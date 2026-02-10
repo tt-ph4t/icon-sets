@@ -1,0 +1,14 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "@iconify/json": "^2.2.425",
+    "@iconify/utils": "^3.1.0",
+    "@toon-format/toon": "^2.1.0",
+    "change-case": "^5.4.4",
+    "es-toolkit": "^1.43.0",
+    "fast-sort": "^3.4.1",
+    "has-values": "^2.0.1",
+    "map-obj": "^6.0.0",
+    "spdx-license-list": "^6.10.0"
+  }
+}
