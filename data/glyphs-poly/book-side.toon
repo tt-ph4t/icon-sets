@@ -1,0 +1,3 @@
+width: 80
+height: 80
+body: "<g fill=\"none\"><path fill=\"#f2f2f2\" fill-rule=\"evenodd\" d=\"M33 13.601a14.41 14.41 0 0 0 14 0v52.797a14.41 14.41 0 0 0-14 0z\" clip-rule=\"evenodd\"/><path stroke=\"#f2994a\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"4\" d=\"M33 12v56m14-56v56\"/></g>"

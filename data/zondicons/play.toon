@@ -1,0 +1,3 @@
+width: 20
+height: 20
+body: "<path fill=\"currentColor\" d=\"m4 4l12 6l-12 6z\"/>"

@@ -1,0 +1,3 @@
+width: 12
+height: 12
+body: "<circle cx=\"6\" cy=\"6\" r=\"5\" fill=\"currentColor\" fill-rule=\"evenodd\" stroke=\"currentColor\"/>"

@@ -1,0 +1,3 @@
+width: 80
+height: 80
+body: "<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m15 24l17.16 15.253a1 1 0 0 1 0 1.494L15 56m26 0h24\"/>"

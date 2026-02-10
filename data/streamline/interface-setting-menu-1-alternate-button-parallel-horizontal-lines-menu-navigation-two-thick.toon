@@ -1,0 +1,4 @@
+width: 14
+height: 14
+body: "<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"11\" height=\"4\" x=\"1.5\" y=\"9.61\" rx=\"1\"/><rect width=\"11\" height=\"4\" x=\"1.5\" y=\".61\" rx=\"1\"/></g>"
+hidden: true

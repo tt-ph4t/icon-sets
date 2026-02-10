@@ -1,0 +1,3 @@
+width: 2048
+height: 2048
+body: "<path fill=\"currentColor\" d=\"M768 2048V0h128v2048zM1152 0h128v2048h-128z\"/>"

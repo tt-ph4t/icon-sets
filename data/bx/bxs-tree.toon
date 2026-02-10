@@ -1,0 +1,4 @@
+width: 24
+height: 24
+body: "<path d=\"M20 18l-4-5h3l-4-5h2l-5-6l-5 6h2l-4 5h3l-4 5h7v4h2v-4z\" fill=\"currentColor\"/>"
+hidden: true

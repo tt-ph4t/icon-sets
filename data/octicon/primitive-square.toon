@@ -1,0 +1,3 @@
+width: 8
+body: "<path fill-rule=\"evenodd\" d=\"M8 12H0V4h8v8z\" fill=\"currentColor\"/>"
+hidden: true

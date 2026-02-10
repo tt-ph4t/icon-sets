@@ -1,0 +1,4 @@
+width: 14
+height: 14
+body: "<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10 6L7 9L4 6\"/><circle cx=\"7\" cy=\"7\" r=\"6.5\"/></g>"
+hidden: true

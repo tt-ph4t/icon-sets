@@ -1,0 +1,3 @@
+width: 32
+height: 32
+body: "<circle cx=\"16\" cy=\"16\" r=\"12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4\"/>"
