@@ -1,0 +1,16 @@
+:root {
+  --height: 100dvh;
+  --width: 100dvw;
+  --spacing: 0.25rem;
+
+  body {
+    padding: 0;
+    height: var(--height);
+    width: var(--width);
+    position: relative;
+  }
+
+  #root {
+    isolation: isolate;
+  }
+}
