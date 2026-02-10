@@ -1,7 +1,7 @@
 {
   "type": "module",
   "devDependencies": {
-    "@iconify/json": "^2.2.425",
+    "@iconify/json": "^2.2.438",
     "@iconify/utils": "^3.1.0",
     "@toon-format/toon": "^2.1.0",
     "change-case": "^5.4.4",
