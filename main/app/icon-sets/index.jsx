@@ -18,7 +18,7 @@ const queryOptions = getQueryOptions({
   url: import.meta.env.VITE_ICON_SETS_URL
 })
 
-const AllIconSets = component(() => {
+const IconSets = component(() => {
   const selectedIconSetPrefixes = useFilter().useSelectValue(
     ({ draft }) => draft.selectedIconSetPrefixes
   )
@@ -49,7 +49,7 @@ export default component(() => (
       flexGrow: 1,
       position: 'relative'
     }}>
-    <AllIconSets />
+    <IconSets />
     <VscodeFormContainer
       style={{
         left: 0,

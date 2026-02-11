@@ -31,9 +31,9 @@ import { useUpdateEffect } from '../../hooks/use-update-effect'
 import { has, validateIconId } from '../../utils'
 import { prettyBytes } from '../../utils/pretty-bytes'
 import { Menu } from '../base-ui/menu'
+import Grid from './grid'
+import GridItem from './grid-item'
 import { useFilteredIconIds, useSearchTerm } from './hooks'
-import Icon from './icon'
-import VGrid from './v-grid'
 
 const actions = mapValues(
   {
@@ -155,7 +155,7 @@ const Root = component(({ iconIds, reloadMenu }) => {
       </VscodeFormContainer>
       <React.Activity>
         {hasIconIds ? (
-          <VGrid
+          <Grid
             itemCount={state.length}
             renderItem={({ context }) => {
               const iconId = state[context.index]
@@ -168,7 +168,7 @@ const Root = component(({ iconIds, reloadMenu }) => {
                       display: 'flex',
                       justifyContent: 'center'
                     }}>
-                    <Icon id={iconId} index={context.index} />
+                    <GridItem context={context} iconId={iconId} />
                   </div>
                 )
             }}

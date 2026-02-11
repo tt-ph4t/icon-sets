@@ -24,10 +24,10 @@ import { timeAgo } from '../../utils/time-ago'
 import { Menu } from '../base-ui/menu'
 import { useSearchTerm } from './hooks'
 
-export default component(({ id, index }) => {
-  const icon = useMemo(() => stringToIcon(id), [id])
+export default component(({ context, iconId }) => {
+  const icon = useMemo(() => stringToIcon(iconId), [iconId])
   const iconNameFallback = useMemo(() => icon.name.slice(0, 3), [icon.name])
-  const [iconQuery] = useIconQueries({ id })
+  const [iconQuery] = useIconQueries({ id: iconId })
   const queryClient = useQueryClient()
   const searchTerm = useSearchTerm()
   const bookmarkedIcons = useBookmarkedIcons()
@@ -35,9 +35,9 @@ export default component(({ id, index }) => {
   const iconQueryFilter = useMemo(
     () => ({
       exact: true,
-      queryKey: [id]
+      queryKey: [iconId]
     }),
-    [id]
+    [iconId]
   )
 
   const iconSetQuery = useQuery(
@@ -91,7 +91,7 @@ export default component(({ id, index }) => {
   if (iconQuery.isLoading || iconSetQuery.isLoading)
     return (
       <Menu
-        data={[{ label: id }, { separator: true }, ...iconQueryMenu]}
+        data={[{ label: iconId }, { separator: true }, ...iconQueryMenu]}
         render={<span>{iconNameFallback}</span>}
       />
     )
@@ -100,7 +100,7 @@ export default component(({ id, index }) => {
     return (
       <Menu
         data={[
-          { label: id },
+          { label: iconId },
           { separator: true },
           { label: iconQuery.error.message },
           { separator: true },
@@ -158,7 +158,7 @@ export default component(({ id, index }) => {
         },
         { separator: true },
         {
-          description: index + 1,
+          description: context.index + 1,
           label: 'Order'
         },
         {

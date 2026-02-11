@@ -26,8 +26,8 @@ export const useIconQueries = (...icons) => {
           buildIcon({
             data,
             id,
-            ...buildIconContextQuery.data[icon.prefix],
-            ...icon
+            ...icon,
+            ...buildIconContextQuery.data[icon.prefix]
           }),
         url: `${import.meta.env.VITE_DATA_BASE_URL}/${icon.prefix}/${
           icon.name
