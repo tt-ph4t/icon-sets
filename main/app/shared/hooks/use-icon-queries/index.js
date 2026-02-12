@@ -17,18 +17,21 @@ export const useIconQueries = (...icons) => {
   )
 
   return useQueries({
-    queries: icons.map(({ id, queryOptions }) => {
-      const icon = stringToIcon(id)
+    queries: icons.map(({ iconCustomisations, iconId, queryOptions }) => {
+      const icon = stringToIcon(iconId)
 
       return getQueryOptions({
-        queryKey: id,
+        queryKey: iconId,
         select: data =>
-          buildIcon({
-            data,
-            id,
-            ...icon,
-            ...buildIconContextQuery.data[icon.prefix]
-          }),
+          buildIcon(
+            {
+              data,
+              id: iconId,
+              ...icon,
+              ...buildIconContextQuery.data[icon.prefix]
+            },
+            iconCustomisations
+          ),
         url: `${import.meta.env.VITE_DATA_BASE_URL}/${icon.prefix}/${
           icon.name
         }.toon`,

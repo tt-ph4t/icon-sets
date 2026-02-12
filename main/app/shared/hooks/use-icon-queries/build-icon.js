@@ -43,12 +43,7 @@ const idCases =
 // https://github.com/antfu-collective/icones/blob/main/src/utils/svgToPng.ts
 export default (
   icon,
-  {
-    hFlip,
-    vFlip,
-    wrapSvgContentEnd = '',
-    wrapSvgContentStart = ''
-  } = defaultIconProps // ??
+  { hFlip, vFlip, wrapSvgContentEnd, wrapSvgContentStart }
 ) => {
   if (iconCache.has(icon.id)) return iconCache.get(icon.id)
 

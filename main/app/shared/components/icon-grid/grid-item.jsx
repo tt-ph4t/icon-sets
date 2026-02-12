@@ -7,9 +7,10 @@ import { size, truncate } from 'es-toolkit/compat'
 import React from 'react'
 import root from 'react-shadow'
 
-import { useBookmarkedIcons } from '../../../sidebar/bookmarked-icons'
 import { component } from '../../hocs'
+import { useBookmarkedIcons } from '../../hooks/use-bookmarked-icons'
 import { useCallback } from '../../hooks/use-callback'
+import { useCustomizedIcons } from '../../hooks/use-customized-icons'
 import { useIconQueries } from '../../hooks/use-icon-queries'
 import { useMemo } from '../../hooks/use-memo'
 import {
@@ -24,13 +25,24 @@ import { timeAgo } from '../../utils/time-ago'
 import { Menu } from '../base-ui/menu'
 import { useSearchTerm } from './hooks'
 
+const flipDirections = {
+  hFlip: 'Horizontal flip',
+  vFlip: 'Vertical flip'
+}
+
 export default component(({ context, iconId }) => {
   const icon = useMemo(() => stringToIcon(iconId), [iconId])
   const iconNameFallback = useMemo(() => icon.name.slice(0, 3), [icon.name])
-  const [iconQuery] = useIconQueries({ id: iconId })
   const queryClient = useQueryClient()
   const searchTerm = useSearchTerm()
   const bookmarkedIcons = useBookmarkedIcons()
+  const customizedIcons = useCustomizedIcons()
+  const { iconCustomisations } = useCustomizedIcons.useSelectValue(iconId)
+
+  const [iconQuery] = useIconQueries({
+    iconCustomisations,
+    iconId
+  })
 
   const iconQueryFilter = useMemo(
     () => ({
@@ -120,38 +132,67 @@ export default component(({ context, iconId }) => {
       data={[
         {
           label: capitalCase(iconQuery.data.name),
-          menu: Object.entries(iconQuery.data['/'].paths).map(
-            ([fileType, fileName]) => {
-              const icon = iconQuery.data['/'].as(fileType)
-
-              return {
-                description: prettyBytes(icon.blob),
-                label: fileType.toUpperCase(),
-                menu: has(icon) && [
-                  {
-                    label: 'View',
-                    onClick: async () => {
-                      await openObjectURL(icon.blob)
-                    }
-                  },
-                  {
-                    label: 'Copy',
-                    onClick: () => {
-                      copy(icon.data, {
-                        // format: icon.mimeType
-                      })
-                    }
-                  },
-                  {
-                    label: 'Download',
-                    onClick: async () => {
-                      await fileSaver(icon.blob, fileName.labeled)
-                    }
-                  }
-                ]
+          menu: [
+            {
+              label: 'Reset',
+              onClick: () => {
+                customizedIcons.delete(iconQuery.data.id)
               }
-            }
-          ),
+            },
+            { separator: true },
+            {
+              label: 'Restart animations',
+              onClick: () => {
+                customizedIcons.set(iconQuery.data.id, () => ({
+                  wrapSvgContentStart: `<!-- ${crypto.randomUUID()} -->`
+                }))
+              }
+            },
+            ...Object.keys(flipDirections).map(flipDirection => ({
+              label: flipDirections[flipDirection],
+              onClick: () => {
+                customizedIcons.set(
+                  iconQuery.data.id,
+                  ({ iconCustomisations }) => ({
+                    [flipDirection]: !iconCustomisations[flipDirection]
+                  })
+                )
+              }
+            })),
+            { separator: true },
+            ...Object.entries(iconQuery.data['/'].paths).map(
+              ([fileType, fileName]) => {
+                const icon = iconQuery.data['/'].as(fileType)
+
+                return {
+                  description: prettyBytes(icon.blob),
+                  label: fileType.toUpperCase(),
+                  menu: has(icon) && [
+                    {
+                      label: 'View',
+                      onClick: async () => {
+                        await openObjectURL(icon.blob)
+                      }
+                    },
+                    {
+                      label: 'Copy',
+                      onClick: () => {
+                        copy(icon.data, {
+                          // format: icon.mimeType
+                        })
+                      }
+                    },
+                    {
+                      label: 'Download',
+                      onClick: async () => {
+                        await fileSaver(icon.blob, fileName.labeled)
+                      }
+                    }
+                  ]
+                }
+              }
+            )
+          ],
           onClick: () => {
             bookmarkedIcons.toggle(iconQuery.data.id)
           }

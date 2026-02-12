@@ -3,6 +3,7 @@ import React from 'react'
 import { component } from '../shared/hocs'
 import BookmarkedIcons from './bookmarked-icons'
 import CachedIcons from './cached-icons'
+import CustomizedIcons from './customized-icons'
 import IconSets from './icon-sets'
 
 export default component(() => (
@@ -11,6 +12,7 @@ export default component(() => (
       <IconSets />
     </React.Activity>
     <BookmarkedIcons />
+    <CustomizedIcons />
     <CachedIcons />
   </div>
 ))
