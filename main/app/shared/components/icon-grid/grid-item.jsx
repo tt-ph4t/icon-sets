@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { VscodeIcon } from '@vscode-elements/react-elements'
 import { useUnmount } from 'ahooks'
 import { capitalCase } from 'change-case'
+import { findKey, uniq } from 'es-toolkit'
 import { size, truncate } from 'es-toolkit/compat'
 import React from 'react'
 import root from 'react-shadow'
@@ -127,6 +128,11 @@ export default component(({ context, iconId }) => {
       />
     )
 
+  const iconAliases = uniq([
+    iconQuery.data.name,
+    ...(iconSetQuery.data.aliases[iconQuery.data.name] ?? [])
+  ])
+
   return (
     <Menu
       data={[
@@ -239,6 +245,25 @@ export default component(({ context, iconId }) => {
           label: 'Size'
         },
         {
+          description: iconAliases.length,
+          label: 'Alias',
+          menu: iconAliases.map(iconAlias => ({
+            label: capitalCase(iconAlias),
+            onClick: () => {
+              searchTerm.set(({ draft }) => {
+                draft.current = iconAlias
+              })
+            }
+          }))
+        },
+        {
+          description: findKey(
+            iconSetQuery.data.chars,
+            iconName => iconName === iconQuery.data.name
+          ),
+          label: 'Character'
+        },
+        {
           description: iconSetQuery.data.license.spdx,
           label: 'License',
           onClick: () => {
@@ -255,30 +280,35 @@ export default component(({ context, iconId }) => {
         },
         { separator: true },
         {
-          label: 'Bookmark',
-          menu: ['toggle', 'add', 'delete'].map(value => ({
-            label: capitalCase(value),
-            onClick: () => {
-              bookmarkedIcons[value](iconQuery.data.id)
-            }
-          }))
-        },
-        {
-          label: 'Search',
-          menu: [iconQuery.data.name, `${iconQuery.data.prefix}:`].map(
-            label => ({
-              label,
-              onClick: () => {
-                searchTerm.set(({ draft }) => {
-                  draft.current = label
+          label: 'More',
+          menu: [
+            {
+              label: 'Bookmark',
+              menu: ['toggle', 'add', 'delete'].map(value => ({
+                label: capitalCase(value),
+                onClick: () => {
+                  bookmarkedIcons[value](iconQuery.data.id)
+                }
+              }))
+            },
+            {
+              label: 'Search',
+              menu: [iconQuery.data.name, `${iconQuery.data.prefix}:`].map(
+                label => ({
+                  label,
+                  onClick: () => {
+                    searchTerm.set(({ draft }) => {
+                      draft.current = label
+                    })
+                  }
                 })
-              }
-            })
-          )
-        },
-        {
-          label: 'Query',
-          menu: iconQueryMenu
+              )
+            },
+            {
+              label: 'Query',
+              menu: iconQueryMenu
+            }
+          ]
         }
       ]}
       key={iconQuery.data.id}
