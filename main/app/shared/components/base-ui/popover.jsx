@@ -57,6 +57,7 @@ export const Popover = Object.assign(
           <Trigger
             closeDelay={closeDelay}
             delay={delay}
+            nativeButton={false}
             openOnHover={openOnHover}
             render={render}>
             {children}

@@ -9,6 +9,7 @@ import { component } from '../shared/hocs'
 import { useBookmarkedIcons } from '../shared/hooks/use-bookmarked-icons'
 import { useCustomizedIcons } from '../shared/hooks/use-customized-icons'
 import { iconCache } from '../shared/hooks/use-icon-queries/build-icon'
+import Characters from './characters'
 import IconGrid from './icon-grid'
 import IconSets from './icon-sets'
 
@@ -23,14 +24,12 @@ const CustomizedIcons = component(() => {
       keepMounted={false}>
       <IconGrid iconIds={iconIds} />
       <Menu
-        data={[
-          {
-            label: 'Reset',
-            onClick: () => {
-              customizedIcons.delete(...iconIds)
-            }
+        data={{
+          label: 'Reset',
+          onClick: () => {
+            customizedIcons.delete(...iconIds)
           }
-        ]}
+        }}
         render={<VscodeToolbarButton icon='kebab-vertical' slot='actions' />}
       />
     </Collapsible>
@@ -95,12 +94,10 @@ const BookmarkedIcons = component(() => {
       heading='bookmarked icons'>
       <IconGrid iconIds={bookmarkedIcons.current} />
       <Menu
-        data={[
-          {
-            label: 'Reset',
-            onClick: bookmarkedIcons.reset
-          }
-        ]}
+        data={{
+          label: 'Reset',
+          onClick: bookmarkedIcons.reset
+        }}
         render={<VscodeToolbarButton icon='kebab-vertical' slot='actions' />}
       />
     </Collapsible>
@@ -114,6 +111,9 @@ export default component(() => (
     </React.Activity>
     <BookmarkedIcons />
     <CustomizedIcons />
-    <CachedIcons />
+    <React.Activity>
+      <CachedIcons />
+      <Characters />
+    </React.Activity>
   </div>
 ))

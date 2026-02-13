@@ -14,7 +14,7 @@ import { progressBar } from './'
 import { ButtonGroup } from './button-group'
 
 export const QueryBoundary = component(
-  ({ query, queryOptions, render: Render }) => {
+  ({ query, queryOptions, render: Render = React.Fragment }) => {
     const queryClient = useQueryClient()
 
     const queryFilter = useMemo(

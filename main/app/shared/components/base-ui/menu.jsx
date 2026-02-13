@@ -4,7 +4,6 @@ import {
   VscodeContextMenuItem,
   VscodeFormContainer
 } from '@vscode-elements/react-elements'
-import { compact } from 'es-toolkit'
 import { castArray } from 'es-toolkit/compat'
 import React from 'react'
 import { VList } from 'virtua'
@@ -127,13 +126,14 @@ export const Menu = component(
     render,
     side = 'bottom'
   }) => {
-    data = useMemo(() => compact(data), [data])
+    data = useMemo(() => castArray(data).filter(isPlainObject), [data])
 
     return (
       <Root disabled={disabled}>
         <Trigger
           closeDelay={closeDelay}
           delay={delay}
+          nativeButton={false}
           openOnHover={openOnHover}
           render={render}>
           {children}
