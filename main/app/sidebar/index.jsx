@@ -10,7 +10,7 @@ import { useBookmarkedIcons } from '../shared/hooks/use-bookmarked-icons'
 import { useCustomizedIcons } from '../shared/hooks/use-customized-icons'
 import { iconCache } from '../shared/hooks/use-icon-queries/build-icon'
 import Characters from './characters'
-import IconGrid from './icon-grid'
+import IconGrid from './components/icon-grid'
 import IconSets from './icon-sets'
 
 const CustomizedIcons = component(() => {

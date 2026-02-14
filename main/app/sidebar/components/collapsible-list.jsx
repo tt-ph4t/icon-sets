@@ -6,19 +6,25 @@ import {
 } from '@vscode-elements/react-elements'
 import { VList } from 'virtua'
 
-import { Menu } from '../shared/components/base-ui/menu'
-import { component, withImmerAtom } from '../shared/hocs'
-import { useMemo } from '../shared/hooks/use-memo'
-import { has } from '../shared/utils'
+import { Menu } from '../../shared/components/base-ui/menu'
+import { component, withImmerAtom } from '../../shared/hocs'
+import { useMemo } from '../../shared/hooks/use-memo'
+import { has } from '../../shared/utils'
 
 export default Object.assign(
-  component(({ ids, menu, renderItem, useCollapsible }) => {
-    const collapsible = useCollapsible()
-    const collapsibleMap = collapsible.useSelectValue(({ draft }) => draft.map)
+  component(({ ids, menu, renderItem, useCollapsibleList }) => {
+    const collapsibleList = useCollapsibleList()
 
-    const collapsibleOpen = useMemo(
-      () => Object.values(collapsibleMap).some(({ open }) => open),
-      [collapsibleMap]
+    const collapsibleListCurrent = collapsibleList.useSelectValue(
+      ({ draft }) => draft.current
+    )
+
+    const hasAnyOpen = useMemo(
+      () =>
+        Object.values(collapsibleListCurrent).some(
+          collapsible => collapsible.open
+        ),
+      [collapsibleListCurrent]
     )
 
     return (
@@ -37,10 +43,10 @@ export default Object.assign(
                       CollapsibleProps: {
                         defaultOpen: !index,
                         onOpenChange: open =>
-                          collapsible.set(({ draft }) => {
-                            ;(draft.map[id] ??= {}).open = open
+                          collapsibleList.set(({ draft }) => {
+                            ;(draft.current[id] ??= {}).open = open
                           }),
-                        ...collapsibleMap[id]
+                        ...collapsibleListCurrent[id]
                       },
                       id,
                       index
@@ -54,13 +60,13 @@ export default Object.assign(
         <Menu
           data={[
             {
-              label: collapsibleOpen ? 'Collapse All' : 'Expand All',
+              label: hasAnyOpen ? 'Collapse All' : 'Expand All',
               onClick: () => {
-                collapsible.set(({ draft }) => {
-                  draft.map = ids.reduce((a, b) => {
+                collapsibleList.set(({ draft }) => {
+                  draft.current = ids.reduce((a, b) => {
                     a[b] = {
-                      ...collapsibleMap[b],
-                      open: !collapsibleOpen
+                      ...collapsibleListCurrent[b],
+                      open: !hasAnyOpen
                     }
 
                     return a
@@ -76,6 +82,9 @@ export default Object.assign(
     )
   }),
   {
-    createUseCollapsible: () => withImmerAtom({ map: {} })
+    createHook: () =>
+      withImmerAtom({
+        current: {}
+      })
   }
 )
