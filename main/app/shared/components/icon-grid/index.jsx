@@ -49,17 +49,21 @@ const actions = mapValues(
     flow(clone, value, castArray, iconIds => iconIds.filter(validateIconId))
 )
 
-const Root = component(({ iconIds, reloadMenu }) => {
-  const filteredIconIds = useFilteredIconIds(iconIds)
-  const [state, setState] = useState(() => filteredIconIds)
+const Root = component(({ iconIds, initialSearchTerm, reloadMenu }) => {
   const searchTerm = useSearchTerm()
   const isInitSearchTerm = searchTerm.useIsInit()
-  const hasIconIds = has(filteredIconIds)
   const bookmarkedIcons = useBookmarkedIcons()
+  const [hasInteracted, setHasInteracted] = useState()
 
   const searchTermCurrent = searchTerm.useSelectValue(
-    ({ draft }) => draft.current
+    ({ draft }) =>
+      hasInteracted ? draft.current : (initialSearchTerm ?? draft.current),
+    [hasInteracted, initialSearchTerm]
   )
+
+  const filteredIconIds = useFilteredIconIds(searchTermCurrent, iconIds)
+  const hasIconIds = has(filteredIconIds)
+  const [state, setState] = useState(() => filteredIconIds)
 
   useUpdateEffect(() => {
     React.startTransition(() => {
@@ -90,6 +94,11 @@ const Root = component(({ iconIds, reloadMenu }) => {
                 !(isInitSearchTerm || isWordCharacter(searchTermCurrent))
               }
               onInput={event => {
+                if (!hasInteracted)
+                  React.startTransition(() => {
+                    setHasInteracted(true)
+                  })
+
                 searchTerm.set(({ draft }) => {
                   draft.current = event.target.value
                 })

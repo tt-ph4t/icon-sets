@@ -11,25 +11,23 @@ const uf = new uFuzzy()
 
 export const useSearchTerm = withImmerAtom({ current: '' })
 
-export const useFilteredIconIds = iconIds => {
+export const useFilteredIconIds = (searchTerm, iconIds) => {
   iconIds = useMemo(() => castArray(iconIds).filter(validateIconId), [iconIds])
 
-  const searchTerm = useSearchTerm()
-  const isInitSearchTerm = searchTerm.useIsInit()
+  const deferredSearchTerm = React.useDeferredValue(searchTerm)
 
-  const deferredSearchTermCurrent = React.useDeferredValue(
-    searchTerm.useSelectValue(({ draft }) => draft.current)
-  )
+  const isInitialSearchTerm =
+    useSearchTerm().init.current === deferredSearchTerm
 
   return useMemo(
     () =>
-      isInitSearchTerm
+      isInitialSearchTerm
         ? iconIds
-        : isWordCharacter(deferredSearchTermCurrent)
+        : isWordCharacter(deferredSearchTerm)
           ? uf
-              .search(iconIds, deferredSearchTermCurrent)[0]
+              .search(iconIds, deferredSearchTerm)[0]
               .map(index => iconIds[index])
           : [],
-    [isInitSearchTerm, iconIds, deferredSearchTermCurrent]
+    [isInitialSearchTerm, iconIds, deferredSearchTerm]
   )
 }

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { noCase } from 'change-case'
 import { size } from 'es-toolkit/compat'
 import { sort } from 'fast-sort'
 
@@ -13,16 +14,13 @@ const useCollapsibleList = CollapsibleList.createHook()
 
 const queryOptions = getQueryOptions({
   select: iconSets => {
-    const iconIds = {}
+    const map = new Map() // ?
 
     for (const iconSet of Object.values(iconSets))
-      for (const [char, iconName] of Object.entries(iconSet.chars))
-        iconIds[char] = [
-          ...(iconIds[char] ?? []),
-          getId(iconSet.prefix, iconName)
-        ]
+      for (const icon of iconSet.icons)
+        map.set(icon, [...(map.get(icon) ?? []), getId(iconSet.prefix, icon)])
 
-    return Object.fromEntries(sort(Object.entries(iconIds)).asc(([a]) => a))
+    return Object.fromEntries(sort([...map.entries()]).asc(([a]) => a))
   },
   url: import.meta.env.VITE_ICON_SETS_URL
 })
@@ -35,7 +33,7 @@ export default component(() => {
       query={query}
       queryOptions={queryOptions}
       render={() => (
-        <Collapsible description={size(query.data)} heading='characters'>
+        <Collapsible description={size(query.data)} heading='icon names'>
           <CollapsibleList
             ids={Object.keys(query.data)}
             renderItem={({ context }) => {
@@ -44,7 +42,7 @@ export default component(() => {
               return (
                 <Collapsible
                   description={iconIds.length}
-                  heading={context.id}
+                  heading={noCase(context.id)}
                   keepMounted={false}
                   {...context.CollapsibleProps}>
                   <div style={{ height: 'var(--sidebar-icon-grid-height)' }}>
