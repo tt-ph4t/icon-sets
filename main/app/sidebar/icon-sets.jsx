@@ -9,7 +9,9 @@ import { component } from '../shared/hocs'
 import { useState } from '../shared/hooks'
 import { useCallback } from '../shared/hooks/use-callback'
 import { getId, getQueryOptions } from '../shared/utils'
-import { CollapsibleList } from './components/collapsible-list'
+import CollapsibleList from './components/collapsible-list'
+
+const useCollapsibleList = CollapsibleList.createHook()
 
 const queryOptions = getQueryOptions({
   url: import.meta.env.VITE_ICON_SETS_URL
@@ -74,6 +76,7 @@ export default component(() => {
               renderItem={({ context }) => (
                 <IconSet context={context} key={context.id} />
               )}
+              useCollapsibleList={useCollapsibleList}
             />
           </Collapsible>
         )
