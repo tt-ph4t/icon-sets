@@ -46,7 +46,6 @@ export default component(() => {
                   description={iconIds.length}
                   heading={context.id}
                   keepMounted={false}
-                  useCollapsibleList={useCollapsibleList}
                   {...context.CollapsibleProps}>
                   <div style={{ height: 'var(--sidebar-icon-grid-height)' }}>
                     <IconGrid iconIds={iconIds} />
@@ -54,6 +53,7 @@ export default component(() => {
                 </Collapsible>
               )
             }}
+            useCollapsibleList={useCollapsibleList}
           />
         </Collapsible>
       )}
