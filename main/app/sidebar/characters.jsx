@@ -7,9 +7,7 @@ import { IconGrid } from '../shared/components/icon-grid'
 import { QueryBoundary } from '../shared/components/query-boundary'
 import { component } from '../shared/hocs'
 import { getId, getQueryOptions } from '../shared/utils'
-import CollapsibleList from './components/collapsible-list'
-
-const useCollapsibleList = CollapsibleList.createHook()
+import { CollapsibleList } from './components/collapsible-list'
 
 const queryOptions = getQueryOptions({
   select: iconSets => {
@@ -53,7 +51,6 @@ export default component(() => {
                 </Collapsible>
               )
             }}
-            useCollapsibleList={useCollapsibleList}
           />
         </Collapsible>
       )}

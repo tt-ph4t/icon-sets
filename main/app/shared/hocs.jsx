@@ -58,12 +58,20 @@ export const lazy = (load, fallback = progressBar) => {
   ))
 }
 
-export const component = Component =>
-  React.memo(
-    props => (
-      <React.Activity>
-        <Component {...props} />
-      </React.Activity>
+export const component = Object.assign(
+  Component =>
+    React.memo(
+      props => (
+        <React.Activity>
+          <Component {...props} />
+        </React.Activity>
+      ),
+      isEqual
     ),
-    isEqual
-  )
+  {
+    withImmerAtom: (initialValue, Component) =>
+      Object.assign(component(Component), {
+        useImmerAtom: withImmerAtom(initialValue)
+      })
+  }
+)

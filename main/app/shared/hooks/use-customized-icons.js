@@ -6,7 +6,7 @@ import { isEqual } from '../utils'
 import { useCallback } from './use-callback'
 import { iconCache } from './use-icon-queries/build-icon'
 
-const useCustomizedIcons1 = withImmerAtom({ current: {} })
+const useStore = withImmerAtom({ current: {} })
 const result = iconCustomisations => ({ iconCustomisations })
 
 const invalidateIconCache = (fn, ...iconIds) => {
@@ -17,13 +17,13 @@ const invalidateIconCache = (fn, ...iconIds) => {
 
 export const useCustomizedIcons = Object.assign(
   () => {
-    const customizedIcons = useCustomizedIcons1()
+    const store = useStore()
 
     return {
       delete: useCallback((...iconIds) => {
         invalidateIconCache(
           () => {
-            customizedIcons.set(({ draft }) => {
+            store.set(({ draft }) => {
               draft.current = omit(draft.current, iconIds)
             })
           },
@@ -32,7 +32,7 @@ export const useCustomizedIcons = Object.assign(
       }),
       set: useCallback((iconId, fn) => {
         invalidateIconCache(() => {
-          customizedIcons.set(({ draft }) => {
+          store.set(({ draft }) => {
             const a = draft.current[iconId] ?? defaultIconCustomisations
             const b = fn(result(a))
 
@@ -44,11 +44,9 @@ export const useCustomizedIcons = Object.assign(
   },
   {
     useIconIds: () =>
-      useCustomizedIcons1().useSelectValue(({ draft }) =>
-        Object.keys(draft.current)
-      ),
+      useStore().useSelectValue(({ draft }) => Object.keys(draft.current)),
     useSelectValue: iconId =>
-      useCustomizedIcons1().useSelectValue(
+      useStore().useSelectValue(
         ({ draft }) =>
           result(draft.current[iconId] ?? defaultIconCustomisations),
         [iconId]

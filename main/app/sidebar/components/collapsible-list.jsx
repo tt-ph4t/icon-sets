@@ -7,13 +7,16 @@ import {
 import { VList } from 'virtua'
 
 import { Menu } from '../../shared/components/base-ui/menu'
-import { component, withImmerAtom } from '../../shared/hocs'
+import { component } from '../../shared/hocs'
 import { useMemo } from '../../shared/hooks/use-memo'
 import { has } from '../../shared/utils'
 
-export default Object.assign(
-  component(({ ids, menu, renderItem, useCollapsibleList }) => {
-    const collapsibleList = useCollapsibleList()
+export const CollapsibleList = component.withImmerAtom(
+  {
+    current: {}
+  },
+  ({ ids, menu, renderItem }) => {
+    const collapsibleList = CollapsibleList.useImmerAtom()
 
     const collapsibleListCurrent = collapsibleList.useSelectValue(
       ({ draft }) => draft.current
@@ -80,11 +83,5 @@ export default Object.assign(
         />
       </>
     )
-  }),
-  {
-    createHook: () =>
-      withImmerAtom({
-        current: {}
-      })
   }
 )
