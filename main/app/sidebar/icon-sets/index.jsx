@@ -2,39 +2,19 @@ import { useQuery } from '@tanstack/react-query'
 import { groupBy, mapValues } from 'es-toolkit'
 import { sort } from 'fast-sort'
 
-import { Collapsible } from '../shared/components/collapsible'
-import { IconGrid } from '../shared/components/icon-grid'
-import { QueryBoundary } from '../shared/components/query-boundary'
-import { component } from '../shared/hocs'
-import { useState } from '../shared/hooks'
-import { useCallback } from '../shared/hooks/use-callback'
-import { getId, getQueryOptions } from '../shared/utils'
-import CollapsibleList from './components/collapsible-list'
+import { Collapsible } from '../../shared/components/collapsible'
+import { QueryBoundary } from '../../shared/components/query-boundary'
+import { component } from '../../shared/hocs'
+import { useState } from '../../shared/hooks'
+import { useCallback } from '../../shared/hooks/use-callback'
+import { getQueryOptions } from '../../shared/utils'
+import CollapsibleList from '../components/collapsible-list'
+import IconSet from './icon-set'
 
 const useCollapsibleList = CollapsibleList.createHook()
 
 const queryOptions = getQueryOptions({
   url: import.meta.env.VITE_ICON_SETS_URL
-})
-
-const IconSet = component(({ context }) => {
-  const query = useQuery({
-    ...queryOptions,
-    select: useCallback(iconSets => iconSets[context.id], [context.id])
-  })
-
-  return (
-    <Collapsible
-      description={query.data.category}
-      heading={`${context.index + 1}. ${query.data.name}`}
-      {...context.CollapsibleProps}>
-      <div style={{ height: 'var(--sidebar-icon-grid-height)' }}>
-        <IconGrid
-          iconIds={query.data.icons.map(icon => getId(query.data.prefix, icon))}
-        />
-      </div>
-    </Collapsible>
-  )
 })
 
 export default component(() => {

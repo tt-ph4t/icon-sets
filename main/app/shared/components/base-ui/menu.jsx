@@ -6,7 +6,6 @@ import {
 } from '@vscode-elements/react-elements'
 import { castArray } from 'es-toolkit/compat'
 import React from 'react'
-import { VList } from 'virtua'
 
 import { component } from '../../hocs'
 import { useState } from '../../hooks'
@@ -27,21 +26,19 @@ const {
 } = menu
 
 const popupRender = Object.assign(
-  (data, children) => {
-    const height = 500
-    const asVList = data.length > Math.floor(height * 0.1)
-    const Popup = asVList ? VList : 'div'
+  (...args) => {
+    const maxHeight = 500
 
     return (
       <VscodeFormContainer style={cardStyle}>
-        <Popup
+        <div
           style={{
-            [asVList ? 'height' : 'maxHeight']: height,
-            maxWidth: height * 0.7,
+            maxHeight,
+            maxWidth: maxHeight * 0.7,
             overflow: 'auto'
           }}>
-          {children}
-        </Popup>
+          {popupRender.children(...args)}
+        </div>
       </VscodeFormContainer>
     )
   },
@@ -59,12 +56,7 @@ const popupRender = Object.assign(
                 <SubmenuTrigger render={itemRender} {...context.TriggerProps} />
                 <Portal>
                   <Positioner>
-                    <Popup
-                      render={popupRender(
-                        menu,
-                        popupRender.children(menu, context)
-                      )}
-                    />
+                    <Popup render={popupRender(menu, context)} />
                   </Positioner>
                 </Portal>
               </SubmenuRoot>
@@ -141,13 +133,10 @@ export const Menu = component(
         <Portal>
           <Positioner align={align} side={side}>
             <Popup
-              render={popupRender(
-                data,
-                popupRender.children(data, {
-                  ItemProps: { closeOnClick },
-                  TriggerProps: { closeDelay, delay, openOnHover }
-                })
-              )}
+              render={popupRender(data, {
+                ItemProps: { closeOnClick },
+                TriggerProps: { closeDelay, delay, openOnHover }
+              })}
             />
           </Positioner>
         </Portal>
