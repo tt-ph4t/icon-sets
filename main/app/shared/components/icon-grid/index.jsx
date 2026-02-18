@@ -94,10 +94,7 @@ const Root = component(({ iconIds, initialSearchTerm, reloadMenu }) => {
                 !(isInitSearchTerm || isWordCharacter(searchTermCurrent))
               }
               onInput={event => {
-                if (!hasInteracted)
-                  React.startTransition(() => {
-                    setHasInteracted(true)
-                  })
+                if (!hasInteracted) setHasInteracted(true)
 
                 searchTerm.set(({ draft }) => {
                   draft.current = event.target.value
