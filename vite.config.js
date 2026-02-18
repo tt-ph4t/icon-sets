@@ -1,5 +1,6 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import { compression } from 'vite-plugin-compression2'
 
 export default defineConfig({
   build: {
@@ -21,6 +22,7 @@ export default defineConfig({
       babel: {
         plugins: [['babel-plugin-react-compiler']]
       }
-    })
+    }),
+    compression()
   ]
 })

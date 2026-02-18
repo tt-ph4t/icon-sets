@@ -11,7 +11,6 @@ import { progressBar } from './shared/components'
 import { Menu } from './shared/components/base-ui/menu'
 import { SplitLayout } from './shared/components/split-layout'
 import { component, lazy } from './shared/hocs'
-import { useMemo } from './shared/hooks/use-memo'
 
 const Sidebar = lazy(() => import('./sidebar'))
 const IconSets = lazy(() => import('./icon-sets'))
@@ -28,54 +27,8 @@ const Loading = component(() => {
   )
 })
 
-const useQueryClientMenu = () => {
-  const queryClient = useQueryClient()
-
-  return useMemo(
-    () => [
-      {
-        label: 'All Queries',
-        menu: [
-          {
-            label: 'Refetch',
-            onClick: async () => {
-              await queryClient.refetchQueries()
-            }
-          },
-          { separator: true },
-          {
-            label: 'Invalidate',
-            onClick: async () => {
-              await queryClient.invalidateQueries()
-            }
-          },
-          {
-            label: 'Reset',
-            onClick: async () => {
-              await queryClient.resetQueries()
-            }
-          },
-          {
-            label: 'Cancel',
-            onClick: async () => {
-              await queryClient.cancelQueries()
-            }
-          },
-          {
-            label: 'Remove',
-            onClick: () => {
-              queryClient.removeQueries()
-            }
-          }
-        ]
-      }
-    ],
-    [queryClient]
-  )
-}
-
 export default component(() => {
-  const queryClientMenu = useQueryClientMenu()
+  const queryClient = useQueryClient()
 
   return (
     <div style={{ position: 'relative' }}>
@@ -96,7 +49,42 @@ export default component(() => {
         }}>
         <Menu
           data={[
-            ...queryClientMenu,
+            {
+              label: 'All Queries',
+              menu: [
+                {
+                  label: 'Refetch',
+                  onClick: async () => {
+                    await queryClient.refetchQueries()
+                  }
+                },
+                { separator: true },
+                {
+                  label: 'Invalidate',
+                  onClick: async () => {
+                    await queryClient.invalidateQueries()
+                  }
+                },
+                {
+                  label: 'Reset',
+                  onClick: async () => {
+                    await queryClient.resetQueries()
+                  }
+                },
+                {
+                  label: 'Cancel',
+                  onClick: async () => {
+                    await queryClient.cancelQueries()
+                  }
+                },
+                {
+                  label: 'Remove',
+                  onClick: () => {
+                    queryClient.removeQueries()
+                  }
+                }
+              ]
+            },
             {
               label: 'GitHub',
               onClick: () => {

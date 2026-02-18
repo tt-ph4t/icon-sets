@@ -8,6 +8,6 @@ const queryClient = new QueryClient()
 export default component(({ children }) => (
   <QueryClientProvider client={queryClient}>
     {children}
-    <ReactQueryDevtools />
+    <ReactQueryDevtools client={queryClient} />
   </QueryClientProvider>
 ))
