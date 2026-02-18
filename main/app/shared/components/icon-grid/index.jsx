@@ -29,6 +29,7 @@ import { useState } from '../../hooks'
 import { useBookmarkedIcons } from '../../hooks/use-bookmarked-icons'
 import { useUpdateEffect } from '../../hooks/use-update-effect'
 import { has, validateIconId } from '../../utils'
+import { pluralize } from '../../utils/pluralize'
 import { prettyBytes } from '../../utils/pretty-bytes'
 import { Menu } from '../base-ui/menu'
 import Grid from './grid'
@@ -151,7 +152,7 @@ const Root = component(({ iconIds, initialSearchTerm, reloadMenu }) => {
                 ]}
                 render={
                   <VscodeBadge slot='content-after'>
-                    {state.length} icons
+                    {pluralize(state.length, 'icon')}
                   </VscodeBadge>
                 }
               />
