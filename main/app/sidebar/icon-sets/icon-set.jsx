@@ -1,12 +1,12 @@
 import { isEmptyString, isSymbol } from '@sindresorhus/is'
 import { useQuery } from '@tanstack/react-query'
-import { VscodeToolbarButton } from '@vscode-elements/react-elements'
 import { capitalCase } from 'change-case'
 import { compact } from 'es-toolkit'
 
 import { Menu } from '../../shared/components/base-ui/menu'
 import { Collapsible } from '../../shared/components/collapsible'
 import { IconGrid } from '../../shared/components/icon-grid'
+import { ToolbarButton } from '../../shared/components/toolbar-button'
 import { component, withImmerAtom } from '../../shared/hocs'
 import { useCallback } from '../../shared/hooks/use-callback'
 import { getId, getQueryOptions, isEqual } from '../../shared/utils'
@@ -57,6 +57,8 @@ export default component(({ context }) => {
     })
   )
 
+  const isInitialState = isEqual(state, initialState)
+
   return (
     <Collapsible
       description={query.data.category}
@@ -65,7 +67,7 @@ export default component(({ context }) => {
       {...context.CollapsibleProps}>
       <div style={{ height: 'var(--sidebar-icon-grid-height)' }}>
         <IconGrid
-          iconIds={(isEqual(state, initialState)
+          iconIds={(isInitialState
             ? query.data.icons
             : query.data.icons.filter(
                 icon =>
@@ -138,7 +140,14 @@ export default component(({ context }) => {
             })
           }))
         ]}
-        render={<VscodeToolbarButton icon='kebab-vertical' slot='actions' />}
+        render={
+          <ToolbarButton
+            checked={!isInitialState}
+            icon='filter'
+            preventToggle
+            slot='actions'
+          />
+        }
       />
     </Collapsible>
   )

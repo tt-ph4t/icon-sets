@@ -1,10 +1,10 @@
-import { VscodeToolbarButton } from '@vscode-elements/react-elements'
 import { useUpdate } from 'ahooks'
 import { asyncNoop } from 'es-toolkit'
 import React from 'react'
 
 import { Menu } from '../shared/components/base-ui/menu'
 import { Collapsible } from '../shared/components/collapsible'
+import { ToolbarButton } from '../shared/components/toolbar-button'
 import { component } from '../shared/hocs'
 import { useBookmarkedIcons } from '../shared/hooks/use-bookmarked-icons'
 import { useCustomizedIcons } from '../shared/hooks/use-customized-icons'
@@ -31,7 +31,7 @@ const CustomizedIcons = component(() => {
             customizedIcons.delete(...iconIds)
           }
         }}
-        render={<VscodeToolbarButton icon='kebab-vertical' slot='actions' />}
+        render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
       />
     </Collapsible>
   )
@@ -80,7 +80,7 @@ const CachedIcons = component(() => {
           },
           ...rest
         }))}
-        render={<VscodeToolbarButton icon='kebab-vertical' slot='actions' />}
+        render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
       />
     </Collapsible>
   )
@@ -99,7 +99,7 @@ const BookmarkedIcons = component(() => {
           label: 'Reset',
           onClick: bookmarkedIcons.reset
         }}
-        render={<VscodeToolbarButton icon='kebab-vertical' slot='actions' />}
+        render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
       />
     </Collapsible>
   )

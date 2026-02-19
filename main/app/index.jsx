@@ -4,12 +4,12 @@ import {
   useIsRestoring,
   useQueryClient
 } from '@tanstack/react-query'
-import { VscodeToolbarButton } from '@vscode-elements/react-elements'
 import React from 'react'
 
 import { progressBar } from './shared/components'
 import { Menu } from './shared/components/base-ui/menu'
 import { SplitLayout } from './shared/components/split-layout'
+import { ToolbarButton } from './shared/components/toolbar-button'
 import { component, lazy } from './shared/hocs'
 
 const Sidebar = lazy(() => import('./sidebar'))
@@ -92,7 +92,7 @@ export default component(() => {
               }
             }
           ]}
-          render={<VscodeToolbarButton icon='menu' />}
+          render={<ToolbarButton icon='menu' />}
         />
       </div>
       <React.Activity>

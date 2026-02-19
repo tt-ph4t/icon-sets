@@ -1,12 +1,12 @@
 import {
   VscodeFormContainer,
   VscodeFormGroup,
-  VscodeFormHelper,
-  VscodeToolbarButton
+  VscodeFormHelper
 } from '@vscode-elements/react-elements'
 import { VList } from 'virtua'
 
 import { Menu } from '../../shared/components/base-ui/menu'
+import { ToolbarButton } from '../../shared/components/toolbar-button'
 import { component, withImmerAtom } from '../../shared/hocs'
 import { useMemo } from '../../shared/hooks/use-memo'
 import { has } from '../../shared/utils'
@@ -76,7 +76,7 @@ export default Object.assign(
             },
             ...(has(menu) ? [{ separator: true }, ...menu] : [])
           ]}
-          render={<VscodeToolbarButton icon='kebab-vertical' slot='actions' />}
+          render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
         />
       </>
     )

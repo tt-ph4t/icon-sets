@@ -2,11 +2,11 @@ import { useQuery } from '@tanstack/react-query'
 import {
   VscodeDivider,
   VscodeIcon,
-  VscodeMultiSelect,
-  VscodeToolbarButton
+  VscodeMultiSelect
 } from '@vscode-elements/react-elements'
 import { capitalCase } from 'change-case'
 import {
+  flow,
   groupBy,
   identity,
   intersection,
@@ -14,19 +14,21 @@ import {
   pick,
   union,
   uniq,
-  without
+  without,
+  xor
 } from 'es-toolkit'
 import { sort } from 'fast-sort'
 
 import { Popover } from '../shared/components/base-ui/popover'
 import { QueryBoundary } from '../shared/components/query-boundary'
+import { ToolbarButton } from '../shared/components/toolbar-button'
 import { Tree } from '../shared/components/tree'
 import { component, withImmerAtom } from '../shared/hocs'
 import { useCallback } from '../shared/hooks/use-callback'
 import { useEffect } from '../shared/hooks/use-effect'
 import { useMemo } from '../shared/hooks/use-memo'
 import { useRef } from '../shared/hooks/use-ref'
-import { getQueryOptions, isEqual } from '../shared/utils'
+import { getQueryOptions, has } from '../shared/utils'
 import { timeAgo } from '../shared/utils/time-ago'
 
 const queryOptions = getQueryOptions({
@@ -35,6 +37,8 @@ const queryOptions = getQueryOptions({
 
 const getIconSetThemes = iconSet =>
   [iconSet.prefixes, iconSet.suffixes].flatMap(Object.values)
+
+const isFiltering = flow(xor, has)
 
 const Filter = {
   MultiSelect: component(() => {
@@ -82,12 +86,36 @@ const Filter = {
       />
     )
   }),
+  ToolbarButton: component(() => {
+    const selectedIconSetPrefixes = useFilter().useSelectValue(
+      ({ draft }) => draft.selectedIconSetPrefixes
+    )
+
+    const query = useQuery({
+      ...queryOptions,
+      select: useCallback(
+        iconSets => isFiltering(Object.keys(iconSets), selectedIconSetPrefixes),
+        [selectedIconSetPrefixes]
+      )
+    })
+
+    return (
+      <ToolbarButton checked={query.data} icon='filter' preventToggle>
+        Filter
+      </ToolbarButton>
+    )
+  }),
   Tree: component(() => {
     const query = useQuery({ ...queryOptions, select: identity })
     const filter = useFilter()
 
     const selectedIconSetPrefixes = filter.useSelectValue(
       ({ draft }) => draft.selectedIconSetPrefixes
+    )
+
+    const isFiltered = isFiltering(
+      Object.keys(query.data),
+      selectedIconSetPrefixes
     )
 
     const iconSetGroups = useMemo(() => {
@@ -157,12 +185,6 @@ const Filter = {
       )
     }, [query.data])
 
-    const areAllIconSetPrefixesSelected = isEqual(
-      ...[selectedIconSetPrefixes, Object.keys(query.data)].map(
-        iconSetPrefixes => sort(iconSetPrefixes).asc()
-      )
-    )
-
     const iconSetPrefixesByGroup = useMemo(
       () =>
         mapValues(iconSetGroups, item =>
@@ -188,17 +210,14 @@ const Filter = {
 
     return (
       <>
-        <VscodeToolbarButton
-          checked={areAllIconSetPrefixesSelected}
+        <ToolbarButton
+          checked={!isFiltered}
           onChange={() => {
-            toggleIconSetPrefixes(
-              areAllIconSetPrefixesSelected,
-              Object.keys(query.data)
-            )
+            toggleIconSetPrefixes(!isFiltered, Object.keys(query.data))
           }}
           toggleable>
           All
-        </VscodeToolbarButton>
+        </ToolbarButton>
         <Tree
           data={Object.entries(iconSetGroups).map(([a, b]) => {
             // const iconSetPrefixes = iconSetPrefixesByGroup[a]
@@ -300,7 +319,9 @@ export default component(() => {
               </div>
             }
             render={
-              <VscodeToolbarButton icon='filter'>Filter</VscodeToolbarButton>
+              <div>
+                <Filter.ToolbarButton />
+              </div>
             }
           />
         )
