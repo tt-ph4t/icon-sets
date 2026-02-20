@@ -12,7 +12,7 @@ export const Collapsible = component(
     alwaysShowHeaderActions = true,
     children,
     defaultOpen,
-    keepMounted = true,
+    keepMounted,
     onToggle = asyncNoop,
     ...props
   }) => {

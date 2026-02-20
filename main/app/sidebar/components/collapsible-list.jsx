@@ -42,10 +42,14 @@ export default Object.assign(
                     context: {
                       CollapsibleProps: {
                         defaultOpen: !index,
-                        onOpenChange: open =>
+                        onOpenChange: open => {
                           collapsibleList.set(({ draft }) => {
-                            ;(draft.current[id] ??= {}).open = open
-                          }),
+                            draft.current[id] = {
+                              ...draft.current[id],
+                              open
+                            }
+                          })
+                        },
                         ...collapsibleListCurrent[id]
                       },
                       id,

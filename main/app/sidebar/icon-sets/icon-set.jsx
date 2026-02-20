@@ -64,7 +64,6 @@ export default component(({ context }) => {
     <Collapsible
       description={query.data.category}
       heading={`${context.index + 1}. ${query.data.name}`}
-      keepMounted={false}
       {...context.CollapsibleProps}>
       <div style={{ height: 'var(--sidebar-icon-grid-height)' }}>
         <IconGrid

@@ -20,10 +20,7 @@ const CustomizedIcons = component(() => {
   const iconIds = useCustomizedIcons.useIconIds()
 
   return (
-    <Collapsible
-      description={iconIds.length}
-      heading='customized icons'
-      keepMounted={false}>
+    <Collapsible description={iconIds.length} heading='customized icons'>
       <IconGrid iconIds={iconIds} />
       <Menu
         data={{
@@ -46,7 +43,6 @@ const CachedIcons = component(() => {
     <Collapsible
       description={iconIds.length}
       heading='cached icons'
-      keepMounted={false}
       onToggle={event => {
         if (event.detail.open) update()
       }}>
