@@ -4,6 +4,7 @@ import { sort } from 'fast-sort'
 
 import { Collapsible } from '../../shared/components/collapsible'
 import { QueryBoundary } from '../../shared/components/query-boundary'
+import { ICON_SETS_URL } from '../../shared/constants'
 import { component } from '../../shared/hocs'
 import { useState } from '../../shared/hooks'
 import { useCallback } from '../../shared/hooks/use-callback'
@@ -14,7 +15,7 @@ import IconSet from './icon-set'
 const useCollapsibleList = CollapsibleList.createHook()
 
 const queryOptions = getQueryOptions({
-  url: import.meta.env.VITE_ICON_SETS_URL
+  url: ICON_SETS_URL
 })
 
 export default component(() => {

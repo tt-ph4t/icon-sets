@@ -1,16 +1,16 @@
 import { defaultIconCustomisations } from '@iconify/utils'
 import { omit } from 'es-toolkit'
 
+import { ICON_CACHE } from '../constants'
 import { withImmerAtom } from '../hocs'
 import { isEqual } from '../utils'
 import { useCallback } from './use-callback'
-import { iconCache } from './use-icon-queries/build-icon'
 
 const useStore = withImmerAtom({ current: {} })
 const result = iconCustomisations => ({ iconCustomisations })
 
 const invalidateIconCache = (fn, ...iconIds) => {
-  for (const iconId of iconIds) iconCache.delete(iconId)
+  for (const iconId of iconIds) ICON_CACHE.delete(iconId)
 
   fn()
 }

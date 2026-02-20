@@ -8,6 +8,7 @@ import { size, truncate } from 'es-toolkit/compat'
 import React from 'react'
 import root from 'react-shadow'
 
+import { ICON_SETS_URL } from '../../constants'
 import { component } from '../../hocs'
 import { useBookmarkedIcons } from '../../hooks/use-bookmarked-icons'
 import { useCallback } from '../../hooks/use-callback'
@@ -63,7 +64,7 @@ export default component(({ context, iconId }) => {
         },
         [icon]
       ),
-      url: import.meta.env.VITE_ICON_SETS_URL
+      url: ICON_SETS_URL
     })
   )
 
@@ -140,31 +141,45 @@ export default component(({ context, iconId }) => {
           label: capitalCase(iconQuery.data.name),
           menu: [
             {
-              label: 'Reset',
-              onClick: () => {
-                customizedIcons.delete(iconQuery.data.id)
-              }
+              label: 'Bookmark',
+              menu: ['toggle', 'add', 'delete'].map(a => ({
+                label: capitalCase(a),
+                onClick: () => {
+                  bookmarkedIcons[a](iconQuery.data.id)
+                }
+              }))
             },
-            { separator: true },
             {
-              label: 'Restart animations',
-              onClick: () => {
-                customizedIcons.set(iconQuery.data.id, () => ({
-                  wrapSvgContentStart: `<!-- ${crypto.randomUUID()} -->`
+              label: 'More',
+              menu: [
+                {
+                  label: 'Reset',
+                  onClick: () => {
+                    customizedIcons.delete(iconQuery.data.id)
+                  }
+                },
+                { separator: true },
+                {
+                  label: 'Restart animations',
+                  onClick: () => {
+                    customizedIcons.set(iconQuery.data.id, () => ({
+                      wrapSvgContentStart: `<!-- ${crypto.randomUUID()} -->`
+                    }))
+                  }
+                },
+                ...Object.keys(flipDirections).map(flipDirection => ({
+                  label: flipDirections[flipDirection],
+                  onClick: () => {
+                    customizedIcons.set(
+                      iconQuery.data.id,
+                      ({ iconCustomisations }) => ({
+                        [flipDirection]: !iconCustomisations[flipDirection]
+                      })
+                    )
+                  }
                 }))
-              }
+              ]
             },
-            ...Object.keys(flipDirections).map(flipDirection => ({
-              label: flipDirections[flipDirection],
-              onClick: () => {
-                customizedIcons.set(
-                  iconQuery.data.id,
-                  ({ iconCustomisations }) => ({
-                    [flipDirection]: !iconCustomisations[flipDirection]
-                  })
-                )
-              }
-            })),
             { separator: true },
             ...Object.entries(iconQuery.data['/'].paths).map(
               ([fileType, fileName]) => {
@@ -277,38 +292,6 @@ export default component(({ context, iconId }) => {
         {
           description: timeAgo.unix(iconSetQuery.data.lastModified),
           label: 'Last modified'
-        },
-        { separator: true },
-        {
-          label: 'More',
-          menu: [
-            {
-              label: 'Bookmark',
-              menu: ['toggle', 'add', 'delete'].map(value => ({
-                label: capitalCase(value),
-                onClick: () => {
-                  bookmarkedIcons[value](iconQuery.data.id)
-                }
-              }))
-            },
-            {
-              label: 'Search',
-              menu: [iconQuery.data.name, `${iconQuery.data.prefix}:`].map(
-                label => ({
-                  label,
-                  onClick: () => {
-                    searchTerm.set(({ draft }) => {
-                      draft.current = label
-                    })
-                  }
-                })
-              )
-            },
-            {
-              label: 'Query',
-              menu: iconQueryMenu
-            }
-          ]
         }
       ]}
       key={iconQuery.data.id}

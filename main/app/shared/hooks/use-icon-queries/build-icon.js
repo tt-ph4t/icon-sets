@@ -9,12 +9,10 @@ import {
   wrapSVGContent
 } from '@iconify/utils'
 import { mapValues } from 'es-toolkit'
-import { LRUCache } from 'lru-cache'
 import mime from 'mime/lite'
 
+import { ICON_CACHE } from '../../constants'
 import { has } from '../../utils'
-
-export const iconCache = new LRUCache({ max: 1000 })
 
 const iconTypes = ['css', 'json', 'svg', 'txt', 'ico', 'png', 'pdf']
 
@@ -45,7 +43,7 @@ export default (
   icon,
   { hFlip, vFlip, wrapSvgContentEnd, wrapSvgContentStart }
 ) => {
-  if (iconCache.has(icon.id)) return iconCache.get(icon.id)
+  if (ICON_CACHE.has(icon.id)) return ICON_CACHE.get(icon.id)
 
   icon = {
     ...icon,
@@ -116,7 +114,7 @@ export default (
     }
   }
 
-  iconCache.set(icon.id, icon)
+  ICON_CACHE.set(icon.id, icon)
 
   return icon
 }

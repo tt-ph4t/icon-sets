@@ -6,6 +6,7 @@ import {
 import { asyncNoop, noop } from 'es-toolkit'
 import React from 'react'
 
+import { DELAY_MS } from '../constants'
 import { component } from '../hocs'
 import { useState } from '../hooks'
 import { useEffect } from '../hooks/use-effect'
@@ -17,7 +18,7 @@ const minPositionInPercentage = 5
 
 const useDebounceEffect = (
   effect = asyncNoop,
-  { beforeEffect = noop, delay = import.meta.env.VITE_DELAY_MS, deps }
+  { beforeEffect = noop, delay = DELAY_MS, deps }
 ) => {
   const ref = useRef()
 

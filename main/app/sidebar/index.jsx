@@ -1,14 +1,15 @@
 import { useUpdate } from 'ahooks'
+import { capitalCase } from 'change-case'
 import { asyncNoop } from 'es-toolkit'
 import React from 'react'
 
 import { Menu } from '../shared/components/base-ui/menu'
 import { Collapsible } from '../shared/components/collapsible'
 import { ToolbarButton } from '../shared/components/toolbar-button'
+import { ICON_CACHE } from '../shared/constants'
 import { component } from '../shared/hocs'
 import { useBookmarkedIcons } from '../shared/hooks/use-bookmarked-icons'
 import { useCustomizedIcons } from '../shared/hooks/use-customized-icons'
-import { iconCache } from '../shared/hooks/use-icon-queries/build-icon'
 import Characters from './characters'
 import IconGrid from './components/icon-grid'
 import IconNames from './icon-names'
@@ -39,7 +40,7 @@ const CustomizedIcons = component(() => {
 
 const CachedIcons = component(() => {
   const update = useUpdate()
-  const iconIds = [...iconCache.values()].map(icon => icon.id)
+  const iconIds = [...ICON_CACHE.values()].map(icon => icon.id)
 
   return (
     <Collapsible
@@ -54,24 +55,12 @@ const CachedIcons = component(() => {
         data={[
           { label: 'Reload' },
           { separator: true },
-          {
-            label: 'Purge Stale',
+          ...['purgeStale', 'pop', 'clear'].map(a => ({
+            label: capitalCase(a),
             onClick: () => {
-              iconCache.purgeStale()
+              ICON_CACHE[a]()
             }
-          },
-          {
-            label: 'Pop',
-            onClick: () => {
-              iconCache.pop()
-            }
-          },
-          {
-            label: 'Clear',
-            onClick: () => {
-              iconCache.clear()
-            }
-          }
+          }))
         ].map(({ onClick = asyncNoop, ...rest }) => ({
           onClick: async () => {
             await onClick()

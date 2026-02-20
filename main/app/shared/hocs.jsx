@@ -6,6 +6,7 @@ import React from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import { progressBar } from './components'
+import { DELAY_MS } from './constants'
 import { useCallback } from './hooks/use-callback'
 import { isEqual } from './utils'
 
@@ -40,7 +41,7 @@ export const withImmerAtom = initialValue =>
             useCallback(draft => fn({ draft }), deps),
             isEqual
           ),
-          { delay: import.meta.env.VITE_DELAY_MS }
+          { delay: DELAY_MS }
         )
       )
     }

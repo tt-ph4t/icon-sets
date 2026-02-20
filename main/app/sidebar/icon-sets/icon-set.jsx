@@ -7,6 +7,7 @@ import { Menu } from '../../shared/components/base-ui/menu'
 import { Collapsible } from '../../shared/components/collapsible'
 import { IconGrid } from '../../shared/components/icon-grid'
 import { ToolbarButton } from '../../shared/components/toolbar-button'
+import { ICON_SETS_URL } from '../../shared/constants'
 import { component, withImmerAtom } from '../../shared/hocs'
 import { useCallback } from '../../shared/hooks/use-callback'
 import { getId, getQueryOptions, isEqual } from '../../shared/utils'
@@ -53,7 +54,7 @@ export default component(({ context }) => {
   const query = useQuery(
     getQueryOptions({
       select: useCallback(iconSets => iconSets[context.id], [context.id]),
-      url: import.meta.env.VITE_ICON_SETS_URL
+      url: ICON_SETS_URL
     })
   )
 

@@ -13,6 +13,8 @@ import { isWordCharacter } from 'is-word-character'
 import jszip from 'jszip'
 import isEqual1 from 'react-fast-compare'
 
+import { DELAY_MS, ID_SEPARATOR } from '../constants'
+
 export const fileSaver = async (data, fileName) => {
   // jszip
   if ('generateAsync' in data) data = await data.generateAsync({ type: 'blob' })
@@ -35,7 +37,7 @@ export const Zip = Object.assign(jszip, {
 export const getQueryOptions =
   // https://tanstack.com/query/latest/docs/framework/react/guides/render-optimizations
   ({
-    delayMs = import.meta.env.VITE_DELAY_MS,
+    delayMs = DELAY_MS,
     networkMode = 'offlineFirst',
     queryFn,
     queryKey,
@@ -71,7 +73,7 @@ export const getQueryOptions =
 export const getId = (...values) =>
   values
     .map(value => (isPlainObject(value) ? JSON.stringify : String)(value))
-    .join(import.meta.env.VITE_ID_SEPARATOR)
+    .join(ID_SEPARATOR)
 
 export const isEqual = (...[b, ...a]) => a.every(a => isEqual1(a, b))
 export const has = (...values) => hasValues(values)
@@ -81,7 +83,7 @@ export const checkOdd =
   value => value % 2 !== 0
 
 export const validateIconId = (value = '') =>
-  value.includes(import.meta.env.VITE_ID_SEPARATOR) &&
+  value.includes(ID_SEPARATOR) &&
   isWordCharacter(value) &&
   validateIconName(stringToIcon(value))
 
@@ -89,7 +91,7 @@ export const openObjectURL = async (...args) => {
   const url = URL.createObjectURL(...args)
 
   if (open(url)) {
-    await delay(import.meta.env.VITE_DELAY_MS)
+    await delay(DELAY_MS)
 
     URL.revokeObjectURL(url)
   }

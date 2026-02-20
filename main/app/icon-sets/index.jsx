@@ -9,13 +9,14 @@ import React from 'react'
 
 import { IconGrid } from '../shared/components/icon-grid'
 import { QueryBoundary } from '../shared/components/query-boundary'
+import { ICON_SETS_URL } from '../shared/constants'
 import { component } from '../shared/hocs'
 import { useCallback } from '../shared/hooks/use-callback'
 import { getId, getQueryOptions } from '../shared/utils'
 import Filter, { useFilter } from './filter'
 
 const queryOptions = getQueryOptions({
-  url: import.meta.env.VITE_ICON_SETS_URL
+  url: ICON_SETS_URL
 })
 
 const IconSets = component(() => {

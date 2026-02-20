@@ -6,6 +6,7 @@ import { sort } from 'fast-sort'
 import { Collapsible } from '../shared/components/collapsible'
 import { IconGrid } from '../shared/components/icon-grid'
 import { QueryBoundary } from '../shared/components/query-boundary'
+import { ICON_SETS_URL } from '../shared/constants'
 import { component } from '../shared/hocs'
 import { getId, getQueryOptions } from '../shared/utils'
 import CollapsibleList from './components/collapsible-list'
@@ -22,7 +23,7 @@ const queryOptions = getQueryOptions({
 
     return Object.fromEntries(sort([...map.entries()]).asc(([a]) => a))
   },
-  url: import.meta.env.VITE_ICON_SETS_URL
+  url: ICON_SETS_URL
 })
 
 export default component(() => {

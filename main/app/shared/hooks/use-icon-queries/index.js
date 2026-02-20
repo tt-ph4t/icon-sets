@@ -2,6 +2,7 @@ import { stringToIcon } from '@iconify/utils'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { mapValues } from 'es-toolkit'
 
+import { DATA_BASE_URL, ICON_SETS_URL } from '../../constants'
 import { getQueryOptions } from '../../utils'
 import { useCallback } from '../use-callback'
 import buildIcon from './build-icon'
@@ -12,7 +13,7 @@ export const useIconQueries = (...icons) => {
       select: useCallback(iconSets =>
         mapValues(iconSets, iconSet => ({ setName: iconSet.name }))
       ),
-      url: import.meta.env.VITE_ICON_SETS_URL
+      url: ICON_SETS_URL
     })
   )
 
@@ -32,9 +33,7 @@ export const useIconQueries = (...icons) => {
             },
             iconCustomisations
           ),
-        url: `${import.meta.env.VITE_DATA_BASE_URL}/${icon.prefix}/${
-          icon.name
-        }.toon`,
+        url: `${DATA_BASE_URL}/${icon.prefix}/${icon.name}.toon`,
         ...queryOptions
       })
     })

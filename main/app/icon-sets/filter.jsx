@@ -23,6 +23,7 @@ import { Popover } from '../shared/components/base-ui/popover'
 import { QueryBoundary } from '../shared/components/query-boundary'
 import { ToolbarButton } from '../shared/components/toolbar-button'
 import { Tree } from '../shared/components/tree'
+import { ICON_SETS_URL } from '../shared/constants'
 import { component, withImmerAtom } from '../shared/hocs'
 import { useCallback } from '../shared/hooks/use-callback'
 import { useEffect } from '../shared/hooks/use-effect'
@@ -32,7 +33,7 @@ import { getQueryOptions, has } from '../shared/utils'
 import { timeAgo } from '../shared/utils/time-ago'
 
 const queryOptions = getQueryOptions({
-  url: import.meta.env.VITE_ICON_SETS_URL
+  url: ICON_SETS_URL
 })
 
 const getIconSetThemes = iconSet =>
