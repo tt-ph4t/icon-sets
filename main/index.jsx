@@ -26,8 +26,8 @@ createRoot(document.querySelector('#root')).render(
     />
     <vscode-dev-toolbar
       style={{
-        bottom: 'calc(var(--spacing) * 3)',
-        left: 'calc(var(--spacing) * 3)',
+        bottom: 'calc(var(--spacing) * 8)',
+        left: 'calc(var(--spacing) * 1.5)',
         position: 'absolute',
         right: 'unset'
       }}

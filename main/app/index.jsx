@@ -4,6 +4,7 @@ import {
   useIsRestoring,
   useQueryClient
 } from '@tanstack/react-query'
+import { capitalCase } from 'change-case'
 import React from 'react'
 
 import { progressBar } from './shared/components'
@@ -42,57 +43,35 @@ export default component(() => {
       </div>
       <div
         style={{
-          bottom: 0,
-          left: 0,
+          bottom: 'calc(var(--spacing) * 1.5)',
+          left: 'calc(var(--spacing) * 1.5)',
           position: 'absolute',
           zIndex: 1
         }}>
         <Menu
           data={[
-            {
-              label: 'All Queries',
-              menu: [
-                {
-                  label: 'Refetch',
-                  onClick: async () => {
-                    await queryClient.refetchQueries()
-                  }
-                },
-                { separator: true },
-                {
-                  label: 'Invalidate',
-                  onClick: async () => {
-                    await queryClient.invalidateQueries()
-                  }
-                },
-                {
-                  label: 'Reset',
-                  onClick: async () => {
-                    await queryClient.resetQueries()
-                  }
-                },
-                {
-                  label: 'Cancel',
-                  onClick: async () => {
-                    await queryClient.cancelQueries()
-                  }
-                },
-                {
-                  label: 'Remove',
-                  onClick: () => {
-                    queryClient.removeQueries()
-                  }
-                }
-              ]
-            },
-            {
-              label: 'GitHub',
-              onClick: () => {
-                open('https://github.com/tt-ph4t/icon-sets')
-              }
+            'refetchQueries',
+            'invalidateQueries',
+            'resetQueries',
+            'cancelQueries',
+            'removeQueries'
+          ].map(a => ({
+            label: capitalCase(a),
+            onClick: async () => {
+              await queryClient[a]()
             }
-          ]}
-          render={<ToolbarButton icon='menu' />}
+          }))}
+          render={
+            <ToolbarButton
+              checked
+              icon='github'
+              onClick={() => {
+                open('https://github.com/tt-ph4t/icon-sets')
+              }}
+              preventToggle>
+              GitHub
+            </ToolbarButton>
+          }
         />
       </div>
       <React.Activity>
