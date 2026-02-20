@@ -29,7 +29,7 @@ export const Collapsible = component(
       async event => {
         await onToggle(event)
 
-        setOpen(event.detail.open)
+        setOpen(event.detail.open) // ?
       },
       { target: ref }
     )

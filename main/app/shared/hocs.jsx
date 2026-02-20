@@ -33,7 +33,7 @@ export const withImmerAtom = initialValue =>
           )
         )
       },
-      useSelectValue: useCallback((fn, deps = []) =>
+      useSelectValue: useCallback((fn, { deps = [], ...options } = {}) =>
         useAtomValue(
           selectAtom(
             atom,
@@ -41,7 +41,10 @@ export const withImmerAtom = initialValue =>
             useCallback(draft => fn({ draft }), deps),
             isEqual
           ),
-          { delay: DELAY_MS }
+          {
+            delay: DELAY_MS,
+            ...options
+          }
         )
       )
     }

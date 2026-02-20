@@ -49,7 +49,7 @@ export const useCustomizedIcons = Object.assign(
       useStore().useSelectValue(
         ({ draft }) =>
           result(draft.current[iconId] ?? defaultIconCustomisations),
-        [iconId]
+        { deps: [iconId] }
       )
   }
 )

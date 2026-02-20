@@ -16,7 +16,8 @@ export default Object.assign(
     const collapsibleList = useCollapsibleList()
 
     const collapsibleListCurrent = collapsibleList.useSelectValue(
-      ({ draft }) => draft.current
+      ({ draft }) => draft.current,
+      { delay: 0 }
     )
 
     const hasAnyOpen = useMemo(

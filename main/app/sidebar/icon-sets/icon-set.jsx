@@ -48,7 +48,7 @@ export default component(({ context }) => {
 
   const state = store.useSelectValue(
     ({ draft }) => draft.current[context.id] ?? initialState,
-    [context.id]
+    { deps: [context.id] }
   )
 
   const query = useQuery(

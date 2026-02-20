@@ -59,7 +59,7 @@ const Root = component(({ iconIds, initialSearchTerm, reloadMenu }) => {
   const searchTermCurrent = searchTerm.useSelectValue(
     ({ draft }) =>
       hasInteracted ? draft.current : (initialSearchTerm ?? draft.current),
-    [hasInteracted, initialSearchTerm]
+    { deps: [hasInteracted, initialSearchTerm] }
   )
 
   const filteredIconIds = useFilteredIconIds(searchTermCurrent, iconIds)
