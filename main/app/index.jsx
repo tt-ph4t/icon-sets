@@ -37,7 +37,7 @@ export default component(() => (
     </div>
     <ToolbarButton
       checked
-      icon='github'
+      icon='code'
       onClick={() => {
         open('https://github.com/tt-ph4t/icon-sets')
       }}
@@ -47,9 +47,8 @@ export default component(() => (
         left: 'calc(var(--spacing) * 1.5)',
         position: 'absolute',
         zIndex: 1
-      }}>
-      GitHub
-    </ToolbarButton>
+      }}
+    />
     <React.Activity>
       <SplitLayout
         initialHandlePosition='25%'

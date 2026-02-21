@@ -26,6 +26,9 @@ export default component(() => {
         groupBy(Object.values(iconSets), iconSet => iconSet.category),
         iconSets => iconSets.map(iconSet => iconSet.prefix)
       ),
+      get categoryNames() {
+        return sort(Object.keys(this.categories)).asc()
+      },
       prefixes: Object.keys(iconSets)
     }))
   })
@@ -45,15 +48,13 @@ export default component(() => {
             heading='icon sets'>
             <CollapsibleList
               ids={prefixes}
-              menu={sort(Object.keys(query.data.categories))
-                .asc()
-                .map(category => ({
-                  label: category,
-                  onClick: () => {
-                    setState(state => state === category || category)
-                  },
-                  selected: category === state
-                }))}
+              menu={query.data.categoryNames.map(category => ({
+                label: category,
+                onClick: () => {
+                  setState(state => state === category || category)
+                },
+                selected: category === state
+              }))}
               renderItem={({ context }) => (
                 <IconSet context={context} key={context.id} />
               )}

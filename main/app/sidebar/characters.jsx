@@ -17,9 +17,9 @@ const queryOptions = getQueryOptions({
     const iconIds = {}
 
     for (const iconSet of Object.values(iconSets))
-      for (const [char, iconName] of Object.entries(iconSet.chars))
-        iconIds[char] = [
-          ...(iconIds[char] ?? []),
+      for (const [character, iconName] of Object.entries(iconSet.chars))
+        iconIds[character] = [
+          ...(iconIds[character] ?? []),
           getId(iconSet.prefix, iconName)
         ]
 

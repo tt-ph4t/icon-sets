@@ -230,7 +230,7 @@ const Filter = {
             return {
               children: (['lastModified'].includes(a)
                 ? Object.entries(b)
-                : sort(Object.entries(b)).asc(([label]) => label)
+                : sort(Object.entries(b)).asc(([a]) => a)
               ).map(([label, iconSets]) => {
                 const iconSetPrefixes = iconSets.map(iconSet => iconSet.prefix)
 
