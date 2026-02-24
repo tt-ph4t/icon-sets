@@ -11,9 +11,7 @@ import { ICON_SETS_URL } from '../../shared/constants'
 import { component } from '../../shared/hocs'
 import { getQueryOptions } from '../../shared/utils'
 
-const queryOptions = getQueryOptions({
-  url: ICON_SETS_URL
-})
+const queryOptions = getQueryOptions({ url: ICON_SETS_URL })
 
 export default component(props => {
   const query = useQuery(queryOptions)

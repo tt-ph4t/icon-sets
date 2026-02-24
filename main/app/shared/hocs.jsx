@@ -62,7 +62,7 @@ export const lazy = (load, fallback = progressBar) => {
   ))
 }
 
-export const component = Component =>
+export const component = (Component = React.Fragment) =>
   React.memo(
     props => (
       <React.Activity>

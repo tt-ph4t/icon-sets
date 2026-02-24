@@ -7,7 +7,6 @@ import { QueryBoundary } from '../../shared/components/query-boundary'
 import { ICON_SETS_URL } from '../../shared/constants'
 import { component } from '../../shared/hocs'
 import { useState } from '../../shared/hooks'
-import { useCallback } from '../../shared/hooks/use-callback'
 import { getQueryOptions } from '../../shared/utils'
 import CollapsibleList from '../components/collapsible-list'
 import IconSet from './icon-set'
@@ -15,23 +14,21 @@ import IconSet from './icon-set'
 const useCollapsibleList = CollapsibleList.createHook()
 
 const queryOptions = getQueryOptions({
+  select: iconSets => ({
+    categories: mapValues(
+      groupBy(Object.values(iconSets), iconSet => iconSet.category),
+      iconSets => iconSets.map(iconSet => iconSet.prefix)
+    ),
+    get categoryNames() {
+      return sort(Object.keys(this.categories)).asc()
+    },
+    prefixes: Object.keys(iconSets)
+  }),
   url: ICON_SETS_URL
 })
 
 export default component(() => {
-  const query = useQuery({
-    ...queryOptions,
-    select: useCallback(iconSets => ({
-      categories: mapValues(
-        groupBy(Object.values(iconSets), iconSet => iconSet.category),
-        iconSets => iconSets.map(iconSet => iconSet.prefix)
-      ),
-      get categoryNames() {
-        return sort(Object.keys(this.categories)).asc()
-      },
-      prefixes: Object.keys(iconSets)
-    }))
-  })
+  const query = useQuery(queryOptions)
 
   return (
     <QueryBoundary

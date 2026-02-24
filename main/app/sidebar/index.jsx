@@ -10,9 +10,8 @@ import { ICON_CACHE } from '../shared/constants'
 import { component } from '../shared/hocs'
 import { useBookmarkedIcons } from '../shared/hooks/use-bookmarked-icons'
 import { useCustomizedIcons } from '../shared/hooks/use-customized-icons'
-import Characters from './characters'
 import IconGrid from './components/icon-grid'
-import IconNames from './icon-names'
+import IconGroups from './icon-groups'
 import IconSets from './icon-sets'
 
 const CustomizedIcons = component(() => {
@@ -94,13 +93,10 @@ export default component(() => (
   <div style={{ '--sidebar-icon-grid-height': 'calc(var(--height) / 2)' }}>
     <React.Activity>
       <IconSets />
-      <IconNames />
+      <IconGroups />
     </React.Activity>
     <BookmarkedIcons />
     <CustomizedIcons />
-    <React.Activity>
-      <CachedIcons />
-      <Characters />
-    </React.Activity>
+    <CachedIcons />
   </div>
 ))

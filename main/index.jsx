@@ -5,7 +5,7 @@ import { createRoot } from 'react-dom/client'
 import root from 'react-shadow'
 
 import { lazy } from './app/shared/hocs'
-import './globals.css'
+import './index.css'
 
 const App = lazy(() => import('./app'))
 const QueryClientProvider = lazy(() => import('./query-client-provider'))
