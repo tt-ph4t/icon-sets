@@ -30,7 +30,6 @@ import { useEffect } from '../shared/hooks/use-effect'
 import { useMemo } from '../shared/hooks/use-memo'
 import { useRef } from '../shared/hooks/use-ref'
 import { getQueryOptions, has } from '../shared/utils'
-import { timeAgo } from '../shared/utils/time-ago'
 
 const queryOptions = getQueryOptions({
   url: ICON_SETS_URL
@@ -128,29 +127,8 @@ const Filter = {
             mapValues(
               {
                 author: groupBy(iconSets, iconSet => iconSet.author.name),
-                categories: uniq(
-                  iconSets.flatMap(iconSet => Object.keys(iconSet.categories))
-                ).reduce((a, b) => {
-                  a[b] = groupBy(iconSets, iconSet =>
-                    Object.keys(iconSet.categories).includes(b)
-                  ).true
-
-                  return a
-                }, {}),
                 category: groupBy(iconSets, iconSet => iconSet.category),
                 grid: groupBy(iconSets, iconSet => iconSet.grid),
-                lastModified: uniq(
-                  sort(iconSets.map(iconSet => iconSet.lastModified))
-                    .desc()
-                    .map(timeAgo.unix)
-                ).reduce((a, b) => {
-                  a[b] = groupBy(
-                    iconSets,
-                    iconSet => timeAgo.unix(iconSet.lastModified) === b
-                  ).true
-
-                  return a
-                }, {}),
                 license: groupBy(iconSets, iconSet => iconSet.license.spdx),
                 palette: groupBy(iconSets, iconSet =>
                   iconSet.palette ? 'Multiple colors' : 'Monotone'
@@ -228,32 +206,33 @@ const Filter = {
             // )
 
             return {
-              children: (['lastModified'].includes(a)
-                ? Object.entries(b)
-                : sort(Object.entries(b)).asc(([a]) => a)
-              ).map(([label, iconSets]) => {
-                const iconSetPrefixes = iconSets.map(iconSet => iconSet.prefix)
+              children: sort(Object.entries(b))
+                .asc(([a]) => a)
+                .map(([label, iconSets]) => {
+                  const iconSetPrefixes = iconSets.map(
+                    iconSet => iconSet.prefix
+                  )
 
-                const checked = selectedIconSetPrefixes.some(a =>
-                  iconSetPrefixes.includes(a)
-                )
+                  const checked = selectedIconSetPrefixes.some(a =>
+                    iconSetPrefixes.includes(a)
+                  )
 
-                return {
-                  id: label,
-                  label: (
-                    <>
-                      {`${label} (${iconSets.length})`}
-                      <VscodeIcon
-                        name={checked ? 'check' : 'blank'}
-                        slot='icon-leaf'
-                      />
-                    </>
-                  ),
-                  onClick: () => {
-                    toggleIconSetPrefixes(checked, iconSetPrefixes)
+                  return {
+                    id: label,
+                    label: (
+                      <>
+                        {`${label} (${iconSets.length})`}
+                        <VscodeIcon
+                          name={checked ? 'check' : 'blank'}
+                          slot='icon-leaf'
+                        />
+                      </>
+                    ),
+                    onClick: () => {
+                      toggleIconSetPrefixes(checked, iconSetPrefixes)
+                    }
                   }
-                }
-              }),
+                }),
               id: a,
               label: capitalCase(a),
               open: true
