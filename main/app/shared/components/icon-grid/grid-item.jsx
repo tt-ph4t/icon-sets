@@ -39,11 +39,10 @@ export default component(({ context, iconId }) => {
   const searchTerm = useSearchTerm()
   const bookmarkedIcons = useBookmarkedIcons()
   const customizedIcons = useCustomizedIcons()
-  const { iconCustomisations } = useCustomizedIcons.useSelectValue(iconId)
 
   const [iconQuery] = useIconQueries({
-    iconCustomisations,
-    iconId
+    iconId,
+    ...useCustomizedIcons.useSelectValue(iconId)
   })
 
   const iconQueryFilter = useMemo(
@@ -58,6 +57,7 @@ export default component(({ context, iconId }) => {
     getQueryOptions({
       select: useCallback(
         iconSets => {
+          // eslint-disable-next-line no-unused-vars
           const { icons, ...iconSet } = iconSets[icon.prefix]
 
           return iconSet
@@ -150,7 +150,7 @@ export default component(({ context, iconId }) => {
               }))
             },
             {
-              label: 'More',
+              label: 'Customisations',
               menu: [
                 {
                   label: 'Reset',
