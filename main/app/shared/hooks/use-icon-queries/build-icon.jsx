@@ -71,11 +71,11 @@ export default (
           ? {
               get blob() {
                 return new Blob([this.data], {
-                  type: this.mimeType
+                  type: this.type
                 })
               },
               data,
-              mimeType: mime.getType(fileType)
+              type: mime.getType(fileType)
             }
           : {}
       },

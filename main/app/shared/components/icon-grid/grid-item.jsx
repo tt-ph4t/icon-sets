@@ -7,6 +7,7 @@ import { useUnmount } from 'ahooks'
 import { capitalCase } from 'change-case'
 import { findKey, pick, uniq } from 'es-toolkit'
 import { size, truncate } from 'es-toolkit/compat'
+import mime from 'mime/lite'
 import React from 'react'
 
 import { ICON_SETS_URL } from '../../constants'
@@ -35,7 +36,11 @@ const flipDirections = {
 }
 
 const takumi = {
-  formats: ['png', 'jpeg', 'webp', 'raw'],
+  formats: ['png', 'jpeg', 'webp', 'raw'].reduce((a, b) => {
+    a[b] = mime.getType(b)
+
+    return a
+  }, {}),
   get getBlob() {
     let blob, imageResponse
 
@@ -200,7 +205,7 @@ export default component(({ context, iconId }) => {
             },
             {
               label: 'Takumi WASM',
-              menu: takumi.formats.map(format => {
+              menu: Object.entries(takumi.formats).map(([format, type]) => {
                 const getBlobArgs = [
                   iconQuery.data['/'].to.reactElement,
                   {
@@ -218,6 +223,16 @@ export default component(({ context, iconId }) => {
                         await openObjectURL(
                           await takumi.getBlob(...getBlobArgs)
                         )
+                      }
+                    },
+                    ClipboardItem.supports(type) && {
+                      label: 'Copy',
+                      onClick: async () => {
+                        await navigator.clipboard.write([
+                          new ClipboardItem({
+                            [type]: await takumi.getBlob(...getBlobArgs)
+                          })
+                        ])
                       }
                     },
                     {
@@ -251,9 +266,7 @@ export default component(({ context, iconId }) => {
                     {
                       label: 'Copy',
                       onClick: () => {
-                        copy(icon.data, {
-                          // format: icon.mimeType
-                        })
+                        copy(icon.data)
                       }
                     },
                     {
