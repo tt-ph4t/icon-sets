@@ -130,16 +130,18 @@ export const Menu = component(
           render={render}>
           {children}
         </Trigger>
-        <Portal>
-          <Positioner align={align} side={side}>
-            <Popup
-              render={popupRender(data, {
-                ItemProps: { closeOnClick },
-                TriggerProps: { closeDelay, delay, openOnHover }
-              })}
-            />
-          </Positioner>
-        </Portal>
+        {has(data) && (
+          <Portal>
+            <Positioner align={align} side={side}>
+              <Popup
+                render={popupRender(data, {
+                  ItemProps: { closeOnClick },
+                  TriggerProps: { closeDelay, delay, openOnHover }
+                })}
+              />
+            </Positioner>
+          </Portal>
+        )}
       </Root>
     )
   }

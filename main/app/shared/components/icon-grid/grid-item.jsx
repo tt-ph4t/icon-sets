@@ -8,7 +8,6 @@ import { capitalCase } from 'change-case'
 import { findKey, pick, uniq } from 'es-toolkit'
 import { size, truncate } from 'es-toolkit/compat'
 import React from 'react'
-import root from 'react-shadow'
 
 import { ICON_SETS_URL } from '../../constants'
 import { component } from '../../hocs'
@@ -350,14 +349,7 @@ export default component(({ context, iconId }) => {
       ]}
       key={iconQuery.data.id}
       render={
-        <root.div
-          style={{
-            '--size': '40%',
-
-            height: 'var(--size)',
-            position: 'relative',
-            width: 'var(--size)'
-          }}>
+        <div style={{ position: 'relative' }}>
           <React.Activity
             mode={
               bookmarkedIcons.has(iconQuery.data.id) ? 'visible' : 'hidden'
@@ -379,17 +371,13 @@ export default component(({ context, iconId }) => {
               }}
             />
           </React.Activity>
-          <div
-            icon={iconQuery.data.id}
-            style={{
-              '--size': '100%',
-
-              height: 'var(--size)',
-              width: 'var(--size)'
-            }}
-          />
-          <style>{iconQuery.data['/'].to.css}</style>
-        </root.div>
+          {React.cloneElement(iconQuery.data['/'].to.reactElement, {
+            get height() {
+              return this.width // 'auto'
+            },
+            width: '2.8rem'
+          })}
+        </div>
       }
     />
   )
