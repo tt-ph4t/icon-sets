@@ -40,7 +40,7 @@ const CachedIcons = component(() => {
 
   return (
     <Collapsible
-      description={iconIds.length}
+      description={`${iconIds.length} / ${ICON_CACHE.max}`}
       heading='cached icons'
       onToggle={event => {
         if (event.detail.open) update()

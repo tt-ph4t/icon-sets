@@ -1,9 +1,11 @@
 import { stringToIcon } from '@iconify/utils'
+import ImageResponse from '@takumi-rs/image-response/wasm'
+import takumiWasmBgUrl from '@takumi-rs/wasm/takumi_wasm_bg.wasm?url'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { VscodeIcon } from '@vscode-elements/react-elements'
 import { useUnmount } from 'ahooks'
 import { capitalCase } from 'change-case'
-import { findKey, uniq } from 'es-toolkit'
+import { findKey, pick, uniq } from 'es-toolkit'
 import { size, truncate } from 'es-toolkit/compat'
 import React from 'react'
 import root from 'react-shadow'
@@ -14,6 +16,7 @@ import { useBookmarkedIcons } from '../../hooks/use-bookmarked-icons'
 import { useCallback } from '../../hooks/use-callback'
 import { useCustomizedIcons } from '../../hooks/use-customized-icons'
 import { useIconQueries } from '../../hooks/use-icon-queries'
+import { getIconFileNames } from '../../hooks/use-icon-queries/build-icon'
 import { useMemo } from '../../hooks/use-memo'
 import {
   copy,
@@ -30,6 +33,22 @@ import { useSearchTerm } from './hooks'
 const flipDirections = {
   hFlip: 'Horizontal flip',
   vFlip: 'Vertical flip'
+}
+
+const takumi = {
+  formats: ['png', 'jpeg', 'webp', 'raw'],
+  get getBlob() {
+    let blob, imageResponse
+
+    return async (component, options) => {
+      imageResponse ??= new ImageResponse(component, {
+        module: takumiWasmBgUrl,
+        ...options
+      })
+
+      return (blob ??= await imageResponse.blob())
+    }
+  }
 }
 
 export default component(({ context, iconId }) => {
@@ -158,15 +177,6 @@ export default component(({ context, iconId }) => {
                     customizedIcons.delete(iconQuery.data.id)
                   }
                 },
-                { separator: true },
-                {
-                  label: 'Restart animations',
-                  onClick: () => {
-                    customizedIcons.set(iconQuery.data.id, () => ({
-                      wrapSvgContentStart: `<!-- ${crypto.randomUUID()} -->`
-                    }))
-                  }
-                },
                 ...Object.keys(flipDirections).map(flipDirection => ({
                   label: flipDirections[flipDirection],
                   onClick: () => {
@@ -177,8 +187,52 @@ export default component(({ context, iconId }) => {
                       })
                     )
                   }
-                }))
+                })),
+                { separator: true },
+                {
+                  label: 'Restart animations',
+                  onClick: () => {
+                    customizedIcons.set(iconQuery.data.id, () => ({
+                      wrapSvgContentStart: `<!-- ${crypto.randomUUID()} -->`
+                    }))
+                  }
+                }
               ]
+            },
+            {
+              label: 'Takumi WASM',
+              menu: takumi.formats.map(format => {
+                const getBlobArgs = [
+                  iconQuery.data['/'].to.reactElement,
+                  {
+                    format,
+                    ...pick(iconQuery.data.data, ['height', 'width'])
+                  }
+                ]
+
+                return {
+                  label: format.toUpperCase(),
+                  menu: !['raw'].includes(format) && [
+                    {
+                      label: 'View',
+                      onClick: async () => {
+                        await openObjectURL(
+                          await takumi.getBlob(...getBlobArgs)
+                        )
+                      }
+                    },
+                    {
+                      label: 'Download',
+                      onClick: async () => {
+                        await fileSaver(
+                          await takumi.getBlob(...getBlobArgs),
+                          getIconFileNames(iconQuery.data, format).labeled
+                        )
+                      }
+                    }
+                  ]
+                }
+              })
             },
             { separator: true },
             ...Object.entries(iconQuery.data['/'].paths).map(
@@ -297,7 +351,6 @@ export default component(({ context, iconId }) => {
       key={iconQuery.data.id}
       render={
         <root.div
-          icon={iconQuery.data.id}
           style={{
             '--size': '40%',
 

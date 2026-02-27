@@ -9,12 +9,13 @@ import {
   wrapSVGContent
 } from '@iconify/utils'
 import { mapValues } from 'es-toolkit'
+import parse from 'html-react-parser'
 import mime from 'mime/lite'
 
 import { ICON_CACHE } from '../../constants'
 import { has } from '../../utils'
 
-const iconTypes = ['css', 'json', 'svg', 'txt', 'ico', 'png', 'pdf']
+const iconTypes = ['css', 'json', 'svg', 'txt', 'ico', 'pdf']
 
 const idCases =
   // https://github.com/antfu-collective/icones/blob/e04ac9277776d791c1fc0696706708baa6a7d89f/src/utils/case.ts
@@ -37,6 +38,16 @@ const idCases =
     unocss: id => `i-${id.replaceAll(':', '-')}`,
     unocssColon: id => `i-${id}`
   }
+
+export const getIconFileNames = (icon, extension) => ({
+  default: `${icon.name}.${extension}`,
+  get fullPath() {
+    return `${icon.setName}/${this.default}`
+  },
+  get labeled() {
+    return `[${icon.setName}] ${this.default}`
+  }
+})
 
 // https://github.com/antfu-collective/icones/blob/main/src/utils/svgToPng.ts
 export default (
@@ -70,15 +81,7 @@ export default (
       },
       idCases: mapValues(idCases, value => value(icon.id)),
       paths: iconTypes.reduce((a, b) => {
-        a[b] = {
-          default: `${icon.name}.${b}`,
-          get full() {
-            return `${icon.setName}/${this.default}`
-          },
-          get labeled() {
-            return `[${icon.setName}] ${this.default}`
-          }
-        }
+        a[b] = getIconFileNames(icon, b)
 
         return a
       }, {}),
@@ -100,14 +103,15 @@ export default (
             return svgToData(this.html)
           },
           get html() {
-            const svgSizeFull = '100%'
-
             const svg = iconToSVG(iconData, {
               height: iconData.height,
               width: iconData.width
             })
 
             return iconToHTML(replaceIDs(svg.body), svg.attributes)
+          },
+          get reactElement() {
+            return parse(this.html)
           }
         }
       }

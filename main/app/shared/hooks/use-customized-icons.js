@@ -1,4 +1,4 @@
-import { defaultIconCustomisations } from '@iconify/utils'
+import { defaultIconCustomisations, mergeCustomisations } from '@iconify/utils'
 import { omit } from 'es-toolkit'
 
 import { ICON_CACHE } from '../constants'
@@ -36,6 +36,7 @@ export const useCustomizedIcons = Object.assign(
             const a = draft.current[iconId] ?? defaultIconCustomisations
             const b = fn(result(a))
 
+            mergeCustomisations
             if (!isEqual(a, b)) draft.current[iconId] = { ...a, ...b }
           })
         }, iconId)
