@@ -34,6 +34,7 @@
     "client-zip": "^2.5.0",
     "copy-to-clipboard": "^3.3.3",
     "dayjs": "^1.11.19",
+    "devtools-detector": "^2.0.25",
     "es-toolkit": "^1.44.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",

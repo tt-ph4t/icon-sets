@@ -6,7 +6,6 @@ import {
 import { asyncNoop, noop } from 'es-toolkit'
 import React from 'react'
 
-import { DELAY_MS } from '../constants'
 import { component } from '../hocs'
 import { useState } from '../hooks'
 import { useEffect } from '../hooks/use-effect'
@@ -18,15 +17,15 @@ const minPositionInPercentage = 5
 
 const useDebounceEffect = (
   effect = asyncNoop,
-  { beforeEffect = noop, delay = DELAY_MS, deps }
+  { beforeEffect = noop, deps }
 ) => {
   const ref = useRef()
 
   useEffect(() => {
-    clearTimeout(ref.current)
+    cancelIdleCallback(ref.current)
     beforeEffect()
 
-    ref.current = setTimeout(effect, delay)
+    ref.current = requestIdleCallback(effect)
   }, deps)
 }
 
@@ -43,7 +42,6 @@ const Slot = component(({ children, index, positionInPercentage }) => {
       beforeEffect: () => {
         if (has(state)) setState(true)
       },
-      delay: 1000,
       deps: [size]
     }
   )

@@ -1,5 +1,6 @@
 import '@vscode-elements/webview-playground'
 import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
+import devtoolsDetector from 'devtools-detector'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import root from 'react-shadow'
@@ -10,15 +11,6 @@ import './index.css'
 
 const App = lazy(() => import('./app'))
 const QueryClientProvider = lazy(() => import('./query-client-provider'))
-
-{
-  let error = new Error(`https://github.com/${GITHUB_REPO}`)
-
-  for (let index = 1; index < 1e3; index++)
-    error = new Error(error.message, { cause: error })
-
-  console.error(new Error('GitHub', { cause: error }))
-}
 
 createRoot(document.querySelector('#root')).render(
   <>
@@ -46,3 +38,44 @@ createRoot(document.querySelector('#root')).render(
     />
   </>
 )
+
+if (import.meta.env.PROD) {
+  let idleId
+
+  const max = 1e6
+
+  devtoolsDetector.addListener(isOpen => {
+    if (isOpen) {
+      let index = 1
+      let error = new Error(index)
+
+      const callback =
+        // https://viblo.asia/p/event-loop-trong-javascript-microtask-macrotask-promise-va-cac-cau-hoi-phong-van-pho-bien-GyZJZjrbJjm
+        () => {
+          if (isOpen) {
+            do {
+              index++
+              error = new Error(index, { cause: error })
+            } while (index % (max * 0.01))
+
+            if (index === max) {
+              devtoolsDetector.stop()
+
+              console.error(
+                new Error(`https://github.com/${GITHUB_REPO}`, { cause: error })
+              )
+            } else idleId = requestIdleCallback(callback)
+          }
+        }
+
+      idleId = requestIdleCallback(callback)
+    } else {
+      cancelIdleCallback(idleId)
+      devtoolsDetector.launch()
+
+      idleId = undefined
+    }
+  })
+
+  devtoolsDetector.launch()
+}
