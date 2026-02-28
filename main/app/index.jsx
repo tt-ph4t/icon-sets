@@ -8,8 +8,7 @@ import { preconnect } from 'react-dom'
 
 import { progressBar } from './shared/components'
 import { SplitLayout } from './shared/components/split-layout'
-import { ToolbarButton } from './shared/components/toolbar-button'
-import { DATA_BASE_URL, GITHUB_REPO } from './shared/constants'
+import { DATA_BASE_URL } from './shared/constants'
 import { component, lazy } from './shared/hocs'
 
 const Sidebar = lazy(() => import('./sidebar'))
@@ -40,20 +39,6 @@ export default component(() => {
         }}>
         <Loading />
       </div>
-      <ToolbarButton
-        checked
-        icon='code'
-        onClick={() => {
-          open(`https://github.com/${GITHUB_REPO}`)
-        }}
-        preventToggle
-        style={{
-          bottom: 'calc(var(--spacing) * 1.5)',
-          left: 'calc(var(--spacing) * 1.5)',
-          position: 'absolute',
-          zIndex: 1
-        }}
-      />
       <React.Activity>
         <SplitLayout
           initialHandlePosition='25%'

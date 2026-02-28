@@ -388,6 +388,7 @@ export default component(({ context, iconId }) => {
             get height() {
               return this.width // 'auto'
             },
+            id: iconQuery.data.id,
             width: '2.8rem'
           })}
         </div>
