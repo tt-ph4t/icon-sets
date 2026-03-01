@@ -1,5 +1,5 @@
 import { stringToIcon, validateIconName } from '@iconify/utils'
-import { isPlainObject } from '@sindresorhus/is'
+import { isPrimitive } from '@sindresorhus/is'
 import { queryOptions } from '@tanstack/react-query'
 import { decode } from '@toon-format/toon'
 import axios from 'axios'
@@ -11,6 +11,7 @@ import FileSaver from 'file-saver'
 import hasValues from 'has-values'
 import { isWordCharacter } from 'is-word-character'
 import jszip from 'jszip'
+import { hash } from 'ohash'
 import isEqual1 from 'react-fast-compare'
 
 import { DELAY_MS, ID_SEPARATOR } from '../constants'
@@ -72,7 +73,11 @@ export const getQueryOptions =
 
 export const getId = (...values) =>
   values
-    .map(value => (isPlainObject(value) ? JSON.stringify : String)(value))
+    .map(value => {
+      if (isPrimitive(value)) return String(value)
+
+      return hash(value)
+    })
     .join(ID_SEPARATOR)
 
 export const isEqual = (...[b, ...a]) => a.every(a => isEqual1(a, b))
