@@ -26,7 +26,7 @@ import React from 'react'
 
 import { component } from '../../hocs'
 import { useState } from '../../hooks'
-import { useBookmarkedIcons } from '../../hooks/use-bookmarked-icons'
+import { useFavorites } from '../../hooks/use-favorites'
 import { useUpdateEffect } from '../../hooks/use-update-effect'
 import { has, validateIconId } from '../../utils'
 import { pluralize } from '../../utils/pluralize'
@@ -53,8 +53,8 @@ const actions = mapValues(
 const Root = component(({ iconIds, initialSearchTerm, reloadMenu }) => {
   const searchTerm = useSearchTerm()
   const isInitSearchTerm = searchTerm.useIsInit()
-  const bookmarkedIcons = useBookmarkedIcons()
   const [hasInteracted, setHasInteracted] = useState()
+  const favorites = useFavorites()
 
   const searchTermCurrent = searchTerm.useSelectValue(
     ({ draft }) =>
@@ -111,11 +111,11 @@ const Root = component(({ iconIds, initialSearchTerm, reloadMenu }) => {
                     ? [
                         { separator: true },
                         {
-                          label: 'Bookmark',
-                          menu: ['toggle', 'add', 'delete'].map(value => ({
-                            label: capitalCase(value),
+                          label: 'Favorite',
+                          menu: ['toggle', 'add', 'delete'].map(a => ({
+                            label: capitalCase(a),
                             onClick: () => {
-                              bookmarkedIcons[value](...state)
+                              favorites[a](...state)
                             }
                           }))
                         },

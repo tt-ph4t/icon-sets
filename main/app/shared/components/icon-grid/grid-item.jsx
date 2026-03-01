@@ -12,9 +12,9 @@ import React from 'react'
 
 import { ICON_SETS_URL } from '../../constants'
 import { component } from '../../hocs'
-import { useBookmarkedIcons } from '../../hooks/use-bookmarked-icons'
 import { useCallback } from '../../hooks/use-callback'
 import { useCustomizedIcons } from '../../hooks/use-customized-icons'
+import { useFavorites } from '../../hooks/use-favorites'
 import { useIconQueries } from '../../hooks/use-icon-queries'
 import { getIconFileNames } from '../../hooks/use-icon-queries/build-icon'
 import { useMemo } from '../../hooks/use-memo'
@@ -60,8 +60,8 @@ export default component(({ context, iconId }) => {
   const iconNameFallback = useMemo(() => icon.name.slice(0, 3), [icon.name])
   const queryClient = useQueryClient()
   const searchTerm = useSearchTerm()
-  const bookmarkedIcons = useBookmarkedIcons()
   const customizedIcons = useCustomizedIcons()
+  const favorites = useFavorites()
 
   const [iconQuery] = useIconQueries({
     iconId,
@@ -164,11 +164,11 @@ export default component(({ context, iconId }) => {
           label: capitalCase(iconQuery.data.name),
           menu: [
             {
-              label: 'Bookmark',
+              label: 'Favorite',
               menu: ['toggle', 'add', 'delete'].map(a => ({
                 label: capitalCase(a),
                 onClick: () => {
-                  bookmarkedIcons[a](iconQuery.data.id)
+                  favorites[a](iconQuery.data.id)
                 }
               }))
             },
@@ -281,7 +281,7 @@ export default component(({ context, iconId }) => {
             )
           ],
           onClick: () => {
-            bookmarkedIcons.toggle(iconQuery.data.id)
+            favorites.toggle(iconQuery.data.id)
           }
         },
         { separator: true },
@@ -364,13 +364,11 @@ export default component(({ context, iconId }) => {
       render={
         <div style={{ position: 'relative' }}>
           <React.Activity
-            mode={
-              bookmarkedIcons.has(iconQuery.data.id) ? 'visible' : 'hidden'
-            }>
+            mode={favorites.has(iconQuery.data.id) ? 'visible' : 'hidden'}>
             <VscodeIcon
               name='circle-filled'
               onClick={() => {
-                bookmarkedIcons.delete(iconQuery.data.id)
+                favorites.delete(iconQuery.data.id)
               }}
               size={12}
               style={{

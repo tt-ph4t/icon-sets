@@ -8,8 +8,8 @@ import { Collapsible } from '../shared/components/collapsible'
 import { ToolbarButton } from '../shared/components/toolbar-button'
 import { ICON_CACHE } from '../shared/constants'
 import { component } from '../shared/hocs'
-import { useBookmarkedIcons } from '../shared/hooks/use-bookmarked-icons'
 import { useCustomizedIcons } from '../shared/hooks/use-customized-icons'
+import { useFavorites } from '../shared/hooks/use-favorites'
 import IconGrid from './components/icon-grid'
 import IconGroups from './icon-groups'
 import IconSets from './icon-sets'
@@ -70,18 +70,16 @@ const CachedIcons = component(() => {
   )
 })
 
-const BookmarkedIcons = component(() => {
-  const bookmarkedIcons = useBookmarkedIcons()
+const Favorites = component(() => {
+  const favorites = useFavorites()
 
   return (
-    <Collapsible
-      description={bookmarkedIcons.current.length}
-      heading='bookmarked icons'>
-      <IconGrid iconIds={bookmarkedIcons.current} />
+    <Collapsible description={favorites.current.length} heading='favorites'>
+      <IconGrid iconIds={favorites.current} />
       <Menu
         data={{
           label: 'Reset',
-          onClick: bookmarkedIcons.reset
+          onClick: favorites.reset
         }}
         render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
       />
@@ -95,7 +93,7 @@ export default component(() => (
       <IconSets />
       <IconGroups />
     </React.Activity>
-    <BookmarkedIcons />
+    <Favorites />
     <CustomizedIcons />
     <CachedIcons />
   </div>
