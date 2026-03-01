@@ -1,13 +1,10 @@
 import { stringToIcon } from '@iconify/utils'
-import ImageResponse from '@takumi-rs/image-response/wasm'
-import takumiWasmBgUrl from '@takumi-rs/wasm/takumi_wasm_bg.wasm?url'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { VscodeIcon } from '@vscode-elements/react-elements'
 import { useUnmount } from 'ahooks'
 import { capitalCase } from 'change-case'
 import { findKey, pick, uniq } from 'es-toolkit'
 import { size, truncate } from 'es-toolkit/compat'
-import mime from 'mime/lite'
 import React from 'react'
 
 import { ICON_SETS_URL } from '../../constants'
@@ -21,6 +18,7 @@ import { useMemo } from '../../hooks/use-memo'
 import {
   copy,
   fileSaver,
+  getId,
   getQueryOptions,
   has,
   openObjectURL
@@ -29,30 +27,11 @@ import { prettyBytes } from '../../utils/pretty-bytes'
 import { timeAgo } from '../../utils/time-ago'
 import { Menu } from '../base-ui/menu'
 import { useSearchTerm } from './hooks'
+import takumi from './takumi.wasm'
 
 const flipDirections = {
   hFlip: 'Horizontal flip',
   vFlip: 'Vertical flip'
-}
-
-const takumi = {
-  formats: ['png', 'jpeg', 'webp', 'raw'].reduce((a, b) => {
-    a[b] = mime.getType(b)
-
-    return a
-  }, {}),
-  get getBlob() {
-    let blob, imageResponse
-
-    return async (component, options) => {
-      imageResponse ??= new ImageResponse(component, {
-        module: takumiWasmBgUrl,
-        ...options
-      })
-
-      return (blob ??= await imageResponse.blob())
-    }
-  }
 }
 
 export default component(({ context, iconId }) => {
@@ -62,10 +41,11 @@ export default component(({ context, iconId }) => {
   const searchTerm = useSearchTerm()
   const customizedIcons = useCustomizedIcons()
   const favorites = useFavorites()
+  const { iconCustomisations } = useCustomizedIcons.useSelect(iconId)
 
   const [iconQuery] = useIconQueries({
-    iconId,
-    ...useCustomizedIcons.useSelectValue(iconId)
+    iconCustomisations,
+    iconId
   })
 
   const iconQueryFilter = useMemo(
@@ -206,23 +186,27 @@ export default component(({ context, iconId }) => {
             {
               label: 'Takumi WASM',
               menu: Object.entries(takumi.formats).map(([format, type]) => {
-                const getBlobArgs = [
-                  iconQuery.data['/'].to.reactElement,
-                  {
+                const takumiArg = {
+                  component: iconQuery.data['/'].to.reactElement,
+                  get id() {
+                    return getId(`[${iconQuery.data.id}]`, {
+                      iconCustomisations,
+                      options: this.options
+                    })
+                  },
+                  options: {
                     format,
                     ...pick(iconQuery.data.data, ['height', 'width'])
                   }
-                ]
+                }
 
                 return {
                   label: format.toUpperCase(),
-                  menu: !['raw'].includes(format) && [
+                  menu: type && [
                     {
                       label: 'View',
                       onClick: async () => {
-                        await openObjectURL(
-                          await takumi.getBlob(...getBlobArgs)
-                        )
+                        await openObjectURL(await takumi(takumiArg))
                       }
                     },
                     ClipboardItem.supports(type) && {
@@ -230,7 +214,7 @@ export default component(({ context, iconId }) => {
                       onClick: async () => {
                         await navigator.clipboard.write([
                           new ClipboardItem({
-                            [type]: await takumi.getBlob(...getBlobArgs)
+                            [type]: await takumi(takumiArg)
                           })
                         ])
                       }
@@ -239,7 +223,7 @@ export default component(({ context, iconId }) => {
                       label: 'Download',
                       onClick: async () => {
                         await fileSaver(
-                          await takumi.getBlob(...getBlobArgs),
+                          await takumi(takumiArg),
                           getIconFileNames(iconQuery.data, format).labeled
                         )
                       }

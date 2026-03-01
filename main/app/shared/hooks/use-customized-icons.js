@@ -46,7 +46,7 @@ export const useCustomizedIcons = Object.assign(
   {
     useIconIds: () =>
       useStore().useSelectValue(({ draft }) => Object.keys(draft.current)),
-    useSelectValue: iconId =>
+    useSelect: iconId =>
       useStore().useSelectValue(
         ({ draft }) =>
           result(draft.current[iconId] ?? defaultIconCustomisations),
