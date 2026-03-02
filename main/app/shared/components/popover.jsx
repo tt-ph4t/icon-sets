@@ -4,10 +4,11 @@ import {
   VscodeFormGroup
 } from '@vscode-elements/react-elements'
 import React from 'react'
+import { renderSlot } from 'render-slot'
 
-import { component } from '../../hocs'
-import { useState } from '../../hooks'
-import { cardStyle, resolveRender } from './utils'
+import { component } from '../hocs'
+import { useState } from '../hooks'
+import { cardStyle } from './utils'
 
 const { Popup, Portal, Positioner, Root, Trigger } = popover
 
@@ -22,6 +23,7 @@ export const Popover = Object.assign(
       open = false,
       openOnHover = true,
       popupRender,
+      popupWrapper,
       render,
       side = 'bottom'
     }) => {
@@ -33,12 +35,16 @@ export const Popover = Object.assign(
             align={align}
             render={(props, state) => (
               <Popup
-                render={resolveRender(popupRender, {
+                render={renderSlot({
+                  bespoke: popupRender,
                   context: {
-                    props,
-                    setOpen: setState,
-                    state
-                  }
+                    context: {
+                      props,
+                      setOpen: setState,
+                      state
+                    }
+                  },
+                  wrapper: popupWrapper
                 })}
                 {...props}
               />
@@ -74,9 +80,9 @@ export const Popover = Object.assign(
     }
   ),
   {
-    Card: component(({ popupRender, ...props }) => (
+    Card: component(props => (
       <Popover
-        popupRender={(...args) => (
+        popupWrapper={children => (
           <VscodeFormContainer style={cardStyle}>
             <VscodeFormGroup
               style={{
@@ -85,7 +91,7 @@ export const Popover = Object.assign(
                 overflow: 'auto'
               }}
               variant='settings-group'>
-              {resolveRender(popupRender, ...args)}
+              {children}
             </VscodeFormGroup>
           </VscodeFormContainer>
         )}

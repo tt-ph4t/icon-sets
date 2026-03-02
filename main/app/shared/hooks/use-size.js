@@ -5,7 +5,11 @@ import { useRef } from './use-ref'
 
 export const useSize = () => {
   const ref = useRef()
-  const size = useSize1(() => ref.current ?? document.querySelector('body'))
 
-  return { ref, ...React.useDeferredValue(size) }
+  return {
+    ref,
+    ...React.useDeferredValue(
+      useSize1(() => ref.current ?? document.querySelector('body'))
+    )
+  }
 }

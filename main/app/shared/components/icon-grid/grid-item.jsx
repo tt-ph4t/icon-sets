@@ -25,7 +25,7 @@ import {
 } from '../../utils'
 import { prettyBytes } from '../../utils/pretty-bytes'
 import { timeAgo } from '../../utils/time-ago'
-import { Menu } from '../base-ui/menu'
+import { Menu } from '../menu'
 import { useSearchTerm } from './hooks'
 import takumi from './takumi.wasm'
 

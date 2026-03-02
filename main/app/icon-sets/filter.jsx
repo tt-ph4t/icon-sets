@@ -19,7 +19,7 @@ import {
 } from 'es-toolkit'
 import { sort } from 'fast-sort'
 
-import { Popover } from '../shared/components/base-ui/popover'
+import { Popover } from '../shared/components/popover'
 import { QueryBoundary } from '../shared/components/query-boundary'
 import { ToolbarButton } from '../shared/components/toolbar-button'
 import { Tree } from '../shared/components/tree'

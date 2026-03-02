@@ -5,7 +5,7 @@ import {
 import { pick } from 'es-toolkit'
 
 import { component } from '../hocs'
-import { Menu } from './base-ui/menu'
+import { Menu } from './menu'
 
 export const ButtonGroup = component(({ menu, ...props }) => (
   <VscodeButtonGroup>

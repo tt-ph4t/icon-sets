@@ -5,7 +5,7 @@ import {
 } from '@vscode-elements/react-elements'
 import { VList } from 'virtua'
 
-import { Menu } from '../../shared/components/base-ui/menu'
+import { Menu } from '../../shared/components/menu'
 import { ToolbarButton } from '../../shared/components/toolbar-button'
 import { component, withImmerAtom } from '../../shared/hocs'
 import { useMemo } from '../../shared/hooks/use-memo'

@@ -1,12 +1,3 @@
-import { isFunction } from '@sindresorhus/is'
-import { noop } from 'es-toolkit'
-import React from 'react'
-
-export const resolveRender = (value, ...args) =>
-  React.isValidElement(value)
-    ? value
-    : (isFunction(value) ? value : noop)(...args)
-
 export const cardStyle =
   // https://github.com/vscode-elements/elements/blob/e71099a40fdbcbeaa50fd2d61ba2734f4e42f8d1/src/vscode-context-menu/vscode-context-menu.styles.ts
   {

@@ -1,16 +1,15 @@
-import { useLocalStorageState } from 'ahooks'
 import { union, uniq, without } from 'es-toolkit'
 import { castArray } from 'es-toolkit/compat'
 
 import { validateIconId } from '../utils'
 import { useCallback } from './use-callback'
+import { useLocalStorageState } from './use-local-storage-state'
 
 const defaultValue = []
 
 export const useFavorites = () => {
   const [state, setState] = useLocalStorageState('useFavorites', {
-    defaultValue,
-    listenStorageChange: true
+    defaultValue
   })
 
   return {

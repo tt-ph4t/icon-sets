@@ -73,11 +73,7 @@ export const getQueryOptions =
 
 export const getId = (...values) =>
   values
-    .map(value => {
-      if (isPrimitive(value)) return String(value)
-
-      return hash(value)
-    })
+    .map(value => (isPrimitive(value) ? String : hash)(value))
     .join(ID_SEPARATOR)
 
 export const isEqual = (...[b, ...a]) => a.every(a => isEqual1(a, b))

@@ -7,11 +7,11 @@ import {
 import { castArray } from 'es-toolkit/compat'
 import React from 'react'
 
-import { component } from '../../hocs'
-import { useState } from '../../hooks'
-import { useCallback } from '../../hooks/use-callback'
-import { useMemo } from '../../hooks/use-memo'
-import { getId, has } from '../../utils'
+import { component } from '../hocs'
+import { useState } from '../hooks'
+import { useCallback } from '../hooks/use-callback'
+import { useMemo } from '../hooks/use-memo'
+import { getId, has } from '../utils'
 import { cardStyle } from './utils'
 
 const {
