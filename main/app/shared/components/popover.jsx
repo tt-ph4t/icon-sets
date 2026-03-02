@@ -6,9 +6,9 @@ import {
 import React from 'react'
 import { renderSlot } from 'render-slot'
 
+import { CARD_STYLE } from '../constants'
 import { component } from '../hocs'
 import { useState } from '../hooks'
-import { cardStyle } from './utils'
 
 const { Popup, Portal, Positioner, Root, Trigger } = popover
 
@@ -83,7 +83,7 @@ export const Popover = Object.assign(
     Card: component(props => (
       <Popover
         popupWrapper={children => (
-          <VscodeFormContainer style={cardStyle}>
+          <VscodeFormContainer style={CARD_STYLE}>
             <VscodeFormGroup
               style={{
                 maxHeight: 'calc(var(--available-height) / 1.6)',

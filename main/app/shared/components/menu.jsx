@@ -4,15 +4,16 @@ import {
   VscodeContextMenuItem,
   VscodeFormContainer
 } from '@vscode-elements/react-elements'
+import { asyncNoop } from 'es-toolkit'
 import { castArray } from 'es-toolkit/compat'
 import React from 'react'
 
+import { CARD_STYLE } from '../constants'
 import { component } from '../hocs'
 import { useState } from '../hooks'
 import { useCallback } from '../hooks/use-callback'
 import { useMemo } from '../hooks/use-memo'
 import { getId, has } from '../utils'
-import { cardStyle } from './utils'
 
 const {
   Item,
@@ -30,7 +31,7 @@ const popupRender = Object.assign(
     const maxHeight = 500
 
     return (
-      <VscodeFormContainer style={cardStyle}>
+      <VscodeFormContainer style={CARD_STYLE}>
         <div
           style={{
             maxHeight,
@@ -74,8 +75,8 @@ const StyledItem = component(
     description,
     disabled,
     keybinding = description,
-    onMouseOut,
-    onMouseOver,
+    onMouseOut = asyncNoop,
+    onMouseOver = asyncNoop,
     selected = false,
     ...props
   }) => {
@@ -91,12 +92,12 @@ const StyledItem = component(
         onMouseOut={async event => {
           setSelected(false)
 
-          await onMouseOut?.(event)
+          await onMouseOut(event)
         }}
         onMouseOver={async event => {
           setSelected(true)
 
-          await onMouseOver?.(event)
+          await onMouseOver(event)
         }}
         selected={state}
         {...props}

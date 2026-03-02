@@ -10,9 +10,9 @@ import { ICON_CACHE } from '../shared/constants'
 import { component } from '../shared/hocs'
 import { useCustomizedIcons } from '../shared/hooks/use-customized-icons'
 import { useFavorites } from '../shared/hooks/use-favorites'
-import IconGrid from './components/icon-grid'
 import IconGroups from './icon-groups'
 import IconSets from './icon-sets'
+import { IconGridWithFormContainer } from './shared'
 
 const CustomizedIcons = component(() => {
   const customizedIcons = useCustomizedIcons()
@@ -20,7 +20,7 @@ const CustomizedIcons = component(() => {
 
   return (
     <Collapsible description={iconIds.length} heading='customized icons'>
-      <IconGrid iconIds={iconIds} />
+      <IconGridWithFormContainer iconIds={iconIds} />
       <Menu
         data={{
           label: 'Reset',
@@ -45,7 +45,7 @@ const CachedIcons = component(() => {
       onToggle={event => {
         if (event.detail.open) update()
       }}>
-      <IconGrid iconIds={iconIds} />
+      <IconGridWithFormContainer iconIds={iconIds} />
       <Menu
         data={[
           { label: 'Reload' },
@@ -75,7 +75,7 @@ const Favorites = component(() => {
 
   return (
     <Collapsible description={favorites.current.length} heading='favorites'>
-      <IconGrid iconIds={favorites.current} />
+      <IconGridWithFormContainer iconIds={favorites.current} />
       <Menu
         data={{
           label: 'Reset',
