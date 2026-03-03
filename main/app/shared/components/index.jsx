@@ -4,7 +4,7 @@ export const progressBar = {
   default: (
     <VscodeProgressBar
       style={{
-        '--vscode-progressBar-background': 'var(--vscode-badge-foreground)'
+        '--vscode-progressBar-background': 'var(--vscode-badge-background)'
       }}
     />
   ),

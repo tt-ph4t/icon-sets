@@ -1,4 +1,4 @@
-import { stringToIcon } from '@iconify/utils'
+import { defaultIconCustomisations, stringToIcon } from '@iconify/utils'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { VscodeIcon } from '@vscode-elements/react-elements'
 import { useUnmount } from 'ahooks'
@@ -21,6 +21,7 @@ import {
   getId,
   getQueryOptions,
   has,
+  isEqual,
   openObjectURL
 } from '../../utils'
 import { prettyBytes } from '../../utils/pretty-bytes'
@@ -347,24 +348,48 @@ export default component(({ context, iconId }) => {
       key={iconQuery.data.id}
       render={
         <div style={{ position: 'relative' }}>
-          <React.Activity
-            mode={favorites.has(iconQuery.data.id) ? 'visible' : 'hidden'}>
-            <VscodeIcon
-              name='circle-filled'
-              onClick={() => {
-                favorites.delete(iconQuery.data.id)
-              }}
-              size={12}
+          <React.Activity>
+            <div
               style={{
-                '--vscode-icon-foreground':
-                  'var(--vscode-activityWarningBadge-background)',
-
+                display: 'flex',
+                flexDirection: 'column',
                 position: 'absolute',
                 right: 0,
-                top: 0,
-                zIndex: 1
-              }}
-            />
+                top: 0
+              }}>
+              <React.Activity
+                mode={favorites.has(iconQuery.data.id) ? 'visible' : 'hidden'}>
+                <VscodeIcon
+                  name='circle-filled'
+                  onClick={() => {
+                    favorites.delete(iconQuery.data.id)
+                  }}
+                  size={13}
+                  style={{
+                    '--vscode-icon-foreground':
+                      'var(--vscode-activityWarningBadge-background)'
+                  }}
+                />
+              </React.Activity>
+              <React.Activity
+                mode={
+                  isEqual(defaultIconCustomisations, iconCustomisations)
+                    ? 'hidden'
+                    : 'visible'
+                }>
+                <VscodeIcon
+                  name='circle-filled'
+                  onClick={() => {
+                    customizedIcons.delete(iconQuery.data.id)
+                  }}
+                  size={13}
+                  style={{
+                    '--vscode-icon-foreground':
+                      'var(--vscode-inputOption-activeBorder)'
+                  }}
+                />
+              </React.Activity>
+            </div>
           </React.Activity>
           {React.cloneElement(iconQuery.data['/'].to.reactElement, {
             get height() {
