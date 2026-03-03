@@ -1,7 +1,7 @@
 import { isEmptyString, isSymbol } from '@sindresorhus/is'
 import { useQuery } from '@tanstack/react-query'
-import { capitalCase } from 'change-case'
 import { compact } from 'es-toolkit'
+import { size } from 'es-toolkit/compat'
 
 import { Collapsible } from '../../shared/components/collapsible'
 import { IconGrid } from '../../shared/components/icon-grid'
@@ -11,6 +11,7 @@ import { ICON_SETS_URL } from '../../shared/constants'
 import { component, withImmerAtom } from '../../shared/hocs'
 import { useCallback } from '../../shared/hooks/use-callback'
 import { getId, getQueryOptions, isEqual } from '../../shared/utils'
+import { pluralize } from '../../shared/utils/pluralize'
 
 const initialState = {
   category: Symbol(),
@@ -92,7 +93,7 @@ export default component(({ context }) => {
       <Menu
         data={[
           {
-            label: 'Category',
+            label: pluralize(size(query.data.categories), 'category'),
             menu: Object.keys(query.data.categories).map(category => {
               const selected = category === state.category
 
@@ -115,7 +116,7 @@ export default component(({ context }) => {
             ['prefix', query.data.prefixes],
             ['suffix', query.data.suffixes]
           ].map(([a, b], index) => ({
-            description: capitalCase(a),
+            description: pluralize(size(b), a),
             label: !index && 'Theme',
             menu: Object.entries(b).map(([c, d]) => {
               const selected = c === state.theme[a]

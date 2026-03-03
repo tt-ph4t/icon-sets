@@ -4,7 +4,6 @@ import {
   VscodeIcon,
   VscodeMultiSelect
 } from '@vscode-elements/react-elements'
-import { capitalCase } from 'change-case'
 import {
   flow,
   groupBy,
@@ -16,6 +15,7 @@ import {
   without,
   xor
 } from 'es-toolkit'
+import { size } from 'es-toolkit/compat'
 import { sort } from 'fast-sort'
 
 import { Popover } from '../shared/components/popover'
@@ -29,10 +29,9 @@ import { useEffect } from '../shared/hooks/use-effect'
 import { useMemo } from '../shared/hooks/use-memo'
 import { useRef } from '../shared/hooks/use-ref'
 import { getQueryOptions, has } from '../shared/utils'
+import { pluralize } from '../shared/utils/pluralize'
 
-const queryOptions = getQueryOptions({
-  url: ICON_SETS_URL
-})
+const queryOptions = getQueryOptions({ url: ICON_SETS_URL })
 
 const getIconSetThemes = iconSet =>
   [iconSet.prefixes, iconSet.suffixes].flatMap(Object.values)
@@ -40,6 +39,25 @@ const getIconSetThemes = iconSet =>
 const isFiltering = flow(xor, has)
 
 const Filter = {
+  Label: component(() => {
+    const selectedIconSetPrefixes = useFilter().useSelectValue(
+      ({ draft }) => draft.selectedIconSetPrefixes
+    )
+
+    const query = useQuery({
+      ...queryOptions,
+      select: useCallback(
+        iconSets => isFiltering(Object.keys(iconSets), selectedIconSetPrefixes),
+        [selectedIconSetPrefixes]
+      )
+    })
+
+    return (
+      <ToolbarButton checked={query.data} icon='filter' preventToggle>
+        Filter
+      </ToolbarButton>
+    )
+  }),
   MultiSelect: component(() => {
     const filter = useFilter()
 
@@ -85,25 +103,6 @@ const Filter = {
       />
     )
   }),
-  ToolbarButton: component(() => {
-    const selectedIconSetPrefixes = useFilter().useSelectValue(
-      ({ draft }) => draft.selectedIconSetPrefixes
-    )
-
-    const query = useQuery({
-      ...queryOptions,
-      select: useCallback(
-        iconSets => isFiltering(Object.keys(iconSets), selectedIconSetPrefixes),
-        [selectedIconSetPrefixes]
-      )
-    })
-
-    return (
-      <ToolbarButton checked={query.data} icon='filter' preventToggle>
-        Filter
-      </ToolbarButton>
-    )
-  }),
   Tree: component(() => {
     const query = useQuery({ ...queryOptions, select: identity })
     const filter = useFilter()
@@ -132,7 +131,7 @@ const Filter = {
                 palette: groupBy(iconSets, iconSet =>
                   iconSet.palette ? 'Multiple colors' : 'Monotone'
                 ),
-                tags: uniq(iconSets.flatMap(iconSet => iconSet.tags)).reduce(
+                tag: uniq(iconSets.flatMap(iconSet => iconSet.tags)).reduce(
                   (a, b) => {
                     a[b] = groupBy(iconSets, iconSet =>
                       iconSet.tags.includes(b)
@@ -142,7 +141,7 @@ const Filter = {
                   },
                   {}
                 ),
-                themes: uniq(iconSets.flatMap(getIconSetThemes)).reduce(
+                theme: uniq(iconSets.flatMap(getIconSetThemes)).reduce(
                   (a, b) => {
                     a[b] = groupBy(iconSets, iconSet =>
                       getIconSetThemes(iconSet).includes(b)
@@ -216,7 +215,7 @@ const Filter = {
               }
             }),
             id: a,
-            label: capitalCase(a),
+            label: pluralize(size(b), a),
             open: true
           }))}
           hideArrows
@@ -281,7 +280,7 @@ export default component(() => {
             }
             render={
               <div>
-                <Filter.ToolbarButton />
+                <Filter.Label />
               </div>
             }
           />

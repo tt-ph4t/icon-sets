@@ -39,7 +39,9 @@ export const Tree = Object.assign(
       leaf: <VscodeIcon name='file' slot='icon-leaf' />
     },
     Item: component(({ children, label, ...props }) => (
-      <VscodeTreeItem {...props}>
+      <VscodeTreeItem
+        // open // ?
+        {...props}>
         {label}
         {render(children)}
       </VscodeTreeItem>
