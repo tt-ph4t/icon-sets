@@ -8,7 +8,7 @@ import { ICON_SETS_URL } from '../../shared/constants'
 import { component } from '../../shared/hocs'
 import { useState } from '../../shared/hooks'
 import { getQueryOptions } from '../../shared/utils'
-import { CollapsibleList } from '../shared'
+import CollapsibleList from '../collapsible-list'
 import IconSet from './icon-set'
 
 const useCollapsibleList = CollapsibleList.createHook()

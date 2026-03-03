@@ -1,3 +1,4 @@
+import { isTruthy } from '@sindresorhus/is'
 import {
   useIsFetching,
   useIsMutating,
@@ -16,7 +17,7 @@ const IconSets = lazy(() => import('./icon-sets'))
 
 const Loading = component(() => {
   const isLoading = [useIsFetching(), useIsMutating(), useIsRestoring()].some(
-    Boolean
+    isTruthy
   )
 
   return (

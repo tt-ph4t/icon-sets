@@ -11,7 +11,7 @@ import { ICON_SETS_URL, ID_SEPARATOR } from '../shared/constants'
 import { component } from '../shared/hocs'
 import { useState } from '../shared/hooks'
 import { getId, getQueryOptions } from '../shared/utils'
-import { CollapsibleList } from './shared'
+import CollapsibleList from './collapsible-list'
 
 const useCollapsibleList = CollapsibleList.createHook()
 

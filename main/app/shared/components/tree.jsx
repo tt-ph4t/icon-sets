@@ -7,15 +7,8 @@ import { asyncNoop } from 'es-toolkit'
 
 import { component } from '../hocs'
 
-const render = data =>
-  data?.map((props, index) => <TreeItem key={props.id ?? index} {...props} />)
-
-const TreeItem = component(({ children, label, ...props }) => (
-  <VscodeTreeItem {...props}>
-    {label}
-    {render(children)}
-  </VscodeTreeItem>
-))
+const render = (data = []) =>
+  data.map(props => <Tree.Item key={props.id} {...props} />)
 
 export const Tree = Object.assign(
   component(({ data, onVscTreeSelect, ...props }) => (
@@ -36,12 +29,20 @@ export const Tree = Object.assign(
     </VscodeTree>
   )),
   {
-    branchIcon: (
-      <>
-        <VscodeIcon name='folder' slot='icon-branch' />
-        <VscodeIcon name='folder-opened' slot='icon-branch-opened' />
-      </>
-    ),
-    leafIcon: <VscodeIcon name='file' slot='icon-leaf' />
+    icon: {
+      branch: (
+        <>
+          <VscodeIcon name='folder' slot='icon-branch' />
+          <VscodeIcon name='folder-opened' slot='icon-branch-opened' />
+        </>
+      ),
+      leaf: <VscodeIcon name='file' slot='icon-leaf' />
+    },
+    Item: component(({ children, label, ...props }) => (
+      <VscodeTreeItem {...props}>
+        {label}
+        {render(children)}
+      </VscodeTreeItem>
+    ))
   }
 )

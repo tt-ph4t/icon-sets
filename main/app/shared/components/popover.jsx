@@ -13,90 +13,90 @@ import { useState } from '../hooks'
 const { Popup, Portal, Positioner, Root, Trigger } = popover
 
 export const Popover = Object.assign(
-  component(
-    ({
-      align = 'start',
-      children,
-      closeDelay = 0,
-      delay = 0,
-      keepMounted = false,
-      open = false,
-      openOnHover = true,
-      popupRender,
-      popupWrapper,
-      render,
-      side = 'bottom'
-    }) => {
-      const [state, setState] = useState(open)
-
-      const portal = (
-        <Portal keepMounted={keepMounted}>
-          <Positioner
-            align={align}
-            render={(props, state) => (
-              <Popup
-                render={renderSlot({
-                  bespoke: popupRender,
-                  context: {
-                    context: {
-                      props,
-                      setOpen: setState,
-                      state
-                    }
-                  },
-                  wrapper: popupWrapper
-                })}
-                {...props}
-              />
-            )}
-            side={side}
-          />
-        </Portal>
-      )
-
-      return (
-        <Root
-          onOpenChange={open => {
-            setState(open)
-          }}
-          open={state}>
-          <Trigger
-            closeDelay={closeDelay}
-            delay={delay}
-            nativeButton={false}
-            openOnHover={openOnHover}
-            render={render}>
+  component(props => (
+    <Popover.Primitive
+      popupWrapper={children => (
+        <VscodeFormContainer style={CARD_STYLE}>
+          <VscodeFormGroup
+            style={{
+              maxHeight: 'calc(var(--available-height) / 1.6)',
+              maxWidth: 'calc(var(--available-width) / 3)',
+              overflow: 'auto'
+            }}
+            variant='settings-group'>
             {children}
-          </Trigger>
-          {keepMounted ? (
-            <React.Activity mode={state ? 'visible' : 'hidden'}>
-              {portal}
-            </React.Activity>
-          ) : (
-            portal
-          )}
-        </Root>
-      )
-    }
-  ),
+          </VscodeFormGroup>
+        </VscodeFormContainer>
+      )}
+      {...props}
+    />
+  )),
   {
-    Card: component(props => (
-      <Popover
-        popupWrapper={children => (
-          <VscodeFormContainer style={CARD_STYLE}>
-            <VscodeFormGroup
-              style={{
-                maxHeight: 'calc(var(--available-height) / 1.6)',
-                maxWidth: 'calc(var(--available-width) / 3)',
-                overflow: 'auto'
-              }}
-              variant='settings-group'>
+    Primitive: component(
+      ({
+        align = 'start',
+        children,
+        closeDelay = 0,
+        delay = 0,
+        keepMounted = false,
+        open = false,
+        openOnHover = true,
+        popupRender,
+        popupWrapper,
+        render,
+        side = 'bottom'
+      }) => {
+        const [state, setState] = useState(open)
+
+        const portal = (
+          <Portal keepMounted={keepMounted}>
+            <Positioner
+              align={align}
+              render={(props, state) => (
+                <Popup
+                  render={renderSlot({
+                    bespoke: popupRender,
+                    context: {
+                      context: {
+                        props,
+                        setOpen: setState,
+                        state
+                      }
+                    },
+                    wrapper: popupWrapper
+                  })}
+                  {...props}
+                />
+              )}
+              side={side}
+            />
+          </Portal>
+        )
+
+        return (
+          <Root
+            onOpenChange={open => {
+              setState(open)
+            }}
+            open={state}>
+            <Trigger
+              closeDelay={closeDelay}
+              delay={delay}
+              nativeButton={false}
+              openOnHover={openOnHover}
+              render={render}>
               {children}
-            </VscodeFormGroup>
-          </VscodeFormContainer>
-        )}
-        {...props}
-      />
-    ))
+            </Trigger>
+            {keepMounted ? (
+              <React.Activity mode={state ? 'visible' : 'hidden'}>
+                {portal}
+              </React.Activity>
+            ) : (
+              portal
+            )}
+          </Root>
+        )
+      }
+    )
   }
 )

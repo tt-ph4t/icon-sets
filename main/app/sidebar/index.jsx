@@ -1,18 +1,49 @@
+import { useQuery } from '@tanstack/react-query'
+import {
+  VscodeFormContainer,
+  VscodeFormGroup,
+  VscodeFormHelper
+} from '@vscode-elements/react-elements'
 import { useUpdate } from 'ahooks'
 import { capitalCase } from 'change-case'
 import { asyncNoop } from 'es-toolkit'
 import React from 'react'
 
 import { Collapsible } from '../shared/components/collapsible'
+import { IconGrid } from '../shared/components/icon-grid'
 import { Menu } from '../shared/components/menu'
+import { QueryBoundary } from '../shared/components/query-boundary'
 import { ToolbarButton } from '../shared/components/toolbar-button'
-import { ICON_CACHE } from '../shared/constants'
+import { ICON_CACHE, ICON_SETS_URL } from '../shared/constants'
 import { component } from '../shared/hocs'
 import { useCustomizedIcons } from '../shared/hooks/use-customized-icons'
 import { useFavorites } from '../shared/hooks/use-favorites'
+import { getQueryOptions } from '../shared/utils'
 import IconGroups from './icon-groups'
 import IconSets from './icon-sets'
-import { IconGridWithFormContainer } from './shared'
+
+const queryOptions = getQueryOptions({ url: ICON_SETS_URL })
+
+const IconGridWithFormContainer = component(props => {
+  const query = useQuery(queryOptions)
+
+  return (
+    <QueryBoundary
+      query={query}
+      queryOptions={queryOptions}
+      render={() => (
+        <VscodeFormContainer>
+          <VscodeFormGroup variant='settings-group'>
+            <VscodeFormHelper
+              style={{ height: 'var(--sidebar-icon-grid-height)' }}>
+              <IconGrid {...props} />
+            </VscodeFormHelper>
+          </VscodeFormGroup>
+        </VscodeFormContainer>
+      )}
+    />
+  )
+})
 
 const CustomizedIcons = component(() => {
   const customizedIcons = useCustomizedIcons()

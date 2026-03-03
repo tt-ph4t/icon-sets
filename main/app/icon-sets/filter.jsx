@@ -11,7 +11,6 @@ import {
   identity,
   intersection,
   mapValues,
-  pick,
   union,
   uniq,
   without,
@@ -155,26 +154,20 @@ const Filter = {
                 )
               },
               item =>
-                mapValues(item, (iconSets = []) =>
-                  iconSets.map(iconSet => pick(iconSet, ['prefix']))
+                Object.fromEntries(
+                  sort(
+                    Object.entries(
+                      mapValues(item, (iconSets = []) =>
+                        iconSets.map(iconSet => ({ prefix: iconSet.prefix }))
+                      )
+                    )
+                  ).asc(([a]) => a)
                 )
             )
           )
         ).asc(([, item]) => Object.keys(item).length)
       )
     }, [query.data])
-
-    const iconSetPrefixesByGroup = useMemo(
-      () =>
-        mapValues(iconSetGroups, item =>
-          uniq(
-            Object.values(item).flatMap(iconSets =>
-              iconSets.map(iconSet => iconSet.prefix)
-            )
-          )
-        ),
-      [iconSetGroups]
-    )
 
     const toggleIconSetPrefixes = useCallback((checked, iconSetPrefixes) => {
       filter.set(({ draft }) => {
@@ -198,46 +191,34 @@ const Filter = {
           All
         </ToolbarButton>
         <Tree
-          data={Object.entries(iconSetGroups).map(([a, b]) => {
-            // const iconSetPrefixes = iconSetPrefixesByGroup[a]
+          data={Object.entries(iconSetGroups).map(([a, b]) => ({
+            children: Object.entries(b).map(([label, iconSets]) => {
+              const iconSetPrefixes = iconSets.map(iconSet => iconSet.prefix)
 
-            // const checked = selectedIconSetPrefixes.some(a =>
-            //   iconSetPrefixes.includes(a)
-            // )
+              const checked = selectedIconSetPrefixes.some(a =>
+                iconSetPrefixes.includes(a)
+              )
 
-            return {
-              children: sort(Object.entries(b))
-                .asc(([a]) => a)
-                .map(([label, iconSets]) => {
-                  const iconSetPrefixes = iconSets.map(
-                    iconSet => iconSet.prefix
-                  )
-
-                  const checked = selectedIconSetPrefixes.some(a =>
-                    iconSetPrefixes.includes(a)
-                  )
-
-                  return {
-                    id: label,
-                    label: (
-                      <>
-                        {`${label} (${iconSets.length})`}
-                        <VscodeIcon
-                          name={checked ? 'check' : 'blank'}
-                          slot='icon-leaf'
-                        />
-                      </>
-                    ),
-                    onClick: () => {
-                      toggleIconSetPrefixes(checked, iconSetPrefixes)
-                    }
-                  }
-                }),
-              id: a,
-              label: capitalCase(a),
-              open: true
-            }
-          })}
+              return {
+                id: label,
+                label: (
+                  <>
+                    {`${label} (${iconSets.length})`}
+                    <VscodeIcon
+                      name={checked ? 'check' : 'blank'}
+                      slot='icon-leaf'
+                    />
+                  </>
+                ),
+                onClick: () => {
+                  toggleIconSetPrefixes(checked, iconSetPrefixes)
+                }
+              }
+            }),
+            id: a,
+            label: capitalCase(a),
+            open: true
+          }))}
           hideArrows
           indentGuides='always'
         />
@@ -281,7 +262,7 @@ export default component(() => {
         useFilter.useInit()
 
         return (
-          <Popover.Card
+          <Popover
             keepMounted
             open
             popupRender={
