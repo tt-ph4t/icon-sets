@@ -11,6 +11,7 @@ import FileSaver from 'file-saver'
 import hasValues from 'has-values'
 import { isWordCharacter } from 'is-word-character'
 import jszip from 'jszip'
+import ms from 'ms'
 import { hash } from 'ohash'
 import isEqual1 from 'react-fast-compare'
 
@@ -39,6 +40,7 @@ export const getQueryOptions =
   // https://tanstack.com/query/latest/docs/framework/react/guides/render-optimizations
   ({
     delayMs = DELAY_MS,
+    gcTime = ms('50m'),
     networkMode = 'offlineFirst',
     queryFn,
     queryKey,
@@ -53,6 +55,7 @@ export const getQueryOptions =
     ...rest
   }) =>
     queryOptions({
+      gcTime,
       networkMode,
       queryFn:
         queryFn ??

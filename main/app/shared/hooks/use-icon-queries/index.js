@@ -1,6 +1,7 @@
 import { stringToIcon } from '@iconify/utils'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { mapValues } from 'es-toolkit'
+import ms from 'ms'
 
 import { DATA_BASE_URL, ICON_SETS_URL } from '../../constants'
 import { getQueryOptions } from '../../utils'
@@ -22,6 +23,7 @@ export const useIconQueries = (...icons) => {
       const icon = stringToIcon(iconId)
 
       return getQueryOptions({
+        gcTime: ms('1m'),
         queryKey: iconId,
         select: data =>
           buildIcon(
