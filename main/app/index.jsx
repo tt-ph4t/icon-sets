@@ -4,16 +4,49 @@ import {
   useIsMutating,
   useIsRestoring
 } from '@tanstack/react-query'
+import {
+  VscodeFormContainer,
+  VscodeFormGroup,
+  VscodeFormHelper
+} from '@vscode-elements/react-elements'
+import { identity } from 'es-toolkit'
+import { reverse } from 'es-toolkit/compat'
 import React from 'react'
 import { preconnect } from 'react-dom'
 
 import { progressBar } from './shared/components'
+import { Menu } from './shared/components/menu'
 import { SplitLayout } from './shared/components/split-layout'
-import { DATA_BASE_URL } from './shared/constants'
+import { ToolbarButton } from './shared/components/toolbar-button'
+import { DATA_BASE_URL, GITHUB_REPO } from './shared/constants'
 import { component, lazy } from './shared/hocs'
+import { useSettings } from './shared/hooks/use-settings'
 
 const Sidebar = lazy(() => import('./sidebar'))
-const IconSets = lazy(() => import('./icon-sets'))
+const FilteredIconSets = lazy(() => import('./filtered-icon-sets'))
+
+const App = component(() => {
+  const reverseLayout = useSettings().useSelectValue(
+    ({ draft }) => draft.current.reverseLayout
+  )
+
+  return (
+    <SplitLayout
+      initialHandlePosition={reverseLayout ? '75%' : '25%'}
+      style={{
+        '--border-width': '1px',
+
+        height: 'calc(var(--height) - calc(var(--border-width) * 2))'
+      }}>
+      {(reverseLayout ? reverse : identity)([
+        <Sidebar key={React.useId()} />,
+        <React.Activity key={React.useId()}>
+          <FilteredIconSets />
+        </React.Activity>
+      ])}
+    </SplitLayout>
+  )
+})
 
 const Loading = component(() => {
   const isLoading = [useIsFetching(), useIsMutating(), useIsRestoring()].some(
@@ -27,11 +60,52 @@ const Loading = component(() => {
   )
 })
 
+const Settings = component(() => {
+  const settings = useSettings()
+
+  return (
+    <VscodeFormContainer>
+      <VscodeFormGroup style={{ paddingBottom: 12 }} variant='settings-group'>
+        <VscodeFormHelper>
+          <Menu
+            data={[
+              {
+                label: 'Devtools',
+                onClick: () => {
+                  settings.set(({ draft }) => {
+                    draft.current.showDevtools = !draft.current.showDevtools
+                  })
+                }
+              },
+              {
+                label: 'Reverse Layout',
+                onClick: () => {
+                  settings.set(({ draft }) => {
+                    draft.current.reverseLayout = !draft.current.reverseLayout
+                  })
+                }
+              },
+              { separator: true },
+              {
+                label: 'GitHub',
+                onClick: () => {
+                  open(`https://github.com/${GITHUB_REPO}`)
+                }
+              }
+            ]}
+            render={<ToolbarButton icon='settings'>Settings</ToolbarButton>}
+          />
+        </VscodeFormHelper>
+      </VscodeFormGroup>
+    </VscodeFormContainer>
+  )
+})
+
 export default component(() => {
   preconnect(new URL(DATA_BASE_URL).origin)
 
   return (
-    <div style={{ position: 'relative' }}>
+    <>
       <div
         style={{
           position: 'absolute',
@@ -41,19 +115,16 @@ export default component(() => {
         <Loading />
       </div>
       <React.Activity>
-        <SplitLayout
-          initialHandlePosition='25%'
+        <App />
+        <div
           style={{
-            '--border-width': '1px',
-
-            height: 'calc(var(--height) - calc(var(--border-width) * 2))'
+            alignSelf: 'center',
+            bottom: 0,
+            position: 'absolute'
           }}>
-          <Sidebar />
-          <React.Activity>
-            <IconSets />
-          </React.Activity>
-        </SplitLayout>
+          <Settings />
+        </div>
       </React.Activity>
-    </div>
+    </>
   )
 })

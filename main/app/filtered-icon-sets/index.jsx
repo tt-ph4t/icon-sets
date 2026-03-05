@@ -15,11 +15,9 @@ import { useCallback } from '../shared/hooks/use-callback'
 import { getId, getQueryOptions } from '../shared/utils'
 import Filter, { useFilter } from './filter'
 
-const queryOptions = getQueryOptions({
-  url: ICON_SETS_URL
-})
+const queryOptions = getQueryOptions({ url: ICON_SETS_URL })
 
-const IconSets = component(() => {
+const FilteredIconSets = component(() => {
   const selectedIconSetPrefixes = useFilter().useSelectValue(
     ({ draft }) => draft.selectedIconSetPrefixes
   )
@@ -50,7 +48,7 @@ export default component(() => (
       flexGrow: 1,
       position: 'relative'
     }}>
-    <IconSets />
+    <FilteredIconSets />
     <VscodeFormContainer
       style={{
         left: 0,

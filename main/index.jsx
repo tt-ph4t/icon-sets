@@ -1,81 +1,82 @@
+import { QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools/build/modern/production.js'
 import '@vscode-elements/webview-playground'
 import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
-import devtoolsDetector from 'devtools-detector'
+import { noop } from 'es-toolkit'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import root from 'react-shadow'
 
-import { GITHUB_REPO } from './app/shared/constants'
-import { lazy } from './app/shared/hocs'
+import { QUERY_CLIENT } from './app/shared/constants'
+import { component, lazy } from './app/shared/hocs'
+import { useSettings } from './app/shared/hooks/use-settings'
 import './index.css'
 
 const App = lazy(() => import('./app'))
-const QueryClientProvider = lazy(() => import('./query-client-provider'))
+
+const Devtools = component(() => {
+  const showDevtools = useSettings().useSelectValue(
+    ({ draft }) => draft.current.showDevtools
+  )
+
+  return (
+    <React.Activity mode={showDevtools ? 'visible' : 'hidden'}>
+      <vscode-dev-toolbar
+        style={{
+          bottom: 'calc(var(--spacing) * 18)',
+          right: 'calc(var(--spacing) * 4)'
+        }}
+      />
+      <ReactQueryDevtools client={QUERY_CLIENT} />
+    </React.Activity>
+  )
+})
 
 createRoot(document.querySelector('#root')).render(
   <>
-    <QueryClientProvider>
-      <root.div>
-        <React.Activity>
+    <root.div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative'
+      }}>
+      <React.Activity>
+        <QueryClientProvider client={QUERY_CLIENT}>
           <App />
-        </React.Activity>
-      </root.div>
-    </QueryClientProvider>
+        </QueryClientProvider>
+      </React.Activity>
+    </root.div>
     <link
       href={codiconUrl}
       id='vscode-codicon-stylesheet' // https://vscode-elements.github.io/components/icon/
       rel='stylesheet'
     />
-    <vscode-dev-toolbar
-      style={{
-        bottom: 'calc(var(--spacing) * 2)',
-        get left() {
-          return this.bottom
-        },
-        position: 'absolute',
-        right: 'unset'
-      }}
-    />
+    <Devtools />
   </>
 )
 
-if (import.meta.env.PROD) {
+if (import.meta.env[Symbol()]) {
   let idleId
 
   const max = 1e6
 
-  devtoolsDetector.addListener(isOpen => {
-    if (isOpen) {
-      let index = 1
-      let error = new Error(index)
+  {
+    let index = 1
 
-      const callback =
-        // https://viblo.asia/p/event-loop-trong-javascript-microtask-macrotask-promise-va-cac-cau-hoi-phong-van-pho-bien-GyZJZjrbJjm
-        () => {
-          if (isOpen) {
-            do {
-              index++
-              error = new Error(index, { cause: error })
-            } while (index % (max * 0.01))
+    const callback = () => {
+      do index++
+      while (index % (max * 0.01))
 
-            if (index === max) {
-              devtoolsDetector.stop()
-
-              console.error(
-                new Error(`https://github.com/${GITHUB_REPO}`, { cause: error })
-              )
-            } else idleId = requestIdleCallback(callback)
-          }
-        }
-
-      idleId = requestIdleCallback(callback)
-    } else {
-      cancelIdleCallback(idleId)
-      devtoolsDetector.launch()
-
-      idleId = undefined
+      if (index === max) {
+        noop()
+      } else idleId = requestIdleCallback(callback)
     }
-  })
 
-  devtoolsDetector.launch()
+    idleId =
+      // https://viblo.asia/p/event-loop-trong-javascript-microtask-macrotask-promise-va-cac-cau-hoi-phong-van-pho-bien-GyZJZjrbJjm
+      requestIdleCallback(callback)
+
+    // cancelIdleCallback(idleId)
+    // idleId = undefined
+  }
 }

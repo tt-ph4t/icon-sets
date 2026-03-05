@@ -32,8 +32,8 @@ import { has, validateIconId } from '../../utils'
 import { pluralize } from '../../utils/pluralize'
 import { prettyBytes } from '../../utils/pretty-bytes'
 import { Menu } from '../menu'
+import { ToolbarButton } from '../toolbar-button'
 import Grid from './grid'
-import GridItem from './grid-item'
 import { useFilteredIconIds, useSearchTerm } from './hooks'
 
 const actions = mapValues(
@@ -50,7 +50,7 @@ const actions = mapValues(
     flow(clone, value, castArray, iconIds => iconIds.filter(validateIconId))
 )
 
-const Root = component(({ iconIds, initialSearchTerm, reloadMenu }) => {
+const Root = component(({ iconIds, initialSearchTerm, reloadFn }) => {
   const searchTerm = useSearchTerm()
   const isInitSearchTerm = searchTerm.useIsInit()
   const [hasInteracted, setHasInteracted] = useState()
@@ -105,56 +105,58 @@ const Root = component(({ iconIds, initialSearchTerm, reloadMenu }) => {
               style={{ width: 260 }}
               value={searchTermCurrent}>
               <Menu
-                data={[
-                  reloadMenu,
-                  ...(hasIconIds
-                    ? [
-                        { separator: true },
-                        {
-                          label: 'Favorite',
-                          menu: ['toggle', 'add', 'delete'].map(a => ({
-                            label: capitalCase(a),
-                            onClick: () => {
-                              favorites[a](...state)
-                            }
-                          }))
-                        },
-                        {
-                          label: 'Sort',
-                          menu: ['asc', 'desc'].map(order => ({
-                            label: {
-                              asc: 'Ascending',
-                              desc: 'Descending'
-                            }[order],
-                            onClick: () => {
-                              setState(state => sort(state)[order]())
-                            }
-                          }))
-                        },
-                        ...Object.entries(actions).map(([key, value]) => ({
-                          label: capitalCase(key),
-                          onClick: () => {
-                            setState(value)
-                          }
-                        })),
-                        {
-                          label: 'Sample',
-                          onClick: () => {
-                            setState(sampleSize(filteredIconIds, 1))
-                          }
-                        },
-                        {
-                          description: prettyBytes(),
-                          label: 'Download'
+                data={
+                  hasIconIds && [
+                    {
+                      label: 'Favorite',
+                      menu: ['toggle', 'add', 'delete'].map(a => ({
+                        label: capitalCase(a),
+                        onClick: () => {
+                          favorites[a](...state)
                         }
-                      ]
-                    : [])
-                ]}
+                      }))
+                    },
+                    {
+                      label: 'Sort',
+                      menu: ['asc', 'desc'].map(order => ({
+                        label: {
+                          asc: 'Ascending',
+                          desc: 'Descending'
+                        }[order],
+                        onClick: () => {
+                          setState(state => sort(state)[order]())
+                        }
+                      }))
+                    },
+                    ...Object.entries(actions).map(([key, value]) => ({
+                      label: capitalCase(key),
+                      onClick: () => {
+                        setState(value)
+                      }
+                    })),
+                    {
+                      label: 'Sample',
+                      onClick: () => {
+                        setState(sampleSize(filteredIconIds, 1))
+                      }
+                    },
+                    { separator: true },
+                    {
+                      description: prettyBytes(),
+                      label: 'Download'
+                    }
+                  ]
+                }
                 render={
                   <VscodeBadge slot='content-after'>
                     {pluralize(state.length, 'icon')}
                   </VscodeBadge>
                 }
+              />
+              <ToolbarButton
+                icon='refresh'
+                onClick={reloadFn}
+                slot='content-after'
               />
             </VscodeTextfield>
           </VscodeFormHelper>
@@ -175,7 +177,7 @@ const Root = component(({ iconIds, initialSearchTerm, reloadMenu }) => {
                       display: 'flex',
                       justifyContent: 'center'
                     }}>
-                    <GridItem context={context} iconId={iconId} />
+                    <Grid.Item context={context} iconId={iconId} />
                   </div>
                 )
             }}
@@ -205,11 +207,8 @@ export const IconGrid = component(props => {
   return (
     <Root
       key={state}
-      reloadMenu={{
-        label: 'Reload',
-        onClick: () => {
-          setState(state => !state)
-        }
+      reloadFn={() => {
+        setState(state => !state)
       }}
       {...props}
     />
