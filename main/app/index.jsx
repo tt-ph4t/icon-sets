@@ -116,15 +116,15 @@ export default component(() => {
       </div>
       <React.Activity>
         <App />
-        <div
-          style={{
-            alignSelf: 'center',
-            bottom: 0,
-            position: 'absolute'
-          }}>
-          <Settings />
-        </div>
       </React.Activity>
+      <div
+        style={{
+          alignSelf: 'center',
+          bottom: 0,
+          position: 'absolute'
+        }}>
+        <Settings />
+      </div>
     </>
   )
 })

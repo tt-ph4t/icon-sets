@@ -48,7 +48,9 @@ export default component(() => (
       flexGrow: 1,
       position: 'relative'
     }}>
-    <FilteredIconSets />
+    <React.Activity>
+      <FilteredIconSets />
+    </React.Activity>
     <VscodeFormContainer
       style={{
         left: 0,
@@ -57,9 +59,7 @@ export default component(() => (
       }}>
       <VscodeFormGroup variant='settings-group'>
         <VscodeFormHelper>
-          <React.Activity>
-            <Filter />
-          </React.Activity>
+          <Filter />
         </VscodeFormHelper>
       </VscodeFormGroup>
     </VscodeFormContainer>

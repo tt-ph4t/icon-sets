@@ -40,11 +40,11 @@ createRoot(document.querySelector('#root')).render(
         flexDirection: 'column',
         position: 'relative'
       }}>
-      <React.Activity>
-        <QueryClientProvider client={QUERY_CLIENT}>
+      <QueryClientProvider client={QUERY_CLIENT}>
+        <React.Activity>
           <App />
-        </QueryClientProvider>
-      </React.Activity>
+        </React.Activity>
+      </QueryClientProvider>
     </root.div>
     <link
       href={codiconUrl}
