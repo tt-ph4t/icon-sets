@@ -20,9 +20,9 @@ import { SplitLayout } from './shared/components/split-layout'
 import { ToolbarButton } from './shared/components/toolbar-button'
 import { DATA_BASE_URL, GITHUB_REPO } from './shared/constants'
 import { component, lazy } from './shared/hocs'
+import { useEffect } from './shared/hooks/use-effect'
 import { useRef } from './shared/hooks/use-ref'
 import { useSettings } from './shared/hooks/use-settings'
-import { useUpdateEffect } from './shared/hooks/use-update-effect'
 
 const Sidebar = lazy(() => import('./sidebar'))
 const FilteredIconSets = lazy(() => import('./filtered-icon-sets'))
@@ -34,7 +34,7 @@ const App = component(() => {
     ({ draft }) => draft.current.reverseLayout
   )
 
-  useUpdateEffect(() => {
+  useEffect.Update(() => {
     ref.current.resetHandlePosition()
   }, [reverseLayout])
 

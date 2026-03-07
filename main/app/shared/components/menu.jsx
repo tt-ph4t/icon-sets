@@ -10,9 +10,9 @@ import React from 'react'
 
 import { CARD_STYLE } from '../constants'
 import { component } from '../hocs'
-import { useState } from '../hooks'
 import { useCallback } from '../hooks/use-callback'
 import { useMemo } from '../hooks/use-memo'
+import { useState } from '../hooks/use-state'
 import { getId, has } from '../utils'
 
 const {

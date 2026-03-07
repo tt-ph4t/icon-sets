@@ -3,6 +3,7 @@ import {
   VscodeFormGroup,
   VscodeFormHelper
 } from '@vscode-elements/react-elements'
+import React from 'react'
 import { VList } from 'virtua'
 
 import { Menu } from '../shared/components/menu'
@@ -12,20 +13,19 @@ import { useMemo } from '../shared/hooks/use-memo'
 import { has } from '../shared/utils'
 
 export default Object.assign(
-  component(({ ids, menu, renderItem, useCollapsibleList }) => {
-    const collapsibleList = useCollapsibleList()
+  component(({ ids, menu, renderItem, useStore }) => {
+    const store = useStore()
 
-    const collapsibleListCurrent = collapsibleList.useSelectValue(
-      ({ draft }) => draft.current,
-      { delay: 0 }
-    )
+    const storeCurrent = store.useSelectValue(({ draft }) => draft.current, {
+      delay: 0
+    })
 
     const hasAnyOpen = useMemo(
       () =>
-        Object.values(collapsibleListCurrent).some(
-          collapsible => collapsible.open
+        Object.values(storeCurrent).some(
+          CollapsibleProps => CollapsibleProps.open
         ),
-      [collapsibleListCurrent]
+      [storeCurrent]
     )
 
     return (
@@ -38,26 +38,28 @@ export default Object.assign(
                 style={{
                   height: 'calc(var(--sidebar-icon-grid-height) * 1.5)'
                 }}>
-                {(id, index) =>
-                  renderItem({
-                    context: {
-                      CollapsibleProps: {
-                        defaultOpen: !index,
-                        onOpenChange: open => {
-                          collapsibleList.set(({ draft }) => {
-                            draft.current[id] = {
-                              ...draft.current[id],
-                              open
-                            }
-                          })
-                        },
-                        ...collapsibleListCurrent[id]
+                {(id, index) => {
+                  const context = {
+                    CollapsibleProps: {
+                      defaultOpen: !index,
+                      onOpenChange: open => {
+                        store.set(({ draft }) => {
+                          draft.current[id] = {
+                            ...draft.current[id],
+                            open
+                          }
+                        })
                       },
-                      id,
-                      index
-                    }
+                      ...storeCurrent[id]
+                    },
+                    id,
+                    index
+                  }
+
+                  return React.cloneElement(renderItem({ context }), {
+                    key: context.id
                   })
-                }
+                }}
               </VList>
             </VscodeFormHelper>
           </VscodeFormGroup>
@@ -67,10 +69,10 @@ export default Object.assign(
             {
               label: hasAnyOpen ? 'Collapse All' : 'Expand All',
               onClick: () => {
-                collapsibleList.set(({ draft }) => {
+                store.set(({ draft }) => {
                   draft.current = ids.reduce((a, b) => {
                     a[b] = {
-                      ...collapsibleListCurrent[b],
+                      ...storeCurrent[b],
                       open: !hasAnyOpen
                     }
 
@@ -87,9 +89,10 @@ export default Object.assign(
     )
   }),
   {
-    createHook: () =>
-      withImmerAtom({
+    createContext: () => ({
+      useStore: withImmerAtom({
         current: {}
       })
+    })
   }
 )

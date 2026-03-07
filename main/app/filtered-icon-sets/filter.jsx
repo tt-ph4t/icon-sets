@@ -6,7 +6,6 @@ import {
 } from '@vscode-elements/react-elements'
 import {
   flow,
-  groupBy,
   identity,
   intersection,
   mapValues,
@@ -124,16 +123,22 @@ const Filter = {
           Object.entries(
             mapValues(
               {
-                author: groupBy(iconSets, iconSet => iconSet.author.name),
-                category: groupBy(iconSets, iconSet => iconSet.category),
-                grid: groupBy(iconSets, iconSet => iconSet.grid),
-                license: groupBy(iconSets, iconSet => iconSet.license.spdx),
-                palette: groupBy(iconSets, iconSet =>
+                author: Object.groupBy(
+                  iconSets,
+                  iconSet => iconSet.author.name
+                ),
+                category: Object.groupBy(iconSets, iconSet => iconSet.category),
+                grid: Object.groupBy(iconSets, iconSet => iconSet.grid),
+                license: Object.groupBy(
+                  iconSets,
+                  iconSet => iconSet.license.spdx
+                ),
+                palette: Object.groupBy(iconSets, iconSet =>
                   iconSet.palette ? 'Multiple colors' : 'Monotone'
                 ),
                 tag: uniq(iconSets.flatMap(iconSet => iconSet.tags)).reduce(
                   (a, b) => {
-                    a[b] = groupBy(iconSets, iconSet =>
+                    a[b] = Object.groupBy(iconSets, iconSet =>
                       iconSet.tags.includes(b)
                     ).true
 
@@ -143,7 +148,7 @@ const Filter = {
                 ),
                 theme: uniq(iconSets.flatMap(getIconSetThemes)).reduce(
                   (a, b) => {
-                    a[b] = groupBy(iconSets, iconSet =>
+                    a[b] = Object.groupBy(iconSets, iconSet =>
                       getIconSetThemes(iconSet).includes(b)
                     ).true
 

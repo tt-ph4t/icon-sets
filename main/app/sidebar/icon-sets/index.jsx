@@ -1,22 +1,22 @@
 import { useQuery } from '@tanstack/react-query'
-import { groupBy, mapValues } from 'es-toolkit'
+import { mapValues } from 'es-toolkit'
 import { sort } from 'fast-sort'
 
 import { Collapsible } from '../../shared/components/collapsible'
 import { QueryBoundary } from '../../shared/components/query-boundary'
 import { ICON_SETS_URL } from '../../shared/constants'
 import { component } from '../../shared/hocs'
-import { useState } from '../../shared/hooks'
+import { useState } from '../../shared/hooks/use-state'
 import { getQueryOptions } from '../../shared/utils'
 import CollapsibleList from '../collapsible-list'
 import IconSet from './icon-set'
 
-const useCollapsibleList = CollapsibleList.createHook()
+const CollapsibleListContext = CollapsibleList.createContext()
 
 const queryOptions = getQueryOptions({
   select: iconSets => ({
     categories: mapValues(
-      groupBy(Object.values(iconSets), iconSet => iconSet.category),
+      Object.groupBy(Object.values(iconSets), iconSet => iconSet.category),
       iconSets => iconSets.map(iconSet => iconSet.prefix)
     ),
     get categoryNames() {
@@ -52,10 +52,8 @@ export default component(() => {
                 },
                 selected: category === state
               }))}
-              renderItem={({ context }) => (
-                <IconSet context={context} key={context.id} />
-              )}
-              useCollapsibleList={useCollapsibleList}
+              renderItem={props => <IconSet {...props} />}
+              {...CollapsibleListContext}
             />
           </Collapsible>
         )

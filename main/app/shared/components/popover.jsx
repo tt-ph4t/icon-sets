@@ -8,7 +8,7 @@ import { renderSlot } from 'render-slot'
 
 import { CARD_STYLE } from '../constants'
 import { component } from '../hocs'
-import { useState } from '../hooks'
+import { useState } from '../hooks/use-state'
 
 const { Popup, Portal, Positioner, Root, Trigger } = popover
 

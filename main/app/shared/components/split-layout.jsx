@@ -3,27 +3,26 @@ import {
   VscodeFormHelper,
   VscodeSplitLayout
 } from '@vscode-elements/react-elements'
-import { asyncNoop, noop } from 'es-toolkit'
+import { asyncNoop } from 'es-toolkit'
 import React from 'react'
 
 import { component } from '../hocs'
-import { useState } from '../hooks'
 import { useEffect } from '../hooks/use-effect'
 import { useRef } from '../hooks/use-ref'
-import { useSize } from '../hooks/use-size'
+import { useState } from '../hooks/use-state'
 import { checkOdd, has } from '../utils'
 
 const minPositionInPercentage = 5
 
-const useDebounceEffect = (
+const useIdleAsyncEffect = (
   effect = asyncNoop,
-  { beforeEffect = noop, deps }
+  { beforeEffect = asyncNoop, deps }
 ) => {
   const ref = useRef()
 
-  useEffect(() => {
+  useEffect.Async(async () => {
     cancelIdleCallback(ref.current)
-    beforeEffect()
+    await beforeEffect()
 
     ref.current = requestIdleCallback(effect)
   }, deps)
@@ -31,10 +30,10 @@ const useDebounceEffect = (
 
 const Slot = component(({ children, index, positionInPercentage }) => {
   const isSlotStat = !checkOdd(index)
-  const size = useSize()
+  const size = useRef.Size()
   const [state, setState] = useState()
 
-  useDebounceEffect(
+  useIdleAsyncEffect(
     () => {
       setState(false)
     },

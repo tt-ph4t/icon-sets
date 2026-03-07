@@ -16,8 +16,8 @@ import { useFavorites } from '../../hooks/use-favorites'
 import { useIconQueries } from '../../hooks/use-icon-queries'
 import { getIconFileNames } from '../../hooks/use-icon-queries/build-icon'
 import { useMemo } from '../../hooks/use-memo'
+import { useRef } from '../../hooks/use-ref'
 import { useSettings } from '../../hooks/use-settings'
-import { useSize } from '../../hooks/use-size'
 import {
   copy,
   fileSaver,
@@ -42,7 +42,7 @@ const flipDirections = {
 
 export default Object.assign(
   component(({ cellSize = 100, col, itemCount, renderItem }) => {
-    const size = useSize()
+    const size = useRef.Size()
 
     col = useMemo(
       () =>

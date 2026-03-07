@@ -25,9 +25,9 @@ import { isWordCharacter } from 'is-word-character'
 import React from 'react'
 
 import { component } from '../../hocs'
-import { useState } from '../../hooks'
+import { useEffect } from '../../hooks/use-effect'
 import { useFavorites } from '../../hooks/use-favorites'
-import { useUpdateEffect } from '../../hooks/use-update-effect'
+import { useState } from '../../hooks/use-state'
 import { has, validateIconId } from '../../utils'
 import { pluralize } from '../../utils/pluralize'
 import { prettyBytes } from '../../utils/pretty-bytes'
@@ -66,7 +66,7 @@ const Root = component(({ iconIds, initialSearchTerm, reloadFn }) => {
   const hasIconIds = has(filteredIconIds)
   const [state, setState] = useState(() => filteredIconIds)
 
-  useUpdateEffect(() => {
+  useEffect.Update(() => {
     React.startTransition(() => {
       setState(filteredIconIds)
     })
