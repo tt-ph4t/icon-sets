@@ -205,12 +205,13 @@ export const IconGrid = component(props => {
   const [state, setState] = useState()
 
   return (
-    <Root
-      key={state}
-      reloadFn={() => {
-        setState(state => !state)
-      }}
-      {...props}
-    />
+    <React.Activity key={state}>
+      <Root
+        reloadFn={() => {
+          setState(state => !state)
+        }}
+        {...props}
+      />
+    </React.Activity>
   )
 })
