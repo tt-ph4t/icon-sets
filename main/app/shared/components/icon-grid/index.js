@@ -202,13 +202,13 @@ const Root = component(({ iconIds, initialSearchTerm, reloadFn }) => {
 })
 
 export const IconGrid = component(props => {
-  const [state, setState] = useState()
+  const [state, setState] = useState(0)
 
   return (
     <React.Activity key={state}>
       <Root
         reloadFn={() => {
-          setState(state => !state)
+          setState(state => ++state)
         }}
         {...props}
       />

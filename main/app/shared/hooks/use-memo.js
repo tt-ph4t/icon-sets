@@ -2,11 +2,11 @@ import { isUndefined } from '@sindresorhus/is'
 import { useCreation } from 'ahooks'
 import React from 'react'
 
-import { withDeepCompareDeps } from './use-deep-compare-memoize'
+import { useDeepCompareMemoize } from './use-deep-compare-memoize'
 import { useRef } from './use-ref'
 
-const useCreation1 = withDeepCompareDeps(useCreation)
-const useMemo1 = withDeepCompareDeps(React.useMemo)
+const useCreation1 = useDeepCompareMemoize.with(useCreation)
+const useMemo1 = useDeepCompareMemoize.with(React.useMemo)
 
 export const useMemo = Object.assign(
   (fn, deps) => {

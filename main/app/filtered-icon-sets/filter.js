@@ -173,13 +173,13 @@ const Filter = {
       )
     }, [query.data])
 
-    const toggleIconSetPrefixes = useCallback((checked, iconSetPrefixes) => {
+    const toggleIconSetPrefixes = useCallback((checked, prefixes) => {
       filter.set(({ draft }) => {
         draft.selectedIconSetPrefixes = intersection(
           Object.keys(query.data),
           checked
-            ? without(draft.selectedIconSetPrefixes, ...iconSetPrefixes)
-            : union(draft.selectedIconSetPrefixes, iconSetPrefixes)
+            ? without(draft.selectedIconSetPrefixes, ...prefixes)
+            : union(draft.selectedIconSetPrefixes, prefixes)
         )
       })
     })
