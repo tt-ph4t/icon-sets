@@ -4,7 +4,7 @@ import { defineConfig, transformWithEsbuild } from 'vite'
 import { compression } from 'vite-plugin-compression2'
 
 export default defineConfig({
-  build: {
+  ebuild: {
     rollupOptions: {
       output: {
         manualChunks: {
@@ -17,6 +17,9 @@ export default defineConfig({
         }
       }
     }
+  },
+  esbuild: {
+    loader: 'jsx'
   },
   plugins: [
     {
