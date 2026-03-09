@@ -34,12 +34,7 @@ const Devtools = component(() => {
 
 createRoot(document.querySelector('#root')).render(
   <>
-    <root.div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative'
-      }}>
+    <root.div>
       <QueryClientProvider client={QUERY_CLIENT}>
         <React.Activity>
           <App />

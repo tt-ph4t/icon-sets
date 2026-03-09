@@ -1,4 +1,4 @@
-import ImageResponse from '@takumi-rs/image-response/wasm'
+import { ImageResponse } from '@takumi-rs/image-response/wasm'
 import module from '@takumi-rs/wasm/takumi_wasm_bg.wasm?url'
 import { LRUCache } from 'lru-cache'
 import mime from 'mime/lite'

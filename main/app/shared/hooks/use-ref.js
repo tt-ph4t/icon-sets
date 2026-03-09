@@ -1,4 +1,4 @@
-import { useSize } from 'ahooks'
+import { useFullscreen, useSize } from 'ahooks'
 import React from 'react'
 
 import { useState } from './use-state'
@@ -11,6 +11,12 @@ export const useRef = Object.assign(
     return React.useRef(state)
   },
   {
+    Fullscreen: options => {
+      const ref = useRef()
+      const [isFullscreen, rest] = useFullscreen(ref, options)
+
+      return { isFullscreen, ref, ...rest }
+    },
     Size: () => {
       const ref = useRef()
 

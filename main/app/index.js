@@ -69,6 +69,30 @@ const Loading = component(() => {
   )
 })
 
+const UNSTABLE_FULLSCREEN = component(props => {
+  const settings = useSettings()
+
+  const isFullscreen = settings.useSelectValue(
+    ({ draft }) => draft.current.isFullscreen
+  )
+
+  const fullscreen = useRef.Fullscreen()
+
+  useEffect(() => {
+    if (fullscreen.isEnabled) {
+      if (fullscreen.isFullscreen === isFullscreen) return
+
+      fullscreen[isFullscreen ? 'enterFullscreen' : 'exitFullscreen']()
+
+      settings.set(({ draft }) => {
+        draft.current.isFullscreen = fullscreen.isFullscreen
+      })
+    }
+  }, [isFullscreen, fullscreen])
+
+  return <div ref={fullscreen.ref} {...props} />
+})
+
 const Settings = component(() => {
   const settings = useSettings()
 
@@ -94,6 +118,14 @@ const Settings = component(() => {
                   })
                 }
               },
+              {
+                label: 'UNSTABLE_FULLSCREEN',
+                onClick: () => {
+                  settings.set(({ draft }) => {
+                    draft.current.isFullscreen = !draft.current.isFullscreen
+                  })
+                }
+              },
               { separator: true },
               {
                 label: 'GitHub',
@@ -114,7 +146,12 @@ export default component(() => {
   preconnect(new URL(DATA_BASE_URL).origin)
 
   return (
-    <>
+    <UNSTABLE_FULLSCREEN
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative'
+      }}>
       <div
         style={{
           position: 'absolute',
@@ -134,6 +171,6 @@ export default component(() => {
         }}>
         <Settings />
       </div>
-    </>
+    </UNSTABLE_FULLSCREEN>
   )
 })
