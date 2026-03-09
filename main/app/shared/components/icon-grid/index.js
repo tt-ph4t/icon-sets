@@ -52,7 +52,7 @@ const actions = mapValues(
 
 const Root = component(({ iconIds, initialSearchTerm, reloadFn }) => {
   const searchTerm = useSearchTerm()
-  const isInitSearchTerm = searchTerm.useIsInit()
+  const isDefaultSearchTerm = searchTerm.useIsDefault()
   const [hasInteracted, setHasInteracted] = useState()
   const favorites = useFavorites()
 
@@ -92,7 +92,7 @@ const Root = component(({ iconIds, initialSearchTerm, reloadFn }) => {
           <VscodeFormHelper>
             <VscodeTextfield
               invalid={
-                !(isInitSearchTerm || isWordCharacter(searchTermCurrent))
+                !(isDefaultSearchTerm || isWordCharacter(searchTermCurrent))
               }
               onInput={event => {
                 if (!hasInteracted) setHasInteracted(true)

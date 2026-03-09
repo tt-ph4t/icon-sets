@@ -9,26 +9,14 @@ import {
 
 import { component } from '../hocs'
 
-const progressBar = {
-  default: (
+export const Fallback = Object.assign(
+  component(() => (
     <VscodeProgressBar
       style={{
         '--vscode-progressBar-background': 'var(--vscode-badge-background)'
       }}
     />
-  ),
-  error: (
-    <VscodeProgressBar
-      style={{
-        '--vscode-progressBar-background':
-          'var(--vscode-activityErrorBadge-background)'
-      }}
-    />
-  )
-}
-
-export const Fallback = Object.assign(
-  component(() => progressBar.default),
+  )),
   {
     Error: component(props => (
       <div
@@ -37,7 +25,12 @@ export const Fallback = Object.assign(
           flexDirection: 'column',
           height: '100%'
         }}>
-        {progressBar.error}
+        <VscodeProgressBar
+          style={{
+            '--vscode-progressBar-background':
+              'var(--vscode-activityErrorBadge-background)'
+          }}
+        />
         <VscodeFormContainer
           style={{
             alignContent: 'center',
