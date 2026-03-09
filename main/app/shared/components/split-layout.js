@@ -3,7 +3,8 @@ import {
   VscodeFormHelper,
   VscodeSplitLayout
 } from '@vscode-elements/react-elements'
-import { asyncNoop } from 'es-toolkit'
+import { asyncNoop, delay } from 'es-toolkit'
+import ms from 'ms'
 import React from 'react'
 
 import { component } from '../hocs'
@@ -34,8 +35,12 @@ const Slot = component(({ children, index, positionInPercentage }) => {
   const [state, setState] = useState()
 
   useIdleAsyncEffect(
-    () => {
-      setState(false)
+    async () => {
+      await delay(ms('1s'))
+
+      React.startTransition(() => {
+        setState(false)
+      })
     },
     {
       beforeEffect: () => {
@@ -53,8 +58,14 @@ const Slot = component(({ children, index, positionInPercentage }) => {
         flexDirection: 'column',
         overflow: 'auto'
       }}>
-      <React.Activity mode={state ? 'visible' : 'hidden'} mode='hidden'>
-        <VscodeFormHelper>
+      <React.Activity mode={state ? 'visible' : 'hidden'}>
+        <VscodeFormHelper
+          style={{
+            alignSelf: 'center',
+            position: 'absolute',
+            top: '50%',
+            zIndex: 1
+          }}>
           <VscodeBadge>
             {size.width} x {size.height}
           </VscodeBadge>
@@ -102,7 +113,7 @@ export const SplitLayout = component(
             setState(event.detail.positionInPercentage)
           })
         }}
-        resetOnDblClick={resetOnDblClick} // ?
+        resetOnDblClick={resetOnDblClick}
         {...props}>
         {React.Children.map(children, (children, index) => (
           <React.Activity mode={index <= 1 ? 'visible' : 'hidden'}>
