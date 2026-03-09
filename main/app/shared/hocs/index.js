@@ -3,12 +3,10 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { atomWithImmer } from 'jotai-immer'
 import { freezeAtom, selectAtom } from 'jotai/utils'
 import React from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
 
-import { progressBar } from './components'
-import { DELAY_MS } from './constants'
-import { useCallback } from './hooks/use-callback'
-import { isEqual } from './utils'
+import { DELAY_MS } from '../constants'
+import { useCallback } from '../hooks/use-callback'
+import { isEqual } from '../utils'
 
 export const withImmerAtom = initialValue =>
   partial(atom => {
@@ -49,18 +47,6 @@ export const withImmerAtom = initialValue =>
       )
     }
   }, flow(atomWithImmer, freezeAtom)(initialValue))
-
-export const lazy = (load, fallback = progressBar) => {
-  const Component = React.lazy(load)
-
-  return component(props => (
-    <ErrorBoundary fallback={fallback.error}>
-      <React.Suspense fallback={fallback.default}>
-        <Component {...props} />
-      </React.Suspense>
-    </ErrorBoundary>
-  ))
-}
 
 export const component = (Component = React.Fragment) =>
   React.memo(

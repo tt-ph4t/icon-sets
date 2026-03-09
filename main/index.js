@@ -8,7 +8,8 @@ import { createRoot } from 'react-dom/client'
 import root from 'react-shadow'
 
 import { QUERY_CLIENT } from './app/shared/constants'
-import { component, lazy } from './app/shared/hocs'
+import { component } from './app/shared/hocs'
+import { lazy } from './app/shared/hocs/lazy'
 import { useSettings } from './app/shared/hooks/use-settings'
 import './index.css'
 

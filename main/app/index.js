@@ -14,12 +14,13 @@ import { reverse } from 'es-toolkit/compat'
 import React from 'react'
 import { preconnect } from 'react-dom'
 
-import { progressBar } from './shared/components'
+import { Fallback } from './shared/components/fallback'
 import { Menu } from './shared/components/menu'
 import { SplitLayout } from './shared/components/split-layout'
 import { ToolbarButton } from './shared/components/toolbar-button'
 import { DATA_BASE_URL, GITHUB_REPO } from './shared/constants'
-import { component, lazy } from './shared/hocs'
+import { component } from './shared/hocs'
+import { lazy } from './shared/hocs/lazy'
 import { useEffect } from './shared/hooks/use-effect'
 import { useRef } from './shared/hooks/use-ref'
 import { useSettings } from './shared/hooks/use-settings'
@@ -64,7 +65,7 @@ const Loading = component(() => {
 
   return (
     <React.Activity mode={isLoading ? 'visible' : 'hidden'}>
-      {progressBar.default}
+      <Fallback />
     </React.Activity>
   )
 })
