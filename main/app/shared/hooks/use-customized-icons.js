@@ -1,7 +1,7 @@
-import { defaultIconCustomisations, mergeCustomisations } from '@iconify/utils'
+import { mergeCustomisations } from '@iconify/utils'
 import { omit } from 'es-toolkit'
 
-import { ICON_CACHE } from '../constants'
+import { DEFAULT_ICON_CUSTOMISATIONS, ICON_CACHE } from '../constants'
 import { withImmerAtom } from '../hocs'
 import { isEqual } from '../utils'
 import { useCallback } from './use-callback'
@@ -33,7 +33,7 @@ export const useCustomizedIcons = Object.assign(
       set: useCallback((iconId, fn) => {
         invalidateIconCache(() => {
           store.set(({ draft }) => {
-            const a = draft.current[iconId] ?? defaultIconCustomisations
+            const a = draft.current[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS
             const b = fn(result(a))
 
             mergeCustomisations
@@ -49,7 +49,7 @@ export const useCustomizedIcons = Object.assign(
     useSelect: iconId =>
       useStore().useSelectValue(
         ({ draft }) =>
-          result(draft.current[iconId] ?? defaultIconCustomisations),
+          result(draft.current[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS),
         { deps: [iconId] }
       )
   }

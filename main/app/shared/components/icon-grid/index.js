@@ -128,10 +128,10 @@ const Root = component(({ iconIds, initialSearchTerm, reloadFn }) => {
                         }
                       }))
                     },
-                    ...Object.entries(actions).map(([key, value]) => ({
-                      label: capitalCase(key),
+                    ...Object.entries(actions).map(([a, b]) => ({
+                      label: capitalCase(a),
                       onClick: () => {
-                        setState(value)
+                        setState(b)
                       }
                     })),
                     {

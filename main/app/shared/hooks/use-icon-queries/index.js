@@ -12,7 +12,10 @@ export const useIconQueries = (...icons) => {
   const buildIconContextQuery = useQuery(
     getQueryOptions({
       select: useCallback(iconSets =>
-        mapValues(iconSets, iconSet => ({ setName: iconSet.name }))
+        mapValues(iconSets, iconSet => ({
+          palette: iconSet.palette,
+          setName: iconSet.name
+        }))
       ),
       url: ICON_SETS_URL
     })
@@ -23,6 +26,7 @@ export const useIconQueries = (...icons) => {
       const icon = stringToIcon(iconId)
 
       return getQueryOptions({
+        enabled: buildIconContextQuery.isSuccess,
         gcTime: ms('1m'),
         queryKey: iconId,
         select: data =>

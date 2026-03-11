@@ -1,14 +1,14 @@
-import { defaultIconCustomisations, stringToIcon } from '@iconify/utils'
+import { stringToIcon } from '@iconify/utils'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { VscodeIcon } from '@vscode-elements/react-elements'
 import { useUnmount } from 'ahooks'
 import { capitalCase } from 'change-case'
-import { findKey, pick, uniq } from 'es-toolkit'
+import { findKey, identity, range, uniq } from 'es-toolkit'
 import { size, truncate } from 'es-toolkit/compat'
 import React from 'react'
 import { experimental_VGrid as VGrid } from 'virtua'
 
-import { ICON_SETS_URL } from '../../constants'
+import { DEFAULT_ICON_CUSTOMISATIONS, ICON_SETS_URL } from '../../constants'
 import { component } from '../../hocs'
 import { useCallback } from '../../hooks/use-callback'
 import { useCustomizedIcons } from '../../hooks/use-customized-icons'
@@ -35,9 +35,19 @@ import takumi from './takumi.wasm'
 
 const defaultCol = 1
 
-const flipDirections = {
-  hFlip: 'Horizontal flip',
-  vFlip: 'Vertical flip'
+const ItemContext = {
+  flipDirections: {
+    hFlip: 'Horizontal flip',
+    vFlip: 'Vertical flip'
+  },
+  rotate: {
+    step: 90,
+    values: range(DEFAULT_ICON_CUSTOMISATIONS.rotate, 4)
+  },
+  scales: range(
+    DEFAULT_ICON_CUSTOMISATIONS.scale,
+    100 + DEFAULT_ICON_CUSTOMISATIONS.scale
+  )
 }
 
 export default Object.assign(
@@ -103,6 +113,7 @@ export default Object.assign(
 
       const iconSetQuery = useQuery(
         getQueryOptions({
+          enabled: iconQuery.isSuccess,
           select: useCallback(
             iconSets => {
               // eslint-disable-next-line no-unused-vars
@@ -208,18 +219,46 @@ export default Object.assign(
                         customizedIcons.delete(iconQuery.data.id)
                       }
                     },
-                    ...Object.keys(flipDirections).map(flipDirection => ({
-                      label: flipDirections[flipDirection],
-                      onClick: () => {
-                        customizedIcons.set(
-                          iconQuery.data.id,
-                          ({ iconCustomisations }) => ({
-                            [flipDirection]: !iconCustomisations[flipDirection]
-                          })
-                        )
-                      }
-                    })),
                     { separator: true },
+                    ...Object.keys(ItemContext.flipDirections).map(
+                      flipDirection => ({
+                        label: ItemContext.flipDirections[flipDirection],
+                        onClick: () => {
+                          customizedIcons.set(
+                            iconQuery.data.id,
+                            ({ iconCustomisations }) => ({
+                              [flipDirection]:
+                                !iconCustomisations[flipDirection]
+                            })
+                          )
+                        }
+                      })
+                    ),
+                    { separator: true },
+                    {
+                      label: 'Rotate',
+                      menu: ItemContext.rotate.values.map(rotate => ({
+                        label: `${rotate * ItemContext.rotate.step}deg`,
+                        onClick: () => {
+                          customizedIcons.set(iconQuery.data.id, () => ({
+                            rotate
+                          }))
+                        },
+                        selected: rotate === iconCustomisations.rotate
+                      }))
+                    },
+                    {
+                      label: 'UNSTABLE_SCALE',
+                      menu: ItemContext.scales.map(scale => ({
+                        label: scale,
+                        onClick: () => {
+                          customizedIcons.set(iconQuery.data.id, () => ({
+                            scale
+                          }))
+                        },
+                        selected: scale === iconCustomisations.scale
+                      }))
+                    },
                     {
                       label: 'Restart animations',
                       onClick: () => {
@@ -234,7 +273,13 @@ export default Object.assign(
                   label: 'Takumi WASM',
                   menu: Object.entries(takumi.formats).map(([format, type]) => {
                     const takumiArg = {
-                      component: iconQuery.data['/'].to.reactElement,
+                      component: (format === 'jpeg' && !iconQuery.data.palette
+                        ? React.cloneElement
+                        : identity)(iconQuery.data['/'].to.reactElement, {
+                        style: {
+                          backgroundColor: 'white'
+                        }
+                      }),
                       get id() {
                         return getId(`[${iconQuery.data.id}]`, {
                           iconCustomisations,
@@ -243,7 +288,10 @@ export default Object.assign(
                       },
                       options: {
                         format,
-                        ...pick(iconQuery.data.data, ['height', 'width'])
+                        height:
+                          iconQuery.data.data.height * iconCustomisations.scale,
+                        width:
+                          iconQuery.data.data.width * iconCustomisations.scale
                       }
                     }
 
@@ -353,7 +401,7 @@ export default Object.assign(
               label: 'Category'
             },
             {
-              description: `${iconQuery.data.data.width} x ${iconQuery.data.data.height}`,
+              description: `${iconQuery.data.data.width * iconCustomisations.scale} x ${iconQuery.data.data.height * iconCustomisations.scale}`,
               label: 'Size'
             },
             {
@@ -421,7 +469,7 @@ export default Object.assign(
                   </React.Activity>
                   <React.Activity
                     mode={
-                      isEqual(defaultIconCustomisations, iconCustomisations)
+                      isEqual(DEFAULT_ICON_CUSTOMISATIONS, iconCustomisations)
                         ? 'hidden'
                         : 'visible'
                     }>

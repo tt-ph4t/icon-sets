@@ -1,4 +1,6 @@
+import { defaultIconCustomisations } from '@iconify/utils'
 import { QueryClient } from '@tanstack/react-query'
+import { omit } from 'es-toolkit'
 import { LRUCache } from 'lru-cache'
 
 export const GITHUB_REPO = 'tt-ph4t/icon-sets'
@@ -37,3 +39,11 @@ export const CARD_STYLE =
       whiteSpace: 'nowrap'
     }
   }
+
+export const DEFAULT_ICON_CUSTOMISATIONS = omit(
+  {
+    ...defaultIconCustomisations,
+    scale: 1
+  },
+  ['height', 'width']
+)

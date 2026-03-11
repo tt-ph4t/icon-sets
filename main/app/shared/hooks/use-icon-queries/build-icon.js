@@ -52,7 +52,7 @@ export const getIconFileNames = (icon, extension) => ({
 // https://github.com/antfu-collective/icones/blob/main/src/utils/svgToPng.ts
 export default (
   icon,
-  { hFlip, vFlip, wrapSvgContentEnd, wrapSvgContentStart }
+  { hFlip, rotate, scale, vFlip, wrapSvgContentEnd, wrapSvgContentStart }
 ) => {
   if (ICON_CACHE.has(icon.id)) return ICON_CACHE.get(icon.id)
 
@@ -70,7 +70,7 @@ export default (
         return has(data)
           ? {
               get blob() {
-                return new Blob([this.data], {
+                return new Blob([data], {
                   type: this.type
                 })
               },
@@ -94,6 +94,8 @@ export default (
             wrapSvgContentEnd
           ),
           hFlip,
+          hidden: undefined,
+          rotate,
           vFlip
         })
 
@@ -104,8 +106,8 @@ export default (
           },
           get html() {
             const svg = iconToSVG(iconData, {
-              height: iconData.height,
-              width: iconData.width
+              height: iconData.height * scale,
+              width: iconData.width * scale
             })
 
             return iconToHTML(replaceIDs(svg.body), svg.attributes)
