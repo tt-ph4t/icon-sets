@@ -1,5 +1,6 @@
 import { defaultIconCustomisations } from '@iconify/utils'
 import { QueryClient } from '@tanstack/react-query'
+import bytes from 'bytes'
 import { omit } from 'es-toolkit'
 import { LRUCache } from 'lru-cache'
 
@@ -16,6 +17,10 @@ export const ID_SEPARATOR = ':'
 export const ICON_CACHE = new LRUCache({ max: 1000 })
 
 export const QUERY_CLIENT = new QueryClient()
+
+export const EMPTY_BLOB = new Blob()
+
+export const MAX_CACHEABLE_SIZE = bytes.parse('256kb')
 
 export const CARD_STYLE =
   // https://github.com/vscode-elements/elements/blob/e71099a40fdbcbeaa50fd2d61ba2734f4e42f8d1/src/vscode-context-menu/vscode-context-menu.styles.ts

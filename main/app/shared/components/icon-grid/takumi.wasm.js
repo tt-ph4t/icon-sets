@@ -3,7 +3,7 @@ import module from '@takumi-rs/wasm/takumi_wasm_bg.wasm?url'
 import { LRUCache } from 'lru-cache'
 import mime from 'mime/lite'
 
-import { ICON_CACHE } from '../../constants'
+import { EMPTY_BLOB, ICON_CACHE, MAX_CACHEABLE_SIZE } from '../../constants'
 
 const cache = new LRUCache({ max: ICON_CACHE.max })
 
@@ -11,17 +11,26 @@ export default Object.assign(
   async ({ component, id, options }) => {
     if (cache.has(id)) return cache.get(id)
 
-    const imageResponse = new ImageResponse(component, {
-      module,
-      quality: 100,
-      ...options
-    })
+    try {
+      const imageResponse = new ImageResponse(component, {
+        devicePixelRatio: 1,
+        module,
+        quality: 100,
+        ...options
+      })
 
-    const blob = imageResponse.ok ? await imageResponse.blob() : new Blob()
+      if (imageResponse.ok) {
+        const blob = await imageResponse.blob()
 
-    cache.set(id, blob)
+        if (blob.size <= MAX_CACHEABLE_SIZE) cache.set(id, blob)
 
-    return blob
+        return blob
+      }
+
+      return EMPTY_BLOB
+    } catch {
+      return EMPTY_BLOB
+    }
   },
   {
     formats: ['png', 'jpeg', 'webp', 'raw'].reduce((a, b) => {
