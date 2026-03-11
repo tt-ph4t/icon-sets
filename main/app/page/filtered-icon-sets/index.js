@@ -7,12 +7,12 @@ import {
 import { pick } from 'es-toolkit'
 import React from 'react'
 
-import { IconGrid } from '../shared/components/icon-grid'
-import { QueryBoundary } from '../shared/components/query-boundary'
-import { ICON_SETS_URL } from '../shared/constants'
-import { component } from '../shared/hocs'
-import { useCallback } from '../shared/hooks/use-callback'
-import { getId, getQueryOptions } from '../shared/utils'
+import { IconGrid } from '../../components/icon-grid'
+import { QueryBoundary } from '../../components/query-boundary'
+import { ICON_SETS_URL } from '../../constants'
+import { component } from '../../hocs'
+import { useCallback } from '../../hooks/use-callback'
+import { getId, getQueryOptions } from '../../utils'
 import Filter, { useFilter } from './filter'
 
 const queryOptions = getQueryOptions({ url: ICON_SETS_URL })

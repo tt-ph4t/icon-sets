@@ -6,11 +6,11 @@ import {
 import React from 'react'
 import { VList } from 'virtua'
 
-import { Menu } from '../shared/components/menu'
-import { ToolbarButton } from '../shared/components/toolbar-button'
-import { component, withImmerAtom } from '../shared/hocs'
-import { useMemo } from '../shared/hooks/use-memo'
-import { has } from '../shared/utils'
+import { Menu } from '../../components/menu'
+import { ToolbarButton } from '../../components/toolbar-button'
+import { component, withImmerAtom } from '../../hocs'
+import { useMemo } from '../../hooks/use-memo'
+import { has } from '../../utils'
 
 export default Object.assign(
   component(({ ids, menu, renderItem, useStore }) => {
