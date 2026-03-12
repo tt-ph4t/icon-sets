@@ -11,27 +11,24 @@ import { IconGrid } from '../../components/icon-grid'
 import { QueryBoundary } from '../../components/query-boundary'
 import { ICON_SETS_URL } from '../../constants'
 import { component } from '../../hocs'
-import { useCallback } from '../../hooks/use-callback'
 import { getId, getQueryOptions } from '../../utils'
-import Filter, { useFilter } from './filter'
-
-const queryOptions = getQueryOptions({ url: ICON_SETS_URL })
+import Filter from './filter'
+import { useStore } from './hooks'
 
 const FilteredIconSets = component(() => {
-  const selectedIconSetPrefixes = useFilter().useSelectValue(
+  const selectedIconSetPrefixes = useStore().useSelectValue(
     ({ draft }) => draft.selectedIconSetPrefixes
   )
 
-  const query = useQuery({
-    ...queryOptions,
-    select: useCallback(
-      iconSets =>
-        Object.values(pick(iconSets, selectedIconSetPrefixes)).flatMap(
-          iconSet => iconSet.icons.map(icon => getId(iconSet.prefix, icon))
-        ),
-      [selectedIconSetPrefixes]
-    )
+  const queryOptions = getQueryOptions({
+    select: iconSets =>
+      Object.values(pick(iconSets, selectedIconSetPrefixes)).flatMap(iconSet =>
+        iconSet.icons.map(icon => getId(iconSet.prefix, icon))
+      ),
+    url: ICON_SETS_URL
   })
+
+  const query = useQuery(queryOptions)
 
   return (
     <QueryBoundary

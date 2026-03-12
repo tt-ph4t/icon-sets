@@ -22,13 +22,12 @@ import { QueryBoundary } from '../../components/query-boundary'
 import { ToolbarButton } from '../../components/toolbar-button'
 import { Tree } from '../../components/tree'
 import { ICON_SETS_URL } from '../../constants'
-import { component, withImmerAtom } from '../../hocs'
+import { component } from '../../hocs'
 import { useCallback } from '../../hooks/use-callback'
-import { useEffect } from '../../hooks/use-effect'
 import { useMemo } from '../../hooks/use-memo'
-import { useRef } from '../../hooks/use-ref'
 import { getQueryOptions, has } from '../../utils'
 import { pluralize } from '../../utils/pluralize'
+import { useInit, useStore } from './hooks'
 
 const queryOptions = getQueryOptions({ url: ICON_SETS_URL })
 
@@ -39,7 +38,7 @@ const isFiltering = flow(xor, has)
 
 const Filter = {
   Label: component(() => {
-    const selectedIconSetPrefixes = useFilter().useSelectValue(
+    const selectedIconSetPrefixes = useStore().useSelectValue(
       ({ draft }) => draft.selectedIconSetPrefixes
     )
 
@@ -58,7 +57,7 @@ const Filter = {
     )
   }),
   MultiSelect: component(() => {
-    const filter = useFilter()
+    const store = useStore()
 
     const query = useQuery({
       ...queryOptions,
@@ -80,7 +79,7 @@ const Filter = {
       }))
     })
 
-    const selectedIconSetPrefixes = filter.useSelectValue(
+    const selectedIconSetPrefixes = store.useSelectValue(
       ({ draft }) => draft.selectedIconSetPrefixes
     )
 
@@ -88,7 +87,7 @@ const Filter = {
       <VscodeMultiSelect
         combobox={false}
         onChange={event => {
-          filter.set(({ draft }) => {
+          store.set(({ draft }) => {
             draft.selectedIconSetPrefixes = intersection(
               Object.keys(query.data.iconSetPrefixIndexMap),
               event.target.value
@@ -104,9 +103,9 @@ const Filter = {
   }),
   Tree: component(() => {
     const query = useQuery({ ...queryOptions, select: identity })
-    const filter = useFilter()
+    const store = useStore()
 
-    const selectedIconSetPrefixes = filter.useSelectValue(
+    const selectedIconSetPrefixes = store.useSelectValue(
       ({ draft }) => draft.selectedIconSetPrefixes
     )
 
@@ -174,7 +173,7 @@ const Filter = {
     }, [query.data])
 
     const toggleIconSetPrefixes = useCallback((checked, prefixes) => {
-      filter.set(({ draft }) => {
+      store.set(({ draft }) => {
         draft.selectedIconSetPrefixes = intersection(
           Object.keys(query.data),
           checked
@@ -231,30 +230,6 @@ const Filter = {
   })
 }
 
-export const useFilter = Object.assign(
-  withImmerAtom({
-    selectedIconSetPrefixes: []
-  }),
-  {
-    useInit: () => {
-      const ref = useRef(true)
-      const query = useQuery({ ...queryOptions, select: Object.keys })
-      const filter = useFilter()
-
-      useEffect(() => {
-        if (ref.current)
-          filter.set(({ draft }) => {
-            draft.selectedIconSetPrefixes = query.data
-          })
-
-        return () => {
-          ref.current = false
-        }
-      }, [])
-    }
-  }
-)
-
 export default component(() => {
   const query = useQuery(queryOptions)
 
@@ -263,14 +238,14 @@ export default component(() => {
       query={query}
       queryOptions={queryOptions}
       render={() => {
-        useFilter.useInit()
+        useInit()
 
         return (
           <Popover
             keepMounted
             open
             popupRender={
-              <div style={{ position: 'relative' }}>
+              <>
                 <div
                   style={{
                     inset: 0,
@@ -281,7 +256,7 @@ export default component(() => {
                   <VscodeDivider />
                 </div>
                 <Filter.Tree />
-              </div>
+              </>
             }
             render={
               <div>
