@@ -148,7 +148,8 @@ export default defineConfig([
         'react/display-name',
 
         '@eslint-react/no-children-map',
-        '@eslint-react/no-clone-element'
+        '@eslint-react/no-clone-element',
+        '@eslint-react/no-children-to-array'
       )
     }
   }

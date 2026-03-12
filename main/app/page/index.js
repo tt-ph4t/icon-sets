@@ -28,36 +28,6 @@ import { useSettings } from '../hooks/use-settings'
 const Sidebar = lazy(() => import('./sidebar'))
 const FilteredIconSets = lazy(() => import('./filtered-icon-sets'))
 
-const App = component(() => {
-  const ref = useRef()
-
-  const reverseLayout = useSettings().useSelectValue(
-    ({ draft }) => draft.current.reverseLayout
-  )
-
-  useEffect.Update(() => {
-    ref.current.resetHandlePosition()
-  }, [reverseLayout])
-
-  return (
-    <SplitLayout
-      initialHandlePosition={reverseLayout ? '75%' : '25%'}
-      ref={ref}
-      style={{
-        '--border-width': '1px',
-
-        height: 'calc(var(--height) - calc(var(--border-width) * 2))'
-      }}>
-      {(reverseLayout ? reverse : identity)([
-        <Sidebar key={React.useId()} />,
-        <React.Activity key={React.useId()}>
-          <FilteredIconSets />
-        </React.Activity>
-      ])}
-    </SplitLayout>
-  )
-})
-
 const Loading = component(() => {
   const isLoading = [useIsFetching(), useIsMutating(), useIsRestoring()].some(
     isTruthy
@@ -70,84 +40,113 @@ const Loading = component(() => {
   )
 })
 
-const UNSTABLE_FULLSCREEN = component(props => {
-  const settings = useSettings()
+const Settings = Object.assign(
+  component(() => {
+    const settings = useSettings()
 
-  const isFullscreen = settings.useSelectValue(
-    ({ draft }) => draft.current.isFullscreen
-  )
-
-  const fullscreen = useRef.Fullscreen()
-
-  useEffect(() => {
-    if (fullscreen.isEnabled) {
-      if (fullscreen.isFullscreen === isFullscreen) return
-
-      fullscreen[isFullscreen ? 'enterFullscreen' : 'exitFullscreen']()
-
-      settings.set(({ draft }) => {
-        draft.current.isFullscreen = fullscreen.isFullscreen
-      })
-    }
-  }, [isFullscreen, fullscreen])
-
-  return <div ref={fullscreen.ref} {...props} />
-})
-
-const Settings = component(() => {
-  const settings = useSettings()
-
-  return (
-    <VscodeFormContainer>
-      <VscodeFormGroup style={{ paddingBottom: 12 }} variant='settings-group'>
-        <VscodeFormHelper>
-          <Menu
-            data={[
-              {
-                label: 'Devtools',
-                onClick: () => {
-                  settings.set(({ draft }) => {
-                    draft.current.showDevtools = !draft.current.showDevtools
-                  })
+    return (
+      <VscodeFormContainer>
+        <VscodeFormGroup style={{ paddingBottom: 12 }} variant='settings-group'>
+          <VscodeFormHelper>
+            <Menu
+              data={[
+                {
+                  label: 'Devtools',
+                  onClick: () => {
+                    settings.set(({ draft }) => {
+                      draft.current.showDevtools = !draft.current.showDevtools
+                    })
+                  }
+                },
+                {
+                  label: 'Reverse Layout',
+                  onClick: () => {
+                    settings.set(({ draft }) => {
+                      draft.current.reverseLayout = !draft.current.reverseLayout
+                    })
+                  }
+                },
+                {
+                  label: 'UNSTABLE_FULLSCREEN',
+                  onClick: () => {
+                    settings.set(({ draft }) => {
+                      draft.current.isFullscreen = !draft.current.isFullscreen
+                    })
+                  }
+                },
+                { separator: true },
+                {
+                  label: 'GitHub',
+                  onClick: () => {
+                    open(`https://github.com/${GITHUB_REPO}`)
+                  }
                 }
-              },
-              {
-                label: 'Reverse Layout',
-                onClick: () => {
-                  settings.set(({ draft }) => {
-                    draft.current.reverseLayout = !draft.current.reverseLayout
-                  })
-                }
-              },
-              {
-                label: 'UNSTABLE_FULLSCREEN',
-                onClick: () => {
-                  settings.set(({ draft }) => {
-                    draft.current.isFullscreen = !draft.current.isFullscreen
-                  })
-                }
-              },
-              { separator: true },
-              {
-                label: 'GitHub',
-                onClick: () => {
-                  open(`https://github.com/${GITHUB_REPO}`)
-                }
-              }
-            ]}
-            render={<ToolbarButton icon='settings'>Settings</ToolbarButton>}
-          />
-        </VscodeFormHelper>
-      </VscodeFormGroup>
-    </VscodeFormContainer>
-  )
-})
+              ]}
+              render={<ToolbarButton icon='settings'>Settings</ToolbarButton>}
+            />
+          </VscodeFormHelper>
+        </VscodeFormGroup>
+      </VscodeFormContainer>
+    )
+  }),
+  {
+    Fullscreen: component(props => {
+      const settings = useSettings()
+
+      const isFullscreen = settings.useSelectValue(
+        ({ draft }) => draft.current.isFullscreen
+      )
+
+      const fullscreen = useRef.Fullscreen()
+
+      useEffect(() => {
+        if (fullscreen.isEnabled) {
+          if (fullscreen.isFullscreen === isFullscreen) return
+
+          fullscreen[isFullscreen ? 'enterFullscreen' : 'exitFullscreen']()
+
+          settings.set(({ draft }) => {
+            draft.current.isFullscreen = fullscreen.isFullscreen
+          })
+        }
+      }, [isFullscreen, fullscreen])
+
+      return <div ref={fullscreen.ref} {...props} />
+    }),
+    ReverseLayout: component(({ children }) => {
+      const ref = useRef()
+
+      const reverseLayout = useSettings().useSelectValue(
+        ({ draft }) => draft.current.reverseLayout
+      )
+
+      useEffect.Update(() => {
+        ref.current.resetHandlePosition()
+      }, [reverseLayout])
+
+      return (
+        <SplitLayout
+          initialHandlePosition={reverseLayout ? '75%' : '25%'}
+          ref={ref}
+          style={{
+            '--border-width': '1px',
+
+            height: 'calc(var(--height) - calc(var(--border-width) * 2))'
+          }}>
+          {(reverseLayout ? reverse : identity)(
+            React.Children.toArray(children)
+          )}
+        </SplitLayout>
+      )
+    })
+  }
+)
 
 export default component(() => {
   preconnect(new URL(DATA_BASE_URL).origin)
 
   return (
-    <UNSTABLE_FULLSCREEN
+    <Settings.Fullscreen
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -162,7 +161,10 @@ export default component(() => {
         <Loading />
       </div>
       <React.Activity>
-        <App />
+        <Settings.ReverseLayout>
+          <Sidebar />
+          <FilteredIconSets />
+        </Settings.ReverseLayout>
       </React.Activity>
       <div
         style={{
@@ -172,6 +174,6 @@ export default component(() => {
         }}>
         <Settings />
       </div>
-    </UNSTABLE_FULLSCREEN>
+    </Settings.Fullscreen>
   )
 })
