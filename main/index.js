@@ -7,11 +7,12 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import root from 'react-shadow'
 
+import { Layout } from './app/components/layout'
 import { QUERY_CLIENT } from './app/constants'
 import { component } from './app/hocs'
 import { lazy } from './app/hocs/lazy'
 import { useSettings } from './app/hooks/use-settings'
-import './index.css'
+import './styles/index.css'
 
 const App = lazy(() => import('./app/page'))
 
@@ -35,13 +36,26 @@ const Devtools = component(() => {
 
 createRoot(document.querySelector('#root')).render(
   <>
-    <root.div>
-      <QueryClientProvider client={QUERY_CLIENT}>
-        <React.Activity>
-          <App />
-        </React.Activity>
-      </QueryClientProvider>
-    </root.div>
+    <div
+      style={{
+        alignContent: 'center',
+        alignSelf: 'center',
+        flexGrow: 1
+      }}>
+      <Layout>
+        <root.div
+          style={{
+            height: 'inherit',
+            width: 'inherit'
+          }}>
+          <QueryClientProvider client={QUERY_CLIENT}>
+            <React.Activity>
+              <App />
+            </React.Activity>
+          </QueryClientProvider>
+        </root.div>
+      </Layout>
+    </div>
     <link
       href={codiconUrl}
       id='vscode-codicon-stylesheet' // https://vscode-elements.github.io/components/icon/

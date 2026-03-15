@@ -1,0 +1,25 @@
+@import './react-resizable.css';
+
+:root {
+  --height: 100dvh;
+  --width: 100dvw;
+  --spacing: 0.25rem;
+
+  height: var(--height);
+  width: var(--width);
+
+  body {
+    padding: 0;
+    height: inherit;
+    width: inherit;
+    position: relative;
+  }
+
+  #root {
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    height: inherit;
+    width: inherit;
+  }
+}

@@ -2,8 +2,16 @@ import { withImmerAtom } from '../hocs'
 
 export const useSettings = withImmerAtom({
   current: {
-    isFullscreen: false,
-    reverseLayout: false,
+    layout: {
+      fullscreen: false,
+      reverse: true,
+      size: {
+        height: 0,
+        get width() {
+          return this.height
+        }
+      }
+    },
     showDevtools: false,
     squareIcon: true
   }

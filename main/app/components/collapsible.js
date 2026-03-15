@@ -1,4 +1,3 @@
-import { mergeProps } from '@base-ui/react/merge-props'
 import { VscodeCollapsible } from '@vscode-elements/react-elements'
 import { useControllableValue, useEventListener } from 'ahooks'
 import { asyncNoop } from 'es-toolkit'
@@ -14,9 +13,11 @@ export const Collapsible = component(
     defaultOpen,
     keepMounted,
     onToggle = asyncNoop,
+    ref: ref1,
     ...props
   }) => {
-    const ref = useRef()
+    const ref2 = useRef()
+    const mergedRef = useRef.Merge(ref1, ref2)
 
     const [open, setOpen] = useControllableValue(props, {
       defaultValue: defaultOpen,
@@ -31,12 +32,15 @@ export const Collapsible = component(
 
         setOpen(event.detail.open) // ?
       },
-      { target: ref }
+      { target: ref2 }
     )
 
     return (
       <VscodeCollapsible
-        {...mergeProps(props, { alwaysShowHeaderActions, open, ref })}>
+        alwaysShowHeaderActions={alwaysShowHeaderActions}
+        open={open}
+        ref={mergedRef}
+        {...props}>
         {keepMounted ? (
           <React.Activity mode={open ? 'visible' : 'hidden'}>
             {children}

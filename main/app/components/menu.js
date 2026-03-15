@@ -2,7 +2,8 @@ import { Menu as menu } from '@base-ui/react/menu'
 import { isPlainObject } from '@sindresorhus/is'
 import {
   VscodeContextMenuItem,
-  VscodeFormContainer
+  VscodeFormContainer,
+  VscodeFormGroup
 } from '@vscode-elements/react-elements'
 import { asyncNoop } from 'es-toolkit'
 import { castArray } from 'es-toolkit/compat'
@@ -27,22 +28,22 @@ const {
 } = menu
 
 const popupRender = Object.assign(
-  (...args) => {
-    const maxHeight = 500
-
-    return (
-      <VscodeFormContainer style={CARD_STYLE}>
-        <div
-          style={{
-            maxHeight,
-            maxWidth: maxHeight * 0.7,
-            overflow: 'auto'
-          }}>
-          {popupRender.children(...args)}
-        </div>
-      </VscodeFormContainer>
-    )
-  },
+  (...args) => (
+    <VscodeFormContainer style={CARD_STYLE}>
+      <VscodeFormGroup
+        style={{
+          maxHeight: 500,
+          get maxWidth() {
+            return this.maxHeight * 0.7
+          },
+          overflow: 'auto',
+          padding: 'unset'
+        }}
+        variant='settings-group'>
+        {popupRender.children(...args)}
+      </VscodeFormGroup>
+    </VscodeFormContainer>
+  ),
   {
     children: (data, context) =>
       data.map(({ menu, render, ...props }, index) => {

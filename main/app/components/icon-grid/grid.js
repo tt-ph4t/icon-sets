@@ -248,7 +248,7 @@ export default Object.assign(
                       }))
                     },
                     {
-                      label: 'UNSTABLE_SCALE',
+                      label: 'Scale',
                       menu: ItemContext.scales.map(scale => ({
                         label: scale,
                         onClick: () => {

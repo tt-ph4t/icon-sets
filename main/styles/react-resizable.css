@@ -1,0 +1,31 @@
+@import 'react-resizable/css/styles.css';
+
+.react-resizable {
+  --cyber-bg: #0a0a0f;
+  --cyber-surface: #12121a;
+  --cyber-cyan: #00f0ff;
+  --cyber-magenta: #ff00aa;
+  --cyber-purple: #a855f7;
+  --cyber-yellow: #facc15;
+  --cyber-grid: rgba(0, 240, 255, 0.03);
+  --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.5), 0 0 40px rgba(0, 240, 255, 0.2);
+  --glow-magenta:
+    0 0 20px rgba(255, 0, 170, 0.5), 0 0 40px rgba(255, 0, 170, 0.2);
+
+  /* https://github.com/react-grid-layout/react-resizable/blob/b42f2c7d1a50c0732cee1d2eaf66bda8e5d5fc20/examples/example-styles.css#L248 */
+  .react-resizable-handle {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNnB4IiBoZWlnaHQ9IjZweCI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiNmZjAwYWEiLz48L3N2Zz4=');
+    filter: drop-shadow(0 0 6px var(--cyber-magenta));
+    opacity: 0.8;
+    opacity: 1;
+    transition:
+      filter 0.2s ease,
+      opacity 0.2s ease;
+
+    /* &:hover {
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNnB4IiBoZWlnaHQ9IjZweCI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMGYwZmYiLz48L3N2Zz4=');
+      filter: drop-shadow(0 0 4px var(--cyber-cyan));
+      opacity: 1;
+    } */
+  }
+}

@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query'
 import { ICON_SETS_URL } from '../../constants'
 import { withImmerAtom } from '../../hocs'
 import { useEffect } from '../../hooks/use-effect'
-import { useRef } from '../../hooks/use-ref'
 import { getQueryOptions } from '../../utils'
 
 export const useStore = withImmerAtom({
@@ -11,7 +10,6 @@ export const useStore = withImmerAtom({
 })
 
 export const useInit = () => {
-  const ref = useRef(true)
   const store = useStore()
 
   const query = useQuery(
@@ -21,14 +19,9 @@ export const useInit = () => {
     })
   )
 
-  useEffect(() => {
-    if (ref.current)
-      store.set(({ draft }) => {
-        draft.selectedIconSetPrefixes = query.data
-      })
-
-    return () => {
-      ref.current = false
-    }
-  }, [])
+  useEffect.Once(() => {
+    store.set(({ draft }) => {
+      draft.selectedIconSetPrefixes = query.data
+    })
+  })
 }
