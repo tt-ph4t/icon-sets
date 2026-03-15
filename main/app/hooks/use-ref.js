@@ -5,13 +5,11 @@ import React from 'react'
 import { useCallback } from './use-callback'
 import { useState } from './use-state'
 
+const bodyElement = document.querySelector('body')
+
 // https://github.com/Shopify/quilt/blob/d98672060fc724f3fe7af9a25a0845b8d7c0774a/packages/react-hooks/src/hooks/lazy-ref.ts
 export const useRef = Object.assign(
-  getValue => {
-    const [state] = useState(getValue)
-
-    return React.useRef(state)
-  },
+  getValue => React.useRef(useState(getValue)[0]),
   {
     Fullscreen: options => {
       const ref = useRef()
@@ -27,9 +25,7 @@ export const useRef = Object.assign(
 
       return {
         ref,
-        ...React.useDeferredValue(
-          useSize(() => ref.current ?? document.querySelector('body'))
-        )
+        ...React.useDeferredValue(useSize(() => ref.current ?? bodyElement))
       }
     }
   }

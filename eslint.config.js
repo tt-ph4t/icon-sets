@@ -146,6 +146,7 @@ export default defineConfig([
 
         'react-hooks/exhaustive-deps',
         'react/display-name',
+        'react/prop-types',
 
         '@eslint-react/no-children-map',
         '@eslint-react/no-clone-element',
