@@ -2,8 +2,7 @@ import { mergeCustomisations } from '@iconify/utils'
 import { omit } from 'es-toolkit'
 
 import { DEFAULT_ICON_CUSTOMISATIONS, ICON_CACHE } from '../constants'
-import { withImmerAtom } from '../hocs'
-import { isEqual } from '../utils'
+import { withImmerAtom } from '../hocs/with-immer-atom'
 import { useCallback } from './use-callback'
 
 const useStore = withImmerAtom({ current: {} })
@@ -37,7 +36,7 @@ export const useCustomizedIcons = Object.assign(
             const b = fn(result(a))
 
             mergeCustomisations
-            if (!isEqual(a, b)) draft.current[iconId] = { ...a, ...b }
+            draft.current[iconId] = { ...a, ...b }
           })
         }, iconId)
       })

@@ -11,12 +11,14 @@ const FallbackComponent = component(({ error, resetErrorBoundary }) => (
   </Fallback.Error>
 ))
 
+const fallback = <Fallback />
+
 export const lazy = load => {
   const Component = React.lazy(load)
 
   return component(props => (
     <ErrorBoundary FallbackComponent={FallbackComponent}>
-      <React.Suspense fallback={<Fallback />}>
+      <React.Suspense fallback={fallback}>
         <Component {...props} />
       </React.Suspense>
     </ErrorBoundary>

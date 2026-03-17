@@ -1,5 +1,6 @@
 import { isEmptyString, isSymbol } from '@sindresorhus/is'
 import { useQuery } from '@tanstack/react-query'
+import { isEqual } from '@ver0/deep-equal'
 import { compact } from 'es-toolkit'
 import { size } from 'es-toolkit/compat'
 
@@ -8,9 +9,10 @@ import { IconGrid } from '../../../components/icon-grid'
 import { Menu } from '../../../components/menu'
 import { ToolbarButton } from '../../../components/toolbar-button'
 import { ICON_SETS_URL } from '../../../constants'
-import { component, withImmerAtom } from '../../../hocs'
+import { component } from '../../../hocs'
+import { withImmerAtom } from '../../../hocs/with-immer-atom'
 import { useCallback } from '../../../hooks/use-callback'
-import { getId, getQueryOptions, isEqual } from '../../../utils'
+import { getId, getQueryOptions } from '../../../utils'
 import { pluralize } from '../../../utils/pluralize'
 
 const initialState = {

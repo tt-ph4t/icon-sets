@@ -1,4 +1,4 @@
-import { withImmerAtom } from '../hocs'
+import { withImmerAtom } from '../hocs/with-immer-atom'
 
 export const useSettings = withImmerAtom({
   current: {
@@ -12,7 +12,6 @@ export const useSettings = withImmerAtom({
         }
       }
     },
-    showDevtools: false,
-    squareIcon: true
+    showDevtools: import.meta.env.DEV
   }
 })

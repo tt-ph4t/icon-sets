@@ -31,8 +31,8 @@ export const Layout = Object.assign(
       <ResizableBox
         maxConstraints={[maxSize.width, maxSize.height]}
         minConstraints={[
-          settings.init.current.layout.size.width,
-          settings.init.current.layout.size.height
+          useSettings.initial.current.layout.size.width,
+          useSettings.initial.current.layout.size.height
         ]}
         onResize={(event, data) => {
           settings.set(({ draft }) => {

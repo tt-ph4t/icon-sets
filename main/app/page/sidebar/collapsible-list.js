@@ -8,7 +8,8 @@ import { VList } from 'virtua'
 
 import { Menu } from '../../components/menu'
 import { ToolbarButton } from '../../components/toolbar-button'
-import { component, withImmerAtom } from '../../hocs'
+import { component } from '../../hocs'
+import { withImmerAtom } from '../../hocs/with-immer-atom'
 import { useMemo } from '../../hooks/use-memo'
 import { has } from '../../utils'
 

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { ICON_SETS_URL } from '../../constants'
-import { withImmerAtom } from '../../hocs'
+import { withImmerAtom } from '../../hocs/with-immer-atom'
 import { useEffect } from '../../hooks/use-effect'
 import { getQueryOptions } from '../../utils'
 

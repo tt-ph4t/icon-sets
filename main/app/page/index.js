@@ -23,6 +23,7 @@ import { component } from '../hocs'
 import { lazy } from '../hocs/lazy'
 import { useEffect } from '../hooks/use-effect'
 import { useRef } from '../hooks/use-ref'
+import { useRemount } from '../hooks/use-remount'
 import { useSettings } from '../hooks/use-settings'
 
 const Sidebar = lazy(() => import('./sidebar'))
@@ -40,7 +41,7 @@ const Loading = component(() => {
   )
 })
 
-const Settings = component(() => {
+const Settings = component(({ menu }) => {
   const settings = useSettings()
 
   return (
@@ -58,22 +59,29 @@ const Settings = component(() => {
                 }
               },
               {
-                label: 'Reverse Layout',
-                onClick: () => {
-                  settings.set(({ draft }) => {
-                    draft.current.layout.reverse = !draft.current.layout.reverse
-                  })
-                }
+                label: 'Layout',
+                menu: [
+                  {
+                    label: 'Reverse',
+                    onClick: () => {
+                      settings.set(({ draft }) => {
+                        draft.current.layout.reverse =
+                          !draft.current.layout.reverse
+                      })
+                    }
+                  },
+                  {
+                    label: 'Fullscreen',
+                    onClick: () => {
+                      settings.set(({ draft }) => {
+                        draft.current.layout.fullscreen =
+                          !draft.current.layout.fullscreen
+                      })
+                    }
+                  }
+                ]
               },
-              {
-                label: 'UNSTABLE_FULLSCREEN',
-                onClick: () => {
-                  settings.set(({ draft }) => {
-                    draft.current.layout.fullscreen =
-                      !draft.current.layout.fullscreen
-                  })
-                }
-              },
+              ...menu,
               { separator: true },
               {
                 label: 'GitHub',
@@ -90,67 +98,76 @@ const Settings = component(() => {
   )
 })
 
-export default component(() => {
-  preconnect(new URL(DATA_BASE_URL).origin)
+export default useRemount.with(
+  component(({ INTERNAL_REMOUNT }) => {
+    preconnect(new URL(DATA_BASE_URL).origin)
 
-  return (
-    <Layout.Fullscreen
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: 'inherit',
-        position: 'relative',
-        width: 'inherit'
-      }}>
-      <div
+    return (
+      <Layout.Fullscreen
         style={{
-          position: 'absolute',
-          width: '100%',
-          zIndex: 1
+          display: 'flex',
+          flexDirection: 'column',
+          height: 'inherit',
+          position: 'relative',
+          width: 'inherit'
         }}>
-        <Loading />
-      </div>
-      <React.Activity>
-        <Layout.Reverse
-          wrapper={children => {
-            const ref = useRef()
-
-            const layoutSettings = useSettings().useSelectValue(
-              ({ draft }) => ({
-                reverse: draft.current.layout.reverse
-              })
-            )
-
-            useEffect.Update(() => {
-              ref.current.resetHandlePosition()
-            }, [layoutSettings])
-
-            return (
-              <SplitLayout
-                initialHandlePosition={layoutSettings.reverse ? '75%' : '25%'}
-                ref={ref}
-                style={{
-                  ...omit(CARD_STYLE, ['padding']),
-                  get height() {
-                    return `calc(var(--height) - ${this.borderWidth} * 2)`
-                  }
-                }}>
-                {children}
-              </SplitLayout>
-            )
+        <div
+          style={{
+            position: 'absolute',
+            width: '100%',
+            zIndex: 1
           }}>
-          <Sidebar />
-          <FilteredIconSets />
-        </Layout.Reverse>
-      </React.Activity>
-      <div
-        style={{
-          alignSelf: 'center',
-          bottom: 0,
-          position: 'absolute'
-        }}>
-        <Settings />
-      </div>
-    </Layout.Fullscreen>
-  )
-})
+          <Loading />
+        </div>
+        <React.Activity>
+          <Layout.Reverse
+            wrapper={children => {
+              const ref = useRef()
+
+              const layoutSettings = useSettings().useSelectValue(
+                ({ draft }) => ({
+                  reverse: draft.current.layout.reverse
+                })
+              )
+
+              useEffect.Update(() => {
+                ref.current.resetHandlePosition()
+              }, [layoutSettings])
+
+              return (
+                <SplitLayout
+                  initialHandlePosition={layoutSettings.reverse ? '75%' : '25%'}
+                  ref={ref}
+                  style={{
+                    ...omit(CARD_STYLE, ['padding']),
+                    get height() {
+                      return `calc(var(--height) - ${this.borderWidth} * 2)`
+                    }
+                  }}>
+                  {children}
+                </SplitLayout>
+              )
+            }}>
+            <Sidebar />
+            <FilteredIconSets />
+          </Layout.Reverse>
+        </React.Activity>
+        <div
+          style={{
+            alignSelf: 'center',
+            bottom: 0,
+            position: 'absolute'
+          }}>
+          <Settings
+            menu={[
+              {
+                label: INTERNAL_REMOUNT.label,
+                onClick: INTERNAL_REMOUNT
+              }
+            ]}
+          />
+        </div>
+      </Layout.Fullscreen>
+    )
+  })
+)

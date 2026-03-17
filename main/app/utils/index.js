@@ -2,6 +2,7 @@ import { stringToIcon, validateIconName } from '@iconify/utils'
 import { isPrimitive } from '@sindresorhus/is'
 import { queryOptions } from '@tanstack/react-query'
 import { decode } from '@toon-format/toon'
+import { isEqual } from '@ver0/deep-equal'
 import axios from 'axios'
 import { downloadZip } from 'client-zip'
 import copyToClipboard from 'copy-to-clipboard'
@@ -13,7 +14,6 @@ import { isWordCharacter } from 'is-word-character'
 import jszip from 'jszip'
 import ms from 'ms'
 import { hash } from 'ohash'
-import isEqual1 from 'react-fast-compare'
 
 import { DELAY_MS, ID_SEPARATOR } from '../constants'
 
@@ -79,7 +79,6 @@ export const getId = (...values) =>
     .map(value => (isPrimitive(value) ? String : hash)(value))
     .join(ID_SEPARATOR)
 
-export const isEqual = (...[b, ...a]) => a.every(a => isEqual1(a, b))
 export const has = (...values) => hasValues(values)
 
 export const checkOdd =

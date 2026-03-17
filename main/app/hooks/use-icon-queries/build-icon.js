@@ -58,7 +58,7 @@ export default (
 
   icon = {
     ...icon,
-    '/': {
+    INTERNAL: {
       as(fileType) {
         const data = {
           css: this.to.css,
