@@ -1,17 +1,19 @@
 import { mergeCustomisations } from '@iconify/utils'
-import { omit } from 'es-toolkit'
+import { isEqual } from '@ver0/deep-equal'
 
 import { DEFAULT_ICON_CUSTOMISATIONS, ICON_CACHE } from '../constants'
 import { withImmerAtom } from '../hocs/with-immer-atom'
 import { useCallback } from './use-callback'
 
-const useStore = withImmerAtom({ current: {} })
+mergeCustomisations
+
+const useStore = withImmerAtom({})
 const result = iconCustomisations => ({ iconCustomisations })
 
 const invalidateIconCache = (fn, ...iconIds) => {
-  for (const iconId of iconIds) ICON_CACHE.delete(iconId)
-
   fn()
+
+  for (const iconId of iconIds) ICON_CACHE.delete(iconId)
 }
 
 export const useCustomizedIcons = Object.assign(
@@ -23,7 +25,7 @@ export const useCustomizedIcons = Object.assign(
         invalidateIconCache(
           () => {
             store.set(({ draft }) => {
-              draft.current = omit(draft.current, iconIds)
+              for (const iconId of iconIds) delete draft[iconId]
             })
           },
           ...iconIds
@@ -32,11 +34,12 @@ export const useCustomizedIcons = Object.assign(
       set: useCallback((iconId, fn) => {
         invalidateIconCache(() => {
           store.set(({ draft }) => {
-            const a = draft.current[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS
+            const a = draft[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS
             const b = fn(result(a))
+            const c = { ...a, ...b }
 
-            mergeCustomisations
-            draft.current[iconId] = { ...a, ...b }
+            if (isEqual(c, DEFAULT_ICON_CUSTOMISATIONS)) delete draft[iconId]
+            else draft[iconId] = c
           })
         }, iconId)
       })
@@ -44,11 +47,10 @@ export const useCustomizedIcons = Object.assign(
   },
   {
     useIconIds: () =>
-      useStore().useSelectValue(({ draft }) => Object.keys(draft.current)),
+      useStore().useSelectValue(({ draft }) => Object.keys(draft)),
     useSelect: iconId =>
       useStore().useSelectValue(
-        ({ draft }) =>
-          result(draft.current[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS),
+        ({ draft }) => result(draft[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS),
         { deps: [iconId] }
       )
   }

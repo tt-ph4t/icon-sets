@@ -3,30 +3,50 @@ import {
   VscodeFormGroup,
   VscodeFormHelper
 } from '@vscode-elements/react-elements'
-import React from 'react'
 import { VList } from 'virtua'
 
 import { Menu } from '../../components/menu'
 import { ToolbarButton } from '../../components/toolbar-button'
 import { component } from '../../hocs'
 import { withImmerAtom } from '../../hocs/with-immer-atom'
-import { useMemo } from '../../hooks/use-memo'
+import { useCallback } from '../../hooks/use-callback'
 import { has } from '../../utils'
 
+const Item = component(({ id, index, renderItem, useStore }) => {
+  const store = useStore()
+
+  const onOpenChange = useCallback(open => {
+    store.set(({ draft }) => {
+      draft[id] = {
+        ...draft[id],
+        open
+      }
+    })
+  })
+
+  return renderItem({
+    context: {
+      CollapsibleProps: store.useSelectValue(
+        ({ draft }) => ({
+          defaultOpen: !index,
+          onOpenChange,
+          ...draft[id]
+        }),
+        { deps: [id, index, onOpenChange] }
+      ),
+      id,
+      index
+    }
+  })
+})
+
 export default Object.assign(
-  component(({ ids, menu, renderItem, useStore }) => {
+  component(({ ids, menu, useStore, ...props }) => {
     const store = useStore()
 
-    const storeCurrent = store.useSelectValue(({ draft }) => draft.current, {
-      delay: 0
-    })
-
-    const hasAnyOpen = useMemo(
-      () =>
-        Object.values(storeCurrent).some(
-          CollapsibleProps => CollapsibleProps.open
-        ),
-      [storeCurrent]
+    const anyOpen = store.useSelectValue(
+      ({ draft }) => ids.some(id => draft[id]?.open),
+      { deps: [ids] }
     )
 
     return (
@@ -39,28 +59,15 @@ export default Object.assign(
                 style={{
                   height: 'calc(var(--sidebar-icon-grid-height) * 1.5)'
                 }}>
-                {(id, index) => {
-                  const context = {
-                    CollapsibleProps: {
-                      defaultOpen: !index,
-                      onOpenChange: open => {
-                        store.set(({ draft }) => {
-                          draft.current[id] = {
-                            ...draft.current[id],
-                            open
-                          }
-                        })
-                      },
-                      ...storeCurrent[id]
-                    },
-                    id,
-                    index
-                  }
-
-                  return React.cloneElement(renderItem({ context }), {
-                    key: context.id
-                  })
-                }}
+                {(id, index) => (
+                  <Item
+                    id={id}
+                    index={index}
+                    key={id}
+                    useStore={useStore}
+                    {...props}
+                  />
+                )}
               </VList>
             </VscodeFormHelper>
           </VscodeFormGroup>
@@ -68,17 +75,14 @@ export default Object.assign(
         <Menu
           data={[
             {
-              label: hasAnyOpen ? 'Collapse All' : 'Expand All',
+              label: anyOpen ? 'Collapse All' : 'Expand All',
               onClick: () => {
                 store.set(({ draft }) => {
-                  draft.current = ids.reduce((a, b) => {
-                    a[b] = {
-                      ...storeCurrent[b],
-                      open: !hasAnyOpen
+                  for (const id of ids)
+                    draft[id] = {
+                      ...draft[id],
+                      open: !anyOpen
                     }
-
-                    return a
-                  }, {})
                 })
               }
             },
@@ -91,9 +95,7 @@ export default Object.assign(
   }),
   {
     createContext: () => ({
-      useStore: withImmerAtom({
-        current: {}
-      })
+      useStore: withImmerAtom({})
     })
   }
 )
