@@ -54,7 +54,7 @@ const Settings = component(({ menu }) => {
                 label: 'Devtools',
                 onClick: () => {
                   settings.set(({ draft }) => {
-                    draft.current.showDevtools = !draft.current.showDevtools
+                    draft.showDevtools = !draft.showDevtools
                   })
                 }
               },
@@ -65,8 +65,7 @@ const Settings = component(({ menu }) => {
                     label: 'Reverse',
                     onClick: () => {
                       settings.set(({ draft }) => {
-                        draft.current.layout.reverse =
-                          !draft.current.layout.reverse
+                        draft.layout.reverse = !draft.layout.reverse
                       })
                     }
                   },
@@ -74,8 +73,7 @@ const Settings = component(({ menu }) => {
                     label: 'Fullscreen',
                     onClick: () => {
                       settings.set(({ draft }) => {
-                        draft.current.layout.fullscreen =
-                          !draft.current.layout.fullscreen
+                        draft.layout.fullscreen = !draft.layout.fullscreen
                       })
                     }
                   }
@@ -126,7 +124,7 @@ export default useRemount.with(
 
               const layoutSettings = useSettings().useSelectValue(
                 ({ draft }) => ({
-                  reverse: draft.current.layout.reverse
+                  reverse: draft.layout.reverse
                 })
               )
 

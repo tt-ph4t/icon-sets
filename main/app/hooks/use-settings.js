@@ -1,17 +1,15 @@
 import { withImmerAtom } from '../hocs/with-immer-atom'
 
 export const useSettings = withImmerAtom({
-  current: {
-    layout: {
-      fullscreen: false,
-      reverse: true,
-      size: {
-        height: 0,
-        get width() {
-          return this.height
-        }
+  layout: {
+    fullscreen: false,
+    reverse: true,
+    size: {
+      height: 0,
+      get width() {
+        return this.height
       }
-    },
-    showDevtools: import.meta.env.DEV
-  }
+    }
+  },
+  showDevtools: import.meta.env.DEV
 })

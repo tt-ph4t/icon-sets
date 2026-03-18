@@ -15,12 +15,12 @@ export const Layout = Object.assign(
     const maxSize = useRef.Size()
 
     const layoutSettings = settings.useSelectValue(({ draft }) => ({
-      size: draft.current.layout.size
+      size: draft.layout.size
     }))
 
     useEffect(() => {
       settings.set(({ draft }) => {
-        draft.current.layout.size = {
+        draft.layout.size = {
           height: maxSize.height * 0.86,
           width: maxSize.width * 0.8
         }
@@ -31,12 +31,12 @@ export const Layout = Object.assign(
       <ResizableBox
         maxConstraints={[maxSize.width, maxSize.height]}
         minConstraints={[
-          useSettings.initial.current.layout.size.width,
-          useSettings.initial.current.layout.size.height
+          useSettings.initial.layout.size.width,
+          useSettings.initial.layout.size.height
         ]}
         onResize={(event, data) => {
           settings.set(({ draft }) => {
-            draft.current.layout.size = data.size
+            draft.layout.size = data.size
           })
         }}
         {...layoutSettings.size}>
@@ -49,7 +49,7 @@ export const Layout = Object.assign(
       const settings = useSettings()
 
       const layoutSettings = settings.useSelectValue(({ draft }) => ({
-        fullscreen: draft.current.layout.fullscreen
+        fullscreen: draft.layout.fullscreen
       }))
 
       const fullscreen = useRef.Fullscreen()
@@ -64,7 +64,7 @@ export const Layout = Object.assign(
           ]()
 
           settings.set(({ draft }) => {
-            draft.current.layout.fullscreen = fullscreen.isFullscreen
+            draft.layout.fullscreen = fullscreen.isFullscreen
           })
         }
       }, [layoutSettings, fullscreen])
@@ -73,7 +73,7 @@ export const Layout = Object.assign(
     }),
     Reverse: component(({ children, ...props }) => {
       const layoutSettings = useSettings().useSelectValue(({ draft }) => ({
-        reverse: draft.current.layout.reverse
+        reverse: draft.layout.reverse
       }))
 
       return renderSlot({

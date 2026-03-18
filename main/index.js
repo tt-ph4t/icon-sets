@@ -18,7 +18,7 @@ const App = lazy(() => import('./app/page'))
 
 const Devtools = component(() => {
   const showDevtools = useSettings().useSelectValue(
-    ({ draft }) => draft.current.showDevtools
+    ({ draft }) => draft.showDevtools
   )
 
   return (
