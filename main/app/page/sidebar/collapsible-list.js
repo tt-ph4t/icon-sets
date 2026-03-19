@@ -95,7 +95,7 @@ export default Object.assign(
   }),
   {
     createContext: () => ({
-      useStore: withImmerAtom({})
+      useStore: withImmerAtom()
     })
   }
 )

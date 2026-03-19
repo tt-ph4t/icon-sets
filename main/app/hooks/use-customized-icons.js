@@ -7,7 +7,7 @@ import { useCallback } from './use-callback'
 
 mergeCustomisations
 
-const useStore = withImmerAtom({})
+const useStore = withImmerAtom()
 const result = iconCustomisations => ({ iconCustomisations })
 
 const invalidateIconCache = (fn, ...iconIds) => {

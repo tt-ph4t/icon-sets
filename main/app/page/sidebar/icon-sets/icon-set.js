@@ -23,7 +23,7 @@ const initialState = {
   }
 }
 
-const useStore = withImmerAtom({ current: {} })
+const useStore = withImmerAtom()
 
 const matchesIconTheme = (icon, theme) =>
   isEmptyString(
@@ -50,7 +50,7 @@ export default component(({ context }) => {
   const store = useStore()
 
   const state = store.useSelectValue(
-    ({ draft }) => draft.current[context.id] ?? initialState,
+    ({ draft }) => draft[context.id] ?? initialState,
     { deps: [context.id] }
   )
 
@@ -103,8 +103,8 @@ export default component(({ context }) => {
                 label: category,
                 onClick: () => {
                   store.set(({ draft }) => {
-                    draft.current[context.id] = {
-                      ...(draft.current[context.id] ?? initialState),
+                    draft[context.id] = {
+                      ...(draft[context.id] ?? initialState),
                       category: selected ? initialState.category : category
                     }
                   })
@@ -127,9 +127,9 @@ export default component(({ context }) => {
                 label: d,
                 onClick: () => {
                   store.set(({ draft }) => {
-                    const state = draft.current[context.id] ?? initialState
+                    const state = draft[context.id] ?? initialState
 
-                    draft.current[context.id] = {
+                    draft[context.id] = {
                       ...state,
                       theme: {
                         ...state.theme,

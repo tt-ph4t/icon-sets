@@ -8,8 +8,9 @@ import { DELAY_MS } from '../constants'
 import { useCallback } from '../hooks/use-callback'
 
 const create = flow(atomWithImmer, freezeAtom)
+const defaultValue = {}
 
-export const withImmerAtom = initialValue => {
+export const withImmerAtom = (initialValue = defaultValue) => {
   const atom = create(initialValue)
 
   return Object.assign(
