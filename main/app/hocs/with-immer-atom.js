@@ -27,14 +27,6 @@ export const withImmerAtom = (initialValue = defaultValue) => {
             fn({ draft })
           })
         }),
-        get useIsDefault() {
-          return useCallback(value =>
-            isEqual(
-              this.useSelectValue(({ draft }) => value ?? draft),
-              initialValue
-            )
-          )
-        },
         useSelectValue: useCallback((fn, { deps = [], ...options } = {}) =>
           useAtomValue(
             selectAtom(

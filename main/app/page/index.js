@@ -130,7 +130,7 @@ export default useRemount.with(
 
               useEffect.Update(() => {
                 ref.current.resetHandlePosition()
-              }, [layoutSettings])
+              }, [layoutSettings.reverse])
 
               return (
                 <SplitLayout

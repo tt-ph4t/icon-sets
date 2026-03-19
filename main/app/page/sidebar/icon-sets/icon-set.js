@@ -95,6 +95,15 @@ export default component(({ context }) => {
       <Menu
         data={[
           {
+            label: 'Reset',
+            onClick: () => {
+              store.set(({ draft }) => {
+                delete draft[context.id]
+              })
+            }
+          },
+          { separator: true },
+          {
             label: pluralize(size(query.data.categories), 'category'),
             menu: Object.keys(query.data.categories).map(category => {
               const selected = category === state.category
@@ -113,7 +122,6 @@ export default component(({ context }) => {
               }
             })
           },
-          { separator: true },
           ...[
             ['prefix', query.data.prefixes],
             ['suffix', query.data.suffixes]

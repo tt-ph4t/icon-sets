@@ -67,7 +67,7 @@ export const Layout = Object.assign(
             draft.layout.fullscreen = fullscreen.isFullscreen
           })
         }
-      }, [layoutSettings, fullscreen])
+      }, [layoutSettings.fullscreen, fullscreen])
 
       return <div ref={mergedRef} {...props} />
     }),

@@ -3,7 +3,7 @@ import { withImmerAtom } from '../hocs/with-immer-atom'
 export const useSettings = withImmerAtom({
   layout: {
     fullscreen: false,
-    reverse: true,
+    reverse: false,
     size: {
       height: 0,
       get width() {
