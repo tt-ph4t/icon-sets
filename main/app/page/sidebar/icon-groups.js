@@ -1,16 +1,16 @@
-import { isPlainObject } from '@sindresorhus/is'
-import { useQuery } from '@tanstack/react-query'
-import { capitalCase } from 'change-case'
-import { size } from 'es-toolkit/compat'
-import { sort } from 'fast-sort'
+import {isPlainObject} from '@sindresorhus/is'
+import {useQuery} from '@tanstack/react-query'
+import {capitalCase} from 'change-case'
+import {size} from 'es-toolkit/compat'
+import {sort} from 'fast-sort'
 
-import { Collapsible } from '../../components/collapsible'
-import { IconGrid } from '../../components/icon-grid'
-import { QueryBoundary } from '../../components/query-boundary'
-import { ICON_SETS_URL, ID_SEPARATOR } from '../../constants'
-import { component } from '../../hocs'
-import { useState } from '../../hooks/use-state'
-import { getId, getQueryOptions } from '../../utils'
+import {Collapsible} from '../../components/collapsible'
+import {IconGrid} from '../../components/icon-grid'
+import {QueryBoundary} from '../../components/query-boundary'
+import {ICON_SETS_URL, ID_SEPARATOR} from '../../constants'
+import {component} from '../../hocs'
+import {useState} from '../../hooks/use-state'
+import {getId, getQueryOptions} from '../../utils'
 import CollapsibleList from './collapsible-list'
 
 const CollapsibleListContext = CollapsibleList.createContext()
@@ -79,7 +79,7 @@ export default component(() => {
                   },
                   selected: a === state
                 }))}
-              renderItem={({ context }) => {
+              renderItem={({context}) => {
                 const [, heading] = context.id.split(ID_SEPARATOR)
                 const iconIds = query.data[state][heading]
 
@@ -88,7 +88,7 @@ export default component(() => {
                     description={iconIds.length}
                     heading={heading}
                     {...context.CollapsibleProps}>
-                    <div style={{ height: 'var(--sidebar-icon-grid-height)' }}>
+                    <div style={{height: 'var(--sidebar-icon-grid-height)'}}>
                       <IconGrid iconIds={iconIds} />
                     </div>
                   </Collapsible>

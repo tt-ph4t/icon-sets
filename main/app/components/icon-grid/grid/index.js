@@ -1,15 +1,15 @@
-import { experimental_VGrid as VGrid } from 'virtua'
+import {experimental_VGrid as VGrid} from 'virtua'
 
-import { component } from '../../../hocs'
-import { useMemo } from '../../../hooks/use-memo'
-import { useRef } from '../../../hooks/use-ref'
-import { has } from '../../../utils'
+import {component} from '../../../hocs'
+import {useMemo} from '../../../hooks/use-memo'
+import {useRef} from '../../../hooks/use-ref'
+import {has} from '../../../utils'
 import Item from './item'
 
 const defaultCol = 1
 
 export default Object.assign(
-  component(({ cellSize = 100, col, itemCount, renderItem }) => {
+  component(({cellSize = 100, col, itemCount, renderItem}) => {
     const size = useRef.Size()
 
     col = useMemo(
@@ -42,5 +42,5 @@ export default Object.assign(
       </VGrid>
     )
   }),
-  { Item }
+  {Item}
 )

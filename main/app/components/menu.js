@@ -1,20 +1,20 @@
-import { Menu as menu } from '@base-ui/react/menu'
-import { isPlainObject } from '@sindresorhus/is'
+import {Menu as menu} from '@base-ui/react/menu'
+import {isPlainObject} from '@sindresorhus/is'
 import {
   VscodeContextMenuItem,
   VscodeFormContainer,
   VscodeFormGroup
 } from '@vscode-elements/react-elements'
-import { asyncNoop } from 'es-toolkit'
-import { castArray } from 'es-toolkit/compat'
+import {asyncNoop} from 'es-toolkit'
+import {castArray} from 'es-toolkit/compat'
 import React from 'react'
 
-import { CARD_STYLE } from '../constants'
-import { component } from '../hocs'
-import { useCallback } from '../hooks/use-callback'
-import { useMemo } from '../hooks/use-memo'
-import { useState } from '../hooks/use-state'
-import { getId, has } from '../utils'
+import {CARD_STYLE} from '../constants'
+import {component} from '../hocs'
+import {useCallback} from '../hooks/use-callback'
+import {useMemo} from '../hooks/use-memo'
+import {useState} from '../hooks/use-state'
+import {getId, has} from '../utils'
 
 const {
   Item,
@@ -46,7 +46,7 @@ const popupRender = Object.assign(
   ),
   {
     children: (data, context) =>
-      data.map(({ menu, render, ...props }, index) => {
+      data.map(({menu, render, ...props}, index) => {
         menu = castArray(menu).filter(isPlainObject)
 
         const itemRender = render ?? <StyledItem {...props} />
@@ -137,8 +137,8 @@ export const Menu = component(
             <Positioner align={align} side={side}>
               <Popup
                 render={popupRender(data, {
-                  ItemProps: { closeOnClick },
-                  TriggerProps: { closeDelay, delay, openOnHover }
+                  ItemProps: {closeOnClick},
+                  TriggerProps: {closeDelay, delay, openOnHover}
                 })}
               />
             </Positioner>

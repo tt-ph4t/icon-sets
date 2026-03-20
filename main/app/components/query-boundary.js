@@ -1,13 +1,13 @@
-import { useQueryClient } from '@tanstack/react-query'
-import { useUnmount } from 'ahooks'
+import {useQueryClient} from '@tanstack/react-query'
+import {useUnmount} from 'ahooks'
 import React from 'react'
 
-import { component } from '../hocs'
-import { useMemo } from '../hooks/use-memo'
-import { Fallback } from './fallback'
+import {component} from '../hocs'
+import {useMemo} from '../hooks/use-memo'
+import {Fallback} from './fallback'
 
 export const QueryBoundary = component(
-  ({ query, queryOptions, render: Render = React.Fragment }) => {
+  ({query, queryOptions, render: Render = React.Fragment}) => {
     const queryClient = useQueryClient()
 
     const queryFilter = useMemo(

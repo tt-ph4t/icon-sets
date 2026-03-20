@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react'
-import { minimatch } from 'minimatch'
-import { defineConfig, transformWithEsbuild } from 'vite'
-import { compression } from 'vite-plugin-compression2'
+import {minimatch} from 'minimatch'
+import {defineConfig, transformWithEsbuild} from 'vite'
+import {compression} from 'vite-plugin-compression2'
 
 export default defineConfig({
   ebuild: {

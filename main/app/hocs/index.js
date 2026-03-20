@@ -1,7 +1,7 @@
-import { isEqual } from '@ver0/deep-equal'
+import {isEqual} from '@ver0/deep-equal'
 import React from 'react'
 
-import { useCallback } from '../hooks/use-callback'
+import {useCallback} from '../hooks/use-callback'
 
 useCallback // ?
 

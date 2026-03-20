@@ -1,9 +1,9 @@
-import { useAsyncEffect, useUpdateEffect } from 'ahooks'
-import { mapValues, noop } from 'es-toolkit'
+import {useAsyncEffect, useUpdateEffect} from 'ahooks'
+import {mapValues, noop} from 'es-toolkit'
 import React from 'react'
 
-import { useDeepCompareMemoize } from './use-deep-compare-memoize'
-import { useRef } from './use-ref'
+import {useDeepCompareMemoize} from './use-deep-compare-memoize'
+import {useRef} from './use-ref'
 
 export const useEffect = Object.assign(
   useDeepCompareMemoize.with(React.useEffect),

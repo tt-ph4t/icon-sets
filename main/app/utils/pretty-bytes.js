@@ -1,4 +1,4 @@
-import { isBlob } from '@sindresorhus/is'
+import {isBlob} from '@sindresorhus/is'
 import bytes from 'bytes'
 
 const parseRegExp =

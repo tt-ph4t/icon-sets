@@ -8,12 +8,12 @@ import {
   svgToData,
   wrapSVGContent
 } from '@iconify/utils'
-import { mapValues } from 'es-toolkit'
+import {mapValues} from 'es-toolkit'
 import parse from 'html-react-parser'
 import mime from 'mime/lite'
 
-import { ICON_CACHE } from '../../constants'
-import { has } from '../../utils'
+import {ICON_CACHE} from '../../constants'
+import {has} from '../../utils'
 
 const iconTypes = ['css', 'json', 'svg', 'txt', 'ico', 'pdf']
 
@@ -52,7 +52,7 @@ export const getIconFileNames = (icon, extension) => ({
 // https://github.com/antfu-collective/icones/blob/main/src/utils/svgToPng.ts
 export default (
   icon,
-  { hFlip, rotate, scale, vFlip, wrapSvgContentEnd, wrapSvgContentStart }
+  {hFlip, rotate, scale, vFlip, wrapSvgContentEnd, wrapSvgContentStart}
 ) => {
   if (ICON_CACHE.has(icon.id)) return ICON_CACHE.get(icon.id)
 
@@ -100,7 +100,7 @@ export default (
         })
 
         return {
-          css: getIconCSS(iconData, { iconSelector: '[icon]' }),
+          css: getIconCSS(iconData, {iconSelector: '[icon]'}),
           get dataUrl() {
             return svgToData(this.html)
           },

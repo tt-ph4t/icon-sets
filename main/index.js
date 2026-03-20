@@ -1,24 +1,24 @@
-import { QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools/build/modern/production.js'
+import {QueryClientProvider} from '@tanstack/react-query'
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools/build/modern/production.js'
 import '@vscode-elements/webview-playground'
 import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
-import { noop } from 'es-toolkit'
+import {noop} from 'es-toolkit'
 import React from 'react'
-import { createRoot } from 'react-dom/client'
+import {createRoot} from 'react-dom/client'
 import root from 'react-shadow'
 
-import { Layout } from './app/components/layout'
-import { QUERY_CLIENT } from './app/constants'
-import { component } from './app/hocs'
-import { lazy } from './app/hocs/lazy'
-import { useSettings } from './app/hooks/use-settings'
+import {Layout} from './app/components/layout'
+import {QUERY_CLIENT} from './app/constants'
+import {component} from './app/hocs'
+import {lazy} from './app/hocs/lazy'
+import {useSettings} from './app/hooks/use-settings'
 import './styles/index.css'
 
 const App = lazy(() => import('./app/page'))
 
 const Devtools = component(() => {
   const showDevtools = useSettings().useSelectValue(
-    ({ draft }) => draft.showDevtools
+    ({draft}) => draft.showDevtools
   )
 
   return (

@@ -3,21 +3,21 @@ import {
   VscodeFormHelper,
   VscodeSplitLayout
 } from '@vscode-elements/react-elements'
-import { asyncNoop, delay } from 'es-toolkit'
+import {asyncNoop, delay} from 'es-toolkit'
 import ms from 'ms'
 import React from 'react'
 
-import { component } from '../hocs'
-import { useEffect } from '../hooks/use-effect'
-import { useRef } from '../hooks/use-ref'
-import { useState } from '../hooks/use-state'
-import { checkOdd, has } from '../utils'
+import {component} from '../hocs'
+import {useEffect} from '../hooks/use-effect'
+import {useRef} from '../hooks/use-ref'
+import {useState} from '../hooks/use-state'
+import {checkOdd, has} from '../utils'
 
 const minPositionInPercentage = 5
 
 const useIdleAsyncEffect = (
   effect = asyncNoop,
-  { beforeEffect = asyncNoop, deps }
+  {beforeEffect = asyncNoop, deps}
 ) => {
   const ref = useRef()
 
@@ -29,7 +29,7 @@ const useIdleAsyncEffect = (
   }, deps)
 }
 
-const Slot = component(({ children, index, positionInPercentage }) => {
+const Slot = component(({children, index, positionInPercentage}) => {
   const isSlotStat = !checkOdd(index)
   const size = useRef.Size()
   const [state, setState] = useState()

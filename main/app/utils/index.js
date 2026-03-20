@@ -1,25 +1,25 @@
-import { stringToIcon, validateIconName } from '@iconify/utils'
-import { isPrimitive } from '@sindresorhus/is'
-import { queryOptions } from '@tanstack/react-query'
-import { decode } from '@toon-format/toon'
-import { isEqual } from '@ver0/deep-equal'
+import {stringToIcon, validateIconName} from '@iconify/utils'
+import {isPrimitive} from '@sindresorhus/is'
+import {queryOptions} from '@tanstack/react-query'
+import {decode} from '@toon-format/toon'
+import {isEqual} from '@ver0/deep-equal'
 import axios from 'axios'
-import { downloadZip } from 'client-zip'
+import {downloadZip} from 'client-zip'
 import copyToClipboard from 'copy-to-clipboard'
-import { delay, identity, noop, omit } from 'es-toolkit'
-import { castArray } from 'es-toolkit/compat'
+import {delay, identity, noop, omit} from 'es-toolkit'
+import {castArray} from 'es-toolkit/compat'
 import FileSaver from 'file-saver'
 import hasValues from 'has-values'
-import { isWordCharacter } from 'is-word-character'
+import {isWordCharacter} from 'is-word-character'
 import jszip from 'jszip'
 import ms from 'ms'
-import { hash } from 'ohash'
+import {hash} from 'ohash'
 
-import { DELAY_MS, ID_SEPARATOR } from '../constants'
+import {DELAY_MS, ID_SEPARATOR} from '../constants'
 
 export const fileSaver = async (data, fileName) => {
   // jszip
-  if ('generateAsync' in data) data = await data.generateAsync({ type: 'blob' })
+  if ('generateAsync' in data) data = await data.generateAsync({type: 'blob'})
 
   // client-zip
   if ('blob' in data) data = await data.blob()

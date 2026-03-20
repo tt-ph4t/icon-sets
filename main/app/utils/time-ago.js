@@ -1,6 +1,6 @@
-import { flow } from 'es-toolkit'
+import {flow} from 'es-toolkit'
 
-import { dayjs } from './dayjs'
+import {dayjs} from './dayjs'
 
 const fromNow = dayjs => dayjs.fromNow()
 

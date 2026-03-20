@@ -1,11 +1,11 @@
-import { stringToIcon } from '@iconify/utils'
-import { useQueries, useQuery } from '@tanstack/react-query'
-import { mapValues } from 'es-toolkit'
+import {stringToIcon} from '@iconify/utils'
+import {useQueries, useQuery} from '@tanstack/react-query'
+import {mapValues} from 'es-toolkit'
 import ms from 'ms'
 
-import { DATA_BASE_URL, ICON_SETS_URL } from '../../constants'
-import { getQueryOptions } from '../../utils'
-import { useCallback } from '../use-callback'
+import {DATA_BASE_URL, ICON_SETS_URL} from '../../constants'
+import {getQueryOptions} from '../../utils'
+import {useCallback} from '../use-callback'
 import buildIcon from './build-icon'
 
 export const useIconQueries = (...icons) => {
@@ -22,7 +22,7 @@ export const useIconQueries = (...icons) => {
   )
 
   return useQueries({
-    queries: icons.map(({ iconCustomisations, iconId, queryOptions }) => {
+    queries: icons.map(({iconCustomisations, iconId, queryOptions}) => {
       const icon = stringToIcon(iconId)
 
       return getQueryOptions({

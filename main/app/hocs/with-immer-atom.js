@@ -1,11 +1,11 @@
-import { isEqual } from '@ver0/deep-equal'
-import { flow } from 'es-toolkit'
-import { useAtomValue, useSetAtom } from 'jotai'
-import { atomWithImmer } from 'jotai-immer'
-import { freezeAtom, selectAtom } from 'jotai/utils'
+import {isEqual} from '@ver0/deep-equal'
+import {flow} from 'es-toolkit'
+import {useAtomValue, useSetAtom} from 'jotai'
+import {atomWithImmer} from 'jotai-immer'
+import {freezeAtom, selectAtom} from 'jotai/utils'
 
-import { DELAY_MS } from '../constants'
-import { useCallback } from '../hooks/use-callback'
+import {DELAY_MS} from '../constants'
+import {useCallback} from '../hooks/use-callback'
 
 const create = flow(atomWithImmer, freezeAtom)
 const defaultValue = {}
@@ -24,15 +24,15 @@ export const withImmerAtom = (initialValue = defaultValue) => {
         }),
         set: useCallback(fn => {
           setAtom(draft => {
-            fn({ draft })
+            fn({draft})
           })
         }),
-        useSelectValue: useCallback((fn, { deps = [], ...options } = {}) =>
+        useSelectValue: useCallback((fn, {deps = [], ...options} = {}) =>
           useAtomValue(
             selectAtom(
               atom,
               // https://jotai.org/docs/utilities/select#hold-stable-references
-              useCallback(draft => fn({ draft }), deps),
+              useCallback(draft => fn({draft}), deps),
               isEqual
             ),
             {
@@ -43,6 +43,6 @@ export const withImmerAtom = (initialValue = defaultValue) => {
         )
       }
     },
-    { initial: initialValue }
+    {initial: initialValue}
   )
 }

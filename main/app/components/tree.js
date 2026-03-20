@@ -3,20 +3,20 @@ import {
   VscodeTree,
   VscodeTreeItem
 } from '@vscode-elements/react-elements'
-import { asyncNoop } from 'es-toolkit'
+import {asyncNoop} from 'es-toolkit'
 
-import { component } from '../hocs'
+import {component} from '../hocs'
 
 const render = (data = []) =>
   data.map(props => <Tree.Item key={props.id} {...props} />)
 
 export const Tree = Object.assign(
-  component(({ data, onVscTreeSelect, ...props }) => (
+  component(({data, onVscTreeSelect, ...props}) => (
     <VscodeTree
       onVscTreeSelect={
         onVscTreeSelect ??
         (async event => {
-          const { onClick = asyncNoop } = event.detail[0]._path.reduce(
+          const {onClick = asyncNoop} = event.detail[0]._path.reduce(
             (a, b) => (a.children ?? a)[b],
             data
           )
@@ -38,7 +38,7 @@ export const Tree = Object.assign(
       ),
       leaf: <VscodeIcon name='file' slot='icon-leaf' />
     },
-    Item: component(({ children, label, ...props }) => (
+    Item: component(({children, label, ...props}) => (
       <VscodeTreeItem
         // open // ?
         {...props}>

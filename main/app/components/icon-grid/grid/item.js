@@ -1,23 +1,23 @@
-import { mergeProps } from '@base-ui/react/merge-props'
-import { stringToIcon } from '@iconify/utils'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { isEqual } from '@ver0/deep-equal'
-import { VscodeIcon } from '@vscode-elements/react-elements'
-import { useUnmount } from 'ahooks'
-import { capitalCase } from 'change-case'
-import { findKey, identity, range, uniq } from 'es-toolkit'
-import { size, truncate } from 'es-toolkit/compat'
+import {mergeProps} from '@base-ui/react/merge-props'
+import {stringToIcon} from '@iconify/utils'
+import {useQuery, useQueryClient} from '@tanstack/react-query'
+import {isEqual} from '@ver0/deep-equal'
+import {VscodeIcon} from '@vscode-elements/react-elements'
+import {useUnmount} from 'ahooks'
+import {capitalCase} from 'change-case'
+import {findKey, identity, range, uniq} from 'es-toolkit'
+import {size, truncate} from 'es-toolkit/compat'
 import React from 'react'
 
-import { DEFAULT_ICON_CUSTOMISATIONS, ICON_SETS_URL } from '../../../constants'
-import { component } from '../../../hocs'
-import { useCallback } from '../../../hooks/use-callback'
-import { useCustomizedIcons } from '../../../hooks/use-customized-icons'
-import { useFavorites } from '../../../hooks/use-favorites'
-import { useIconQueries } from '../../../hooks/use-icon-queries'
-import { getIconFileNames } from '../../../hooks/use-icon-queries/build-icon'
-import { useMemo } from '../../../hooks/use-memo'
-import { useRemount } from '../../../hooks/use-remount'
+import {DEFAULT_ICON_CUSTOMISATIONS, ICON_SETS_URL} from '../../../constants'
+import {component} from '../../../hocs'
+import {useCallback} from '../../../hooks/use-callback'
+import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
+import {useFavorites} from '../../../hooks/use-favorites'
+import {useIconQueries} from '../../../hooks/use-icon-queries'
+import {getIconFileNames} from '../../../hooks/use-icon-queries/build-icon'
+import {useMemo} from '../../../hooks/use-memo'
+import {useRemount} from '../../../hooks/use-remount'
 import {
   copy,
   fileSaver,
@@ -26,14 +26,14 @@ import {
   has,
   openObjectURL
 } from '../../../utils'
-import { prettyBytes } from '../../../utils/pretty-bytes'
-import { timeAgo } from '../../../utils/time-ago'
-import { Menu } from '../../menu'
+import {prettyBytes} from '../../../utils/pretty-bytes'
+import {timeAgo} from '../../../utils/time-ago'
+import {Menu} from '../../menu'
 import useStore from '../use-store'
 import takumi from './takumi.wasm'
 
-const Fallback = component(({ children, ...props }) => (
-  <span {...mergeProps(props, { style: { userSelect: 'none' } })}>
+const Fallback = component(({children, ...props}) => (
+  <span {...mergeProps(props, {style: {userSelect: 'none'}})}>
     {children.slice(0, 3)}
   </span>
 ))
@@ -54,14 +54,14 @@ const scales = range(
 )
 
 export default useRemount.with(
-  component(({ context, iconId, INTERNAL_REMOUNT }) => {
+  component(({context, iconId, INTERNAL_REMOUNT}) => {
     const icon = useMemo(() => stringToIcon(iconId), [iconId])
     const queryClient = useQueryClient()
     const customizedIcons = useCustomizedIcons()
     const favorites = useFavorites()
-    const { iconCustomisations } = useCustomizedIcons.useSelect(iconId)
+    const {iconCustomisations} = useCustomizedIcons.useSelect(iconId)
     const store = useStore()
-    const iconSquare = store.useSelectValue(({ draft }) => draft.iconSquare)
+    const iconSquare = store.useSelectValue(({draft}) => draft.iconSquare)
 
     const remountMenu = useMemo(
       () => ({
@@ -90,7 +90,7 @@ export default useRemount.with(
         select: useCallback(
           iconSets => {
             // eslint-disable-next-line no-unused-vars
-            const { icons, ...iconSet } = iconSets[icon.prefix]
+            const {icons, ...iconSet} = iconSets[icon.prefix]
 
             return iconSet
           },
@@ -137,7 +137,7 @@ export default useRemount.with(
     if (iconQuery.isLoading || iconSetQuery.isLoading)
       return (
         <Menu
-          data={[...iconQueryMenu, { separator: true }, remountMenu]}
+          data={[...iconQueryMenu, {separator: true}, remountMenu]}
           render={<Fallback>{icon.name}</Fallback>}
         />
       )
@@ -145,7 +145,7 @@ export default useRemount.with(
     if (iconQuery.isError)
       return (
         <Menu
-          data={[...iconQueryMenu, { separator: true }, remountMenu]}
+          data={[...iconQueryMenu, {separator: true}, remountMenu]}
           render={
             <Fallback
               onClick={() => {
@@ -204,7 +204,7 @@ export default useRemount.with(
                       }
                     }
                   ),
-                  { separator: true },
+                  {separator: true},
                   {
                     label: 'Takumi WASM',
                     menu: Object.entries(takumi.formats).map(
@@ -292,19 +292,19 @@ export default useRemount.with(
                       customizedIcons.delete(iconQuery.data.id)
                     }
                   },
-                  { separator: true },
+                  {separator: true},
                   ...Object.keys(flipDirections).map(flipDirection => ({
                     label: flipDirections[flipDirection],
                     onClick: () => {
                       customizedIcons.set(
                         iconQuery.data.id,
-                        ({ iconCustomisations }) => ({
+                        ({iconCustomisations}) => ({
                           [flipDirection]: !iconCustomisations[flipDirection]
                         })
                       )
                     }
                   })),
-                  { separator: true },
+                  {separator: true},
                   {
                     label: 'Rotate',
                     menu: rotate.values.map(value => ({
@@ -343,14 +343,14 @@ export default useRemount.with(
                 label: 'Query',
                 menu: iconQueryMenu
               },
-              { separator: true },
+              {separator: true},
               remountMenu
             ],
             onClick: () => {
               favorites.toggle(iconQuery.data.id)
             }
           },
-          { separator: true },
+          {separator: true},
           {
             description: context.index + 1,
             label: 'Order'
@@ -363,7 +363,7 @@ export default useRemount.with(
                 label = capitalCase(label)
 
                 return {
-                  description: truncate(id, { length: 6 }),
+                  description: truncate(id, {length: 6}),
                   label,
                   onClick: () => {
                     prompt(label, id)
@@ -397,7 +397,7 @@ export default useRemount.with(
             menu: iconAliases.map(iconAlias => ({
               label: capitalCase(iconAlias),
               onClick: () => {
-                store.set(({ draft }) => {
+                store.set(({draft}) => {
                   draft.searchTerm = iconAlias
                 })
               }
@@ -428,7 +428,7 @@ export default useRemount.with(
         ]}
         key={iconQuery.data.id}
         render={
-          <div style={{ position: 'relative' }}>
+          <div style={{position: 'relative'}}>
             <React.Activity>
               <div
                 style={{

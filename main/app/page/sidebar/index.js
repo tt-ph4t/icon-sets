@@ -1,28 +1,28 @@
-import { useQuery } from '@tanstack/react-query'
+import {useQuery} from '@tanstack/react-query'
 import {
   VscodeFormContainer,
   VscodeFormGroup,
   VscodeFormHelper
 } from '@vscode-elements/react-elements'
-import { useUpdate } from 'ahooks'
-import { capitalCase } from 'change-case'
-import { asyncNoop } from 'es-toolkit'
+import {useUpdate} from 'ahooks'
+import {capitalCase} from 'change-case'
+import {asyncNoop} from 'es-toolkit'
 import React from 'react'
 
-import { Collapsible } from '../../components/collapsible'
-import { IconGrid } from '../../components/icon-grid'
-import { Menu } from '../../components/menu'
-import { QueryBoundary } from '../../components/query-boundary'
-import { ToolbarButton } from '../../components/toolbar-button'
-import { ICON_CACHE, ICON_SETS_URL } from '../../constants'
-import { component } from '../../hocs'
-import { useCustomizedIcons } from '../../hooks/use-customized-icons'
-import { useFavorites } from '../../hooks/use-favorites'
-import { getQueryOptions } from '../../utils'
+import {Collapsible} from '../../components/collapsible'
+import {IconGrid} from '../../components/icon-grid'
+import {Menu} from '../../components/menu'
+import {QueryBoundary} from '../../components/query-boundary'
+import {ToolbarButton} from '../../components/toolbar-button'
+import {ICON_CACHE, ICON_SETS_URL} from '../../constants'
+import {component} from '../../hocs'
+import {useCustomizedIcons} from '../../hooks/use-customized-icons'
+import {useFavorites} from '../../hooks/use-favorites'
+import {getQueryOptions} from '../../utils'
 import IconGroups from './icon-groups'
 import IconSets from './icon-sets'
 
-const queryOptions = getQueryOptions({ url: ICON_SETS_URL })
+const queryOptions = getQueryOptions({url: ICON_SETS_URL})
 
 const IconGridWithFormContainer = component(props => {
   const query = useQuery(queryOptions)
@@ -35,7 +35,7 @@ const IconGridWithFormContainer = component(props => {
         <VscodeFormContainer>
           <VscodeFormGroup variant='settings-group'>
             <VscodeFormHelper
-              style={{ height: 'var(--sidebar-icon-grid-height)' }}>
+              style={{height: 'var(--sidebar-icon-grid-height)'}}>
               <IconGrid {...props} />
             </VscodeFormHelper>
           </VscodeFormGroup>
@@ -79,15 +79,15 @@ const CachedIcons = component(() => {
       <IconGridWithFormContainer iconIds={iconIds} />
       <Menu
         data={[
-          { label: 'Reload' },
-          { separator: true },
+          {label: 'Reload'},
+          {separator: true},
           ...['purgeStale', 'pop', 'clear'].map(a => ({
             label: capitalCase(a),
             onClick: () => {
               ICON_CACHE[a]()
             }
           }))
-        ].map(({ onClick = asyncNoop, ...rest }) => ({
+        ].map(({onClick = asyncNoop, ...rest}) => ({
           onClick: async () => {
             await onClick()
 
@@ -119,7 +119,7 @@ const Favorites = component(() => {
 })
 
 export default component(() => (
-  <div style={{ '--sidebar-icon-grid-height': 'calc(var(--height) / 2)' }}>
+  <div style={{'--sidebar-icon-grid-height': 'calc(var(--height) / 2)'}}>
     <React.Activity>
       <IconSets />
       <IconGroups />

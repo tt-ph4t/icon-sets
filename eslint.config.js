@@ -9,7 +9,7 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactYouMightNotNeedAnEffect from 'eslint-plugin-react-you-might-not-need-an-effect'
 import * as regexpPlugin from 'eslint-plugin-regexp'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
-import { defineConfig, globalIgnores } from 'eslint/config'
+import {defineConfig, globalIgnores} from 'eslint/config'
 import globals from 'globals'
 
 const createRules = (type, ...rules) =>

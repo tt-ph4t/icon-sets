@@ -3,20 +3,20 @@ import {
   VscodeFormGroup,
   VscodeFormHelper
 } from '@vscode-elements/react-elements'
-import { VList } from 'virtua'
+import {VList} from 'virtua'
 
-import { Menu } from '../../components/menu'
-import { ToolbarButton } from '../../components/toolbar-button'
-import { component } from '../../hocs'
-import { withImmerAtom } from '../../hocs/with-immer-atom'
-import { useCallback } from '../../hooks/use-callback'
-import { has } from '../../utils'
+import {Menu} from '../../components/menu'
+import {ToolbarButton} from '../../components/toolbar-button'
+import {component} from '../../hocs'
+import {withImmerAtom} from '../../hocs/with-immer-atom'
+import {useCallback} from '../../hooks/use-callback'
+import {has} from '../../utils'
 
-const Item = component(({ id, index, renderItem, useStore }) => {
+const Item = component(({id, index, renderItem, useStore}) => {
   const store = useStore()
 
   const onOpenChange = useCallback(open => {
-    store.set(({ draft }) => {
+    store.set(({draft}) => {
       draft[id] = {
         ...draft[id],
         open
@@ -27,12 +27,12 @@ const Item = component(({ id, index, renderItem, useStore }) => {
   return renderItem({
     context: {
       CollapsibleProps: store.useSelectValue(
-        ({ draft }) => ({
+        ({draft}) => ({
           defaultOpen: !index,
           onOpenChange,
           ...draft[id]
         }),
-        { deps: [id, index, onOpenChange] }
+        {deps: [id, index, onOpenChange]}
       ),
       id,
       index
@@ -41,12 +41,12 @@ const Item = component(({ id, index, renderItem, useStore }) => {
 })
 
 export default Object.assign(
-  component(({ ids, menu, useStore, ...props }) => {
+  component(({ids, menu, useStore, ...props}) => {
     const store = useStore()
 
     const anyOpen = store.useSelectValue(
-      ({ draft }) => ids.some(id => draft[id]?.open),
-      { deps: [ids] }
+      ({draft}) => ids.some(id => draft[id]?.open),
+      {deps: [ids]}
     )
 
     return (
@@ -77,7 +77,7 @@ export default Object.assign(
             {
               label: anyOpen ? 'Collapse All' : 'Expand All',
               onClick: () => {
-                store.set(({ draft }) => {
+                store.set(({draft}) => {
                   for (const id of ids)
                     draft[id] = {
                       ...draft[id],
@@ -86,7 +86,7 @@ export default Object.assign(
                 })
               }
             },
-            ...(has(menu) ? [{ separator: true }, ...menu] : [])
+            ...(has(menu) ? [{separator: true}, ...menu] : [])
           ]}
           render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
         />

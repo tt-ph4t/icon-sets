@@ -1,4 +1,4 @@
-import { isTruthy } from '@sindresorhus/is'
+import {isTruthy} from '@sindresorhus/is'
 import {
   useIsFetching,
   useIsMutating,
@@ -9,22 +9,22 @@ import {
   VscodeFormGroup,
   VscodeFormHelper
 } from '@vscode-elements/react-elements'
-import { omit } from 'es-toolkit'
+import {omit} from 'es-toolkit'
 import React from 'react'
-import { preconnect } from 'react-dom'
+import {preconnect} from 'react-dom'
 
-import { Fallback } from '../components/fallback'
-import { Layout } from '../components/layout'
-import { Menu } from '../components/menu'
-import { SplitLayout } from '../components/split-layout'
-import { ToolbarButton } from '../components/toolbar-button'
-import { CARD_STYLE, DATA_BASE_URL, GITHUB_REPO } from '../constants'
-import { component } from '../hocs'
-import { lazy } from '../hocs/lazy'
-import { useEffect } from '../hooks/use-effect'
-import { useRef } from '../hooks/use-ref'
-import { useRemount } from '../hooks/use-remount'
-import { useSettings } from '../hooks/use-settings'
+import {Fallback} from '../components/fallback'
+import {Layout} from '../components/layout'
+import {Menu} from '../components/menu'
+import {SplitLayout} from '../components/split-layout'
+import {ToolbarButton} from '../components/toolbar-button'
+import {CARD_STYLE, DATA_BASE_URL, GITHUB_REPO} from '../constants'
+import {component} from '../hocs'
+import {lazy} from '../hocs/lazy'
+import {useEffect} from '../hooks/use-effect'
+import {useRef} from '../hooks/use-ref'
+import {useRemount} from '../hooks/use-remount'
+import {useSettings} from '../hooks/use-settings'
 
 const Sidebar = lazy(() => import('./sidebar'))
 const FilteredIconSets = lazy(() => import('./filtered-icon-sets'))
@@ -41,19 +41,19 @@ const Loading = component(() => {
   )
 })
 
-const Settings = component(({ menu }) => {
+const Settings = component(({menu}) => {
   const settings = useSettings()
 
   return (
     <VscodeFormContainer>
-      <VscodeFormGroup style={{ paddingBottom: 12 }} variant='settings-group'>
+      <VscodeFormGroup style={{paddingBottom: 12}} variant='settings-group'>
         <VscodeFormHelper>
           <Menu
             data={[
               {
                 label: 'Devtools',
                 onClick: () => {
-                  settings.set(({ draft }) => {
+                  settings.set(({draft}) => {
                     draft.showDevtools = !draft.showDevtools
                   })
                 }
@@ -64,7 +64,7 @@ const Settings = component(({ menu }) => {
                   {
                     label: 'Reverse',
                     onClick: () => {
-                      settings.set(({ draft }) => {
+                      settings.set(({draft}) => {
                         draft.layout.reverse = !draft.layout.reverse
                       })
                     }
@@ -72,7 +72,7 @@ const Settings = component(({ menu }) => {
                   {
                     label: 'Fullscreen',
                     onClick: () => {
-                      settings.set(({ draft }) => {
+                      settings.set(({draft}) => {
                         draft.layout.fullscreen = !draft.layout.fullscreen
                       })
                     }
@@ -80,7 +80,7 @@ const Settings = component(({ menu }) => {
                 ]
               },
               ...menu,
-              { separator: true },
+              {separator: true},
               {
                 label: 'GitHub',
                 onClick: () => {
@@ -97,7 +97,7 @@ const Settings = component(({ menu }) => {
 })
 
 export default useRemount.with(
-  component(({ INTERNAL_REMOUNT }) => {
+  component(({INTERNAL_REMOUNT}) => {
     preconnect(new URL(DATA_BASE_URL).origin)
 
     return (
@@ -124,7 +124,7 @@ export default useRemount.with(
                 const ref = useRef()
 
                 const layoutSettings = useSettings().useSelectValue(
-                  ({ draft }) => ({
+                  ({draft}) => ({
                     reverse: draft.layout.reverse
                   })
                 )

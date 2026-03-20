@@ -6,7 +6,7 @@ import {
   VscodeLabel,
   VscodeTextfield
 } from '@vscode-elements/react-elements'
-import { capitalCase } from 'change-case'
+import {capitalCase} from 'change-case'
 import {
   clone,
   flow,
@@ -19,23 +19,23 @@ import {
   tail,
   uniq
 } from 'es-toolkit'
-import { castArray, reverse } from 'es-toolkit/compat'
-import { sort } from 'fast-sort'
-import { isWordCharacter } from 'is-word-character'
+import {castArray, reverse} from 'es-toolkit/compat'
+import {sort} from 'fast-sort'
+import {isWordCharacter} from 'is-word-character'
 import React from 'react'
 
-import { U_FUZZY } from '../../constants'
-import { component } from '../../hocs'
-import { useEffect } from '../../hooks/use-effect'
-import { useFavorites } from '../../hooks/use-favorites'
-import { useMemo } from '../../hooks/use-memo'
-import { useRemount } from '../../hooks/use-remount'
-import { useState } from '../../hooks/use-state'
-import { has, validateIconId } from '../../utils'
-import { pluralize } from '../../utils/pluralize'
-import { prettyBytes } from '../../utils/pretty-bytes'
-import { Menu } from '../menu'
-import { ToolbarButton } from '../toolbar-button'
+import {U_FUZZY} from '../../constants'
+import {component} from '../../hocs'
+import {useEffect} from '../../hooks/use-effect'
+import {useFavorites} from '../../hooks/use-favorites'
+import {useMemo} from '../../hooks/use-memo'
+import {useRemount} from '../../hooks/use-remount'
+import {useState} from '../../hooks/use-state'
+import {has, validateIconId} from '../../utils'
+import {pluralize} from '../../utils/pluralize'
+import {prettyBytes} from '../../utils/pretty-bytes'
+import {Menu} from '../menu'
+import {ToolbarButton} from '../toolbar-button'
 import Grid from './grid'
 import useStore from './use-store'
 
@@ -74,13 +74,13 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
 
 const IconSquareToggle = component(props => {
   const store = useStore()
-  const iconSquare = store.useSelectValue(({ draft }) => draft.iconSquare)
+  const iconSquare = store.useSelectValue(({draft}) => draft.iconSquare)
 
   return (
     <ToolbarButton
       checked={!iconSquare}
       onClick={() => {
-        store.set(({ draft }) => {
+        store.set(({draft}) => {
           draft.iconSquare = !draft.iconSquare
         })
       }}
@@ -92,17 +92,17 @@ const IconSquareToggle = component(props => {
 })
 
 export const IconGrid = useRemount.with(
-  component(({ iconIds, initialSearchTerm, INTERNAL_REMOUNT }) => {
+  component(({iconIds, initialSearchTerm, INTERNAL_REMOUNT}) => {
     const [hasInteracted, setHasInteracted] = useState()
     const favorites = useFavorites()
     const store = useStore()
 
     const searchTerm = store.useSelectValue(
-      ({ draft }) =>
+      ({draft}) =>
         hasInteracted
           ? draft.searchTerm
           : (initialSearchTerm ?? draft.searchTerm),
-      { deps: [hasInteracted, initialSearchTerm] }
+      {deps: [hasInteracted, initialSearchTerm]}
     )
 
     const filteredIconIds = useFilteredIconIds(searchTerm, iconIds)
@@ -143,12 +143,12 @@ export const IconGrid = useRemount.with(
                 onInput={event => {
                   if (!hasInteracted) setHasInteracted(true)
 
-                  store.set(({ draft }) => {
+                  store.set(({draft}) => {
                     draft.searchTerm = event.target.value
                   })
                 }}
                 placeholder='Search'
-                style={{ width: 260 }}
+                style={{width: 260}}
                 value={searchTerm}>
                 <Menu
                   data={
@@ -186,7 +186,7 @@ export const IconGrid = useRemount.with(
                           setState(sampleSize(filteredIconIds, 1))
                         }
                       },
-                      { separator: true },
+                      {separator: true},
                       {
                         description: prettyBytes(),
                         label: 'Download'
@@ -215,7 +215,7 @@ export const IconGrid = useRemount.with(
           {hasIconIds ? (
             <Grid
               itemCount={state.length}
-              renderItem={({ context }) => {
+              renderItem={({context}) => {
                 const iconId = state[context.index]
 
                 if (validateIconId(iconId))

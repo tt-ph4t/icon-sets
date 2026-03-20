@@ -7,7 +7,7 @@ import {
   VscodeProgressBar
 } from '@vscode-elements/react-elements'
 
-import { component } from '../hocs'
+import {component} from '../hocs'
 
 export const Fallback = Object.assign(
   component(() => (
@@ -55,7 +55,7 @@ export const Fallback = Object.assign(
         <VscodeButton
           block={block}
           icon={icon}
-          style={{ width: 'fit-content', ...style }}
+          style={{width: 'fit-content', ...style}}
           type={type}
           {...props}>
           Try Again

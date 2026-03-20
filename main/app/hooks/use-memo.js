@@ -1,7 +1,7 @@
-import { useCreation } from 'ahooks'
+import {useCreation} from 'ahooks'
 
-import { useDeepCompareMemoize } from './use-deep-compare-memoize'
-import { useRef } from './use-ref'
+import {useDeepCompareMemoize} from './use-deep-compare-memoize'
+import {useRef} from './use-ref'
 
 const useCreation1 = useDeepCompareMemoize.with(useCreation)
 

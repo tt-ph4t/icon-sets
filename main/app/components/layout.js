@@ -1,25 +1,25 @@
-import { identity } from 'es-toolkit'
-import { reverse } from 'es-toolkit/compat'
+import {identity} from 'es-toolkit'
+import {reverse} from 'es-toolkit/compat'
 import React from 'react'
-import { ResizableBox } from 'react-resizable'
-import { renderSlot } from 'render-slot'
+import {ResizableBox} from 'react-resizable'
+import {renderSlot} from 'render-slot'
 
-import { component } from '../hocs'
-import { useEffect } from '../hooks/use-effect'
-import { useRef } from '../hooks/use-ref'
-import { useSettings } from '../hooks/use-settings'
+import {component} from '../hocs'
+import {useEffect} from '../hooks/use-effect'
+import {useRef} from '../hooks/use-ref'
+import {useSettings} from '../hooks/use-settings'
 
 export const Layout = Object.assign(
-  component(({ children }) => {
+  component(({children}) => {
     const settings = useSettings()
     const maxSize = useRef.Size()
 
-    const layoutSettings = settings.useSelectValue(({ draft }) => ({
+    const layoutSettings = settings.useSelectValue(({draft}) => ({
       size: draft.layout.size
     }))
 
     useEffect(() => {
-      settings.set(({ draft }) => {
+      settings.set(({draft}) => {
         draft.layout.size = {
           height: maxSize.height * 0.86,
           width: maxSize.width * 0.8
@@ -35,7 +35,7 @@ export const Layout = Object.assign(
           useSettings.initial.layout.size.height
         ]}
         onResize={(event, data) => {
-          settings.set(({ draft }) => {
+          settings.set(({draft}) => {
             draft.layout.size = data.size
           })
         }}
@@ -45,10 +45,10 @@ export const Layout = Object.assign(
     )
   }),
   {
-    Fullscreen: component(({ ref, ...props }) => {
+    Fullscreen: component(({ref, ...props}) => {
       const settings = useSettings()
 
-      const layoutSettings = settings.useSelectValue(({ draft }) => ({
+      const layoutSettings = settings.useSelectValue(({draft}) => ({
         fullscreen: draft.layout.fullscreen
       }))
 
@@ -63,7 +63,7 @@ export const Layout = Object.assign(
             layoutSettings.fullscreen ? 'enterFullscreen' : 'exitFullscreen'
           ]()
 
-          settings.set(({ draft }) => {
+          settings.set(({draft}) => {
             draft.layout.fullscreen = fullscreen.isFullscreen
           })
         }
@@ -71,8 +71,8 @@ export const Layout = Object.assign(
 
       return <div ref={mergedRef} {...props} />
     }),
-    Reverse: component(({ children, render }) => {
-      const layoutSettings = useSettings().useSelectValue(({ draft }) => ({
+    Reverse: component(({children, render}) => {
+      const layoutSettings = useSettings().useSelectValue(({draft}) => ({
         reverse: draft.layout.reverse
       }))
 

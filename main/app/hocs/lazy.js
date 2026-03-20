@@ -1,10 +1,10 @@
 import React from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import {ErrorBoundary} from 'react-error-boundary'
 
-import { Fallback } from '../components/fallback'
-import { component } from './'
+import {Fallback} from '../components/fallback'
+import {component} from './'
 
-const FallbackComponent = component(({ error, resetErrorBoundary }) => (
+const FallbackComponent = component(({error, resetErrorBoundary}) => (
   <Fallback.Error>
     {error.message}
     <Fallback.TryAgainButton onClick={resetErrorBoundary} />

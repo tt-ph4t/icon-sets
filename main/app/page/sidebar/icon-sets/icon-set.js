@@ -1,19 +1,19 @@
-import { isEmptyString, isSymbol } from '@sindresorhus/is'
-import { useQuery } from '@tanstack/react-query'
-import { isEqual } from '@ver0/deep-equal'
-import { compact } from 'es-toolkit'
-import { size } from 'es-toolkit/compat'
+import {isEmptyString, isSymbol} from '@sindresorhus/is'
+import {useQuery} from '@tanstack/react-query'
+import {isEqual} from '@ver0/deep-equal'
+import {compact} from 'es-toolkit'
+import {size} from 'es-toolkit/compat'
 
-import { Collapsible } from '../../../components/collapsible'
-import { IconGrid } from '../../../components/icon-grid'
-import { Menu } from '../../../components/menu'
-import { ToolbarButton } from '../../../components/toolbar-button'
-import { ICON_SETS_URL } from '../../../constants'
-import { component } from '../../../hocs'
-import { withImmerAtom } from '../../../hocs/with-immer-atom'
-import { useCallback } from '../../../hooks/use-callback'
-import { getId, getQueryOptions } from '../../../utils'
-import { pluralize } from '../../../utils/pluralize'
+import {Collapsible} from '../../../components/collapsible'
+import {IconGrid} from '../../../components/icon-grid'
+import {Menu} from '../../../components/menu'
+import {ToolbarButton} from '../../../components/toolbar-button'
+import {ICON_SETS_URL} from '../../../constants'
+import {component} from '../../../hocs'
+import {withImmerAtom} from '../../../hocs/with-immer-atom'
+import {useCallback} from '../../../hooks/use-callback'
+import {getId, getQueryOptions} from '../../../utils'
+import {pluralize} from '../../../utils/pluralize'
 
 const initialState = {
   category: Symbol(),
@@ -32,7 +32,7 @@ const matchesIconTheme = (icon, theme) =>
     theme.current
   )
     ? !compact(Object.keys(theme.list)).some(current =>
-        matchesIconTheme(icon, { ...theme, current })
+        matchesIconTheme(icon, {...theme, current})
       )
     : icon[
         {
@@ -46,12 +46,12 @@ const matchesIconTheme = (icon, theme) =>
         }[theme.match]
       )
 
-export default component(({ context }) => {
+export default component(({context}) => {
   const store = useStore()
 
   const state = store.useSelectValue(
-    ({ draft }) => draft[context.id] ?? initialState,
-    { deps: [context.id] }
+    ({draft}) => draft[context.id] ?? initialState,
+    {deps: [context.id]}
   )
 
   const query = useQuery(
@@ -68,7 +68,7 @@ export default component(({ context }) => {
       description={query.data.category}
       heading={`${context.index + 1}. ${query.data.name}`}
       {...context.CollapsibleProps}>
-      <div style={{ height: 'var(--sidebar-icon-grid-height)' }}>
+      <div style={{height: 'var(--sidebar-icon-grid-height)'}}>
         <IconGrid
           iconIds={(isInitialState
             ? query.data.icons
@@ -97,12 +97,12 @@ export default component(({ context }) => {
           {
             label: 'Reset',
             onClick: () => {
-              store.set(({ draft }) => {
+              store.set(({draft}) => {
                 delete draft[context.id]
               })
             }
           },
-          { separator: true },
+          {separator: true},
           {
             label: pluralize(size(query.data.categories), 'category'),
             menu: Object.keys(query.data.categories).map(category => {
@@ -111,7 +111,7 @@ export default component(({ context }) => {
               return {
                 label: category,
                 onClick: () => {
-                  store.set(({ draft }) => {
+                  store.set(({draft}) => {
                     draft[context.id] = {
                       ...(draft[context.id] ?? initialState),
                       category: selected ? initialState.category : category
@@ -134,7 +134,7 @@ export default component(({ context }) => {
               return {
                 label: d,
                 onClick: () => {
-                  store.set(({ draft }) => {
+                  store.set(({draft}) => {
                     const state = draft[context.id] ?? initialState
 
                     draft[context.id] = {

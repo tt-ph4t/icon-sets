@@ -1,10 +1,10 @@
-import { VscodeCollapsible } from '@vscode-elements/react-elements'
-import { useControllableValue, useEventListener } from 'ahooks'
-import { asyncNoop } from 'es-toolkit'
+import {VscodeCollapsible} from '@vscode-elements/react-elements'
+import {useControllableValue, useEventListener} from 'ahooks'
+import {asyncNoop} from 'es-toolkit'
 import React from 'react'
 
-import { component } from '../hocs'
-import { useRef } from '../hooks/use-ref'
+import {component} from '../hocs'
+import {useRef} from '../hooks/use-ref'
 
 export const Collapsible = component(
   ({
@@ -32,7 +32,7 @@ export const Collapsible = component(
 
         setOpen(event.detail.open) // ?
       },
-      { target: ref2 }
+      {target: ref2}
     )
 
     return (

@@ -1,7 +1,7 @@
-import { isUndefined } from '@sindresorhus/is'
-import { isEqual } from '@ver0/deep-equal'
+import {isUndefined} from '@sindresorhus/is'
+import {isEqual} from '@ver0/deep-equal'
 
-import { useRef } from './use-ref'
+import {useRef} from './use-ref'
 
 export const useDeepCompareMemoize = Object.assign(
   // https://github.com/sandiiarov/use-deep-compare/blob/07a9b586394d883f354648f8487b256f7c6bc178/src/useDeepCompareMemoize.ts
@@ -17,5 +17,5 @@ export const useDeepCompareMemoize = Object.assign(
 
     return [signalRef.current]
   },
-  { with: hook => (fn, deps) => hook(fn, useDeepCompareMemoize(deps)) }
+  {with: hook => (fn, deps) => hook(fn, useDeepCompareMemoize(deps))}
 )

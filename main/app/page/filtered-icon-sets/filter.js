@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import {useQuery} from '@tanstack/react-query'
 import {
   VscodeDivider,
   VscodeIcon,
@@ -14,22 +14,22 @@ import {
   without,
   xor
 } from 'es-toolkit'
-import { size } from 'es-toolkit/compat'
-import { sort } from 'fast-sort'
+import {size} from 'es-toolkit/compat'
+import {sort} from 'fast-sort'
 
-import { Popover } from '../../components/popover'
-import { QueryBoundary } from '../../components/query-boundary'
-import { ToolbarButton } from '../../components/toolbar-button'
-import { Tree } from '../../components/tree'
-import { ICON_SETS_URL } from '../../constants'
-import { component } from '../../hocs'
-import { useCallback } from '../../hooks/use-callback'
-import { useMemo } from '../../hooks/use-memo'
-import { getQueryOptions, has } from '../../utils'
-import { pluralize } from '../../utils/pluralize'
-import { useInit, useStore } from './hooks'
+import {Popover} from '../../components/popover'
+import {QueryBoundary} from '../../components/query-boundary'
+import {ToolbarButton} from '../../components/toolbar-button'
+import {Tree} from '../../components/tree'
+import {ICON_SETS_URL} from '../../constants'
+import {component} from '../../hocs'
+import {useCallback} from '../../hooks/use-callback'
+import {useMemo} from '../../hooks/use-memo'
+import {getQueryOptions, has} from '../../utils'
+import {pluralize} from '../../utils/pluralize'
+import {useInit, useStore} from './hooks'
 
-const queryOptions = getQueryOptions({ url: ICON_SETS_URL })
+const queryOptions = getQueryOptions({url: ICON_SETS_URL})
 
 const getIconSetThemes = iconSet =>
   [iconSet.prefixes, iconSet.suffixes].flatMap(Object.values)
@@ -39,7 +39,7 @@ const isFiltering = flow(xor, has)
 const Filter = {
   Label: component(() => {
     const selectedIconSetPrefixes = useStore().useSelectValue(
-      ({ draft }) => draft.selectedIconSetPrefixes
+      ({draft}) => draft.selectedIconSetPrefixes
     )
 
     const query = useQuery({
@@ -80,14 +80,14 @@ const Filter = {
     })
 
     const selectedIconSetPrefixes = store.useSelectValue(
-      ({ draft }) => draft.selectedIconSetPrefixes
+      ({draft}) => draft.selectedIconSetPrefixes
     )
 
     return (
       <VscodeMultiSelect
         combobox={false}
         onChange={event => {
-          store.set(({ draft }) => {
+          store.set(({draft}) => {
             draft.selectedIconSetPrefixes = intersection(
               Object.keys(query.data.iconSetPrefixIndexMap),
               event.target.value
@@ -102,11 +102,11 @@ const Filter = {
     )
   }),
   Tree: component(() => {
-    const query = useQuery({ ...queryOptions, select: identity })
+    const query = useQuery({...queryOptions, select: identity})
     const store = useStore()
 
     const selectedIconSetPrefixes = store.useSelectValue(
-      ({ draft }) => draft.selectedIconSetPrefixes
+      ({draft}) => draft.selectedIconSetPrefixes
     )
 
     const isFiltered = isFiltering(
@@ -161,7 +161,7 @@ const Filter = {
                   sort(
                     Object.entries(
                       mapValues(item, (iconSets = []) =>
-                        iconSets.map(iconSet => ({ prefix: iconSet.prefix }))
+                        iconSets.map(iconSet => ({prefix: iconSet.prefix}))
                       )
                     )
                   ).asc(([a]) => a)
@@ -173,7 +173,7 @@ const Filter = {
     }, [query.data])
 
     const toggleIconSetPrefixes = useCallback((checked, prefixes) => {
-      store.set(({ draft }) => {
+      store.set(({draft}) => {
         draft.selectedIconSetPrefixes = intersection(
           Object.keys(query.data),
           checked

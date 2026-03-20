@@ -1,16 +1,16 @@
-import { Popover as popover } from '@base-ui/react/popover'
+import {Popover as popover} from '@base-ui/react/popover'
 import {
   VscodeFormContainer,
   VscodeFormGroup
 } from '@vscode-elements/react-elements'
 import React from 'react'
-import { renderSlot } from 'render-slot'
+import {renderSlot} from 'render-slot'
 
-import { CARD_STYLE } from '../constants'
-import { component } from '../hocs'
-import { useState } from '../hooks/use-state'
+import {CARD_STYLE} from '../constants'
+import {component} from '../hocs'
+import {useState} from '../hooks/use-state'
 
-const { Popup, Portal, Positioner, Root, Trigger } = popover
+const {Popup, Portal, Positioner, Root, Trigger} = popover
 
 export const Popover = Object.assign(
   component(props => (

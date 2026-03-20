@@ -1,9 +1,9 @@
-import { defaultIconCustomisations } from '@iconify/utils'
+import {defaultIconCustomisations} from '@iconify/utils'
 import uFuzzy from '@leeoniya/ufuzzy'
-import { QueryClient } from '@tanstack/react-query'
+import {QueryClient} from '@tanstack/react-query'
 import bytes from 'bytes'
-import { omit } from 'es-toolkit'
-import { LRUCache } from 'lru-cache'
+import {omit} from 'es-toolkit'
+import {LRUCache} from 'lru-cache'
 
 export const GITHUB_REPO = 'tt-ph4t/icon-sets'
 
@@ -15,7 +15,7 @@ export const ICON_SETS_URL = `${DATA_BASE_URL}/index.toon`
 
 export const ID_SEPARATOR = ':'
 
-export const ICON_CACHE = new LRUCache({ max: 1000 })
+export const ICON_CACHE = new LRUCache({max: 1000})
 
 export const QUERY_CLIENT = new QueryClient()
 

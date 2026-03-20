@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { component } from '../hocs'
-import { useCallback } from './use-callback'
-import { useState } from './use-state'
+import {component} from '../hocs'
+import {useCallback} from './use-callback'
+import {useState} from './use-state'
 
 export const useRemount = Object.assign(
   () => {

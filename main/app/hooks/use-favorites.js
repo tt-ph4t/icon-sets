@@ -1,9 +1,9 @@
-import { union, uniq, without } from 'es-toolkit'
-import { castArray } from 'es-toolkit/compat'
+import {union, uniq, without} from 'es-toolkit'
+import {castArray} from 'es-toolkit/compat'
 
-import { validateIconId } from '../utils'
-import { useCallback } from './use-callback'
-import { useState } from './use-state'
+import {validateIconId} from '../utils'
+import {useCallback} from './use-callback'
+import {useState} from './use-state'
 
 const defaultValue = []
 
