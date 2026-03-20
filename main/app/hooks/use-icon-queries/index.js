@@ -4,7 +4,7 @@ import {mapValues} from 'es-toolkit'
 import ms from 'ms'
 
 import {DATA_BASE_URL, ICON_SETS_URL} from '../../constants'
-import {getQueryOptions} from '../../utils'
+import {getQueryOptions} from '../../utils/get-query-options'
 import {useCallback} from '../use-callback'
 import buildIcon from './build-icon'
 

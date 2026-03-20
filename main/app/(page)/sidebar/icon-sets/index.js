@@ -7,7 +7,7 @@ import {QueryBoundary} from '../../../components/query-boundary'
 import {ICON_SETS_URL} from '../../../constants'
 import {component} from '../../../hocs'
 import {useState} from '../../../hooks/use-state'
-import {getQueryOptions} from '../../../utils'
+import {getQueryOptions} from '../../../utils/get-query-options'
 import CollapsibleList from '../collapsible-list'
 import IconSet from './icon-set'
 

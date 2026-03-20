@@ -3,7 +3,7 @@ import {useQuery} from '@tanstack/react-query'
 import {EMPTY_ARRAY, ICON_SETS_URL} from '../../constants'
 import {withImmerAtom} from '../../hocs/with-immer-atom'
 import {useEffect} from '../../hooks/use-effect'
-import {getQueryOptions} from '../../utils'
+import {getQueryOptions} from '../../utils/get-query-options'
 
 export const useStore = withImmerAtom({
   selectedIconSetPrefixes: EMPTY_ARRAY

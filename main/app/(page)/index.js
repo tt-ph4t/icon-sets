@@ -26,8 +26,8 @@ import {useRef} from '../hooks/use-ref'
 import {useRemount} from '../hooks/use-remount'
 import {useSettings} from '../hooks/use-settings'
 
-const Sidebar = lazy(() => import('./sidebar'))
-const FilteredIconSets = lazy(() => import('./filtered-icon-sets'))
+const Sidebar = lazy.withFallback(() => import('./sidebar'))
+const FilteredIconSets = lazy.withFallback(() => import('./filtered-icon-sets'))
 
 const Loading = component(() => {
   const isLoading = [useIsFetching(), useIsMutating(), useIsRestoring()].some(

@@ -5,12 +5,13 @@ import bytes from 'bytes'
 import deepFreeze from 'deep-freeze-es6'
 import {omit} from 'es-toolkit'
 import {LRUCache} from 'lru-cache'
+import ms from 'ms'
 
 export const GITHUB_REPO = 'tt-ph4t/icon-sets'
 
 export const DATA_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/refs/heads/data/data`
 
-export const DELAY_MS = 200
+export const DELAY_MS = ms('.2s')
 
 export const ICON_SETS_URL = `${DATA_BASE_URL}/index.toon`
 

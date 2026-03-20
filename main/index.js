@@ -1,6 +1,4 @@
 import {QueryClientProvider} from '@tanstack/react-query'
-import {ReactQueryDevtools} from '@tanstack/react-query-devtools/build/modern/production.js'
-import '@vscode-elements/webview-playground'
 import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
 import {noop} from 'es-toolkit'
 import React from 'react'
@@ -9,30 +7,11 @@ import root from 'react-shadow'
 
 import {Layout} from './app/components/layout'
 import {QUERY_CLIENT} from './app/constants'
-import {component} from './app/hocs'
 import {lazy} from './app/hocs/lazy'
-import {useSettings} from './app/hooks/use-settings'
 import './styles/index.css'
 
-const App = lazy(() => import('./app/page'))
-
-const Devtools = component(() => {
-  const showDevtools = useSettings().useSelectValue(
-    ({draft}) => draft.showDevtools
-  )
-
-  return (
-    <React.Activity mode={showDevtools ? 'visible' : 'hidden'}>
-      <vscode-dev-toolbar
-        style={{
-          bottom: 'calc(var(--spacing) * 18)',
-          right: 'calc(var(--spacing) * 4)'
-        }}
-      />
-      <ReactQueryDevtools client={QUERY_CLIENT} />
-    </React.Activity>
-  )
-})
+const App = lazy(() => import('./app/(page)'))
+const Devtools = lazy(() => import('./devtools'))
 
 createRoot(document.querySelector('#root')).render(
   <>

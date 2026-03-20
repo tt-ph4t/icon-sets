@@ -12,7 +12,8 @@ import {ICON_SETS_URL} from '../../../constants'
 import {component} from '../../../hocs'
 import {withImmerAtom} from '../../../hocs/with-immer-atom'
 import {useCallback} from '../../../hooks/use-callback'
-import {getId, getQueryOptions} from '../../../utils'
+import {getId} from '../../../utils'
+import {getQueryOptions} from '../../../utils/get-query-options'
 import {pluralize} from '../../../utils/pluralize'
 
 const initialState = {

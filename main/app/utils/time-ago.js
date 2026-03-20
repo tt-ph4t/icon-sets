@@ -2,8 +2,8 @@ import {flow} from 'es-toolkit'
 
 import {dayjs} from './dayjs'
 
-const fromNow = dayjs => dayjs.fromNow()
+const withFromNow = fn => flow(fn, fn => fn.fromNow())
 
-export const timeAgo = Object.assign(flow(dayjs, fromNow), {
-  unix: flow(dayjs.unix, fromNow)
+export const timeAgo = Object.assign(withFromNow(dayjs), {
+  unix: withFromNow(dayjs.unix)
 })

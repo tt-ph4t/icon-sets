@@ -13,14 +13,16 @@ const FallbackComponent = component(({error, resetErrorBoundary}) => (
 
 const fallback = <Fallback />
 
-export const lazy = load => {
-  const Component = React.lazy(load)
+export const lazy = Object.assign(React.lazy, {
+  withFallback: load => {
+    const Component = lazy(load)
 
-  return component(props => (
-    <ErrorBoundary FallbackComponent={FallbackComponent}>
-      <React.Suspense fallback={fallback}>
-        <Component {...props} />
-      </React.Suspense>
-    </ErrorBoundary>
-  ))
-}
+    return component(props => (
+      <ErrorBoundary FallbackComponent={FallbackComponent}>
+        <React.Suspense fallback={fallback}>
+          <Component {...props} />
+        </React.Suspense>
+      </ErrorBoundary>
+    ))
+  }
+})

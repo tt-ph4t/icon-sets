@@ -1,21 +1,15 @@
 import {stringToIcon, validateIconName} from '@iconify/utils'
 import {isPrimitive} from '@sindresorhus/is'
-import {queryOptions} from '@tanstack/react-query'
-import {decode} from '@toon-format/toon'
-import {isEqual} from '@ver0/deep-equal'
-import axios from 'axios'
 import {downloadZip} from 'client-zip'
 import copyToClipboard from 'copy-to-clipboard'
-import {delay, identity, noop, omit} from 'es-toolkit'
-import {castArray} from 'es-toolkit/compat'
+import {omit} from 'es-toolkit'
 import FileSaver from 'file-saver'
 import hasValues from 'has-values'
 import {isWordCharacter} from 'is-word-character'
 import jszip from 'jszip'
-import ms from 'ms'
 import {hash} from 'ohash'
 
-import {DELAY_MS, ID_SEPARATOR} from '../constants'
+import {ID_SEPARATOR} from '../constants'
 
 export const fileSaver = async (data, fileName) => {
   // jszip
@@ -29,50 +23,19 @@ export const fileSaver = async (data, fileName) => {
 
 export const Zip = Object.assign(jszip, {
   download: async (files, fileName) => {
-    const response = downloadZip(files)
+    try {
+      const response = downloadZip(files)
 
-    if (response.ok) await fileSaver(response, `${fileName}.zip`)
+      if (response.ok) await fileSaver(response, `${fileName}.zip`)
+    } catch (error) {
+      prompt(
+        'Error',
+        error.message // ?
+      )
+    }
   },
   support: omit(jszip.support, ['nodebuffer', 'nodestream'])
 })
-
-export const getQueryOptions =
-  // https://tanstack.com/query/latest/docs/framework/react/guides/render-optimizations
-  ({
-    delayMs = DELAY_MS,
-    gcTime = ms('50m'),
-    networkMode = 'offlineFirst',
-    queryFn,
-    queryKey,
-    refetchOnReconnect = false,
-    refetchOnWindowFocus = false,
-    retry = 1,
-    select = noop,
-    staleTime = Infinity,
-    structuralSharing = (a, b) => (isEqual(a, b) ? a : b),
-    toonFormat = true,
-    url,
-    ...rest
-  }) =>
-    queryOptions({
-      gcTime,
-      networkMode,
-      queryFn:
-        queryFn ??
-        (async () => {
-          await delay(delayMs)
-
-          return (toonFormat ? decode : identity)((await axios.get(url)).data)
-        }),
-      queryKey: castArray(queryKey ?? url),
-      refetchOnReconnect,
-      refetchOnWindowFocus,
-      retry,
-      select,
-      staleTime,
-      structuralSharing,
-      ...rest
-    })
 
 export const getId = (...values) =>
   values
@@ -90,14 +53,11 @@ export const validateIconId = (value = '') =>
   isWordCharacter(value) &&
   validateIconName(stringToIcon(value))
 
-export const openObjectURL = async (...args) => {
+export const openObjectURL = (...args) => {
   const url = URL.createObjectURL(...args)
 
-  if (open(url)) {
-    await delay(DELAY_MS)
-
-    URL.revokeObjectURL(url)
-  }
+  open(url)
+  URL.revokeObjectURL(url)
 }
 
 export const copy = (text, options) => {

@@ -10,7 +10,8 @@ import {QueryBoundary} from '../../components/query-boundary'
 import {ICON_SETS_URL, ID_SEPARATOR} from '../../constants'
 import {component} from '../../hocs'
 import {useState} from '../../hooks/use-state'
-import {getId, getQueryOptions} from '../../utils'
+import {getId} from '../../utils'
+import {getQueryOptions} from '../../utils/get-query-options'
 import CollapsibleList from './collapsible-list'
 
 const CollapsibleListContext = CollapsibleList.createContext()

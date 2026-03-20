@@ -22,14 +22,8 @@ import {useIconQueries} from '../../../hooks/use-icon-queries'
 import {getIconFileNames} from '../../../hooks/use-icon-queries/build-icon'
 import {useMemo} from '../../../hooks/use-memo'
 import {useRemount} from '../../../hooks/use-remount'
-import {
-  copy,
-  fileSaver,
-  getId,
-  getQueryOptions,
-  has,
-  openObjectURL
-} from '../../../utils'
+import {copy, fileSaver, getId, has, openObjectURL} from '../../../utils'
+import {getQueryOptions} from '../../../utils/get-query-options'
 import {prettyBytes} from '../../../utils/pretty-bytes'
 import {timeAgo} from '../../../utils/time-ago'
 import {Menu} from '../../menu'
@@ -188,8 +182,8 @@ export default useRemount.with(
                         menu: has(icon) && [
                           {
                             label: 'View',
-                            onClick: async () => {
-                              await openObjectURL(icon.blob)
+                            onClick: () => {
+                              openObjectURL(icon.blob)
                             }
                           },
                           {
@@ -248,7 +242,7 @@ export default useRemount.with(
                             {
                               label: 'View',
                               onClick: async () => {
-                                await openObjectURL(await takumi(takumiArg))
+                                openObjectURL(await takumi(takumiArg))
                               }
                             },
                             ClipboardItem.supports(type) && {

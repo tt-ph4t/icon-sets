@@ -18,7 +18,7 @@ import {ICON_CACHE, ICON_SETS_URL} from '../../constants'
 import {component} from '../../hocs'
 import {useCustomizedIcons} from '../../hooks/use-customized-icons'
 import {useFavorites} from '../../hooks/use-favorites'
-import {getQueryOptions} from '../../utils'
+import {getQueryOptions} from '../../utils/get-query-options'
 import IconGroups from './icon-groups'
 import IconSets from './icon-sets'
 
