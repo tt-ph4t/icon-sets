@@ -119,32 +119,36 @@ export default useRemount.with(
         </div>
         <React.Activity>
           <Layout.Reverse
-            wrapper={children => {
-              const ref = useRef()
+            render={{
+              wrapper: children => {
+                const ref = useRef()
 
-              const layoutSettings = useSettings().useSelectValue(
-                ({ draft }) => ({
-                  reverse: draft.layout.reverse
-                })
-              )
+                const layoutSettings = useSettings().useSelectValue(
+                  ({ draft }) => ({
+                    reverse: draft.layout.reverse
+                  })
+                )
 
-              useEffect.Update(() => {
-                ref.current.resetHandlePosition()
-              }, [layoutSettings.reverse])
+                useEffect.Update(() => {
+                  ref.current.resetHandlePosition()
+                }, [layoutSettings.reverse])
 
-              return (
-                <SplitLayout
-                  initialHandlePosition={layoutSettings.reverse ? '75%' : '25%'}
-                  ref={ref}
-                  style={{
-                    ...omit(CARD_STYLE, ['padding']),
-                    get height() {
-                      return `calc(var(--height) - ${this.borderWidth} * 2)`
+                return (
+                  <SplitLayout
+                    initialHandlePosition={
+                      layoutSettings.reverse ? '75%' : '25%'
                     }
-                  }}>
-                  {children}
-                </SplitLayout>
-              )
+                    ref={ref}
+                    style={{
+                      ...omit(CARD_STYLE, ['padding']),
+                      get height() {
+                        return `calc(var(--height) - ${this.borderWidth} * 2)`
+                      }
+                    }}>
+                    {children}
+                  </SplitLayout>
+                )
+              }
             }}>
             <Sidebar />
             <FilteredIconSets />

@@ -71,7 +71,7 @@ export const Layout = Object.assign(
 
       return <div ref={mergedRef} {...props} />
     }),
-    Reverse: component(({ children, ...props }) => {
+    Reverse: component(({ children, render }) => {
       const layoutSettings = useSettings().useSelectValue(({ draft }) => ({
         reverse: draft.layout.reverse
       }))
@@ -81,7 +81,7 @@ export const Layout = Object.assign(
           (layoutSettings.reverse ? reverse : identity)(
             React.Children.toArray(children)
           ),
-        ...props
+        ...render
       })
     })
   }

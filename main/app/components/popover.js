@@ -55,7 +55,7 @@ export const Popover = Object.assign(
               render={(props, state) => (
                 <Popup
                   render={renderSlot({
-                    bespoke: popupRender,
+                    bespoke: true,
                     context: {
                       context: {
                         props,
@@ -63,6 +63,7 @@ export const Popover = Object.assign(
                         state
                       }
                     },
+                    default: popupRender,
                     wrapper: popupWrapper
                   })}
                   {...props}
