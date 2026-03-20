@@ -5,13 +5,14 @@ import {
 } from '@vscode-elements/react-elements'
 import {asyncNoop} from 'es-toolkit'
 
+import {EMPTY_ARRAY} from '../constants'
 import {component} from '../hocs'
 
-const render = (data = []) =>
+const render = (data = EMPTY_ARRAY) =>
   data.map(props => <Tree.Item key={props.id} {...props} />)
 
 export const Tree = Object.assign(
-  component(({data, onVscTreeSelect, ...props}) => (
+  component(({data = EMPTY_ARRAY, onVscTreeSelect, ...props}) => (
     <VscodeTree
       onVscTreeSelect={
         onVscTreeSelect ??

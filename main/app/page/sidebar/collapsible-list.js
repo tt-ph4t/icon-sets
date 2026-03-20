@@ -7,6 +7,7 @@ import {VList} from 'virtua'
 
 import {Menu} from '../../components/menu'
 import {ToolbarButton} from '../../components/toolbar-button'
+import {EMPTY_ARRAY} from '../../constants'
 import {component} from '../../hocs'
 import {withImmerAtom} from '../../hocs/with-immer-atom'
 import {useCallback} from '../../hooks/use-callback'
@@ -86,7 +87,7 @@ export default Object.assign(
                 })
               }
             },
-            ...(has(menu) ? [{separator: true}, ...menu] : [])
+            ...(has(menu) ? [{separator: true}, ...menu] : EMPTY_ARRAY)
           ]}
           render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
         />

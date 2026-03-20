@@ -21,7 +21,7 @@ import {Popover} from '../../components/popover'
 import {QueryBoundary} from '../../components/query-boundary'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {Tree} from '../../components/tree'
-import {ICON_SETS_URL} from '../../constants'
+import {EMPTY_ARRAY, ICON_SETS_URL} from '../../constants'
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
 import {useMemo} from '../../hooks/use-memo'
@@ -160,7 +160,7 @@ const Filter = {
                 Object.fromEntries(
                   sort(
                     Object.entries(
-                      mapValues(item, (iconSets = []) =>
+                      mapValues(item, (iconSets = EMPTY_ARRAY) =>
                         iconSets.map(iconSet => ({prefix: iconSet.prefix}))
                       )
                     )

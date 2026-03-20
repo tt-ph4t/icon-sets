@@ -4,13 +4,12 @@ import {useAtomValue, useSetAtom} from 'jotai'
 import {atomWithImmer} from 'jotai-immer'
 import {freezeAtom, selectAtom} from 'jotai/utils'
 
-import {DELAY_MS} from '../constants'
+import {DELAY_MS, EMPTY_ARRAY, EMPTY_OBJECT} from '../constants'
 import {useCallback} from '../hooks/use-callback'
 
 const create = flow(atomWithImmer, freezeAtom)
-const defaultValue = {}
 
-export const withImmerAtom = (initialValue = defaultValue) => {
+export const withImmerAtom = (initialValue = EMPTY_OBJECT) => {
   const atom = create(initialValue)
 
   return Object.assign(
@@ -27,19 +26,20 @@ export const withImmerAtom = (initialValue = defaultValue) => {
             fn({draft})
           })
         }),
-        useSelectValue: useCallback((fn, {deps = [], ...options} = {}) =>
-          useAtomValue(
-            selectAtom(
-              atom,
-              // https://jotai.org/docs/utilities/select#hold-stable-references
-              useCallback(draft => fn({draft}), deps),
-              isEqual
-            ),
-            {
-              delay: DELAY_MS,
-              ...options
-            }
-          )
+        useSelectValue: useCallback(
+          (fn, {deps = EMPTY_ARRAY, ...options} = EMPTY_OBJECT) =>
+            useAtomValue(
+              selectAtom(
+                atom,
+                // https://jotai.org/docs/utilities/select#hold-stable-references
+                useCallback(draft => fn({draft}), deps),
+                isEqual
+              ),
+              {
+                delay: DELAY_MS,
+                ...options
+              }
+            )
         )
       }
     },

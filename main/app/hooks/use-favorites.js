@@ -1,15 +1,14 @@
 import {union, uniq, without} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 
+import {EMPTY_ARRAY} from '../constants'
 import {validateIconId} from '../utils'
 import {useCallback} from './use-callback'
 import {useState} from './use-state'
 
-const defaultValue = []
-
 export const useFavorites = () => {
   const [state, setState] = useState.LocalStorage('useFavorites', {
-    defaultValue
+    defaultValue: EMPTY_ARRAY
   })
 
   return {
@@ -24,7 +23,7 @@ export const useFavorites = () => {
       return iconIds.every(iconId => this.current.includes(iconId))
     }),
     reset: useCallback(() => {
-      setState(defaultValue)
+      setState(EMPTY_ARRAY)
     }),
     set: useCallback(fn => {
       setState(state => fn(state).filter(validateIconId))

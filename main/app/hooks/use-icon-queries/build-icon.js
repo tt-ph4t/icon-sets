@@ -12,7 +12,7 @@ import {mapValues} from 'es-toolkit'
 import parse from 'html-react-parser'
 import mime from 'mime/lite'
 
-import {ICON_CACHE} from '../../constants'
+import {EMPTY_OBJECT, ICON_CACHE} from '../../constants'
 import {has} from '../../utils'
 
 const iconTypes = ['css', 'json', 'svg', 'txt', 'ico', 'pdf']
@@ -77,7 +77,7 @@ export default (
               data,
               type: mime.getType(fileType)
             }
-          : {}
+          : EMPTY_OBJECT
       },
       idCases: mapValues(idCases, value => value(icon.id)),
       paths: iconTypes.reduce((a, b) => {

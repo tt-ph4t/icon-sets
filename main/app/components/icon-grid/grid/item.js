@@ -9,7 +9,11 @@ import {findKey, identity, range, uniq} from 'es-toolkit'
 import {size, truncate} from 'es-toolkit/compat'
 import React from 'react'
 
-import {DEFAULT_ICON_CUSTOMISATIONS, ICON_SETS_URL} from '../../../constants'
+import {
+  DEFAULT_ICON_CUSTOMISATIONS,
+  EMPTY_ARRAY,
+  ICON_SETS_URL
+} from '../../../constants'
 import {component} from '../../../hocs'
 import {useCallback} from '../../../hooks/use-callback'
 import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
@@ -162,7 +166,7 @@ export default useRemount.with(
 
     const iconAliases = uniq([
       iconQuery.data.name,
-      ...(iconSetQuery.data.aliases[iconQuery.data.name] ?? [])
+      ...(iconSetQuery.data.aliases[iconQuery.data.name] ?? EMPTY_ARRAY)
     ])
 
     return (

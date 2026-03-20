@@ -9,7 +9,7 @@ import {asyncNoop} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import React from 'react'
 
-import {CARD_STYLE} from '../constants'
+import {CARD_STYLE, EMPTY_ARRAY} from '../constants'
 import {component} from '../hocs'
 import {useCallback} from '../hooks/use-callback'
 import {useMemo} from '../hooks/use-memo'
@@ -113,7 +113,7 @@ export const Menu = component(
     children,
     closeDelay = 0,
     closeOnClick = false,
-    data = [],
+    data = EMPTY_ARRAY,
     delay = 0,
     disabled = false,
     openOnHover = true,

@@ -24,7 +24,7 @@ import {sort} from 'fast-sort'
 import {isWordCharacter} from 'is-word-character'
 import React from 'react'
 
-import {U_FUZZY} from '../../constants'
+import {EMPTY_ARRAY, U_FUZZY} from '../../constants'
 import {component} from '../../hocs'
 import {useEffect} from '../../hooks/use-effect'
 import {useFavorites} from '../../hooks/use-favorites'
@@ -67,7 +67,7 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
           ? U_FUZZY.search(iconIds, deferredSearchTerm)[0].map(
               index => iconIds[index]
             )
-          : [],
+          : EMPTY_ARRAY,
     [isInitialSearchTerm, iconIds, deferredSearchTerm]
   )
 }
