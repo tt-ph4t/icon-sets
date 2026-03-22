@@ -2,8 +2,8 @@ import {useQuery} from '@tanstack/react-query'
 import {mapValues} from 'es-toolkit'
 import {sort} from 'fast-sort'
 
+import {Boundary} from '../../../components/boundary'
 import {Collapsible} from '../../../components/collapsible'
-import {QueryBoundary} from '../../../components/query-boundary'
 import {ICON_SETS_URL} from '../../../constants'
 import {component} from '../../../hocs'
 import {useState} from '../../../hooks/use-state'
@@ -31,7 +31,7 @@ export default component(() => {
   const query = useQuery(queryOptions)
 
   return (
-    <QueryBoundary
+    <Boundary.Query
       query={query}
       queryOptions={queryOptions}
       render={() => {

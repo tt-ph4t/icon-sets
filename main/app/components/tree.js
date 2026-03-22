@@ -7,9 +7,14 @@ import {asyncNoop} from 'es-toolkit'
 
 import {EMPTY_ARRAY} from '../constants'
 import {component} from '../hocs'
+import {has, trigger} from '../utils'
 
 const render = (data = EMPTY_ARRAY) =>
-  data.map(props => <Tree.Item key={props.id} {...props} />)
+  data.map(({id, ...props}) => {
+    trigger.error(!has(id))
+
+    return <Tree.Item key={id} {...props} />
+  })
 
 export const Tree = Object.assign(
   component(({data = EMPTY_ARRAY, onVscTreeSelect, ...props}) => (

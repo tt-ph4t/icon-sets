@@ -6,9 +6,7 @@ export const useSettings = withImmerAtom({
     reverse: false,
     size: {
       height: 0,
-      get width() {
-        return this.height
-      }
+      width: 0
     }
   },
   showDevtools: import.meta.env.DEV

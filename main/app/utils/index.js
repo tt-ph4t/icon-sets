@@ -2,7 +2,7 @@ import {stringToIcon, validateIconName} from '@iconify/utils'
 import {isPrimitive} from '@sindresorhus/is'
 import {downloadZip} from 'client-zip'
 import copyToClipboard from 'copy-to-clipboard'
-import {omit} from 'es-toolkit'
+import {mapValues, noop, omit} from 'es-toolkit'
 import FileSaver from 'file-saver'
 import hasValues from 'has-values'
 import {isWordCharacter} from 'is-word-character'
@@ -63,3 +63,18 @@ export const openObjectURL = (...args) => {
 export const copy = (text, options) => {
   if (!copyToClipboard(text, options)) prompt('Copy failed', text)
 }
+
+export const trigger = mapValues(
+  {
+    error: () => {
+      throw new Error(crypto.randomUUID())
+    },
+    suspense: () => {
+      throw new Promise(noop)
+    }
+  },
+  fn =>
+    (enabled = true) => {
+      if (enabled) return fn()
+    }
+)

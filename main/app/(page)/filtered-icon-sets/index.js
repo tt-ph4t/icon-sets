@@ -7,8 +7,8 @@ import {
 import {pick} from 'es-toolkit'
 import React from 'react'
 
+import {Boundary} from '../../components/boundary'
 import {IconGrid} from '../../components/icon-grid'
-import {QueryBoundary} from '../../components/query-boundary'
 import {ICON_SETS_URL} from '../../constants'
 import {component} from '../../hocs'
 import {getId} from '../../utils'
@@ -32,7 +32,7 @@ const FilteredIconSets = component(() => {
   const query = useQuery(queryOptions)
 
   return (
-    <QueryBoundary
+    <Boundary.Query
       query={query}
       queryOptions={queryOptions}
       render={() => <IconGrid iconIds={query.data} />}

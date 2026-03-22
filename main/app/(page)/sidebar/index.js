@@ -9,10 +9,10 @@ import {capitalCase} from 'change-case'
 import {asyncNoop} from 'es-toolkit'
 import React from 'react'
 
+import {Boundary} from '../../components/boundary'
 import {Collapsible} from '../../components/collapsible'
 import {IconGrid} from '../../components/icon-grid'
 import {Menu} from '../../components/menu'
-import {QueryBoundary} from '../../components/query-boundary'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {ICON_CACHE, ICON_SETS_URL} from '../../constants'
 import {component} from '../../hocs'
@@ -28,7 +28,7 @@ const IconGridWithFormContainer = component(props => {
   const query = useQuery(queryOptions)
 
   return (
-    <QueryBoundary
+    <Boundary.Query
       query={query}
       queryOptions={queryOptions}
       render={() => (

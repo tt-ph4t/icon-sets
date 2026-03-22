@@ -10,16 +10,10 @@
 
   body {
     padding: 0;
-    height: inherit;
-    width: inherit;
     position: relative;
   }
 
   #root {
     isolation: isolate;
-    display: flex;
-    flex-direction: column;
-    height: inherit;
-    width: inherit;
   }
 }

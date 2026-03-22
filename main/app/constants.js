@@ -63,3 +63,11 @@ export const DEFAULT_ICON_CUSTOMISATIONS = deepFreeze(
     ['height', 'width']
   )
 )
+
+export const BREAKPOINTS = Object.freeze({
+  '2XL': 1536,
+  LG: 1024,
+  MD: 768,
+  SM: 640,
+  XL: 1280
+})

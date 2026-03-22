@@ -13,6 +13,7 @@ import {omit} from 'es-toolkit'
 import React from 'react'
 import {preconnect} from 'react-dom'
 
+import {Boundary} from '../components/boundary'
 import {Fallback} from '../components/fallback'
 import {Layout} from '../components/layout'
 import {Menu} from '../components/menu'
@@ -20,14 +21,13 @@ import {SplitLayout} from '../components/split-layout'
 import {ToolbarButton} from '../components/toolbar-button'
 import {CARD_STYLE, DATA_BASE_URL, GITHUB_REPO} from '../constants'
 import {component} from '../hocs'
-import {lazy} from '../hocs/lazy'
 import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
 import {useRemount} from '../hooks/use-remount'
 import {useSettings} from '../hooks/use-settings'
 
-const Sidebar = lazy.withFallback(() => import('./sidebar'))
-const FilteredIconSets = lazy.withFallback(() => import('./filtered-icon-sets'))
+const Sidebar = React.lazy(() => import('./sidebar'))
+const FilteredIconSets = React.lazy(() => import('./filtered-icon-sets'))
 
 const Loading = component(() => {
   const isLoading = [useIsFetching(), useIsMutating(), useIsRestoring()].some(
@@ -150,8 +150,12 @@ export default useRemount.with(
                 )
               }
             }}>
-            <Sidebar />
-            <FilteredIconSets />
+            <Boundary>
+              <Sidebar />
+            </Boundary>
+            <Boundary>
+              <FilteredIconSets />
+            </Boundary>
           </Layout.Reverse>
         </React.Activity>
         <div

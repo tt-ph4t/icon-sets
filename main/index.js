@@ -1,36 +1,52 @@
 import {QueryClientProvider} from '@tanstack/react-query'
+import {VscodeProgressRing} from '@vscode-elements/react-elements'
 import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
 import {noop} from 'es-toolkit'
 import React from 'react'
 import {createRoot} from 'react-dom/client'
+import {ErrorBoundary} from 'react-error-boundary'
 import root from 'react-shadow'
 
+import {Fallback} from './app/components/fallback'
 import {Layout} from './app/components/layout'
 import {QUERY_CLIENT} from './app/constants'
-import {lazy} from './app/hocs/lazy'
 import './styles/index.css'
 
-const App = lazy(() => import('./app/(page)'))
-const Devtools = lazy(() => import('./devtools'))
+const App = React.lazy(() => import('./app/(page)'))
+const Devtools = React.lazy(() => import('./devtools'))
 
 createRoot(document.querySelector('#root')).render(
   <>
     <div
       style={{
-        alignContent: 'center',
-        alignSelf: 'center',
-        flexGrow: 1
+        alignItems: 'center',
+        display: 'flex',
+        height: 'var(--height)',
+        justifyContent: 'center',
+        width: 'var(--width)'
       }}>
       <Layout>
         <root.div
           style={{
+            display: 'flex',
             height: 'inherit',
             width: 'inherit'
           }}>
           <QueryClientProvider client={QUERY_CLIENT}>
-            <React.Activity>
-              <App />
-            </React.Activity>
+            <ErrorBoundary
+              fallbackRender={({error, resetErrorBoundary}) => (
+                <Fallback.Error progressBar={false}>
+                  {error.message}
+                  <Fallback.TryAgainButton onClick={resetErrorBoundary} />
+                </Fallback.Error>
+              )}>
+              <React.Suspense
+                fallback={<VscodeProgressRing style={{margin: 'auto'}} />}>
+                <React.Activity>
+                  <App />
+                </React.Activity>
+              </React.Suspense>
+            </ErrorBoundary>
           </QueryClientProvider>
         </root.div>
       </Layout>

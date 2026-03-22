@@ -17,8 +17,8 @@ import {
 import {size} from 'es-toolkit/compat'
 import {sort} from 'fast-sort'
 
+import {Boundary} from '../../components/boundary'
 import {Popover} from '../../components/popover'
-import {QueryBoundary} from '../../components/query-boundary'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {Tree} from '../../components/tree'
 import {EMPTY_ARRAY, ICON_SETS_URL} from '../../constants'
@@ -235,7 +235,7 @@ export default component(() => {
   const query = useQuery(queryOptions)
 
   return (
-    <QueryBoundary
+    <Boundary.Query
       query={query}
       queryOptions={queryOptions}
       render={() => {

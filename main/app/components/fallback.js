@@ -6,6 +6,7 @@ import {
   VscodeLabel,
   VscodeProgressBar
 } from '@vscode-elements/react-elements'
+import React from 'react'
 
 import {component} from '../hocs'
 
@@ -18,19 +19,24 @@ export const Fallback = Object.assign(
     />
   )),
   {
-    Error: component(props => (
+    Error: component(({progressBar = true, ...props}) => (
       <div
         style={{
+          '--size': '100%',
+
           display: 'flex',
           flexDirection: 'column',
-          height: '100%'
+          height: 'var(--size)',
+          width: 'var(--size)'
         }}>
-        <VscodeProgressBar
-          style={{
-            '--vscode-progressBar-background':
-              'var(--vscode-activityErrorBadge-background)'
-          }}
-        />
+        <React.Activity mode={progressBar ? 'visible' : 'hidden'}>
+          <VscodeProgressBar
+            style={{
+              '--vscode-progressBar-background':
+                'var(--vscode-activityErrorBadge-background)'
+            }}
+          />
+        </React.Activity>
         <VscodeFormContainer
           style={{
             alignContent: 'center',

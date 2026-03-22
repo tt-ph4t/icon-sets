@@ -110,9 +110,7 @@ export const IconGrid = useRemount.with(
     const [state, setState] = useState(() => filteredIconIds)
 
     useEffect.Update(() => {
-      React.startTransition(() => {
-        setState(filteredIconIds)
-      })
+      setState(filteredIconIds)
     }, [filteredIconIds])
 
     return (
