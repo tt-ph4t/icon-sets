@@ -1,3 +1,4 @@
+import {isFunction} from '@sindresorhus/is'
 import {
   VscodeButton,
   VscodeFormContainer,
@@ -9,7 +10,6 @@ import {
 import React from 'react'
 
 import {component} from '../hocs'
-import {has} from '../utils'
 
 export const Fallback = Object.assign(
   component(() => (
@@ -48,7 +48,8 @@ export const Fallback = Object.assign(
             <VscodeLabel required>Error</VscodeLabel>
             <VscodeFormHelper>
               {message}
-              <React.Activity mode={has(tryAgainFn) ? 'visible' : 'hidden'}>
+              <React.Activity
+                mode={isFunction(tryAgainFn) ? 'visible' : 'hidden'}>
                 <VscodeButton
                   block
                   icon='debug-rerun'
