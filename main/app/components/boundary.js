@@ -10,10 +10,7 @@ import {useMemo} from '../hooks/use-memo'
 
 const ErrorBoundaryProps = {
   FallbackComponent: component(({error, resetErrorBoundary}) => (
-    <Fallback.Error>
-      {error.message}
-      <Fallback.TryAgainButton onClick={resetErrorBoundary} />
-    </Fallback.Error>
+    <Fallback.Error message={error.message} tryAgainFn={resetErrorBoundary} />
   ))
 }
 
@@ -47,14 +44,12 @@ export const Boundary = Object.assign(
 
       if (query.isError)
         return (
-          <Fallback.Error>
-            {query.error.message}
-            <Fallback.TryAgainButton
-              onClick={async () => {
-                await queryClient.resetQueries(queryFilter)
-              }}
-            />
-          </Fallback.Error>
+          <Fallback.Error
+            message={query.error.message}
+            tryAgainFn={async () => {
+              await queryClient.resetQueries(queryFilter)
+            }}
+          />
         )
 
       return (

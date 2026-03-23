@@ -35,10 +35,11 @@ createRoot(document.querySelector('#root')).render(
           <QueryClientProvider client={QUERY_CLIENT}>
             <ErrorBoundary
               fallbackRender={({error, resetErrorBoundary}) => (
-                <Fallback.Error progressBar={false}>
-                  {error.message}
-                  <Fallback.TryAgainButton onClick={resetErrorBoundary} />
-                </Fallback.Error>
+                <Fallback.Error
+                  message={error.message}
+                  progressBar={false}
+                  tryAgainFn={resetErrorBoundary}
+                />
               )}>
               <React.Suspense
                 fallback={<VscodeProgressRing style={{margin: 'auto'}} />}>

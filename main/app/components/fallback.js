@@ -9,6 +9,7 @@ import {
 import React from 'react'
 
 import {component} from '../hocs'
+import {has} from '../utils'
 
 export const Fallback = Object.assign(
   component(() => (
@@ -19,7 +20,7 @@ export const Fallback = Object.assign(
     />
   )),
   {
-    Error: component(({progressBar = true, ...props}) => (
+    Error: component(({message, progressBar = true, tryAgainFn}) => (
       <div
         style={{
           '--size': '100%',
@@ -45,28 +46,22 @@ export const Fallback = Object.assign(
           }}>
           <VscodeFormGroup variant='settings-group'>
             <VscodeLabel required>Error</VscodeLabel>
-            <VscodeFormHelper {...props} />
+            <VscodeFormHelper>
+              {message}
+              <React.Activity mode={has(tryAgainFn) ? 'visible' : 'hidden'}>
+                <VscodeButton
+                  block
+                  icon='debug-rerun'
+                  onClick={tryAgainFn}
+                  style={{width: 'fit-content'}}
+                  type='reset'>
+                  Try Again
+                </VscodeButton>
+              </React.Activity>
+            </VscodeFormHelper>
           </VscodeFormGroup>
         </VscodeFormContainer>
       </div>
-    )),
-    TryAgainButton: component(
-      ({
-        block = true,
-        icon = 'debug-rerun',
-        style,
-        type = 'reset',
-        ...props
-      }) => (
-        <VscodeButton
-          block={block}
-          icon={icon}
-          style={{width: 'fit-content', ...style}}
-          type={type}
-          {...props}>
-          Try Again
-        </VscodeButton>
-      )
-    )
+    ))
   }
 )
