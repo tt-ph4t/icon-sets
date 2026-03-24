@@ -1,4 +1,3 @@
-import {QueryClientProvider} from '@tanstack/react-query'
 import {VscodeProgressRing} from '@vscode-elements/react-elements'
 import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
 import {noop} from 'es-toolkit'
@@ -9,11 +8,11 @@ import root from 'react-shadow'
 
 import {Fallback} from './app/components/fallback'
 import {Layout} from './app/components/layout'
-import {QUERY_CLIENT} from './app/constants'
 import './styles/index.css'
 
 const App = React.lazy(() => import('./app/(page)'))
 const Devtools = React.lazy(() => import('./devtools'))
+const Providers = React.lazy(() => import('./providers'))
 
 createRoot(document.querySelector('#root')).render(
   <>
@@ -32,32 +31,32 @@ createRoot(document.querySelector('#root')).render(
             height: 'inherit',
             width: 'inherit'
           }}>
-          <QueryClientProvider client={QUERY_CLIENT}>
-            <ErrorBoundary
-              fallbackRender={({error, resetErrorBoundary}) => (
-                <Fallback.Error
-                  message={error.message}
-                  progressBar={false}
-                  tryAgainFn={resetErrorBoundary}
-                />
-              )}>
-              <React.Suspense
-                fallback={<VscodeProgressRing style={{margin: 'auto'}} />}>
-                <React.Activity>
-                  <App />
-                </React.Activity>
-              </React.Suspense>
-            </ErrorBoundary>
-          </QueryClientProvider>
+          <ErrorBoundary
+            fallbackRender={({error, resetErrorBoundary}) => (
+              <Fallback.Error
+                message={error.message}
+                progressBar={false}
+                tryAgainFn={resetErrorBoundary}
+              />
+            )}>
+            <React.Suspense
+              fallback={<VscodeProgressRing style={{margin: 'auto'}} />}>
+              <Providers>
+                <App />
+              </Providers>
+            </React.Suspense>
+          </ErrorBoundary>
         </root.div>
       </Layout>
     </div>
-    <link
-      href={codiconUrl}
-      id='vscode-codicon-stylesheet' // https://vscode-elements.github.io/components/icon/
-      rel='stylesheet'
-    />
-    <Devtools />
+    <React.Activity>
+      <link
+        href={codiconUrl}
+        id='vscode-codicon-stylesheet' // https://vscode-elements.github.io/components/icon/
+        rel='stylesheet'
+      />
+      <Devtools />
+    </React.Activity>
   </>
 )
 

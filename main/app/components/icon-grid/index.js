@@ -1,3 +1,4 @@
+import {useBatchedCallback, useBatcher} from '@tanstack/react-pacer/batcher'
 import {
   VscodeBadge,
   VscodeFormContainer,
@@ -22,6 +23,7 @@ import {
 import {castArray, reverse} from 'es-toolkit/compat'
 import {sort} from 'fast-sort'
 import {isWordCharacter} from 'is-word-character'
+import ms from 'ms'
 import React from 'react'
 
 import {EMPTY_ARRAY, U_FUZZY} from '../../constants'
@@ -53,22 +55,29 @@ const actions = mapValues(
     flow(clone, value, castArray, iconIds => iconIds.filter(validateIconId))
 )
 
-const useFilteredIconIds = (searchTerm, iconIds) => {
-  iconIds = useMemo(() => castArray(iconIds).filter(validateIconId), [iconIds])
+const batcherOptions = {
+  wait: ms('.4s')
+}
 
-  const deferredSearchTerm = React.useDeferredValue(searchTerm)
-  const isInitialSearchTerm = useStore.initial.searchTerm === deferredSearchTerm
+const useFilteredIconIds = (searchTerm, iconIds) => {
+  const [state, setState] = useState(searchTerm)
+
+  const batcher = useBatcher(items => {
+    setState(last(items))
+  }, batcherOptions)
+
+  useEffect.Update(() => {
+    batcher.addItem(searchTerm)
+  }, [searchTerm])
 
   return useMemo(
     () =>
-      isInitialSearchTerm
+      useStore.initial.searchTerm === state
         ? iconIds
-        : isWordCharacter(deferredSearchTerm)
-          ? U_FUZZY.search(iconIds, deferredSearchTerm)[0].map(
-              index => iconIds[index]
-            )
+        : isWordCharacter(state)
+          ? U_FUZZY.search(iconIds, state)[0].map(index => iconIds[index])
           : EMPTY_ARRAY,
-    [isInitialSearchTerm, iconIds, deferredSearchTerm]
+    [iconIds, state]
   )
 }
 
@@ -93,6 +102,11 @@ const IconSquareToggle = component(props => {
 
 export const IconGrid = useRemount.with(
   component(({iconIds, initialSearchTerm, INTERNAL_REMOUNT}) => {
+    iconIds = useMemo(
+      () => castArray(iconIds).filter(validateIconId),
+      [iconIds]
+    )
+
     const [hasInteracted, setHasInteracted] = useState()
     const favorites = useFavorites()
     const store = useStore()
@@ -106,11 +120,16 @@ export const IconGrid = useRemount.with(
     )
 
     const filteredIconIds = useFilteredIconIds(searchTerm, iconIds)
+    const [state, setState] = useState(filteredIconIds)
+
+    const batchedSetState = useBatchedCallback(items => {
+      setState(last(items))
+    }, batcherOptions)
+
     const hasIconIds = has(filteredIconIds)
-    const [state, setState] = useState(() => filteredIconIds)
 
     useEffect.Update(() => {
-      setState(filteredIconIds)
+      batchedSetState(filteredIconIds)
     }, [filteredIconIds])
 
     return (
@@ -168,20 +187,20 @@ export const IconGrid = useRemount.with(
                             desc: 'Descending'
                           }[order],
                           onClick: () => {
-                            setState(state => sort(state)[order]())
+                            batchedSetState(sort(state)[order]())
                           }
                         }))
                       },
                       ...Object.entries(actions).map(([a, b]) => ({
                         label: capitalCase(a),
                         onClick: () => {
-                          setState(b)
+                          batchedSetState(b)
                         }
                       })),
                       {
                         label: 'Sample',
                         onClick: () => {
-                          setState(sampleSize(filteredIconIds, 1))
+                          batchedSetState(sampleSize(filteredIconIds, 1))
                         }
                       },
                       {separator: true},

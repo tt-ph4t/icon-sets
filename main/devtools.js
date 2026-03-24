@@ -1,10 +1,23 @@
-import {ReactQueryDevtools} from '@tanstack/react-query-devtools/build/modern/production.js'
+import {TanStackDevtools} from '@tanstack/react-devtools'
+import {pacerDevtoolsPlugin} from '@tanstack/react-pacer-devtools'
+import {ReactQueryDevtoolsPanel} from '@tanstack/react-query-devtools/build/modern/production.js'
 import '@vscode-elements/webview-playground'
 import React from 'react'
 
 import {QUERY_CLIENT} from './app/constants'
 import {component} from './app/hocs'
 import {useSettings} from './app/hooks/use-settings'
+
+const TanStackDevtoolsProps = {
+  plugins: [
+    {
+      defaultOpen: true,
+      name: 'TanStack Query',
+      render: <ReactQueryDevtoolsPanel client={QUERY_CLIENT} />
+    },
+    pacerDevtoolsPlugin()
+  ]
+}
 
 export default component(() => {
   const showDevtools = useSettings().useSelectValue(
@@ -19,7 +32,7 @@ export default component(() => {
           right: 'calc(var(--spacing) * 4)'
         }}
       />
-      <ReactQueryDevtools client={QUERY_CLIENT} />
+      <TanStackDevtools {...TanStackDevtoolsProps} />
     </React.Activity>
   )
 })

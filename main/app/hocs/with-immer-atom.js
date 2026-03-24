@@ -1,4 +1,5 @@
 import {isEqual} from '@ver0/deep-equal'
+import deepFreeze from 'deep-freeze-es6'
 import {flow} from 'es-toolkit'
 import {useAtomValue, useSetAtom} from 'jotai'
 import {atomWithImmer} from 'jotai-immer'
@@ -10,7 +11,7 @@ import {useCallback} from '../hooks/use-callback'
 const create = flow(atomWithImmer, freezeAtom)
 
 export const withImmerAtom = (initialValue = EMPTY_OBJECT) => {
-  const atom = create(initialValue)
+  const atom = create((initialValue = deepFreeze(initialValue)))
 
   return Object.assign(
     () => {
