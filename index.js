@@ -26,14 +26,6 @@ const sortKeys = (o, options = {}) => {
   );
 };
 
-const validateToonData = (value, fallback) => {
-  try {
-    return toon.decode(toon.encode(value ?? fallback));
-  } catch {
-    return fallback;
-  }
-};
-
 const writeFileSync = (file, data) =>
   fs.writeFileSync(`${file}.toon`, toon.encode(data));
 
@@ -83,7 +75,7 @@ writeFileSync(
               aliases: mapObject(getIconsTree(iconSet), (key, value) =>
                 has(value) ? [key, value] : mapObjectSkip,
               ),
-              categories: validateToonData(iconSet.categories, {}),
+              categories: iconSet.categories ?? {},
               category: iconSet.info.category ?? "Uncategorised",
               grid: iconSet.info.height ?? "No grid / mixed grid",
               hasAnimations: Boolean(
