@@ -1,9 +1,10 @@
-import {useBatchedCallback, useBatcher} from '@tanstack/react-pacer/batcher'
+import {useBatcher} from '@tanstack/react-pacer/batcher'
 import {
   VscodeBadge,
   VscodeFormContainer,
   VscodeFormGroup,
   VscodeFormHelper,
+  VscodeIcon,
   VscodeLabel,
   VscodeTextfield
 } from '@vscode-elements/react-elements'
@@ -15,6 +16,7 @@ import {
   initial,
   last,
   mapValues,
+  pick,
   sampleSize,
   shuffle,
   tail,
@@ -37,7 +39,6 @@ import {has, validateIconId} from '../../utils'
 import {pluralize} from '../../utils/pluralize'
 import {prettyBytes} from '../../utils/pretty-bytes'
 import {Menu} from '../menu'
-import {ToolbarButton} from '../toolbar-button'
 import Grid from './grid'
 import useStore from './use-store'
 
@@ -54,6 +55,13 @@ const actions = mapValues(
   value =>
     flow(clone, value, castArray, iconIds => iconIds.filter(validateIconId))
 )
+
+const sortOrderLabels = {
+  asc: 'Ascending',
+  desc: 'Descending'
+}
+
+const favoriteActions = ['toggle', 'add', 'delete']
 
 const batcherOptions = {
   wait: ms('.4s')
@@ -81,25 +89,6 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
   )
 }
 
-const IconSquareToggle = component(props => {
-  const store = useStore()
-  const iconSquare = store.useSelectValue(({draft}) => draft.iconSquare)
-
-  return (
-    <ToolbarButton
-      checked={!iconSquare}
-      onClick={() => {
-        store.set(({draft}) => {
-          draft.iconSquare = !draft.iconSquare
-        })
-      }}
-      preventToggle
-      toggleable
-      {...props}
-    />
-  )
-})
-
 export const IconGrid = useRemount.with(
   component(({iconIds, initialSearchTerm, INTERNAL_REMOUNT}) => {
     iconIds = useMemo(
@@ -122,14 +111,20 @@ export const IconGrid = useRemount.with(
     const filteredIconIds = useFilteredIconIds(searchTerm, iconIds)
     const [state, setState] = useState(filteredIconIds)
 
-    const batchedSetState = useBatchedCallback(items => {
-      setState(last(items))
-    }, batcherOptions)
+    const batcher = useBatcher(
+      items => {
+        setState(last(items))
+      },
+      {
+        ...batcherOptions,
+        getShouldExecute: items => !has(last(items))
+      }
+    )
 
     const hasIconIds = has(filteredIconIds)
 
     useEffect.Update(() => {
-      batchedSetState(filteredIconIds)
+      batcher.addItem(filteredIconIds)
     }, [filteredIconIds])
 
     return (
@@ -172,7 +167,7 @@ export const IconGrid = useRemount.with(
                     hasIconIds && [
                       {
                         label: 'Favorite',
-                        menu: ['toggle', 'add', 'delete'].map(a => ({
+                        menu: favoriteActions.map(a => ({
                           label: capitalCase(a),
                           onClick: () => {
                             favorites[a](...state)
@@ -181,26 +176,23 @@ export const IconGrid = useRemount.with(
                       },
                       {
                         label: 'Sort',
-                        menu: ['asc', 'desc'].map(order => ({
-                          label: {
-                            asc: 'Ascending',
-                            desc: 'Descending'
-                          }[order],
+                        menu: Object.keys(sortOrderLabels).map(order => ({
+                          label: sortOrderLabels[order],
                           onClick: () => {
-                            batchedSetState(sort(state)[order]())
+                            batcher.addItem(sort(state)[order]())
                           }
                         }))
                       },
                       ...Object.entries(actions).map(([a, b]) => ({
                         label: capitalCase(a),
                         onClick: () => {
-                          batchedSetState(b)
+                          batcher.addItem(b)
                         }
                       })),
                       {
                         label: 'Sample',
                         onClick: () => {
-                          batchedSetState(sampleSize(filteredIconIds, 1))
+                          batcher.addItem(sampleSize(filteredIconIds, 1))
                         }
                       },
                       {separator: true},
@@ -217,12 +209,38 @@ export const IconGrid = useRemount.with(
                   }
                 />
                 <React.Activity>
-                  <IconSquareToggle icon='symbol-ruler' slot='content-after' />
-                  <ToolbarButton
-                    icon={INTERNAL_REMOUNT.icon}
-                    onClick={INTERNAL_REMOUNT}
-                    slot='content-after'
-                  />
+                  <batcher.Subscribe
+                    selector={state => pick(state, ['isPending'])}>
+                    {batcherState => (
+                      <Menu
+                        data={[
+                          {
+                            label: 'Lock aspect ratio',
+                            onClick: () => {
+                              store.set(({draft}) => {
+                                draft.isIconAspectRatioLocked =
+                                  !draft.isIconAspectRatioLocked
+                              })
+                            }
+                          },
+                          {
+                            label: INTERNAL_REMOUNT.label,
+                            onClick: INTERNAL_REMOUNT
+                          }
+                        ]}
+                        render={
+                          <VscodeIcon
+                            name='settings'
+                            slot='content-after'
+                            {...(batcherState.isPending && {
+                              name: 'loading',
+                              spin: true
+                            })}
+                          />
+                        }
+                      />
+                    )}
+                  </batcher.Subscribe>
                 </React.Activity>
               </VscodeTextfield>
             </VscodeFormHelper>
