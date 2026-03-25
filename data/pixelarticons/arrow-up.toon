@@ -1,3 +1,3 @@
 width: 24
 height: 24
-body: "<path fill=\"currentColor\" d=\"M11 20h2V8h2V6h-2V4h-2v2H9v2h2zM7 10V8h2v2zm0 0v2H5v-2zm10 0V8h-2v2zm0 0v2h2v-2z\"/>"
+body: "<g fill=\"currentColor\"><path d=\"M11 20h2V4h-2zm2-12h2V6h-2zm2 2h2V8h-2zm2 2h2v-2h-2zm-6-4H9V6h2z\"/><path d=\"M15 10H7V8h8zm2 2H5v-2h12z\"/></g>"

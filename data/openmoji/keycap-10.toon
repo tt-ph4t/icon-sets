@@ -1,3 +1,3 @@
 width: 72
 height: 72
-body: "<path fill=\"#d0cfce\" d=\"M11.875 12.166h48V60h-48z\"/><g fill=\"none\" stroke=\"#000\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\"><path d=\"M12.125 11.916h48v48h-48z\"/><path d=\"M39.822 44.442a4.643 4.643 0 0 1-4.643-4.643v-7.681a4.643 4.643 0 0 1 4.643-4.643h0a4.643 4.643 0 0 1 4.643 4.643v7.681a4.643 4.643 0 0 1-4.643 4.643M25.535 31.05l4.644-3.48v16.776\"/></g>"
+body: "<path fill=\"#92d3f5\" d=\"M12 12h48v47.83H12z\"/><g fill=\"none\" stroke=\"#000\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path stroke-miterlimit=\"10\" stroke-width=\"4.781\" d=\"M41.843 44.275a4.58 4.58 0 0 1-4.58-4.58v-7.572a4.58 4.58 0 0 1 9.16 0v7.572a4.58 4.58 0 0 1-4.58 4.58m-16.01-13.25l4.63-3.471v16.73\" clip-rule=\"evenodd\"/><path stroke-width=\"2\" d=\"M12 12h48v48H12z\"/></g>"

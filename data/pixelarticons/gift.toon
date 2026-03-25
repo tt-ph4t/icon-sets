@@ -1,3 +1,3 @@
 width: 24
 height: 24
-body: "<path fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" d=\"M19 12v8h-7m7-8h2V8h-3m1 4H5m13-4V4h-6m6 4H6m0 0V4h6M6 8H3v4h2m0 0v8h7m0 0V4\"/>"
+body: "<path fill=\"currentColor\" d=\"M4 6h16v2H4zM2 8h2v4H2zm2 4h16v2H4zm16-4h2v4h-2zM6 4h2v2H6zm2-2h3v2H8zm3 2h2v2h-2zm2-2h3v2h-3zm3 2h2v2h-2zM4 14h2v6H4zm2 6h12v2H6zm12-6h2v6h-2zm-7-6h2v4h-2zm0 6h2v6h-2z\"/>"
