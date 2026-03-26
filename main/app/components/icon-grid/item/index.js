@@ -1,5 +1,4 @@
 import {mergeProps} from '@base-ui/react/merge-props'
-import {stringToIcon} from '@iconify/utils'
 import {useQuery, useQueryClient} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeIcon} from '@vscode-elements/react-elements'
@@ -30,6 +29,7 @@ import {
   ICON_SETS_URL
 } from '../../../misc/constants'
 import {getQueryOptions} from '../../../misc/get-query-options'
+import {parseIconName} from '../../../misc/parse-icon-name'
 import {prettyBytes} from '../../../misc/pretty-bytes'
 import {timeAgo} from '../../../misc/time-ago'
 import {Menu} from '../../menu'
@@ -59,7 +59,8 @@ const scales = range(
 
 export default useRemount.with(
   component(({context, iconId, INTERNAL_REMOUNT}) => {
-    const icon = useMemo(() => stringToIcon(iconId), [iconId])
+    const icon = parseIconName(iconId)
+
     const queryClient = useQueryClient()
     const customizedIcons = useCustomizedIcons()
     const favorites = useFavorites()

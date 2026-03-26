@@ -1,4 +1,4 @@
-import {stringToIcon, validateIconName} from '@iconify/utils'
+import {validateIconName} from '@iconify/utils'
 import {isPrimitive} from '@sindresorhus/is'
 import {downloadZip} from 'client-zip'
 import copyToClipboard from 'copy-to-clipboard'
@@ -10,6 +10,7 @@ import jszip from 'jszip'
 import {hash} from 'ohash'
 
 import {ID_SEPARATOR} from '../misc/constants'
+import {parseIconName} from './parse-icon-name'
 
 export const fileSaver = async (data, fileName) => {
   // jszip
@@ -44,25 +45,9 @@ export const getId = (...values) =>
 
 export const has = (...values) => hasValues(values)
 
-export const checkOdd =
+export const isOdd =
   // https://coreui.io/answers/how-to-check-if-a-number-is-odd-in-javascript/
   value => value % 2 !== 0
-
-export const validateIconId = (value = '') =>
-  value.includes(ID_SEPARATOR) &&
-  isWordCharacter(value) &&
-  validateIconName(stringToIcon(value))
-
-export const openObjectURL = (...args) => {
-  const url = URL.createObjectURL(...args)
-
-  open(url)
-  URL.revokeObjectURL(url)
-}
-
-export const copy = (text, options) => {
-  if (!copyToClipboard(text, options)) prompt('Copy failed', text)
-}
 
 export const trigger = mapValues(
   {
@@ -78,6 +63,22 @@ export const trigger = mapValues(
       if (enabled) return fn()
     }
 )
+
+export const validateIconId = value =>
+  isWordCharacter(value) &&
+  value.includes(ID_SEPARATOR) &&
+  validateIconName(parseIconName(value))
+
+export const openObjectURL = (...args) => {
+  const url = URL.createObjectURL(...args)
+
+  open(url)
+  URL.revokeObjectURL(url)
+}
+
+export const copy = (text, options) => {
+  if (!copyToClipboard(text, options)) prompt('Copy failed', text)
+}
 
 export const getIconFilePaths = (icon, extension) => ({
   default: `${icon.name}.${extension}`,

@@ -11,7 +11,7 @@ import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
 import {useState} from '../hooks/use-state'
-import {checkOdd, has} from '../misc'
+import {has, isOdd} from '../misc'
 
 const minPositionInPercentage = 5
 
@@ -30,7 +30,7 @@ const useIdleAsyncEffect = (
 }
 
 const Slot = component(({children, index, positionInPercentage}) => {
-  const isSlotStat = !checkOdd(index)
+  const isSlotStat = !isOdd(index)
   const size = useRef.Size()
   const [state, setState] = useState()
 

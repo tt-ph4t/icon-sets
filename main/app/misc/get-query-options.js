@@ -2,9 +2,11 @@ import {queryOptions} from '@tanstack/react-query'
 import {decode} from '@toon-format/toon'
 import {isEqual} from '@ver0/deep-equal'
 import axios from 'axios'
-import {identity, noop} from 'es-toolkit'
+import {delay, identity, noop} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import ms from 'ms'
+
+import {DELAY_MS} from './constants'
 
 const defaults = {
   gcTime: ms('50m'),
@@ -14,6 +16,7 @@ const defaults = {
 export const getQueryOptions =
   // https://tanstack.com/query/latest/docs/framework/react/guides/render-optimizations
   ({
+    delayMs = DELAY_MS,
     gcTime = defaults.gcTime,
     networkMode = 'offlineFirst',
     queryFn,
@@ -33,8 +36,11 @@ export const getQueryOptions =
       networkMode,
       queryFn:
         queryFn ??
-        (async () =>
-          (toonFormat ? decode : identity)((await axios.get(url)).data)),
+        (async () => {
+          await delay(delayMs)
+
+          return (toonFormat ? decode : identity)((await axios.get(url)).data)
+        }),
       queryKey: castArray(queryKey ?? url),
       refetchOnReconnect,
       refetchOnWindowFocus,

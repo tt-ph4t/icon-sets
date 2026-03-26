@@ -1,10 +1,10 @@
-import {stringToIcon} from '@iconify/utils'
 import {useQueries, useQuery} from '@tanstack/react-query'
 import {mapValues} from 'es-toolkit'
 import ms from 'ms'
 
 import {DATA_BASE_URL, ICON_SETS_URL} from '../../misc/constants'
 import {getQueryOptions} from '../../misc/get-query-options'
+import {parseIconName} from '../../misc/parse-icon-name'
 import {useCallback} from '../use-callback'
 import buildIcon from './build-icon'
 
@@ -23,7 +23,7 @@ export const useIconQueries = (...icons) => {
 
   return useQueries({
     queries: icons.map(({iconCustomisations, iconId, queryOptions}) => {
-      const icon = stringToIcon(iconId)
+      const icon = parseIconName(iconId)
 
       return getQueryOptions({
         enabled: buildIconContextQuery.isSuccess,
