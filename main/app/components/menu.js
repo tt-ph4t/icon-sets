@@ -9,12 +9,12 @@ import {asyncNoop} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import React from 'react'
 
-import {CARD_STYLE, EMPTY_ARRAY} from '../constants'
 import {component} from '../hocs'
 import {useCallback} from '../hooks/use-callback'
 import {useMemo} from '../hooks/use-memo'
 import {useState} from '../hooks/use-state'
-import {getId, has} from '../utils'
+import {getId, has} from '../misc'
+import {CARD_STYLE, EMPTY_ARRAY} from '../misc/constants'
 
 const {
   Item,

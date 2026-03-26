@@ -9,7 +9,7 @@ import {isWordCharacter} from 'is-word-character'
 import jszip from 'jszip'
 import {hash} from 'ohash'
 
-import {ID_SEPARATOR} from '../constants'
+import {ID_SEPARATOR} from '../misc/constants'
 
 export const fileSaver = async (data, fileName) => {
   // jszip
@@ -78,3 +78,13 @@ export const trigger = mapValues(
       if (enabled) return fn()
     }
 )
+
+export const getIconFilePaths = (icon, extension) => ({
+  default: `${icon.name}.${extension}`,
+  get fullPath() {
+    return `${icon.setName}/${this.default}`
+  },
+  get labeled() {
+    return `[${icon.setName}] ${this.default}`
+  }
+})

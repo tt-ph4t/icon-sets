@@ -4,9 +4,9 @@ import {ReactQueryDevtoolsPanel} from '@tanstack/react-query-devtools/build/mode
 import '@vscode-elements/webview-playground'
 import React from 'react'
 
-import {QUERY_CLIENT} from './app/constants'
-import {component} from './app/hocs'
-import {useSettings} from './app/hooks/use-settings'
+import {component} from '../app/hocs'
+import {useSettings} from '../app/hooks/use-settings'
+import {QUERY_CLIENT} from '../app/misc/constants'
 
 const TanStackDevtoolsProps = {
   plugins: [

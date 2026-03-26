@@ -3,7 +3,11 @@ import module from '@takumi-rs/wasm/takumi_wasm_bg.wasm?url'
 import {LRUCache} from 'lru-cache'
 import mime from 'mime/lite'
 
-import {EMPTY_BLOB, ICON_CACHE, MAX_CACHEABLE_SIZE} from '../../../constants'
+import {
+  EMPTY_BLOB,
+  ICON_CACHE,
+  MAX_CACHEABLE_SIZE
+} from '../../../misc/constants'
 
 const cache = new LRUCache({max: ICON_CACHE.max})
 

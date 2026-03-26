@@ -5,9 +5,9 @@ import {
 } from '@vscode-elements/react-elements'
 import {asyncNoop} from 'es-toolkit'
 
-import {EMPTY_ARRAY} from '../constants'
 import {component} from '../hocs'
-import {has, trigger} from '../utils'
+import {has, trigger} from '../misc'
+import {EMPTY_ARRAY} from '../misc/constants'
 
 const render = (data = EMPTY_ARRAY) =>
   data.map(({id, ...props}) => {

@@ -19,12 +19,12 @@ import {Layout} from '../components/layout'
 import {Menu} from '../components/menu'
 import {SplitLayout} from '../components/split-layout'
 import {ToolbarButton} from '../components/toolbar-button'
-import {CARD_STYLE, DATA_BASE_URL, GITHUB_REPO} from '../constants'
 import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
 import {useRemount} from '../hooks/use-remount'
 import {useSettings} from '../hooks/use-settings'
+import {CARD_STYLE, DATA_BASE_URL, GITHUB_REPO} from '../misc/constants'
 
 const Sidebar = React.lazy(() => import('./sidebar'))
 const FilteredIconSets = React.lazy(() => import('./filtered-icon-sets'))

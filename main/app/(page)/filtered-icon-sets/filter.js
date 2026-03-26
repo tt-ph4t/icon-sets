@@ -17,18 +17,17 @@ import {
 import {size} from 'es-toolkit/compat'
 import {sort} from 'fast-sort'
 
-import {Boundary} from '../../components/boundary'
 import {Popover} from '../../components/popover'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {Tree} from '../../components/tree'
-import {EMPTY_ARRAY, ICON_SETS_URL} from '../../constants'
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
 import {useMemo} from '../../hooks/use-memo'
-import {has} from '../../utils'
-import {getQueryOptions} from '../../utils/get-query-options'
-import {pluralize} from '../../utils/pluralize'
-import {useInit, useStore} from './hooks'
+import {has} from '../../misc'
+import {EMPTY_ARRAY, ICON_SETS_URL} from '../../misc/constants'
+import {getQueryOptions} from '../../misc/get-query-options'
+import {pluralize} from '../../misc/pluralize'
+import useStore from './use-store'
 
 const queryOptions = getQueryOptions({url: ICON_SETS_URL})
 
@@ -231,42 +230,28 @@ const Filter = {
   })
 }
 
-export default component(() => {
-  const query = useQuery(queryOptions)
-
-  return (
-    <Boundary.Query
-      query={query}
-      queryOptions={queryOptions}
-      render={() => {
-        useInit()
-
-        return (
-          <Popover
-            keepMounted
-            open
-            popupRender={
-              <>
-                <div
-                  style={{
-                    inset: 0,
-                    position: 'sticky',
-                    zIndex: 1
-                  }}>
-                  <Filter.MultiSelect />
-                  <VscodeDivider />
-                </div>
-                <Filter.Tree />
-              </>
-            }
-            render={
-              <div>
-                <Filter.Label />
-              </div>
-            }
-          />
-        )
-      }}
-    />
-  )
-})
+export default component(() => (
+  <Popover
+    keepMounted
+    open
+    popupRender={
+      <>
+        <div
+          style={{
+            inset: 0,
+            position: 'sticky',
+            zIndex: 1
+          }}>
+          <Filter.MultiSelect />
+          <VscodeDivider />
+        </div>
+        <Filter.Tree />
+      </>
+    }
+    render={
+      <div>
+        <Filter.Label />
+      </div>
+    }
+  />
+))

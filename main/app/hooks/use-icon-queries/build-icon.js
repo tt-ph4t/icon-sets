@@ -12,8 +12,8 @@ import {mapValues} from 'es-toolkit'
 import parse from 'html-react-parser'
 import mime from 'mime/lite'
 
-import {EMPTY_OBJECT, ICON_CACHE} from '../../constants'
-import {has} from '../../utils'
+import {getIconFilePaths, has} from '../../misc'
+import {EMPTY_OBJECT, ICON_CACHE} from '../../misc/constants'
 
 const iconTypes = ['css', 'json', 'svg', 'txt', 'ico', 'pdf']
 
@@ -38,16 +38,6 @@ const idCases =
     unocss: id => `i-${id.replaceAll(':', '-')}`,
     unocssColon: id => `i-${id}`
   }
-
-export const getIconFileNames = (icon, extension) => ({
-  default: `${icon.name}.${extension}`,
-  get fullPath() {
-    return `${icon.setName}/${this.default}`
-  },
-  get labeled() {
-    return `[${icon.setName}] ${this.default}`
-  }
-})
 
 // https://github.com/antfu-collective/icones/blob/main/src/utils/svgToPng.ts
 export default (
@@ -81,7 +71,7 @@ export default (
       },
       idCases: mapValues(idCases, value => value(icon.id)),
       paths: iconTypes.reduce((a, b) => {
-        a[b] = getIconFileNames(icon, b)
+        a[b] = getIconFilePaths(icon, b)
 
         return a
       }, {}),

@@ -4,10 +4,10 @@ import {sort} from 'fast-sort'
 
 import {Boundary} from '../../../components/boundary'
 import {Collapsible} from '../../../components/collapsible'
-import {ICON_SETS_URL} from '../../../constants'
 import {component} from '../../../hocs'
 import {useState} from '../../../hooks/use-state'
-import {getQueryOptions} from '../../../utils/get-query-options'
+import {ICON_SETS_URL} from '../../../misc/constants'
+import {getQueryOptions} from '../../../misc/get-query-options'
 import CollapsibleList from '../collapsible-list'
 import IconSet from './icon-set'
 

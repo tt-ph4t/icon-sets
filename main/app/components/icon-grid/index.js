@@ -28,18 +28,19 @@ import {isWordCharacter} from 'is-word-character'
 import ms from 'ms'
 import React from 'react'
 
-import {EMPTY_ARRAY, U_FUZZY} from '../../constants'
 import {component} from '../../hocs'
 import {useEffect} from '../../hooks/use-effect'
 import {useFavorites} from '../../hooks/use-favorites'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {useState} from '../../hooks/use-state'
-import {has, validateIconId} from '../../utils'
-import {pluralize} from '../../utils/pluralize'
-import {prettyBytes} from '../../utils/pretty-bytes'
+import {has, validateIconId} from '../../misc'
+import {EMPTY_ARRAY, U_FUZZY} from '../../misc/constants'
+import {pluralize} from '../../misc/pluralize'
+import {prettyBytes} from '../../misc/pretty-bytes'
 import {Menu} from '../menu'
 import Grid from './grid'
+import Item from './item'
 import useStore from './use-store'
 
 const actions = mapValues(
@@ -261,7 +262,7 @@ export const IconGrid = useRemount.with(
                         display: 'flex',
                         justifyContent: 'center'
                       }}>
-                      <Grid.Item context={context} iconId={iconId} />
+                      <Item context={context} iconId={iconId} />
                     </div>
                   )
               }}

@@ -1,8 +1,8 @@
 import {mergeCustomisations} from '@iconify/utils'
 import {isEqual} from '@ver0/deep-equal'
 
-import {DEFAULT_ICON_CUSTOMISATIONS, ICON_CACHE} from '../constants'
 import {withImmerAtom} from '../hocs/with-immer-atom'
+import {DEFAULT_ICON_CUSTOMISATIONS, ICON_CACHE} from '../misc/constants'
 import {useCallback} from './use-callback'
 
 mergeCustomisations

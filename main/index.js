@@ -1,6 +1,5 @@
 import {VscodeProgressRing} from '@vscode-elements/react-elements'
 import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
-import {noop} from 'es-toolkit'
 import React from 'react'
 import {createRoot} from 'react-dom/client'
 import {ErrorBoundary} from 'react-error-boundary'
@@ -8,11 +7,11 @@ import root from 'react-shadow'
 
 import {Fallback} from './app/components/fallback'
 import {Layout} from './app/components/layout'
-import './styles/index.css'
+import './misc/styles/index.css'
 
 const App = React.lazy(() => import('./app/(page)'))
-const Devtools = React.lazy(() => import('./devtools'))
-const Providers = React.lazy(() => import('./providers'))
+const Devtools = React.lazy(() => import('./misc/devtools'))
+const Providers = React.lazy(() => import('./misc/providers'))
 
 createRoot(document.querySelector('#root')).render(
   <>
@@ -24,7 +23,7 @@ createRoot(document.querySelector('#root')).render(
         justifyContent: 'center',
         width: 'var(--width)'
       }}>
-      <Layout>
+      <Layout.Resizable>
         <root.div
           style={{
             display: 'flex',
@@ -47,7 +46,7 @@ createRoot(document.querySelector('#root')).render(
             </React.Suspense>
           </ErrorBoundary>
         </root.div>
-      </Layout>
+      </Layout.Resizable>
     </div>
     <React.Activity>
       <link
@@ -59,29 +58,3 @@ createRoot(document.querySelector('#root')).render(
     </React.Activity>
   </>
 )
-
-if (import.meta.env[Symbol()]) {
-  let idleId
-
-  const max = 1e6
-
-  {
-    let index = 1
-
-    const callback = () => {
-      do index++
-      while (index % (max * 0.01))
-
-      if (index === max) {
-        noop()
-      } else idleId = requestIdleCallback(callback)
-    }
-
-    idleId =
-      // https://viblo.asia/p/event-loop-trong-javascript-microtask-macrotask-promise-va-cac-cau-hoi-phong-van-pho-bien-GyZJZjrbJjm
-      requestIdleCallback(callback)
-
-    // cancelIdleCallback(idleId)
-    // idleId = undefined
-  }
-}

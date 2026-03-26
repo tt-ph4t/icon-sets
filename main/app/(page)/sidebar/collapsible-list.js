@@ -7,11 +7,11 @@ import {VList} from 'virtua'
 
 import {Menu} from '../../components/menu'
 import {ToolbarButton} from '../../components/toolbar-button'
-import {EMPTY_ARRAY} from '../../constants'
 import {component} from '../../hocs'
 import {withImmerAtom} from '../../hocs/with-immer-atom'
 import {useCallback} from '../../hooks/use-callback'
-import {has} from '../../utils'
+import {has} from '../../misc'
+import {EMPTY_ARRAY} from '../../misc/constants'
 
 const Item = component(({id, index, renderItem, useStore}) => {
   const store = useStore()

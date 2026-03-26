@@ -9,23 +9,29 @@ import {findKey, identity, range, uniq} from 'es-toolkit'
 import {size, truncate} from 'es-toolkit/compat'
 import React from 'react'
 
-import {
-  DEFAULT_ICON_CUSTOMISATIONS,
-  EMPTY_ARRAY,
-  ICON_SETS_URL
-} from '../../../constants'
 import {component} from '../../../hocs'
 import {useCallback} from '../../../hooks/use-callback'
 import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
 import {useFavorites} from '../../../hooks/use-favorites'
 import {useIconQueries} from '../../../hooks/use-icon-queries'
-import {getIconFileNames} from '../../../hooks/use-icon-queries/build-icon'
 import {useMemo} from '../../../hooks/use-memo'
 import {useRemount} from '../../../hooks/use-remount'
-import {copy, fileSaver, getId, has, openObjectURL} from '../../../utils'
-import {getQueryOptions} from '../../../utils/get-query-options'
-import {prettyBytes} from '../../../utils/pretty-bytes'
-import {timeAgo} from '../../../utils/time-ago'
+import {
+  copy,
+  fileSaver,
+  getIconFilePaths,
+  getId,
+  has,
+  openObjectURL
+} from '../../../misc'
+import {
+  DEFAULT_ICON_CUSTOMISATIONS,
+  EMPTY_ARRAY,
+  ICON_SETS_URL
+} from '../../../misc/constants'
+import {getQueryOptions} from '../../../misc/get-query-options'
+import {prettyBytes} from '../../../misc/pretty-bytes'
+import {timeAgo} from '../../../misc/time-ago'
 import {Menu} from '../../menu'
 import useStore from '../use-store'
 import takumi from './takumi.wasm'
@@ -263,7 +269,7 @@ export default useRemount.with(
                               onClick: async () => {
                                 await fileSaver(
                                   await takumi(takumiArg),
-                                  getIconFileNames(iconQuery.data, format)
+                                  getIconFilePaths(iconQuery.data, format)
                                     .labeled
                                 )
                               }

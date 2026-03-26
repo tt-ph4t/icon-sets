@@ -1,8 +1,8 @@
 import {union, uniq, without} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 
-import {EMPTY_ARRAY} from '../constants'
-import {validateIconId} from '../utils'
+import {validateIconId} from '../misc'
+import {EMPTY_ARRAY} from '../misc/constants'
 import {useCallback} from './use-callback'
 import {useState} from './use-state'
 

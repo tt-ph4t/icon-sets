@@ -6,9 +6,9 @@ import {
 import React from 'react'
 import {renderSlot} from 'render-slot'
 
-import {CARD_STYLE} from '../constants'
 import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
+import {CARD_STYLE} from '../misc/constants'
 
 const {Popup, Portal, Positioner, Root, Trigger} = popover
 

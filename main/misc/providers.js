@@ -1,8 +1,8 @@
 import {PacerProvider} from '@tanstack/react-pacer'
 import {QueryClientProvider} from '@tanstack/react-query'
 
-import {QUERY_CLIENT} from './app/constants'
-import {component} from './app/hocs'
+import {component} from '../app/hocs'
+import {QUERY_CLIENT} from '../app/misc/constants'
 
 export default component(({children}) => (
   <PacerProvider>

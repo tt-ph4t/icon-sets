@@ -11,7 +11,7 @@ import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
 import {useState} from '../hooks/use-state'
-import {checkOdd, has} from '../utils'
+import {checkOdd, has} from '../misc'
 
 const minPositionInPercentage = 5
 

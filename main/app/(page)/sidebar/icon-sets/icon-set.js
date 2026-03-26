@@ -8,13 +8,13 @@ import {Collapsible} from '../../../components/collapsible'
 import {IconGrid} from '../../../components/icon-grid'
 import {Menu} from '../../../components/menu'
 import {ToolbarButton} from '../../../components/toolbar-button'
-import {ICON_SETS_URL} from '../../../constants'
 import {component} from '../../../hocs'
 import {withImmerAtom} from '../../../hocs/with-immer-atom'
 import {useCallback} from '../../../hooks/use-callback'
-import {getId} from '../../../utils'
-import {getQueryOptions} from '../../../utils/get-query-options'
-import {pluralize} from '../../../utils/pluralize'
+import {getId} from '../../../misc'
+import {ICON_SETS_URL} from '../../../misc/constants'
+import {getQueryOptions} from '../../../misc/get-query-options'
+import {pluralize} from '../../../misc/pluralize'
 
 const initialState = {
   category: Symbol(),

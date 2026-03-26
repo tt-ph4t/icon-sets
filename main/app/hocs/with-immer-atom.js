@@ -5,8 +5,8 @@ import {useAtomValue, useSetAtom} from 'jotai'
 import {atomWithImmer} from 'jotai-immer'
 import {freezeAtom, selectAtom} from 'jotai/utils'
 
-import {DELAY_MS, EMPTY_ARRAY, EMPTY_OBJECT} from '../constants'
 import {useCallback} from '../hooks/use-callback'
+import {DELAY_MS, EMPTY_ARRAY, EMPTY_OBJECT} from '../misc/constants'
 
 const create = flow(atomWithImmer, freezeAtom)
 
