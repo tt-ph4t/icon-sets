@@ -2,13 +2,13 @@ import {asyncNoop, identity} from 'es-toolkit'
 import {reverse} from 'es-toolkit/compat'
 import React from 'react'
 import {ResizableBox} from 'react-resizable'
-import {renderSlot} from 'render-slot'
 
 import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
 import {useSettings} from '../hooks/use-settings'
 import {BREAKPOINTS} from '../misc/constants'
+import {renderSlot} from '../misc/render-slot'
 
 export const Layout = {
   Fullscreen: component(({ref, ...props}) => {

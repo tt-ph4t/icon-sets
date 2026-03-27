@@ -12,6 +12,7 @@ import {withImmerAtom} from '../../hocs/with-immer-atom'
 import {useCallback} from '../../hooks/use-callback'
 import {has} from '../../misc'
 import {EMPTY_ARRAY} from '../../misc/constants'
+import {renderSlot} from '../../misc/render-slot'
 
 const Item = component(({id, index, renderItem, useStore}) => {
   const store = useStore()
@@ -25,7 +26,8 @@ const Item = component(({id, index, renderItem, useStore}) => {
     })
   })
 
-  return renderItem({
+  return renderSlot({
+    bespoke: renderItem,
     context: {
       CollapsibleProps: store.useSelectValue(
         ({draft}) => ({

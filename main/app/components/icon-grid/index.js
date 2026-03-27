@@ -250,21 +250,23 @@ export const IconGrid = useRemount.with(
         <React.Activity>
           {hasIconIds ? (
             <Grid
-              itemCount={state.length}
-              renderItem={({context}) => {
-                const iconId = state[context.index]
+              item={{
+                count: state.length,
+                render: (...[, {context}]) => {
+                  const iconId = state[context.index]
 
-                if (validateIconId(iconId))
-                  return (
-                    <div
-                      style={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        justifyContent: 'center'
-                      }}>
-                      <Item context={context} iconId={iconId} />
-                    </div>
-                  )
+                  if (validateIconId(iconId))
+                    return (
+                      <div
+                        style={{
+                          alignItems: 'center',
+                          display: 'flex',
+                          justifyContent: 'center'
+                        }}>
+                        <Item context={context} iconId={iconId} />
+                      </div>
+                    )
+                }
               }}
             />
           ) : (

@@ -1,5 +1,5 @@
 import {validateIconName} from '@iconify/utils'
-import {isPrimitive} from '@sindresorhus/is'
+import {isPrimitive, isString} from '@sindresorhus/is'
 import {downloadZip} from 'client-zip'
 import copyToClipboard from 'copy-to-clipboard'
 import {mapValues, noop, omit} from 'es-toolkit'
@@ -65,6 +65,7 @@ export const trigger = mapValues(
 )
 
 export const validateIconId = value =>
+  isString(value) &&
   isWordCharacter(value) &&
   value.includes(ID_SEPARATOR) &&
   validateIconName(parseIconName(value))

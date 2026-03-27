@@ -4,11 +4,11 @@ import {
   VscodeFormGroup
 } from '@vscode-elements/react-elements'
 import React from 'react'
-import {renderSlot} from 'render-slot'
 
 import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
 import {CARD_STYLE} from '../misc/constants'
+import {renderSlot} from '../misc/render-slot'
 
 const {Popup, Portal, Positioner, Root, Trigger} = popover
 
@@ -54,18 +54,20 @@ export const Popover = Object.assign(
               align={align}
               render={(props, state) => (
                 <Popup
-                  render={renderSlot({
-                    bespoke: true,
-                    context: {
-                      context: {
-                        props,
-                        setOpen: setState,
-                        state
-                      }
-                    },
-                    default: popupRender,
-                    wrapper: popupWrapper
-                  })}
+                  render={
+                    <div>
+                      {renderSlot({
+                        bespoke: true,
+                        context: {
+                          props,
+                          setOpen: setState,
+                          state
+                        },
+                        default: popupRender,
+                        wrapper: popupWrapper
+                      })}
+                    </div>
+                  }
                   {...props}
                 />
               )}

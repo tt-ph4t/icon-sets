@@ -2,11 +2,11 @@ import {useQueryClient} from '@tanstack/react-query'
 import {useUnmount} from 'ahooks'
 import React from 'react'
 import {ErrorBoundary} from 'react-error-boundary'
-import {renderSlot} from 'render-slot'
 
 import {Fallback} from '../components/fallback'
 import {component} from '../hocs'
 import {useMemo} from '../hooks/use-memo'
+import {renderSlot} from '../misc/render-slot'
 
 const ErrorBoundaryProps = {
   FallbackComponent: component(({error, resetErrorBoundary}) => (
@@ -52,14 +52,10 @@ export const Boundary = Object.assign(
           />
         )
 
-      return (
-        <React.Activity>
-          {renderSlot({
-            bespoke: true,
-            default: render
-          })}
-        </React.Activity>
-      )
+      return renderSlot({
+        bespoke: true,
+        default: render
+      })
     })
   }
 )

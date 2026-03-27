@@ -52,7 +52,7 @@ export default component(() => {
                 },
                 selected: category === state
               }))}
-              renderItem={props => <IconSet {...props} />}
+              renderItem={(...[, props]) => <IconSet {...props} />}
               {...CollapsibleListContext}
             />
           </Collapsible>

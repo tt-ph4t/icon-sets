@@ -80,7 +80,7 @@ export default component(() => {
                   },
                   selected: a === state
                 }))}
-              renderItem={({context}) => {
+              renderItem={(...[, {context}]) => {
                 const [, heading] = context.id.split(ID_SEPARATOR)
                 const iconIds = query.data[state][heading]
 
