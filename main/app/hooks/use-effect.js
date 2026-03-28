@@ -1,5 +1,5 @@
 import {useAsyncEffect, useUpdateEffect} from 'ahooks'
-import {mapValues, noop} from 'es-toolkit'
+import {mapValues} from 'es-toolkit'
 import React from 'react'
 
 import {useDeepCompareMemoize} from './use-deep-compare-memoize'
@@ -21,11 +21,12 @@ export const useEffect = Object.assign(
       let cleanup
 
       useEffect(() => {
-        if (when && ref.current) cleanup = fn() ?? noop
+        if (when && ref.current) cleanup = fn()
 
         return () => {
           ref.current = false
-          cleanup()
+
+          cleanup?.()
         }
       }, [fn, when])
     }

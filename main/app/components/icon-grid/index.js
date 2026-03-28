@@ -8,6 +8,7 @@ import {
   VscodeLabel,
   VscodeTextfield
 } from '@vscode-elements/react-elements'
+import {useSetState} from 'ahooks'
 import {capitalCase} from 'change-case'
 import {
   clone,
@@ -77,7 +78,7 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
 
   useEffect.Update(() => {
     batcher.addItem(searchTerm)
-  }, [searchTerm])
+  }, [batcher, searchTerm])
 
   return useMemo(
     () =>
@@ -97,36 +98,36 @@ export const IconGrid = useRemount.with(
       [iconIds]
     )
 
-    const [hasInteracted, setHasInteracted] = useState()
     const favorites = useFavorites()
     const store = useStore()
-
-    const searchTerm = store.useSelectValue(
-      ({draft}) =>
-        hasInteracted
-          ? draft.searchTerm
-          : (initialSearchTerm ?? draft.searchTerm),
-      {deps: [hasInteracted, initialSearchTerm]}
-    )
-
+    const searchTerm = store.useSelectValue(({draft}) => draft.searchTerm)
     const filteredIconIds = useFilteredIconIds(searchTerm, iconIds)
-    const [state, setState] = useState(filteredIconIds)
 
-    const batcher = useBatcher(
-      items => {
-        setState(last(items))
+    const [state, setState] = useSetState({
+      iconIds
+    })
+
+    const batcher = useBatcher(items => {
+      setState(state => ({
+        iconIds: last(items)(state.iconIds)
+      }))
+    }, batcherOptions)
+
+    const hasFilteredIconIds = has(filteredIconIds)
+
+    useEffect(() => {
+      batcher.addItem(() => filteredIconIds)
+    }, [batcher, filteredIconIds])
+
+    useEffect.Once(
+      () => {
+        store.set(({draft}) => {
+          // draft.searchTerm = initialSearchTerm
+        })
       },
-      {
-        ...batcherOptions,
-        getShouldExecute: items => !has(last(items))
-      }
+      has(initialSearchTerm) &&
+        initialSearchTerm !== useStore.initial.searchTerm
     )
-
-    const hasIconIds = has(filteredIconIds)
-
-    useEffect.Update(() => {
-      batcher.addItem(filteredIconIds)
-    }, [filteredIconIds])
 
     return (
       <div
@@ -154,8 +155,6 @@ export const IconGrid = useRemount.with(
                   )
                 }
                 onInput={event => {
-                  if (!hasInteracted) setHasInteracted(true)
-
                   store.set(({draft}) => {
                     draft.searchTerm = event.target.value
                   })
@@ -165,13 +164,13 @@ export const IconGrid = useRemount.with(
                 value={searchTerm}>
                 <Menu
                   data={
-                    hasIconIds && [
+                    hasFilteredIconIds && [
                       {
                         label: 'Favorite',
                         menu: favoriteActions.map(a => ({
                           label: capitalCase(a),
                           onClick: () => {
-                            favorites[a](...state)
+                            favorites[a](...state.iconIds)
                           }
                         }))
                       },
@@ -180,7 +179,7 @@ export const IconGrid = useRemount.with(
                         menu: Object.keys(sortOrderLabels).map(order => ({
                           label: sortOrderLabels[order],
                           onClick: () => {
-                            batcher.addItem(sort(state)[order]())
+                            batcher.addItem(iconIds => sort(iconIds)[order]())
                           }
                         }))
                       },
@@ -193,7 +192,7 @@ export const IconGrid = useRemount.with(
                       {
                         label: 'Sample',
                         onClick: () => {
-                          batcher.addItem(sampleSize(filteredIconIds, 1))
+                          batcher.addItem(() => sampleSize(filteredIconIds, 1))
                         }
                       },
                       {separator: true},
@@ -205,7 +204,7 @@ export const IconGrid = useRemount.with(
                   }
                   render={
                     <VscodeBadge slot='content-after'>
-                      {pluralize(state.length, 'icon')}
+                      {pluralize(state.iconIds.length, 'icon')}
                     </VscodeBadge>
                   }
                 />
@@ -248,12 +247,12 @@ export const IconGrid = useRemount.with(
           </VscodeFormGroup>
         </VscodeFormContainer>
         <React.Activity>
-          {hasIconIds ? (
+          {hasFilteredIconIds ? (
             <Grid
               item={{
-                count: state.length,
+                count: state.iconIds.length,
                 render: (...[, {context}]) => {
-                  const iconId = state[context.index]
+                  const iconId = state.iconIds[context.index]
 
                   if (validateIconId(iconId))
                     return (
