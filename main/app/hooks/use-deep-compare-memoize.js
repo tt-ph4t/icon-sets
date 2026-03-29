@@ -17,5 +17,7 @@ export const useDeepCompareMemoize = Object.assign(
 
     return [signalRef.current]
   },
-  {with: hook => (fn, deps) => hook(fn, useDeepCompareMemoize(deps))}
+  {
+    with: hook => (fn, deps) => hook(fn, useDeepCompareMemoize(deps))
+  }
 )

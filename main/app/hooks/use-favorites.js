@@ -1,35 +1,54 @@
+import {useThrottler} from '@tanstack/react-pacer/throttler'
 import {union, uniq, without} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
+import ms from 'ms'
 
 import {validateIconId} from '../misc'
 import {EMPTY_ARRAY} from '../misc/constants'
 import {useCallback} from './use-callback'
 import {useState} from './use-state'
 
-export const useFavorites = () => {
-  const [state, setState] = useState.LocalStorage('useFavorites', {
+const defaults = {
+  key: 'useFavorites',
+  throttlerOptions: {wait: ms('1s')}
+}
+
+export const useFavorites = (
+  key = defaults.key,
+  throttlerOptions = defaults.throttlerOptions
+) => {
+  const [state, setState] = useState.LocalStorage(key, {
     defaultValue: EMPTY_ARRAY
   })
 
+  const throttler = useThrottler(setState, throttlerOptions)
+
+  const set = useCallback(fn => {
+    throttler.maybeExecute(state => fn(state).filter(validateIconId))
+  })
+
+  const current = castArray(state).filter(validateIconId)
+
   return {
-    add: useCallback(function (...iconIds) {
-      this.set(state => union(iconIds, state))
+    add: useCallback((...iconIds) => {
+      set(state => union(iconIds, state))
     }),
-    current: castArray(state).filter(validateIconId),
-    delete: useCallback(function (...iconIds) {
-      this.set(state => without(state, ...iconIds))
+    current,
+    delete: useCallback((...iconIds) => {
+      set(state => without(state, ...iconIds))
     }),
-    has: useCallback(function (...iconIds) {
-      return iconIds.every(iconId => this.current.includes(iconId))
+    has: useCallback((...iconIds) => {
+      return iconIds.every(iconId => current.includes(iconId))
     }),
     reset: useCallback(() => {
-      setState(EMPTY_ARRAY)
+      throttler.cancel()
+
+      set(() => EMPTY_ARRAY)
     }),
-    set: useCallback(fn => {
-      setState(state => fn(state).filter(validateIconId))
-    }),
-    toggle: useCallback(function (...iconIds) {
-      this.set(state => {
+    set,
+    throttler,
+    toggle: useCallback((...iconIds) => {
+      set(state => {
         const a = new Set()
         const b = new Set(castArray(state))
 

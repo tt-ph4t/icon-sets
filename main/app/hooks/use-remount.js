@@ -1,3 +1,5 @@
+import {useBatcher} from '@tanstack/react-pacer/batcher'
+import {last} from 'es-toolkit'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -8,11 +10,18 @@ export const useRemount = Object.assign(
   () => {
     const [state, setState] = useState(0)
 
+    const batcher = useBatcher(items => {
+      last(items)()
+    })
+
     return Object.assign(
       useCallback(() => {
-        setState(state => ++state)
+        batcher.addItem(() => {
+          setState(state => ++state)
+        })
       }),
       {
+        batcher,
         icon: 'refresh',
         label: 'Reload',
         state
