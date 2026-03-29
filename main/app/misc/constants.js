@@ -7,6 +7,8 @@ import {omit} from 'es-toolkit'
 import {LRUCache} from 'lru-cache'
 import ms from 'ms'
 
+import {prettyBytes} from './pretty-bytes'
+
 export const GITHUB_REPO = 'tt-ph4t/icon-sets'
 
 export const DATA_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/refs/heads/data/data`
@@ -30,6 +32,8 @@ export const U_FUZZY = new uFuzzy()
 export const EMPTY_OBJECT = deepFreeze({})
 
 export const EMPTY_ARRAY = deepFreeze([])
+
+export const EMPTY_SIZE_TEXT = prettyBytes(0)
 
 export const CARD_STYLE =
   // https://github.com/vscode-elements/elements/blob/e71099a40fdbcbeaa50fd2d61ba2734f4e42f8d1/src/vscode-context-menu/vscode-context-menu.styles.ts

@@ -36,9 +36,8 @@ import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {useState} from '../../hooks/use-state'
 import {has, validateIconId} from '../../misc'
-import {EMPTY_ARRAY, U_FUZZY} from '../../misc/constants'
+import {EMPTY_ARRAY, EMPTY_SIZE_TEXT, U_FUZZY} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
-import {prettyBytes} from '../../misc/pretty-bytes'
 import {Menu} from '../menu'
 import Grid from './grid'
 import Item from './item'
@@ -119,16 +118,6 @@ export const IconGrid = useRemount.with(
       batcher.addItem(() => filteredIconIds)
     }, [batcher, filteredIconIds])
 
-    useEffect.Once(
-      () => {
-        store.set(({draft}) => {
-          // draft.searchTerm = initialSearchTerm
-        })
-      },
-      has(initialSearchTerm) &&
-        initialSearchTerm !== useStore.initial.searchTerm
-    )
-
     return (
       <div
         style={{
@@ -197,7 +186,7 @@ export const IconGrid = useRemount.with(
                       },
                       {separator: true},
                       {
-                        description: prettyBytes(),
+                        description: EMPTY_SIZE_TEXT,
                         label: 'Download'
                       }
                     ]
