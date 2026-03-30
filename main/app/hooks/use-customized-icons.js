@@ -1,4 +1,5 @@
 import {mergeCustomisations} from '@iconify/utils'
+import {useThrottler} from '@tanstack/react-pacer/throttler'
 import {isEqual} from '@ver0/deep-equal'
 
 import {withImmerAtom} from '../hocs/with-immer-atom'
@@ -18,31 +19,32 @@ const invalidateIconCache = (fn, ...iconIds) => {
 
 export const useCustomizedIcons = Object.assign(
   () => {
-    const store = useStore()
+    const throttler = useThrottler(useStore().set)
 
     return {
       delete: useCallback((...iconIds) => {
-        invalidateIconCache(
-          () => {
-            store.set(({draft}) => {
+        throttler.maybeExecute(({draft}) => {
+          invalidateIconCache(
+            () => {
               for (const iconId of iconIds) delete draft[iconId]
-            })
-          },
-          ...iconIds
-        )
+            },
+            ...iconIds
+          )
+        })
       }),
       set: useCallback((iconId, fn) => {
-        invalidateIconCache(() => {
-          store.set(({draft}) => {
+        throttler.maybeExecute(({draft}) => {
+          invalidateIconCache(() => {
             const a = draft[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS
             const b = fn(result(a))
             const c = {...a, ...b}
 
             if (isEqual(c, DEFAULT_ICON_CUSTOMISATIONS)) delete draft[iconId]
             else draft[iconId] = c
-          })
-        }, iconId)
-      })
+          }, iconId)
+        })
+      }),
+      throttler
     }
   },
   {

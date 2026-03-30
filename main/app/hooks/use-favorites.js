@@ -41,8 +41,6 @@ export const useFavorites = (
       return iconIds.every(iconId => current.includes(iconId))
     }),
     reset: useCallback(() => {
-      throttler.cancel()
-
       set(() => EMPTY_ARRAY)
     }),
     set,
