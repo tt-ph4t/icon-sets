@@ -13,7 +13,7 @@ import {component} from '../hocs'
 import {useCallback} from '../hooks/use-callback'
 import {useMemo} from '../hooks/use-memo'
 import {useState} from '../hooks/use-state'
-import {getId, has} from '../misc'
+import {getId, hasValues} from '../misc'
 import {CARD_STYLE, EMPTY_ARRAY} from '../misc/constants'
 
 const {
@@ -53,7 +53,7 @@ const popupRender = Object.assign(
 
         return (
           <React.Fragment key={getId(index, props)}>
-            {has(menu) ? (
+            {hasValues(menu) ? (
               <SubmenuRoot>
                 <SubmenuTrigger render={itemRender} {...context.TriggerProps} />
                 <Portal>
@@ -132,7 +132,7 @@ export const Menu = component(
           render={render}>
           {children}
         </Trigger>
-        {has(data) && (
+        {hasValues(data) && (
           <Portal>
             <Positioner align={align} side={side}>
               <Popup

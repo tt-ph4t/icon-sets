@@ -11,7 +11,7 @@ import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
 import {useState} from '../hooks/use-state'
-import {has, isOdd} from '../misc'
+import {hasValues, isOdd} from '../misc'
 
 const minPositionInPercentage = 5
 
@@ -44,7 +44,7 @@ const Slot = component(({children, index, positionInPercentage}) => {
     },
     {
       beforeEffect: () => {
-        if (has(state)) setState(true)
+        if (hasValues(state)) setState(true)
       },
       deps: [size]
     }

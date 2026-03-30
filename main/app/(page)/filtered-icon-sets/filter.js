@@ -23,7 +23,7 @@ import {Tree} from '../../components/tree'
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
 import {useMemo} from '../../hooks/use-memo'
-import {has} from '../../misc'
+import {hasValues} from '../../misc'
 import {EMPTY_ARRAY, ICON_SETS_URL} from '../../misc/constants'
 import {getQueryOptions} from '../../misc/get-query-options'
 import {pluralize} from '../../misc/pluralize'
@@ -34,7 +34,7 @@ const queryOptions = getQueryOptions({url: ICON_SETS_URL})
 const getIconSetThemes = iconSet =>
   [iconSet.prefixes, iconSet.suffixes].flatMap(Object.values)
 
-const isFiltering = flow(xor, has)
+const isFiltering = flow(xor, hasValues)
 
 const Filter = {
   Label: component(() => {

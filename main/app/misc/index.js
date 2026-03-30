@@ -4,7 +4,7 @@ import {downloadZip} from 'client-zip'
 import copyToClipboard from 'copy-to-clipboard'
 import {mapValues, noop, omit} from 'es-toolkit'
 import FileSaver from 'file-saver'
-import hasValues from 'has-values'
+import has from 'has-values'
 import {isWordCharacter} from 'is-word-character'
 import jszip from 'jszip'
 import {hash} from 'ohash'
@@ -43,7 +43,7 @@ export const getId = (...values) =>
     .map(value => (isPrimitive(value) ? String : hash)(value))
     .join(ID_SEPARATOR)
 
-export const has = (...values) => hasValues(values)
+export const hasValues = (...values) => has(values)
 
 export const isOdd =
   // https://coreui.io/answers/how-to-check-if-a-number-is-odd-in-javascript/

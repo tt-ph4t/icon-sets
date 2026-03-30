@@ -20,7 +20,7 @@ import {
   fileSaver,
   getIconFilePaths,
   getId,
-  has,
+  hasValues,
   openObjectURL
 } from '../../../misc'
 import {
@@ -189,7 +189,7 @@ export default useRemount.with(
                       return {
                         description: prettyBytes(icon.blob),
                         label: fileType.toUpperCase(),
-                        menu: has(icon) && [
+                        menu: hasValues(icon) && [
                           {
                             label: 'View',
                             onClick: () => {

@@ -6,12 +6,12 @@ import {
 import {asyncNoop} from 'es-toolkit'
 
 import {component} from '../hocs'
-import {has, trigger} from '../misc'
+import {hasValues, trigger} from '../misc'
 import {EMPTY_ARRAY} from '../misc/constants'
 
 const render = (data = EMPTY_ARRAY) =>
   data.map(({id, ...props}) => {
-    trigger.error(!has(id))
+    trigger.error(!hasValues(id))
 
     return <Tree.Item key={id} {...props} />
   })

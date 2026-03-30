@@ -12,7 +12,7 @@ import {mapValues} from 'es-toolkit'
 import parse from 'html-react-parser'
 import mime from 'mime/lite'
 
-import {getIconFilePaths, has} from '../../misc'
+import {getIconFilePaths, hasValues} from '../../misc'
 import {EMPTY_OBJECT, ICON_CACHE} from '../../misc/constants'
 
 const iconTypes = ['css', 'json', 'svg', 'txt', 'ico', 'pdf']
@@ -57,7 +57,7 @@ export default (
           txt: this.to.dataUrl
         }[fileType]
 
-        return has(data)
+        return hasValues(data)
           ? {
               get blob() {
                 return new Blob([data], {

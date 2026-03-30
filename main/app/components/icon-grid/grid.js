@@ -2,7 +2,7 @@ import {experimental_VGrid as VGrid} from 'virtua'
 
 import {component} from '../../hocs'
 import {useRef} from '../../hooks/use-ref'
-import {has} from '../../misc'
+import {hasValues} from '../../misc'
 import {renderSlot} from '../../misc/render-slot'
 
 const defaultCol = 1
@@ -13,7 +13,9 @@ export default component(
 
     col = Math.floor(
       col ??
-        (has(size) ? Math.max(size.width / cellSize, defaultCol) : defaultCol)
+        (hasValues(size)
+          ? Math.max(size.width / cellSize, defaultCol)
+          : defaultCol)
     )
 
     row = Math.ceil(row ?? item.count / col)

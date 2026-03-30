@@ -10,7 +10,7 @@ import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {withImmerAtom} from '../../hocs/with-immer-atom'
 import {useCallback} from '../../hooks/use-callback'
-import {has} from '../../misc'
+import {hasValues} from '../../misc'
 import {EMPTY_ARRAY} from '../../misc/constants'
 import {renderSlot} from '../../misc/render-slot'
 
@@ -89,7 +89,7 @@ export default Object.assign(
                 })
               }
             },
-            ...(has(menu) ? [{separator: true}, ...menu] : EMPTY_ARRAY)
+            ...(hasValues(menu) ? [{separator: true}, ...menu] : EMPTY_ARRAY)
           ]}
           render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
         />

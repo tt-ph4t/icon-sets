@@ -35,7 +35,7 @@ import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {useState} from '../../hooks/use-state'
-import {has, validateIconId} from '../../misc'
+import {hasValues, validateIconId} from '../../misc'
 import {EMPTY_ARRAY, EMPTY_SIZE_TEXT, U_FUZZY} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {Menu} from '../menu'
@@ -112,7 +112,7 @@ export const IconGrid = useRemount.with(
       }))
     }, batcherOptions)
 
-    const hasFilteredIconIds = has(filteredIconIds)
+    const hasFilteredIconIds = hasValues(filteredIconIds)
 
     useEffect(() => {
       batcher.addItem(() => filteredIconIds)
