@@ -9,16 +9,17 @@ import {useCallback} from './use-callback'
 import {useState} from './use-state'
 
 const defaults = {
-  key: 'useFavorites',
-  throttlerOptions: {wait: ms('1s')}
+  key: 'useFavoritedIcons',
+  throttlerOptions: {wait: ms('1s')},
+  value: EMPTY_ARRAY
 }
 
-export const useFavorites = (
+export const useFavoritedIcons = (
   key = defaults.key,
   throttlerOptions = defaults.throttlerOptions
 ) => {
   const [state, setState] = useState.LocalStorage(key, {
-    defaultValue: EMPTY_ARRAY
+    defaultValue: defaults.value
   })
 
   const throttler = useThrottler(setState, throttlerOptions)
@@ -41,7 +42,7 @@ export const useFavorites = (
       return iconIds.every(iconId => current.includes(iconId))
     }),
     reset: useCallback(() => {
-      set(() => EMPTY_ARRAY)
+      set(() => defaults.value)
     }),
     set,
     throttler,

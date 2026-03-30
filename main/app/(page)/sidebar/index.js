@@ -16,7 +16,7 @@ import {Menu} from '../../components/menu'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useCustomizedIcons} from '../../hooks/use-customized-icons'
-import {useFavorites} from '../../hooks/use-favorites'
+import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {ICON_CACHE, ICON_SETS_URL} from '../../misc/constants'
 import {getQueryOptions} from '../../misc/get-query-options'
 import IconGroups from './icon-groups'
@@ -101,16 +101,18 @@ const CachedIcons = component(() => {
   )
 })
 
-const Favorites = component(() => {
-  const favorites = useFavorites()
+const FavoritedIcons = component(() => {
+  const favoritedIcons = useFavoritedIcons()
 
   return (
-    <Collapsible description={favorites.current.length} heading='favorites'>
-      <IconGridWithFormContainer iconIds={favorites.current} />
+    <Collapsible
+      description={favoritedIcons.current.length}
+      heading='favorited icons'>
+      <IconGridWithFormContainer iconIds={favoritedIcons.current} />
       <Menu
         data={{
           label: 'Reset',
-          onClick: favorites.reset
+          onClick: favoritedIcons.reset
         }}
         render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
       />
@@ -124,7 +126,7 @@ export default component(() => (
       <IconSets />
       <IconGroups />
     </React.Activity>
-    <Favorites />
+    <FavoritedIcons />
     <CustomizedIcons />
     <CachedIcons />
   </div>

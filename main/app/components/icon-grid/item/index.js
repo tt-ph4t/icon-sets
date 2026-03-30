@@ -11,7 +11,7 @@ import React from 'react'
 import {component} from '../../../hocs'
 import {useCallback} from '../../../hooks/use-callback'
 import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
-import {useFavorites} from '../../../hooks/use-favorites'
+import {useFavoritedIcons} from '../../../hooks/use-favorited-icons'
 import {useIconQueries} from '../../../hooks/use-icon-queries'
 import {useMemo} from '../../../hooks/use-memo'
 import {useRemount} from '../../../hooks/use-remount'
@@ -63,7 +63,7 @@ export default useRemount.with(
 
     const queryClient = useQueryClient()
     const customizedIcons = useCustomizedIcons()
-    const favorites = useFavorites()
+    const favoritedIcons = useFavoritedIcons()
     const {iconCustomisations} = useCustomizedIcons.useSelect(iconId)
     const store = useStore()
 
@@ -287,7 +287,7 @@ export default useRemount.with(
                 menu: ['toggle', 'add', 'delete'].map(a => ({
                   label: capitalCase(a),
                   onClick: () => {
-                    favorites[a](iconQuery.data.id)
+                    favoritedIcons[a](iconQuery.data.id)
                   }
                 }))
               },
@@ -355,7 +355,7 @@ export default useRemount.with(
               remountMenu
             ],
             onClick: () => {
-              favorites.toggle(iconQuery.data.id)
+              favoritedIcons.toggle(iconQuery.data.id)
             }
           },
           {separator: true},
@@ -448,12 +448,12 @@ export default useRemount.with(
                 }}>
                 <React.Activity
                   mode={
-                    favorites.has(iconQuery.data.id) ? 'visible' : 'hidden'
+                    favoritedIcons.has(iconQuery.data.id) ? 'visible' : 'hidden'
                   }>
                   <VscodeIcon
                     name='circle-filled'
                     onClick={() => {
-                      favorites.delete(iconQuery.data.id)
+                      favoritedIcons.delete(iconQuery.data.id)
                     }}
                     size={13}
                     style={{

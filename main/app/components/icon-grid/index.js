@@ -31,7 +31,7 @@ import React from 'react'
 
 import {component} from '../../hocs'
 import {useEffect} from '../../hooks/use-effect'
-import {useFavorites} from '../../hooks/use-favorites'
+import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {useState} from '../../hooks/use-state'
@@ -97,7 +97,7 @@ export const IconGrid = useRemount.with(
       [iconIds]
     )
 
-    const favorites = useFavorites()
+    const favoritedIcons = useFavoritedIcons()
     const store = useStore()
     const searchTerm = store.useSelectValue(({draft}) => draft.searchTerm)
     const filteredIconIds = useFilteredIconIds(searchTerm, iconIds)
@@ -159,7 +159,7 @@ export const IconGrid = useRemount.with(
                         menu: favoriteActions.map(a => ({
                           label: capitalCase(a),
                           onClick: () => {
-                            favorites[a](...state.iconIds)
+                            favoritedIcons[a](...state.iconIds)
                           }
                         }))
                       },
