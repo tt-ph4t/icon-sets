@@ -1,9 +1,5 @@
 import {useQuery} from '@tanstack/react-query'
-import {
-  VscodeDivider,
-  VscodeIcon,
-  VscodeMultiSelect
-} from '@vscode-elements/react-elements'
+import {VscodeDivider, VscodeMultiSelect} from '@vscode-elements/react-elements'
 import {
   flow,
   identity,
@@ -194,34 +190,33 @@ const Filter = {
           All
         </ToolbarButton>
         <Tree
-          data={Object.entries(iconSetGroups).map(([a, b]) => ({
-            children: Object.entries(b).map(([label, iconSets]) => {
-              const iconSetPrefixes = iconSets.map(iconSet => iconSet.prefix)
+          data={Object.entries(iconSetGroups).map(([a, b]) => {
+            const label = pluralize(size(b), a)
 
-              const checked = selectedIconSetPrefixes.some(a =>
-                iconSetPrefixes.includes(a)
-              )
+            return {
+              children: Object.entries(b).map(([label, iconSets]) => {
+                label = `${label} (${iconSets.length})`
 
-              return {
-                id: label,
-                label: (
-                  <>
-                    {`${label} (${iconSets.length})`}
-                    <VscodeIcon
-                      name={checked ? 'check' : 'blank'}
-                      slot='icon-leaf'
-                    />
-                  </>
-                ),
-                onClick: () => {
-                  toggleIconSetPrefixes(checked, iconSetPrefixes)
+                const iconSetPrefixes = iconSets.map(iconSet => iconSet.prefix)
+
+                const checked = selectedIconSetPrefixes.some(a =>
+                  iconSetPrefixes.includes(a)
+                )
+
+                return {
+                  checked,
+                  id: label,
+                  label,
+                  onClick: () => {
+                    toggleIconSetPrefixes(checked, iconSetPrefixes)
+                  }
                 }
-              }
-            }),
-            id: a,
-            label: pluralize(size(b), a),
-            open: true
-          }))}
+              }),
+              id: label,
+              label,
+              open: true
+            }
+          })}
           hideArrows
           indentGuides='always'
         />

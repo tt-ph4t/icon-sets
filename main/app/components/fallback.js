@@ -7,9 +7,36 @@ import {
   VscodeLabel,
   VscodeProgressBar
 } from '@vscode-elements/react-elements'
+import {delay, negate} from 'es-toolkit'
+import ms from 'ms'
 import React from 'react'
 
 import {component} from '../hocs'
+import {useState} from '../hooks/use-state'
+
+const TryAgain = component(({onClick}) => {
+  const [state, setState] = useState(false)
+
+  return (
+    <VscodeButton
+      block
+      disabled={state}
+      icon={state ? 'loading' : 'debug-rerun'}
+      iconSpin={state}
+      onClick={async (...args) => {
+        React.startTransition(() => {
+          setState(negate)
+        })
+
+        await delay(ms('1s'))
+        await onClick(...args)
+      }}
+      style={{width: 'fit-content'}}
+      type='reset'>
+      Try Again
+    </VscodeButton>
+  )
+})
 
 export const Fallback = Object.assign(
   component(() => (
@@ -50,14 +77,7 @@ export const Fallback = Object.assign(
               {message}
               <React.Activity
                 mode={isFunction(tryAgainFn) ? 'visible' : 'hidden'}>
-                <VscodeButton
-                  block
-                  icon='debug-rerun'
-                  onClick={tryAgainFn}
-                  style={{width: 'fit-content'}}
-                  type='reset'>
-                  Try Again
-                </VscodeButton>
+                <TryAgain onClick={tryAgainFn} />
               </React.Activity>
             </VscodeFormHelper>
           </VscodeFormGroup>
