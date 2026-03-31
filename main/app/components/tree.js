@@ -13,8 +13,17 @@ const render = (data = EMPTY_ARRAY) =>
   data.map(({id, ...props}) => {
     trigger.error(!hasValues(id))
 
-    return <Tree.Item key={id} {...props} />
+    return <Item key={id} {...props} />
   })
+
+const Item = component(({children, label, ...props}) => (
+  <VscodeTreeItem
+    // open // ?
+    {...props}>
+    {label}
+    {render(children)}
+  </VscodeTreeItem>
+))
 
 export const Tree = Object.assign(
   component(({data = EMPTY_ARRAY, onVscTreeSelect, ...props}) => (
@@ -43,14 +52,6 @@ export const Tree = Object.assign(
         </>
       ),
       leaf: <VscodeIcon name='file' slot='icon-leaf' />
-    },
-    Item: component(({children, label, ...props}) => (
-      <VscodeTreeItem
-        // open // ?
-        {...props}>
-        {label}
-        {render(children)}
-      </VscodeTreeItem>
-    ))
+    }
   }
 )
