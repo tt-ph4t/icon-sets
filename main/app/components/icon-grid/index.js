@@ -10,7 +10,7 @@ import {
   VscodeTextfield
 } from '@vscode-elements/react-elements'
 import {useSetState} from 'ahooks'
-import {capitalCase, sentenceCase} from 'change-case'
+import {sentenceCase} from 'change-case'
 import {
   clone,
   flow,
@@ -173,7 +173,7 @@ export const IconGrid = useRemount.with(
                         }))
                       },
                       ...Object.entries(actions).map(([a, b]) => ({
-                        label: capitalCase(a),
+                        label: sentenceCase(a),
                         onClick: () => {
                           batcher.addItem(b)
                         }

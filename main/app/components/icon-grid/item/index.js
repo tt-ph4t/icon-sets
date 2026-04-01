@@ -375,7 +375,7 @@ export default useRemount.with(
             label: 'ID cases',
             menu: Object.entries(iconQuery.data.INTERNAL.idCases).map(
               ([label, id]) => {
-                label = capitalCase(label)
+                label = sentenceCase(label)
 
                 return {
                   description: truncate(id, {length: 6}),
