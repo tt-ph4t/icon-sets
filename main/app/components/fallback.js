@@ -33,7 +33,7 @@ const TryAgain = component(({onClick}) => {
       }}
       style={{width: 'fit-content'}}
       type='reset'>
-      Try Again
+      Try again
     </VscodeButton>
   )
 })

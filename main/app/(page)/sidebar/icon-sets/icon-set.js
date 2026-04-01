@@ -93,6 +93,13 @@ export default component(({context}) => {
           ).map(icon => getId(query.data.prefix, icon))}
         />
       </div>
+      <ToolbarButton
+        icon='file-symlink-file'
+        onClick={() => {
+          open(`https://www.npmjs.com/package/@iconify-json/${context.id}`)
+        }}
+        slot='actions'
+      />
       <Menu
         data={[
           {

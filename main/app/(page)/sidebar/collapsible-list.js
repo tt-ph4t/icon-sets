@@ -78,7 +78,7 @@ export default Object.assign(
         <Menu
           data={[
             {
-              label: anyOpen ? 'Collapse All' : 'Expand All',
+              label: `${anyOpen ? 'Collapse' : 'Expand'} all`,
               onClick: () => {
                 store.set(({draft}) => {
                   for (const id of ids)

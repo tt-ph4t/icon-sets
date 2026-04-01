@@ -1,5 +1,4 @@
 import {defaultIconCustomisations} from '@iconify/utils'
-import uFuzzy from '@leeoniya/ufuzzy'
 import {QueryClient} from '@tanstack/react-query'
 import bytes from 'bytes'
 import deepFreeze from 'deep-freeze-es6'
@@ -27,13 +26,16 @@ export const EMPTY_BLOB = new Blob()
 
 export const MAX_CACHEABLE_SIZE = bytes.parse('256kb')
 
-export const U_FUZZY = new uFuzzy()
-
 export const EMPTY_OBJECT = deepFreeze({})
 
 export const EMPTY_ARRAY = deepFreeze([])
 
 export const EMPTY_SIZE_TEXT = prettyBytes(0)
+
+export const SORT_ORDER_LABELS = deepFreeze({
+  asc: 'Ascending',
+  desc: 'Descending'
+})
 
 export const CARD_STYLE =
   // https://github.com/vscode-elements/elements/blob/e71099a40fdbcbeaa50fd2d61ba2734f4e42f8d1/src/vscode-context-menu/vscode-context-menu.styles.ts

@@ -1,3 +1,4 @@
+import uFuzzy from '@leeoniya/ufuzzy'
 import {useBatcher} from '@tanstack/react-pacer/batcher'
 import {
   VscodeBadge,
@@ -36,7 +37,11 @@ import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {useState} from '../../hooks/use-state'
 import {hasValues, validateIconId} from '../../misc'
-import {EMPTY_ARRAY, EMPTY_SIZE_TEXT, U_FUZZY} from '../../misc/constants'
+import {
+  EMPTY_ARRAY,
+  EMPTY_SIZE_TEXT,
+  SORT_ORDER_LABELS
+} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {Menu} from '../menu'
 import Grid from './grid'
@@ -57,12 +62,8 @@ const actions = mapValues(
     flow(clone, value, castArray, iconIds => iconIds.filter(validateIconId))
 )
 
-const sortOrderLabels = {
-  asc: 'Ascending',
-  desc: 'Descending'
-}
-
-const favoriteActions = ['toggle', 'add', 'delete']
+const uf = new uFuzzy()
+const favoriteIconActions = ['toggle', 'add', 'delete']
 
 const batcherOptions = {
   wait: ms('.4s')
@@ -84,7 +85,7 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
       useStore.initial.searchTerm === state
         ? iconIds
         : isWordCharacter(state)
-          ? U_FUZZY.search(iconIds, state)[0].map(index => iconIds[index])
+          ? uf.search(iconIds, state)[0].map(index => iconIds[index])
           : EMPTY_ARRAY,
     [iconIds, state]
   )
@@ -114,7 +115,7 @@ export const IconGrid = useRemount.with(
 
     const hasFilteredIconIds = hasValues(filteredIconIds)
 
-    useEffect(() => {
+    useEffect.Update(() => {
       batcher.addItem(() => filteredIconIds)
     }, [batcher, filteredIconIds])
 
@@ -156,7 +157,7 @@ export const IconGrid = useRemount.with(
                     hasFilteredIconIds && [
                       {
                         label: 'Favorite',
-                        menu: favoriteActions.map(a => ({
+                        menu: favoriteIconActions.map(a => ({
                           label: capitalCase(a),
                           onClick: () => {
                             favoritedIcons[a](...state.iconIds)
@@ -165,8 +166,8 @@ export const IconGrid = useRemount.with(
                       },
                       {
                         label: 'Sort',
-                        menu: Object.keys(sortOrderLabels).map(order => ({
-                          label: sortOrderLabels[order],
+                        menu: Object.keys(SORT_ORDER_LABELS).map(order => ({
+                          label: SORT_ORDER_LABELS[order],
                           onClick: () => {
                             batcher.addItem(iconIds => sort(iconIds)[order]())
                           }

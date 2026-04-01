@@ -57,6 +57,9 @@ const scales = range(
   100 + DEFAULT_ICON_CUSTOMISATIONS.scale
 )
 
+const sizeLabel = (width = 0, height = 0, scale = 1) =>
+  `${width * scale} x ${height * scale}`
+
 export default useRemount.with(
   component(({context, iconId, INTERNAL_REMOUNT}) => {
     const icon = parseIconName(iconId)
@@ -326,9 +329,13 @@ export default useRemount.with(
                     }))
                   },
                   {
-                    label: 'Scale',
+                    label: 'Sizes',
                     menu: scales.map(scale => ({
-                      label: scale,
+                      label: sizeLabel(
+                        iconQuery.data.data.width,
+                        iconQuery.data.data.height,
+                        scale
+                      ),
                       onClick: () => {
                         customizedIcons.set(iconQuery.data.id, () => ({
                           scale
@@ -365,7 +372,7 @@ export default useRemount.with(
           },
           {
             description: size(iconQuery.data.INTERNAL.idCases),
-            label: 'ID Cases',
+            label: 'ID cases',
             menu: Object.entries(iconQuery.data.INTERNAL.idCases).map(
               ([label, id]) => {
                 label = capitalCase(label)
@@ -382,7 +389,7 @@ export default useRemount.with(
           },
           {
             description: iconSetQuery.data.name,
-            label: 'Set Name'
+            label: 'Set name'
           },
           {
             description: iconSetQuery.data.author.name,
@@ -396,7 +403,11 @@ export default useRemount.with(
             label: 'Category'
           },
           {
-            description: `${iconQuery.data.data.width * iconCustomisations.scale} x ${iconQuery.data.data.height * iconCustomisations.scale}`,
+            description: sizeLabel(
+              iconQuery.data.data.width,
+              iconQuery.data.data.height,
+              iconCustomisations.scale
+            ),
             label: 'Size'
           },
           {
@@ -431,7 +442,10 @@ export default useRemount.with(
           },
           {
             description: timeAgo.unix(iconSetQuery.data.lastModified),
-            label: 'Last modified'
+            label: 'Last modified',
+            onClick: () => {
+              prompt('Unix time', iconSetQuery.data.lastModified)
+            }
           }
         ]}
         key={iconQuery.data.id}

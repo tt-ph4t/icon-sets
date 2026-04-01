@@ -5,7 +5,7 @@ import {
   VscodeFormHelper
 } from '@vscode-elements/react-elements'
 import {useUpdate} from 'ahooks'
-import {capitalCase} from 'change-case'
+import {sentenceCase} from 'change-case'
 import {asyncNoop} from 'es-toolkit'
 import React from 'react'
 
@@ -82,7 +82,7 @@ const CachedIcons = component(() => {
           {label: 'Reload'},
           {separator: true},
           ...['purgeStale', 'pop', 'clear'].map(a => ({
-            label: capitalCase(a),
+            label: sentenceCase(a),
             onClick: () => {
               ICON_CACHE[a]()
             }
