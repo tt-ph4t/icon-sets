@@ -103,12 +103,11 @@ const CachedIcons = component(() => {
 
 const FavoritedIcons = component(() => {
   const favoritedIcons = useFavoritedIcons()
+  const iconIds = favoritedIcons.get()
 
   return (
-    <Collapsible
-      description={favoritedIcons.current.length}
-      heading='favorited icons'>
-      <IconGridWithFormContainer iconIds={favoritedIcons.current} />
+    <Collapsible description={iconIds.length} heading='favorited icons'>
+      <IconGridWithFormContainer iconIds={iconIds} />
       <Menu
         data={{
           label: 'Reset',

@@ -14,48 +14,49 @@ const defaults = {
   value: EMPTY_ARRAY
 }
 
-export const useFavoritedIcons = (
-  key = defaults.key,
-  throttlerOptions = defaults.throttlerOptions
-) => {
-  const [state, setState] = useState.LocalStorage(key, {
-    defaultValue: defaults.value
-  })
-
-  const throttler = useThrottler(setState, throttlerOptions)
-
-  const set = useCallback(fn => {
-    throttler.maybeExecute(state => fn(state).filter(validateIconId))
-  })
-
-  const current = castArray(state).filter(validateIconId)
-
-  return {
-    add: useCallback((...iconIds) => {
-      set(state => union(iconIds, state))
-    }),
-    current,
-    delete: useCallback((...iconIds) => {
-      set(state => without(state, ...iconIds))
-    }),
-    has: useCallback((...iconIds) => {
-      return iconIds.every(iconId => current.includes(iconId))
-    }),
-    reset: useCallback(() => {
-      set(() => defaults.value)
-    }),
-    set,
-    throttler,
-    toggle: useCallback((...iconIds) => {
-      set(state => {
-        const a = new Set()
-        const b = new Set(castArray(state))
-
-        for (const iconId of uniq(iconIds))
-          b.has(iconId) ? b.delete(iconId) : a.add(iconId)
-
-        return [...a, ...b]
-      })
+export const useFavoritedIcons = Object.assign(
+  (key = defaults.key, throttlerOptions = defaults.throttlerOptions) => {
+    const [state, setState] = useState.LocalStorage(key, {
+      defaultValue: defaults.value
     })
+
+    const throttler = useThrottler(setState, throttlerOptions)
+
+    const set = useCallback(fn => {
+      throttler.maybeExecute(state => fn(state).filter(validateIconId))
+    })
+
+    const current = castArray(state).filter(validateIconId)
+
+    return {
+      add: useCallback((...iconIds) => {
+        set(state => union(iconIds, state))
+      }),
+      delete: useCallback((...iconIds) => {
+        set(state => without(state, ...iconIds))
+      }),
+      get: useCallback(() => current),
+      has: useCallback((...iconIds) => {
+        return iconIds.every(iconId => current.includes(iconId))
+      }),
+      reset: useCallback(() => {
+        set(() => defaults.value)
+      }),
+      throttler,
+      toggle: useCallback((...iconIds) => {
+        set(state => {
+          const a = new Set()
+          const b = new Set(castArray(state))
+
+          for (const iconId of uniq(iconIds))
+            b.has(iconId) ? b.delete(iconId) : a.add(iconId)
+
+          return [...a, ...b]
+        })
+      })
+    }
+  },
+  {
+    menu: ['toggle', 'add', 'delete'] // ?
   }
-}
+)

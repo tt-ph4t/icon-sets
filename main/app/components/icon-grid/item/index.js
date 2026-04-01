@@ -3,7 +3,7 @@ import {useQuery, useQueryClient} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeIcon} from '@vscode-elements/react-elements'
 import {useUnmount} from 'ahooks'
-import {capitalCase} from 'change-case'
+import {capitalCase, sentenceCase} from 'change-case'
 import {findKey, identity, range, uniq} from 'es-toolkit'
 import {size, truncate} from 'es-toolkit/compat'
 import React from 'react'
@@ -287,8 +287,8 @@ export default useRemount.with(
               },
               {
                 label: 'Favorite',
-                menu: ['toggle', 'add', 'delete'].map(a => ({
-                  label: capitalCase(a),
+                menu: useFavoritedIcons.menu.map(a => ({
+                  label: sentenceCase(a),
                   onClick: () => {
                     favoritedIcons[a](iconQuery.data.id)
                   }

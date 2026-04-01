@@ -10,7 +10,7 @@ import {
   VscodeTextfield
 } from '@vscode-elements/react-elements'
 import {useSetState} from 'ahooks'
-import {capitalCase} from 'change-case'
+import {capitalCase, sentenceCase} from 'change-case'
 import {
   clone,
   flow,
@@ -63,7 +63,6 @@ const actions = mapValues(
 )
 
 const uf = new uFuzzy()
-const favoriteIconActions = ['toggle', 'add', 'delete']
 
 const batcherOptions = {
   wait: ms('.4s')
@@ -157,8 +156,8 @@ export const IconGrid = useRemount.with(
                     hasFilteredIconIds && [
                       {
                         label: 'Favorite',
-                        menu: favoriteIconActions.map(a => ({
-                          label: capitalCase(a),
+                        menu: useFavoritedIcons.menu.map(a => ({
+                          label: sentenceCase(a),
                           onClick: () => {
                             favoritedIcons[a](...state.iconIds)
                           }
