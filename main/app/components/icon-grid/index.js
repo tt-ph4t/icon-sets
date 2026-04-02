@@ -114,7 +114,7 @@ export const IconGrid = useRemount.with(
 
     const hasFilteredIconIds = hasValues(filteredIconIds)
 
-    useEffect.Update(() => {
+    useEffect(() => {
       batcher.addItem(() => filteredIconIds)
     }, [batcher, filteredIconIds])
 

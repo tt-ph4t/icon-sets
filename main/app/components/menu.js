@@ -74,7 +74,6 @@ const popupRender = Object.assign(
 const StyledItem = component(
   ({
     description,
-    disabled,
     keybinding = description,
     onMouseOut = asyncNoop,
     onMouseOver = asyncNoop,
@@ -84,7 +83,7 @@ const StyledItem = component(
     const [state, setState] = useState(selected)
 
     const setSelected = useCallback((...args) => {
-      if (!(disabled || selected)) setState(...args)
+      if (!selected) setState(...args)
     })
 
     return (

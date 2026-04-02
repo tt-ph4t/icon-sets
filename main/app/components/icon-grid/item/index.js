@@ -329,7 +329,7 @@ export default useRemount.with(
                     }))
                   },
                   {
-                    label: 'Sizes',
+                    label: 'Size',
                     menu: scales.map(scale => ({
                       label: sizeLabel(
                         iconQuery.data.data.width,

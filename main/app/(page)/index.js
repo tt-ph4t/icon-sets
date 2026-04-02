@@ -24,7 +24,7 @@ import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
 import {useRemount} from '../hooks/use-remount'
 import {useSettings} from '../hooks/use-settings'
-import {CARD_STYLE, DATA_BASE_URL, GITHUB_REPO} from '../misc/constants'
+import {CARD_STYLE, DATA_BASE_URL} from '../misc/constants'
 
 const Sidebar = React.lazy(() => import('./sidebar'))
 const FilteredIconSets = React.lazy(() => import('./filtered-icon-sets'))
@@ -79,14 +79,7 @@ const Settings = component(({menu}) => {
                   }
                 ]
               },
-              ...menu,
-              {separator: true},
-              {
-                label: 'GitHub',
-                onClick: () => {
-                  open(`https://github.com/${GITHUB_REPO}`)
-                }
-              }
+              ...menu
             ]}
             render={<ToolbarButton icon='settings'>Settings</ToolbarButton>}
           />
@@ -166,6 +159,7 @@ export default useRemount.with(
           }}>
           <Settings
             menu={[
+              {separator: true},
               {
                 label: INTERNAL_REMOUNT.label,
                 onClick: INTERNAL_REMOUNT

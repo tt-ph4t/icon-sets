@@ -2,7 +2,7 @@ import {queryOptions} from '@tanstack/react-query'
 import {decode} from '@toon-format/toon'
 import {isEqual} from '@ver0/deep-equal'
 import axios from 'axios'
-import {delay, identity, noop} from 'es-toolkit'
+import {delay, noop} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import ms from 'ms'
 
@@ -27,7 +27,6 @@ export const getQueryOptions =
     select = noop,
     staleTime = Infinity,
     structuralSharing = defaults.structuralSharing,
-    toonFormat = true,
     url,
     ...rest
   }) =>
@@ -39,7 +38,13 @@ export const getQueryOptions =
         (async () => {
           await delay(delayMs)
 
-          return (toonFormat ? decode : identity)((await axios.get(url)).data)
+          const axiosResponse = await axios.get(url)
+
+          try {
+            return decode(axiosResponse.data)
+          } catch {
+            return axiosResponse
+          }
         }),
       queryKey: castArray(queryKey ?? url),
       refetchOnReconnect,

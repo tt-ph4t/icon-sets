@@ -4,18 +4,19 @@ import {ReactQueryDevtoolsPanel} from '@tanstack/react-query-devtools/build/mode
 import '@vscode-elements/webview-playground'
 import React from 'react'
 
-import {component} from '../app/hocs'
-import {useSettings} from '../app/hooks/use-settings'
-import {QUERY_CLIENT} from '../app/misc/constants'
+import {component} from '../../app/hocs'
+import {useSettings} from '../../app/hooks/use-settings'
+import {DEFAULT_THEME, QUERY_CLIENT} from '../../app/misc/constants'
+import githubDevtoolsPlugin from './github-devtools-plugin'
 
 const TanStackDevtoolsProps = {
   plugins: [
     {
-      defaultOpen: true,
       name: 'TanStack Query',
       render: <ReactQueryDevtoolsPanel client={QUERY_CLIENT} />
     },
-    pacerDevtoolsPlugin()
+    pacerDevtoolsPlugin(),
+    githubDevtoolsPlugin({defaultOpen: true})
   ]
 }
 
@@ -32,7 +33,10 @@ export default component(() => {
           right: 'calc(var(--spacing) * 4)'
         }}
       />
-      <TanStackDevtools {...TanStackDevtoolsProps} />
+      <TanStackDevtools
+        config={{theme: DEFAULT_THEME}}
+        {...TanStackDevtoolsProps}
+      />
     </React.Activity>
   )
 })

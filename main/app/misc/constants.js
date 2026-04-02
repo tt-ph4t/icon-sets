@@ -37,6 +37,8 @@ export const SORT_ORDER_LABELS = deepFreeze({
   desc: 'Descending'
 })
 
+export const DEFAULT_THEME = 'light'
+
 export const CARD_STYLE =
   // https://github.com/vscode-elements/elements/blob/e71099a40fdbcbeaa50fd2d61ba2734f4e42f8d1/src/vscode-context-menu/vscode-context-menu.styles.ts
   deepFreeze({
