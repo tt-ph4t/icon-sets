@@ -1,13 +1,21 @@
+import ms from 'ms'
 import {useGlitch} from 'react-powerglitch'
 
 import {component} from '../../app/hocs'
-import {GITHUB_REPO} from '../../app/misc/constants'
+import {GITHUB_REPO, POWER_GLITCH_OPTIONS} from '../../app/misc/constants'
 import XUA7ZZcBl0McuVqwd8 from './XUA7ZZcBl0McuVqwd8.webp'
 
 const name = 'GitHub'
 
 const GlitchCat = component(() => {
-  const glitch = useGlitch({playMode: 'click'})
+  const glitch = useGlitch({
+    ...POWER_GLITCH_OPTIONS.MEDIUM,
+    playMode: 'click',
+    timing: {
+      duration: ms('.3s'),
+      easing: 'ease-in-out'
+    }
+  })
 
   return (
     <img

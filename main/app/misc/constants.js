@@ -79,3 +79,32 @@ export const BREAKPOINTS = Object.freeze({
   SM: 640,
   XL: 1280
 })
+
+export const POWER_GLITCH_OPTIONS =
+  // https://github.com/7PH/powerglitch/blob/d82fc318057a0644a55a06aa9a20c2f23ddffcb2/docs-src/src/views/HomeView.vue#L19
+  deepFreeze({
+    HEAVY: {
+      glitchTimeSpan: {
+        end: 0.8,
+        start: 0.2
+      }
+    },
+    LIGHT: {
+      glitchTimeSpan: {
+        end: 0.6,
+        start: 0.2
+      },
+      shake: false,
+      slice: {
+        count: 3,
+        velocity: 4
+      }
+    },
+    MEDIUM: EMPTY_OBJECT,
+    NONE: {
+      shake: false,
+      slice: {
+        count: 0
+      }
+    }
+  })
