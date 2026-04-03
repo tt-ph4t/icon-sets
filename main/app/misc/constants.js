@@ -71,7 +71,7 @@ export const DEFAULT_ICON_CUSTOMISATIONS = deepFreeze(
   )
 )
 
-export const BREAKPOINTS = Object.freeze({
+export const BREAKPOINTS = deepFreeze({
   '2XL': 1536,
   LG: 1024,
   MD: 768,
