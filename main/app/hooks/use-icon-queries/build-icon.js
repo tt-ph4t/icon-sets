@@ -39,10 +39,21 @@ const idCases =
     unocssColon: id => `i-${id}`
   }
 
-// https://github.com/antfu-collective/icones/blob/main/src/utils/svgToPng.ts
+const defaults = {
+  wrapSvgContentEnd: '',
+  wrapSvgContentStart: ''
+}
+
 export default (
   icon,
-  {hFlip, rotate, scale, vFlip, wrapSvgContentEnd, wrapSvgContentStart}
+  {
+    hFlip,
+    rotate,
+    scale,
+    vFlip,
+    wrapSvgContentEnd = defaults.wrapSvgContentEnd,
+    wrapSvgContentStart = defaults.wrapSvgContentStart
+  }
 ) => {
   if (ICON_CACHE.has(icon.id)) return ICON_CACHE.get(icon.id)
 
