@@ -20,12 +20,9 @@ import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
 import {useMemo} from '../../hooks/use-memo'
 import {hasValues} from '../../misc'
-import {EMPTY_ARRAY, ICON_SETS_URL} from '../../misc/constants'
-import {getQueryOptions} from '../../misc/get-query-options'
+import {DEFAULT_QUERY_OPTIONS, EMPTY_ARRAY} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import useStore from './use-store'
-
-const queryOptions = getQueryOptions({url: ICON_SETS_URL})
 
 const getIconSetThemes = iconSet =>
   [iconSet.prefixes, iconSet.suffixes].flatMap(Object.values)
@@ -39,7 +36,7 @@ const Filter = {
     )
 
     const query = useQuery({
-      ...queryOptions,
+      ...DEFAULT_QUERY_OPTIONS,
       select: useCallback(
         iconSets => isFiltering(Object.keys(iconSets), selectedIconSetPrefixes),
         [selectedIconSetPrefixes]
@@ -56,7 +53,7 @@ const Filter = {
     const store = useStore()
 
     const query = useQuery({
-      ...queryOptions,
+      ...DEFAULT_QUERY_OPTIONS,
       select: useCallback(iconSets => ({
         iconSetPrefixIndexMap: Object.keys(iconSets).reduce((a, b, index) => {
           a[b] = index
@@ -98,7 +95,7 @@ const Filter = {
     )
   }),
   Tree: component(() => {
-    const query = useQuery({...queryOptions, select: identity})
+    const query = useQuery({...DEFAULT_QUERY_OPTIONS, select: identity})
     const store = useStore()
 
     const selectedIconSetPrefixes = store.useSelectValue(

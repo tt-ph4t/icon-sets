@@ -11,14 +11,9 @@ import {Boundary} from '../../components/boundary'
 import {IconGrid} from '../../components/icon-grid'
 import {component} from '../../hocs'
 import {getId} from '../../misc'
-import {ICON_SETS_URL} from '../../misc/constants'
-import {getQueryOptions} from '../../misc/get-query-options'
+import {DEFAULT_QUERY_OPTIONS} from '../../misc/constants'
 import Filter from './filter'
 import useStore from './use-store'
-
-const queryOptions = getQueryOptions({
-  url: ICON_SETS_URL
-})
 
 const FilteredIconSets = component(() => {
   const selectedIconSetPrefixes = useStore().useSelectValue(
@@ -26,7 +21,7 @@ const FilteredIconSets = component(() => {
   )
 
   const query = useQuery({
-    ...queryOptions,
+    ...DEFAULT_QUERY_OPTIONS,
     select: iconSets =>
       Object.values(pick(iconSets, selectedIconSetPrefixes)).flatMap(iconSet =>
         iconSet.icons.map(icon => getId(iconSet.prefix, icon))
@@ -37,12 +32,11 @@ const FilteredIconSets = component(() => {
 })
 
 export default component(() => {
-  const query = useQuery(queryOptions)
+  const query = useQuery(DEFAULT_QUERY_OPTIONS)
 
   return (
     <Boundary.Query
       query={query}
-      queryOptions={queryOptions}
       render={() => {
         useStore.useInit()
 

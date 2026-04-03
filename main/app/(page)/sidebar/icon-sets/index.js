@@ -6,14 +6,14 @@ import {Boundary} from '../../../components/boundary'
 import {Collapsible} from '../../../components/collapsible'
 import {component} from '../../../hocs'
 import {useState} from '../../../hooks/use-state'
-import {ICON_SETS_URL} from '../../../misc/constants'
-import {getQueryOptions} from '../../../misc/get-query-options'
+import {DEFAULT_QUERY_OPTIONS} from '../../../misc/constants'
 import CollapsibleList from '../collapsible-list'
 import IconSet from './icon-set'
 
 const CollapsibleListContext = CollapsibleList.createContext()
 
-const queryOptions = getQueryOptions({
+const queryOptions = {
+  ...DEFAULT_QUERY_OPTIONS,
   select: iconSets => ({
     categories: mapValues(
       Object.groupBy(Object.values(iconSets), iconSet => iconSet.category),
@@ -23,9 +23,8 @@ const queryOptions = getQueryOptions({
       return sort(Object.keys(this.categories)).asc()
     },
     prefixes: Object.keys(iconSets)
-  }),
-  url: ICON_SETS_URL
-})
+  })
+}
 
 export default component(() => {
   const query = useQuery(queryOptions)

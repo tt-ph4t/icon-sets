@@ -25,10 +25,9 @@ import {
 } from '../../../misc'
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
-  EMPTY_ARRAY,
-  ICON_SETS_URL
+  DEFAULT_QUERY_OPTIONS,
+  EMPTY_ARRAY
 } from '../../../misc/constants'
-import {getQueryOptions} from '../../../misc/get-query-options'
 import {parseIconName} from '../../../misc/parse-icon-name'
 import {prettyBytes} from '../../../misc/pretty-bytes'
 import {timeAgo} from '../../../misc/time-ago'
@@ -95,21 +94,19 @@ export default useRemount.with(
       [iconId]
     )
 
-    const iconSetQuery = useQuery(
-      getQueryOptions({
-        enabled: iconQuery.isSuccess,
-        select: useCallback(
-          iconSets => {
-            // eslint-disable-next-line no-unused-vars
-            const {icons, ...iconSet} = iconSets[icon.prefix]
+    const iconSetQuery = useQuery({
+      ...DEFAULT_QUERY_OPTIONS,
+      enabled: iconQuery.isSuccess,
+      select: useCallback(
+        iconSets => {
+          // eslint-disable-next-line no-unused-vars
+          const {icons, ...iconSet} = iconSets[icon.prefix]
 
-            return iconSet
-          },
-          [icon]
-        ),
-        url: ICON_SETS_URL
-      })
-    )
+          return iconSet
+        },
+        [icon]
+      )
+    })
 
     const iconQueryMenu = useMemo(
       () => [

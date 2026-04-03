@@ -38,12 +38,12 @@ export const getQueryOptions =
         (async () => {
           await delay(delayMs)
 
-          const axiosResponse = await axios.get(url)
+          const {data} = await axios.get(url)
 
           try {
-            return decode(axiosResponse.data)
+            return decode(data)
           } catch {
-            return axiosResponse
+            return data
           }
         }),
       queryKey: castArray(queryKey ?? url),

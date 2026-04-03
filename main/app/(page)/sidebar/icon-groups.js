@@ -10,13 +10,13 @@ import {IconGrid} from '../../components/icon-grid'
 import {component} from '../../hocs'
 import {useState} from '../../hooks/use-state'
 import {getId} from '../../misc'
-import {ICON_SETS_URL, ID_SEPARATOR} from '../../misc/constants'
-import {getQueryOptions} from '../../misc/get-query-options'
+import {DEFAULT_QUERY_OPTIONS, ID_SEPARATOR} from '../../misc/constants'
 import CollapsibleList from './collapsible-list'
 
 const CollapsibleListContext = CollapsibleList.createContext()
 
-const queryOptions = getQueryOptions({
+const queryOptions = {
+  ...DEFAULT_QUERY_OPTIONS,
   select: iconSets => {
     const map = new Map()
 
@@ -49,9 +49,8 @@ const queryOptions = getQueryOptions({
     }
 
     return Object.fromEntries(map)
-  },
-  url: ICON_SETS_URL
-})
+  }
+}
 
 export default component(() => {
   const query = useQuery(queryOptions)

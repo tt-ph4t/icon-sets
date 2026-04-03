@@ -6,6 +6,7 @@ import {omit} from 'es-toolkit'
 import {LRUCache} from 'lru-cache'
 import ms from 'ms'
 
+import {getQueryOptions} from './get-query-options'
 import {prettyBytes} from './pretty-bytes'
 
 export const GITHUB_REPO = 'tt-ph4t/icon-sets'
@@ -13,8 +14,6 @@ export const GITHUB_REPO = 'tt-ph4t/icon-sets'
 export const DATA_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/refs/heads/data/data`
 
 export const DELAY_MS = ms('.15s')
-
-export const ICON_SETS_URL = `${DATA_BASE_URL}/index.toon`
 
 export const ID_SEPARATOR = ':'
 
@@ -108,3 +107,9 @@ export const POWER_GLITCH_OPTIONS =
       }
     }
   })
+
+export const DEFAULT_QUERY_OPTIONS = deepFreeze(
+  getQueryOptions({
+    url: `${DATA_BASE_URL}/index.toon`
+  })
+)

@@ -17,20 +17,16 @@ import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useCustomizedIcons} from '../../hooks/use-customized-icons'
 import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
-import {ICON_CACHE, ICON_SETS_URL} from '../../misc/constants'
-import {getQueryOptions} from '../../misc/get-query-options'
+import {DEFAULT_QUERY_OPTIONS, ICON_CACHE} from '../../misc/constants'
 import IconGroups from './icon-groups'
 import IconSets from './icon-sets'
 
-const queryOptions = getQueryOptions({url: ICON_SETS_URL})
-
 const IconGridWithFormContainer = component(props => {
-  const query = useQuery(queryOptions)
+  const query = useQuery(DEFAULT_QUERY_OPTIONS)
 
   return (
     <Boundary.Query
       query={query}
-      queryOptions={queryOptions}
       render={() => (
         <VscodeFormContainer>
           <VscodeFormGroup variant='settings-group'>

@@ -12,8 +12,7 @@ import {component} from '../../../hocs'
 import {withImmerAtom} from '../../../hocs/with-immer-atom'
 import {useCallback} from '../../../hooks/use-callback'
 import {getId} from '../../../misc'
-import {ICON_SETS_URL} from '../../../misc/constants'
-import {getQueryOptions} from '../../../misc/get-query-options'
+import {DEFAULT_QUERY_OPTIONS} from '../../../misc/constants'
 import {pluralize} from '../../../misc/pluralize'
 
 const initialState = {
@@ -55,12 +54,10 @@ export default component(({context}) => {
     {deps: [context.id]}
   )
 
-  const query = useQuery(
-    getQueryOptions({
-      select: useCallback(iconSets => iconSets[context.id], [context.id]),
-      url: ICON_SETS_URL
-    })
-  )
+  const query = useQuery({
+    ...DEFAULT_QUERY_OPTIONS,
+    select: useCallback(iconSets => iconSets[context.id], [context.id])
+  })
 
   const isInitialState = isEqual(state, initialState)
 
