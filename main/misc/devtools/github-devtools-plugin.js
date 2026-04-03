@@ -3,11 +3,11 @@ import {useGlitch} from 'react-powerglitch'
 
 import {component} from '../../app/hocs'
 import {GITHUB_REPO, POWER_GLITCH_OPTIONS} from '../../app/misc/constants'
-import XUA7ZZcBl0McuVqwd8 from './XUA7ZZcBl0McuVqwd8.webp'
+import xT9IgxY4eMijhmPgm4 from './xT9IgxY4eMijhmPgm4.webp'
 
 const name = 'GitHub'
 
-const GlitchCat = component(() => {
+const GlitchFish = component(() => {
   const glitch = useGlitch({
     ...POWER_GLITCH_OPTIONS.MEDIUM,
     playMode: 'click',
@@ -20,7 +20,7 @@ const GlitchCat = component(() => {
   return (
     <img
       ref={glitch.ref}
-      src={XUA7ZZcBl0McuVqwd8}
+      src={xT9IgxY4eMijhmPgm4}
       style={{
         height: 'auto',
         width: 50
@@ -41,7 +41,7 @@ export default options => ({
         justifyContent: 'center'
       }}>
       <div style={{height: 'unset'}}>
-        <GlitchCat />
+        <GlitchFish />
       </div>
       <a
         href={`https://github.com/${GITHUB_REPO}`}
