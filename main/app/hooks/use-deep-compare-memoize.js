@@ -9,7 +9,7 @@ export const useDeepCompareMemoize = Object.assign(
   // https://github.com/react-hookz/web/blob/c0d7c43dbcbfaad11975fe425f392f58877107cc/src/useCustomCompareEffect/index.ts
   deps => {
     const ref = useRef()
-    const signalRef = useRef(0)
+    const signalRef = useRef(() => 0)
 
     if (isUndefined(deps) || !isEqual(deps, ref.current)) signalRef.current++
 

@@ -1,5 +1,6 @@
 import {composeRefs} from '@radix-ui/react-compose-refs'
-import {useFullscreen, useSize} from 'ahooks'
+import {useFullscreen, useSize, useUnmount} from 'ahooks'
+import {noop} from 'es-toolkit'
 import React from 'react'
 
 import {useCallback} from './use-callback'
@@ -9,7 +10,17 @@ const bodyElement = document.querySelector('body')
 
 // https://github.com/Shopify/quilt/blob/d98672060fc724f3fe7af9a25a0845b8d7c0774a/packages/react-hooks/src/hooks/lazy-ref.ts
 export const useRef = Object.assign(
-  getValue => React.useRef(useState(getValue)[0]),
+  (getValue = noop) => {
+    const ref = React.useRef(useState(() => getValue())[0])
+
+    useUnmount(() => {
+      React.startTransition(() => {
+        ref.current = noop()
+      })
+    })
+
+    return ref
+  },
   {
     Fullscreen: options => {
       const ref = useRef()

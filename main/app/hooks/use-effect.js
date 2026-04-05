@@ -16,7 +16,7 @@ export const useEffect = Object.assign(
       useDeepCompareMemoize.with
     ),
     Once: (fn, when = true) => {
-      const ref = useRef(true)
+      const ref = useRef(() => true)
 
       let cleanup
 
