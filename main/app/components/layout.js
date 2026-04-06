@@ -7,7 +7,7 @@ import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
 import {useSettings} from '../hooks/use-settings'
-import {BREAKPOINTS} from '../misc/constants'
+import {THEME} from '../misc/constants'
 import {renderSlot} from '../misc/render-slot'
 
 export const Layout = {
@@ -19,7 +19,7 @@ export const Layout = {
     }))
 
     const fullscreen = useRef.Fullscreen()
-    const mergedRef = useRef.Merge(ref, fullscreen.ref)
+    const {mergedRef} = useRef.Merge(ref, fullscreen.ref)
 
     useEffect(() => {
       if (fullscreen.isEnabled) {
@@ -50,9 +50,10 @@ export const Layout = {
         draft.layout.size = {
           height:
             maxSize.height *
-            (maxSize.width >= BREAKPOINTS['2XL'] ? 0.86 : 0.96),
+            (maxSize.width >= THEME.BREAKPOINTS['2XL'] ? 0.86 : 0.96),
           width:
-            maxSize.width * (maxSize.width >= BREAKPOINTS['2XL'] ? 0.8 : 0.95)
+            maxSize.width *
+            (maxSize.width >= THEME.BREAKPOINTS['2XL'] ? 0.8 : 0.95)
         }
       })
     }, [maxSize])

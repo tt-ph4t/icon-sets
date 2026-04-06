@@ -6,7 +6,7 @@ import React from 'react'
 
 import {component} from '../../app/hocs'
 import {useSettings} from '../../app/hooks/use-settings'
-import {DEFAULT_THEME, QUERY_CLIENT} from '../../app/misc/constants'
+import {QUERY_CLIENT, THEME} from '../../app/misc/constants'
 import githubDevtoolsPlugin from './github-devtools-plugin'
 
 const TanStackDevtoolsProps = {
@@ -34,7 +34,7 @@ export default component(() => {
         }}
       />
       <TanStackDevtools
-        config={{theme: DEFAULT_THEME}}
+        config={{theme: THEME.DEFAULT_COLOR_SCHEME}}
         {...TanStackDevtoolsProps}
       />
     </React.Activity>

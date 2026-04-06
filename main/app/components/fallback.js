@@ -1,3 +1,4 @@
+import {mergeProps} from '@base-ui/react'
 import {isFunction} from '@sindresorhus/is'
 import {
   VscodeButton,
@@ -13,8 +14,9 @@ import React from 'react'
 
 import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
+import {THEME} from '../misc/constants'
 
-const TryAgain = component(({onClick}) => {
+const Retry = component(({onClick}) => {
   const [state, setState] = useState(false)
 
   return (
@@ -33,21 +35,26 @@ const TryAgain = component(({onClick}) => {
       }}
       style={{width: 'fit-content'}}
       type='reset'>
-      Try again
+      Retry
     </VscodeButton>
   )
 })
 
 export const Fallback = Object.assign(
-  component(() => (
+  component(props => (
     <VscodeProgressBar
-      style={{
-        '--vscode-progressBar-background': 'var(--vscode-badge-background)'
-      }}
+      {...mergeProps(
+        {
+          style: {
+            '--vscode-progressBar-background': `color-mix(var(${THEME.COLORS.FOREGROUND}) 30%, transparent)`
+          }
+        },
+        props
+      )}
     />
   )),
   {
-    Error: component(({message, progressBar = true, tryAgainFn}) => (
+    Error: component(({message, progressBar = true, retryFn}) => (
       <div
         style={{
           '--size': '100%',
@@ -60,8 +67,7 @@ export const Fallback = Object.assign(
         <React.Activity mode={progressBar ? 'visible' : 'hidden'}>
           <VscodeProgressBar
             style={{
-              '--vscode-progressBar-background':
-                'var(--vscode-activityErrorBadge-background)'
+              '--vscode-progressBar-background': `var(${THEME.COLORS.ERROR})`
             }}
           />
         </React.Activity>
@@ -75,9 +81,8 @@ export const Fallback = Object.assign(
             <VscodeLabel required>Error</VscodeLabel>
             <VscodeFormHelper>
               {message}
-              <React.Activity
-                mode={isFunction(tryAgainFn) ? 'visible' : 'hidden'}>
-                <TryAgain onClick={tryAgainFn} />
+              <React.Activity mode={isFunction(retryFn) ? 'visible' : 'hidden'}>
+                <Retry onClick={retryFn} />
               </React.Activity>
             </VscodeFormHelper>
           </VscodeFormGroup>

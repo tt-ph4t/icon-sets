@@ -11,7 +11,7 @@ import {renderSlot} from '../misc/render-slot'
 
 const ErrorBoundaryProps = {
   FallbackComponent: component(({error, resetErrorBoundary}) => (
-    <Fallback.Error message={error.message} tryAgainFn={resetErrorBoundary} />
+    <Fallback.Error message={error.message} retryFn={resetErrorBoundary} />
   ))
 }
 
@@ -48,7 +48,7 @@ export const Boundary = Object.assign(
           return (
             <Fallback.Error
               message={query.error.message}
-              tryAgainFn={async () => {
+              retryFn={async () => {
                 await queryClient.resetQueries(queryFilter)
               }}
             />

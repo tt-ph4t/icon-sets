@@ -7,7 +7,7 @@ import React from 'react'
 
 import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
-import {CARD_STYLE} from '../misc/constants'
+import {THEME} from '../misc/constants'
 import {renderSlot} from '../misc/render-slot'
 
 const {Popup, Portal, Positioner, Root, Trigger} = popover
@@ -16,7 +16,7 @@ export const Popover = Object.assign(
   component(props => (
     <Popover.Primitive
       popupWrapper={children => (
-        <VscodeFormContainer style={CARD_STYLE}>
+        <VscodeFormContainer style={THEME.CARD_STYLE}>
           <VscodeFormGroup
             style={{
               maxHeight: 'calc(var(--available-height) / 1.6)',

@@ -26,7 +26,8 @@ import {
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
   DEFAULT_QUERY_OPTIONS,
-  EMPTY_ARRAY
+  EMPTY_ARRAY,
+  THEME
 } from '../../../misc/constants'
 import {parseIconName} from '../../../misc/parse-icon-name'
 import {prettyBytes} from '../../../misc/pretty-bytes'
@@ -160,7 +161,7 @@ export default useRemount.with(
                 prompt('Error', iconQuery.error.message)
               }}
               style={{
-                color: 'var(--vscode-activityErrorBadge-background)'
+                color: `var(${THEME.COLORS.ERROR})`
               }}>
               {icon.name}
             </Fallback>
@@ -468,8 +469,7 @@ export default useRemount.with(
                     }}
                     size={13}
                     style={{
-                      '--vscode-icon-foreground':
-                        'var(--vscode-activityWarningBadge-background)'
+                      '--vscode-icon-foreground': `var(${THEME.COLORS.WARNING})`
                     }}
                   />
                 </React.Activity>
@@ -486,8 +486,7 @@ export default useRemount.with(
                     }}
                     size={13}
                     style={{
-                      '--vscode-icon-foreground':
-                        'var(--vscode-inputOption-activeBorder)'
+                      '--vscode-icon-foreground': `var(${THEME.COLORS.PRIMARY})`
                     }}
                   />
                 </React.Activity>

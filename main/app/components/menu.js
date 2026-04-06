@@ -14,7 +14,7 @@ import {useCallback} from '../hooks/use-callback'
 import {useMemo} from '../hooks/use-memo'
 import {useState} from '../hooks/use-state'
 import {getId, hasValues} from '../misc'
-import {CARD_STYLE, EMPTY_ARRAY} from '../misc/constants'
+import {EMPTY_ARRAY, THEME} from '../misc/constants'
 
 const {
   Item,
@@ -29,7 +29,7 @@ const {
 
 const popupRender = Object.assign(
   (...args) => (
-    <VscodeFormContainer style={CARD_STYLE}>
+    <VscodeFormContainer style={THEME.CARD_STYLE}>
       <VscodeFormGroup
         style={{
           maxHeight: 500,

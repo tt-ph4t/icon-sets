@@ -13,11 +13,11 @@ export const Collapsible = component(
     defaultOpen,
     keepMounted,
     onToggle = asyncNoop,
-    ref: ref1,
+    ref,
     ...props
   }) => {
-    const ref2 = useRef()
-    const mergedRef = useRef.Merge(ref1, ref2)
+    const internalRef = useRef()
+    const {mergedRef} = useRef.Merge(ref, internalRef)
 
     const [open, setOpen] = useControllableValue(props, {
       defaultValue: defaultOpen,
@@ -32,7 +32,7 @@ export const Collapsible = component(
 
         setOpen(event.detail.open) // ?
       },
-      {target: ref2}
+      {target: internalRef}
     )
 
     return (

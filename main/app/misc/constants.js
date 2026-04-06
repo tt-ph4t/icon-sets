@@ -36,31 +36,6 @@ export const SORT_ORDER_LABELS = deepFreeze({
   desc: 'Descending'
 })
 
-export const DEFAULT_THEME = 'light'
-
-export const CARD_STYLE =
-  // https://github.com/vscode-elements/elements/blob/e71099a40fdbcbeaa50fd2d61ba2734f4e42f8d1/src/vscode-context-menu/vscode-context-menu.styles.ts
-  deepFreeze({
-    outline: 'unset',
-
-    // eslint-disable-next-line unicorn/no-useless-spread
-    ...{
-      backgroundColor: 'var(--vscode-menu-background, #1f1f1f)',
-      borderColor: 'var(--vscode-menu-border, #454545)',
-      borderRadius: '5px',
-      borderStyle: 'solid',
-      borderWidth: '1px',
-      boxShadow: '0 2px 8px var(--vscode-widget-shadow, rgba(0, 0, 0, 0.36))',
-      color: 'var(--vscode-menu-foreground, #cccccc)',
-      fontFamily: 'var(--vscode-font-family, sans-serif)',
-      fontSize: 'var(--vscode-font-size, 13px)',
-      fontWeight: 'var(--vscode-font-weight, normal)',
-      lineHeight: '1.4em',
-      padding: '4px 0',
-      whiteSpace: 'nowrap'
-    }
-  })
-
 export const DEFAULT_ICON_CUSTOMISATIONS = deepFreeze(
   omit(
     {
@@ -70,14 +45,6 @@ export const DEFAULT_ICON_CUSTOMISATIONS = deepFreeze(
     ['height', 'width']
   )
 )
-
-export const BREAKPOINTS = deepFreeze({
-  '2XL': 1536,
-  LG: 1024,
-  MD: 768,
-  SM: 640,
-  XL: 1280
-})
 
 export const POWER_GLITCH_OPTIONS =
   // https://github.com/7PH/powerglitch/blob/d82fc318057a0644a55a06aa9a20c2f23ddffcb2/docs-src/src/views/HomeView.vue#L19
@@ -113,3 +80,42 @@ export const DEFAULT_QUERY_OPTIONS = deepFreeze(
     url: `${DATA_BASE_URL}/index.toon`
   })
 )
+
+export const THEME = deepFreeze({
+  BREAKPOINTS: {
+    '2XL': 1536,
+    LG: 1024,
+    MD: 768,
+    SM: 640,
+    XL: 1280
+  },
+  CARD_STYLE:
+    // https://github.com/vscode-elements/elements/blob/e71099a40fdbcbeaa50fd2d61ba2734f4e42f8d1/src/vscode-context-menu/vscode-context-menu.styles.ts
+    {
+      outline: 'unset',
+
+      // eslint-disable-next-line unicorn/no-useless-spread
+      ...{
+        backgroundColor: 'var(--vscode-menu-background, #1f1f1f)',
+        borderColor: 'var(--vscode-menu-border, #454545)',
+        borderRadius: '5px',
+        borderStyle: 'solid',
+        borderWidth: '1px',
+        boxShadow: '0 2px 8px var(--vscode-widget-shadow, rgba(0, 0, 0, 0.36))',
+        color: 'var(--vscode-menu-foreground, #cccccc)',
+        fontFamily: 'var(--vscode-font-family, sans-serif)',
+        fontSize: 'var(--vscode-font-size, 13px)',
+        fontWeight: 'var(--vscode-font-weight, normal)',
+        lineHeight: '1.4em',
+        padding: '4px 0',
+        whiteSpace: 'nowrap'
+      }
+    },
+  COLORS: {
+    ERROR: '--vscode-activityErrorBadge-background',
+    FOREGROUND: '--vscode-foreground',
+    PRIMARY: '--vscode-inputOption-activeBorder',
+    WARNING: '--vscode-activityWarningBadge-background'
+  },
+  DEFAULT_COLOR_SCHEME: 'light'
+})

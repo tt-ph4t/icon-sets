@@ -35,7 +35,7 @@ createRoot(document.querySelector('#root')).render(
               <Fallback.Error
                 message={error.message}
                 progressBar={false}
-                tryAgainFn={resetErrorBoundary}
+                retryFn={resetErrorBoundary}
               />
             )}>
             <React.Suspense

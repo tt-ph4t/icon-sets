@@ -9,6 +9,7 @@ import {
   VscodeFormGroup,
   VscodeFormHelper
 } from '@vscode-elements/react-elements'
+import {useNetwork} from 'ahooks'
 import {omit} from 'es-toolkit'
 import React from 'react'
 import {preconnect} from 'react-dom'
@@ -24,19 +25,27 @@ import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
 import {useRemount} from '../hooks/use-remount'
 import {useSettings} from '../hooks/use-settings'
-import {CARD_STYLE, DATA_BASE_URL} from '../misc/constants'
+import {DATA_BASE_URL, THEME} from '../misc/constants'
 
 const Sidebar = React.lazy(() => import('./sidebar'))
 const FilteredIconSets = React.lazy(() => import('./filtered-icon-sets'))
 
-const Loading = component(() => {
-  const isLoading = [useIsFetching(), useIsMutating(), useIsRestoring()].some(
-    isTruthy
+const Activity = component(() => {
+  const isLoading = React.useDeferredValue(
+    [useIsFetching(), useIsMutating(), useIsRestoring()].some(isTruthy)
   )
 
+  const network = React.useDeferredValue(useNetwork())
+
   return (
-    <React.Activity mode={isLoading ? 'visible' : 'hidden'}>
-      <Fallback />
+    <React.Activity mode={isLoading || !network.online ? 'visible' : 'hidden'}>
+      <Fallback
+        style={
+          network.online || {
+            '--vscode-progressBar-background': `var(${THEME.COLORS.ERROR})`
+          }
+        }
+      />
     </React.Activity>
   )
 })
@@ -108,7 +117,7 @@ export default useRemount.with(
             width: '100%',
             zIndex: 1
           }}>
-          <Loading />
+          <Activity />
         </div>
         <React.Activity>
           <Layout.Reverse
@@ -133,7 +142,7 @@ export default useRemount.with(
                     }
                     ref={ref}
                     style={{
-                      ...omit(CARD_STYLE, ['padding']),
+                      ...omit(THEME.CARD_STYLE, ['padding']),
                       get height() {
                         return `calc(var(--height) - ${this.borderWidth} * 2)`
                       }
