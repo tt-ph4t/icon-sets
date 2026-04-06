@@ -38,30 +38,32 @@ export default component(() => {
     <Boundary.Query
       query={query}
       render={() => {
-        useStore.useInit()
+        const init = useStore.useInit()
 
         return (
-          <div
-            style={{
-              flexGrow: 1,
-              position: 'relative'
-            }}>
-            <React.Activity>
-              <FilteredIconSets />
-            </React.Activity>
-            <VscodeFormContainer
+          <React.Activity mode={init.isSuccess ? 'visible' : 'hidden'}>
+            <div
               style={{
-                left: 0,
-                position: 'absolute',
-                top: 0
+                flexGrow: 1,
+                position: 'relative'
               }}>
-              <VscodeFormGroup variant='settings-group'>
-                <VscodeFormHelper>
-                  <Filter />
-                </VscodeFormHelper>
-              </VscodeFormGroup>
-            </VscodeFormContainer>
-          </div>
+              <React.Activity>
+                <FilteredIconSets />
+              </React.Activity>
+              <VscodeFormContainer
+                style={{
+                  left: 0,
+                  position: 'absolute',
+                  top: 0
+                }}>
+                <VscodeFormGroup variant='settings-group'>
+                  <VscodeFormHelper>
+                    <Filter />
+                  </VscodeFormHelper>
+                </VscodeFormGroup>
+              </VscodeFormContainer>
+            </div>
+          </React.Activity>
         )
       }}
     />

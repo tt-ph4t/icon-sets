@@ -10,7 +10,7 @@ import {useSettings} from '../hooks/use-settings'
 import {THEME} from '../misc/constants'
 import {renderSlot} from '../misc/render-slot'
 
-export const Layout = {
+export default {
   Fullscreen: component(({ref, ...props}) => {
     const settings = useSettings()
 

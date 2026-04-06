@@ -12,11 +12,9 @@ import {
 import {useNetwork} from 'ahooks'
 import {omit} from 'es-toolkit'
 import React from 'react'
-import {preconnect} from 'react-dom'
 
 import {Boundary} from '../components/boundary'
 import {Fallback} from '../components/fallback'
-import {Layout} from '../components/layout'
 import {Menu} from '../components/menu'
 import {SplitLayout} from '../components/split-layout'
 import {ToolbarButton} from '../components/toolbar-button'
@@ -25,7 +23,8 @@ import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
 import {useRemount} from '../hooks/use-remount'
 import {useSettings} from '../hooks/use-settings'
-import {DATA_BASE_URL, THEME} from '../misc/constants'
+import {THEME} from '../misc/constants'
+import Layout from './layout'
 
 const Sidebar = React.lazy(() => import('./sidebar'))
 const FilteredIconSets = React.lazy(() => import('./filtered-icon-sets'))
@@ -98,74 +97,74 @@ const Settings = component(({menu}) => {
   )
 })
 
+const SplitLayoutProps = {
+  style: {
+    ...omit(THEME.CARD_STYLE, ['padding']),
+    get height() {
+      return `calc(var(--height) - ${this.borderWidth} * 2)`
+    }
+  }
+}
+
 export default useRemount.with(
-  component(({INTERNAL_REMOUNT}) => {
-    preconnect(new URL(DATA_BASE_URL).origin)
-
-    return (
-      <Layout.Fullscreen
+  component(({INTERNAL_REMOUNT}) => (
+    <Layout.Fullscreen
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: 'inherit',
+        position: 'relative',
+        width: 'inherit'
+      }}>
+      <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: 'inherit',
-          position: 'relative',
-          width: 'inherit'
+          position: 'absolute',
+          width: '100%',
+          zIndex: 1
         }}>
-        <div
-          style={{
-            position: 'absolute',
-            width: '100%',
-            zIndex: 1
+        <Activity />
+      </div>
+      <React.Activity>
+        <Layout.Reverse
+          render={{
+            wrapper: children => {
+              const ref = useRef()
+
+              const layoutSettings = useSettings().useSelectValue(
+                ({draft}) => ({
+                  reverse: draft.layout.reverse
+                })
+              )
+
+              useEffect.Update(() => {
+                ref.current.resetHandlePosition()
+              }, [layoutSettings.reverse])
+
+              return (
+                <SplitLayout
+                  initialHandlePosition={layoutSettings.reverse ? '75%' : '25%'}
+                  ref={ref}
+                  {...SplitLayoutProps}>
+                  {children}
+                </SplitLayout>
+              )
+            }
           }}>
-          <Activity />
-        </div>
+          <Boundary>
+            <Sidebar />
+          </Boundary>
+          <Boundary>
+            <FilteredIconSets />
+          </Boundary>
+        </Layout.Reverse>
+      </React.Activity>
+      <div
+        style={{
+          alignSelf: 'center',
+          bottom: 0,
+          position: 'absolute'
+        }}>
         <React.Activity>
-          <Layout.Reverse
-            render={{
-              wrapper: children => {
-                const ref = useRef()
-
-                const layoutSettings = useSettings().useSelectValue(
-                  ({draft}) => ({
-                    reverse: draft.layout.reverse
-                  })
-                )
-
-                useEffect.Update(() => {
-                  ref.current.resetHandlePosition()
-                }, [layoutSettings.reverse])
-
-                return (
-                  <SplitLayout
-                    initialHandlePosition={
-                      layoutSettings.reverse ? '75%' : '25%'
-                    }
-                    ref={ref}
-                    style={{
-                      ...omit(THEME.CARD_STYLE, ['padding']),
-                      get height() {
-                        return `calc(var(--height) - ${this.borderWidth} * 2)`
-                      }
-                    }}>
-                    {children}
-                  </SplitLayout>
-                )
-              }
-            }}>
-            <Boundary>
-              <Sidebar />
-            </Boundary>
-            <Boundary>
-              <FilteredIconSets />
-            </Boundary>
-          </Layout.Reverse>
-        </React.Activity>
-        <div
-          style={{
-            alignSelf: 'center',
-            bottom: 0,
-            position: 'absolute'
-          }}>
           <Settings
             menu={[
               {separator: true},
@@ -175,8 +174,8 @@ export default useRemount.with(
               }
             ]}
           />
-        </div>
-      </Layout.Fullscreen>
-    )
-  })
+        </React.Activity>
+      </div>
+    </Layout.Fullscreen>
+  ))
 )

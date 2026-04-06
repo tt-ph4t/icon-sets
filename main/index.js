@@ -1,17 +1,21 @@
 import {VscodeProgressRing} from '@vscode-elements/react-elements'
 import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
 import React from 'react'
+import {preconnect} from 'react-dom'
 import {createRoot} from 'react-dom/client'
 import {ErrorBoundary} from 'react-error-boundary'
 import root from 'react-shadow'
 
+import Layout from './app/(page)/layout'
 import {Fallback} from './app/components/fallback'
-import {Layout} from './app/components/layout'
+import {DATA_BASE_URL} from './app/misc/constants'
 import './misc/styles/index.css'
 
 const App = React.lazy(() => import('./app/(page)'))
 const Devtools = React.lazy(() => import('./misc/devtools'))
 const Providers = React.lazy(() => import('./misc/providers'))
+
+preconnect(new URL(DATA_BASE_URL).origin)
 
 createRoot(document.querySelector('#root')).render(
   <>
