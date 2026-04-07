@@ -5,7 +5,6 @@ import {
   VscodeFormContainer,
   VscodeFormGroup,
   VscodeFormHelper,
-  VscodeIcon,
   VscodeLabel,
   VscodeTextfield
 } from '@vscode-elements/react-elements'
@@ -223,17 +222,15 @@ export const IconGrid = useRemount.with(
                   <ItemSquareToggle slot='content-after' />
                   <batcher.Subscribe
                     selector={state => pick(state, ['isPending'])}>
-                    {batcherState =>
-                      batcherState.isPending ? (
-                        <VscodeIcon name='loading' slot='content-after' spin />
-                      ) : (
-                        <ToolbarButton
-                          icon={INTERNAL_REMOUNT.icon}
-                          onClick={INTERNAL_REMOUNT}
-                          slot='content-after'
-                        />
-                      )
-                    }
+                    {batcherState => (
+                      <ToolbarButton
+                        checked={batcherState.isPending}
+                        icon={INTERNAL_REMOUNT.icon}
+                        onClick={INTERNAL_REMOUNT}
+                        preventToggle
+                        slot='content-after'
+                      />
+                    )}
                   </batcher.Subscribe>
                 </React.Activity>
               </VscodeTextfield>
