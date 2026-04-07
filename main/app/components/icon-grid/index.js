@@ -253,7 +253,7 @@ export const IconGrid = useRemount.with(
                           display: 'flex',
                           justifyContent: 'center'
                         }}>
-                        <Item context={context} iconId={iconId} />
+                        <Item iconId={iconId} index={context.index} />
                       </div>
                     )
                 }

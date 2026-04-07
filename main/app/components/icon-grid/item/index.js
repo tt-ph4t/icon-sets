@@ -61,7 +61,7 @@ const sizeLabel = (width = 0, height = 0, scale = 1) =>
   `${width * scale} x ${height * scale}`
 
 export default useRemount.with(
-  component(({context, iconId, INTERNAL_REMOUNT}) => {
+  component(({iconId, index, INTERNAL_REMOUNT}) => {
     const icon = parseIconName(iconId)
 
     const queryClient = useQueryClient()
@@ -362,7 +362,7 @@ export default useRemount.with(
           },
           {separator: true},
           {
-            description: context.index + 1,
+            description: index + 1,
             label: 'Order'
           },
           {

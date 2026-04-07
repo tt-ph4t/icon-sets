@@ -10,6 +10,7 @@ import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {withImmerAtom} from '../../hocs/with-immer-atom'
 import {useCallback} from '../../hooks/use-callback'
+import {useRemount} from '../../hooks/use-remount'
 import {hasValues} from '../../misc'
 import {EMPTY_ARRAY} from '../../misc/constants'
 import {renderSlot} from '../../misc/render-slot'
@@ -44,58 +45,64 @@ const Item = component(({id, index, renderItem, useStore}) => {
 })
 
 export default Object.assign(
-  component(({ids, menu, useStore, ...props}) => {
-    const store = useStore()
+  useRemount.with(
+    component(({ids, INTERNAL_REMOUNT, menu, useStore, ...props}) => {
+      const store = useStore()
 
-    const anyOpen = store.useSelectValue(
-      ({draft}) => ids.some(id => draft[id]?.open),
-      {deps: [ids]}
-    )
+      const anyOpen = store.useSelectValue(
+        ({draft}) => ids.some(id => draft[id]?.open),
+        {deps: [ids]}
+      )
 
-    return (
-      <>
-        <VscodeFormContainer>
-          <VscodeFormGroup variant='settings-group'>
-            <VscodeFormHelper>
-              <VList
-                data={ids}
-                style={{
-                  height: 'calc(var(--sidebar-icon-grid-height) * 1.5)'
-                }}>
-                {(id, index) => (
-                  <Item
-                    id={id}
-                    index={index}
-                    key={id}
-                    useStore={useStore}
-                    {...props}
-                  />
-                )}
-              </VList>
-            </VscodeFormHelper>
-          </VscodeFormGroup>
-        </VscodeFormContainer>
-        <Menu
-          data={[
-            {
-              label: `${anyOpen ? 'Collapse' : 'Expand'} all`,
-              onClick: () => {
-                store.set(({draft}) => {
-                  for (const id of ids)
-                    draft[id] = {
-                      ...draft[id],
-                      open: !anyOpen
-                    }
-                })
-              }
-            },
-            ...(hasValues(menu) ? [{separator: true}, ...menu] : EMPTY_ARRAY)
-          ]}
-          render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
-        />
-      </>
-    )
-  }),
+      return (
+        <>
+          <VscodeFormContainer>
+            <VscodeFormGroup variant='settings-group'>
+              <VscodeFormHelper>
+                <VList
+                  data={ids}
+                  style={{
+                    height: 'calc(var(--sidebar-icon-grid-height) * 1.5)'
+                  }}>
+                  {(id, index) => (
+                    <Item
+                      id={id}
+                      index={index}
+                      key={id}
+                      useStore={useStore}
+                      {...props}
+                    />
+                  )}
+                </VList>
+              </VscodeFormHelper>
+            </VscodeFormGroup>
+          </VscodeFormContainer>
+          <Menu
+            data={[
+              {
+                label: INTERNAL_REMOUNT.label,
+                onClick: INTERNAL_REMOUNT
+              },
+              {
+                label: `${anyOpen ? 'Collapse' : 'Expand'} all`,
+                onClick: () => {
+                  store.set(({draft}) => {
+                    for (const id of ids)
+                      draft[id] = {
+                        ...draft[id],
+                        open: !anyOpen
+                      }
+                  })
+                }
+              },
+              ...(hasValues(menu) ? [{separator: true}, ...menu] : EMPTY_ARRAY)
+            ]}
+            render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
+          />
+        </>
+      )
+    })
+  ),
   {
     createContext: () => ({
       useStore: withImmerAtom()

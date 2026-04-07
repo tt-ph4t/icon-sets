@@ -6,7 +6,6 @@ import {
 } from '@vscode-elements/react-elements'
 import {useUpdate} from 'ahooks'
 import {sentenceCase} from 'change-case'
-import {asyncNoop} from 'es-toolkit'
 import React from 'react'
 
 import {Boundary} from '../../components/boundary'
@@ -21,7 +20,7 @@ import {DEFAULT_QUERY_OPTIONS, ICON_CACHE} from '../../misc/constants'
 import IconGroups from './icon-groups'
 import IconSets from './icon-sets'
 
-const IconGridWithFormContainer = component(props => {
+const InternalIconGrid = component(props => {
   const query = useQuery(DEFAULT_QUERY_OPTIONS)
 
   return (
@@ -47,7 +46,7 @@ const CustomizedIcons = component(() => {
 
   return (
     <Collapsible description={iconIds.length} heading='customized icons'>
-      <IconGridWithFormContainer iconIds={iconIds} />
+      <InternalIconGrid iconIds={iconIds} />
       <Menu
         data={{
           label: 'Reset',
@@ -72,25 +71,22 @@ const CachedIcons = component(() => {
       onToggle={event => {
         if (event.detail.open) update()
       }}>
-      <IconGridWithFormContainer iconIds={iconIds} />
+      <InternalIconGrid iconIds={iconIds} />
       <Menu
         data={[
-          {label: 'Reload'},
+          {
+            label: 'Update',
+            onClick: update
+          },
           {separator: true},
           ...['purgeStale', 'pop', 'clear'].map(a => ({
             label: sentenceCase(a),
             onClick: () => {
               ICON_CACHE[a]()
+              update()
             }
           }))
-        ].map(({onClick = asyncNoop, ...rest}) => ({
-          onClick: async () => {
-            await onClick()
-
-            update()
-          },
-          ...rest
-        }))}
+        ]}
         render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
       />
     </Collapsible>
@@ -103,7 +99,7 @@ const FavoritedIcons = component(() => {
 
   return (
     <Collapsible description={iconIds.length} heading='favorited icons'>
-      <IconGridWithFormContainer iconIds={iconIds} />
+      <InternalIconGrid iconIds={iconIds} />
       <Menu
         data={{
           label: 'Reset',
