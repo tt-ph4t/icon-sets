@@ -69,10 +69,7 @@ export default useRemount.with(
     const favoritedIcons = useFavoritedIcons()
     const {iconCustomisations} = useCustomizedIcons.useSelect(iconId)
     const store = useStore()
-
-    const isIconAspectRatioLocked = store.useSelectValue(
-      ({draft}) => draft.isIconAspectRatioLocked
-    )
+    const isItemSquare = store.useSelectValue(({draft}) => draft.isItemSquare)
 
     const remountMenu = useMemo(
       () => ({
@@ -494,7 +491,7 @@ export default useRemount.with(
             </React.Activity>
             {React.cloneElement(iconQuery.data.INTERNAL.to.reactElement, {
               get height() {
-                return isIconAspectRatioLocked ? this.width : '100%'
+                return isItemSquare ? this.width : '100%'
               },
               id: iconQuery.data.id,
               width: '2.8rem'

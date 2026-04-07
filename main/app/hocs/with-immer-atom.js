@@ -64,7 +64,10 @@ export const withImmerAtom = (initialValue = EMPTY_OBJECT) => {
 
             return atomValue.state
           }
-        )
+        ),
+        useValue: useCallback(function () {
+          return this.useSelectValue(({draft}) => draft)
+        })
       }
     },
     {initial: initialValue}

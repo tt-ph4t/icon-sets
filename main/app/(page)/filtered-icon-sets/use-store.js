@@ -1,4 +1,5 @@
 import {useQuery} from '@tanstack/react-query'
+import {pick} from 'es-toolkit'
 
 import {withImmerAtom} from '../../hocs/with-immer-atom'
 import {useCallback} from '../../hooks/use-callback'
@@ -21,8 +22,6 @@ export default Object.assign(useStore, {
       })
     })
 
-    return {
-      isSuccess: query.isSuccess
-    }
+    return pick(query, ['isSuccess'])
   }
 })

@@ -44,6 +44,7 @@ import {
 } from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {Menu} from '../menu'
+import {ToolbarButton} from '../toolbar-button'
 import Grid from './grid'
 import Item from './item'
 import useStore from './use-store'
@@ -89,6 +90,25 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
     [iconIds, state]
   )
 }
+
+const ItemSquareToggle = component(props => {
+  const store = useStore()
+  const isItemSquare = store.useSelectValue(({draft}) => draft.isItemSquare)
+
+  return (
+    <ToolbarButton
+      checked={isItemSquare}
+      icon='symbol-ruler'
+      onChange={event => {
+        store.set(({draft}) => {
+          draft.isItemSquare = event.target.checked
+        })
+      }}
+      toggleable
+      {...props}
+    />
+  )
+})
 
 export const IconGrid = useRemount.with(
   component(({iconIds, initialSearchTerm, INTERNAL_REMOUNT}) => {
@@ -151,84 +171,69 @@ export const IconGrid = useRemount.with(
                 placeholder='Search'
                 style={{width: 260}}
                 value={searchTerm}>
-                <Menu
-                  data={
-                    hasFilteredIconIds && [
-                      {
-                        label: 'Favorite',
-                        menu: useFavoritedIcons.menu.map(a => ({
+                <React.Activity>
+                  <Menu
+                    data={
+                      hasFilteredIconIds && [
+                        {
+                          label: 'Favorite',
+                          menu: useFavoritedIcons.menu.map(a => ({
+                            label: sentenceCase(a),
+                            onClick: () => {
+                              favoritedIcons[a](...state.iconIds)
+                            }
+                          }))
+                        },
+                        {
+                          label: 'Sort',
+                          menu: Object.keys(SORT_ORDER_LABELS).map(order => ({
+                            label: SORT_ORDER_LABELS[order],
+                            onClick: () => {
+                              batcher.addItem(iconIds => sort(iconIds)[order]())
+                            }
+                          }))
+                        },
+                        ...Object.entries(actions).map(([a, b]) => ({
                           label: sentenceCase(a),
                           onClick: () => {
-                            favoritedIcons[a](...state.iconIds)
+                            batcher.addItem(b)
                           }
-                        }))
-                      },
-                      {
-                        label: 'Sort',
-                        menu: Object.keys(SORT_ORDER_LABELS).map(order => ({
-                          label: SORT_ORDER_LABELS[order],
+                        })),
+                        {
+                          label: 'Sample',
                           onClick: () => {
-                            batcher.addItem(iconIds => sort(iconIds)[order]())
+                            batcher.addItem(() =>
+                              sampleSize(filteredIconIds, 1)
+                            )
                           }
-                        }))
-                      },
-                      ...Object.entries(actions).map(([a, b]) => ({
-                        label: sentenceCase(a),
-                        onClick: () => {
-                          batcher.addItem(b)
+                        },
+                        {separator: true},
+                        {
+                          description: EMPTY_SIZE_TEXT,
+                          label: 'Download'
                         }
-                      })),
-                      {
-                        label: 'Sample',
-                        onClick: () => {
-                          batcher.addItem(() => sampleSize(filteredIconIds, 1))
-                        }
-                      },
-                      {separator: true},
-                      {
-                        description: EMPTY_SIZE_TEXT,
-                        label: 'Download'
-                      }
-                    ]
-                  }
-                  render={
-                    <VscodeBadge slot='content-after'>
-                      {pluralize(state.iconIds.length, 'icon')}
-                    </VscodeBadge>
-                  }
-                />
-                <React.Activity>
+                      ]
+                    }
+                    render={
+                      <VscodeBadge slot='content-after'>
+                        {pluralize(state.iconIds.length, 'icon')}
+                      </VscodeBadge>
+                    }
+                  />
+                  <ItemSquareToggle slot='content-after' />
                   <batcher.Subscribe
                     selector={state => pick(state, ['isPending'])}>
-                    {batcherState => (
-                      <Menu
-                        data={[
-                          {
-                            label: 'Lock aspect ratio',
-                            onClick: () => {
-                              store.set(({draft}) => {
-                                draft.isIconAspectRatioLocked =
-                                  !draft.isIconAspectRatioLocked
-                              })
-                            }
-                          },
-                          {
-                            label: INTERNAL_REMOUNT.label,
-                            onClick: INTERNAL_REMOUNT
-                          }
-                        ]}
-                        render={
-                          <VscodeIcon
-                            name='settings'
-                            slot='content-after'
-                            {...(batcherState.isPending && {
-                              name: 'loading',
-                              spin: true
-                            })}
-                          />
-                        }
-                      />
-                    )}
+                    {batcherState =>
+                      batcherState.isPending ? (
+                        <VscodeIcon name='loading' slot='content-after' spin />
+                      ) : (
+                        <ToolbarButton
+                          icon={INTERNAL_REMOUNT.icon}
+                          onClick={INTERNAL_REMOUNT}
+                          slot='content-after'
+                        />
+                      )
+                    }
                   </batcher.Subscribe>
                 </React.Activity>
               </VscodeTextfield>
