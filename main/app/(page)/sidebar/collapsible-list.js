@@ -79,10 +79,7 @@ export default Object.assign(
           </VscodeFormContainer>
           <Menu
             data={[
-              {
-                label: INTERNAL_REMOUNT.label,
-                onClick: INTERNAL_REMOUNT
-              },
+              INTERNAL_REMOUNT.menu,
               {
                 label: `${anyOpen ? 'Collapse' : 'Expand'} all`,
                 onClick: () => {

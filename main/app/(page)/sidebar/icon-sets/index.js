@@ -8,7 +8,7 @@ import {component} from '../../../hocs'
 import {useState} from '../../../hooks/use-state'
 import {DEFAULT_QUERY_OPTIONS} from '../../../misc/constants'
 import CollapsibleList from '../collapsible-list'
-import IconSet from './icon-set'
+import Item from './item'
 
 const CollapsibleListContext = CollapsibleList.createContext()
 
@@ -51,7 +51,7 @@ export default component(() => {
                 },
                 selected: category === state
               }))}
-              renderItem={(...[, props]) => <IconSet {...props} />}
+              renderItem={(...[, props]) => <Item {...props} />}
               {...CollapsibleListContext}
             />
           </Collapsible>

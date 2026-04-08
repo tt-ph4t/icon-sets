@@ -165,15 +165,7 @@ export default useRemount.with(
           position: 'absolute'
         }}>
         <React.Activity>
-          <Settings
-            menu={[
-              {separator: true},
-              {
-                label: INTERNAL_REMOUNT.label,
-                onClick: INTERNAL_REMOUNT
-              }
-            ]}
-          />
+          <Settings menu={[{separator: true}, INTERNAL_REMOUNT.menu]} />
         </React.Activity>
       </div>
     </Layout.Fullscreen>

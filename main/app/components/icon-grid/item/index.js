@@ -71,14 +71,6 @@ export default useRemount.with(
     const store = useStore()
     const isItemSquare = store.useSelectValue(({draft}) => draft.isItemSquare)
 
-    const remountMenu = useMemo(
-      () => ({
-        label: INTERNAL_REMOUNT.label,
-        onClick: INTERNAL_REMOUNT
-      }),
-      [INTERNAL_REMOUNT]
-    )
-
     const [iconQuery] = useIconQueries({
       iconCustomisations,
       iconId
@@ -143,7 +135,7 @@ export default useRemount.with(
     if (iconQuery.isLoading || iconSetQuery.isLoading)
       return (
         <Menu
-          data={[...iconQueryMenu, {separator: true}, remountMenu]}
+          data={[...iconQueryMenu, {separator: true}, INTERNAL_REMOUNT.menu]}
           render={<Fallback>{icon.name}</Fallback>}
         />
       )
@@ -151,7 +143,7 @@ export default useRemount.with(
     if (iconQuery.isError)
       return (
         <Menu
-          data={[...iconQueryMenu, {separator: true}, remountMenu]}
+          data={[...iconQueryMenu, {separator: true}, INTERNAL_REMOUNT.menu]}
           render={
             <Fallback
               onClick={() => {
@@ -180,9 +172,9 @@ export default useRemount.with(
               {
                 label: 'To',
                 menu: [
-                  ...Object.entries(iconQuery.data.INTERNAL.paths).map(
+                  ...Object.entries(iconQuery.data.internal.paths).map(
                     ([fileType, fileName]) => {
-                      const icon = iconQuery.data.INTERNAL.as(fileType)
+                      const icon = iconQuery.data.internal.as(fileType)
 
                       return {
                         description: prettyBytes(icon.blob),
@@ -220,7 +212,7 @@ export default useRemount.with(
                             !iconQuery.data.palette
                             ? React.cloneElement
                             : identity)(
-                            iconQuery.data.INTERNAL.to.reactElement,
+                            iconQuery.data.internal.to.reactElement,
                             {
                               style: {
                                 backgroundColor: 'white'
@@ -354,7 +346,7 @@ export default useRemount.with(
                 menu: iconQueryMenu
               },
               {separator: true},
-              remountMenu
+              INTERNAL_REMOUNT.menu
             ],
             onClick: () => {
               favoritedIcons.toggle(iconQuery.data.id)
@@ -366,9 +358,9 @@ export default useRemount.with(
             label: 'Order'
           },
           {
-            description: size(iconQuery.data.INTERNAL.idCases),
+            description: size(iconQuery.data.internal.idCases),
             label: 'ID cases',
-            menu: Object.entries(iconQuery.data.INTERNAL.idCases).map(
+            menu: Object.entries(iconQuery.data.internal.idCases).map(
               ([label, id]) => {
                 label = sentenceCase(label)
 
@@ -489,7 +481,7 @@ export default useRemount.with(
                 </React.Activity>
               </div>
             </React.Activity>
-            {React.cloneElement(iconQuery.data.INTERNAL.to.reactElement, {
+            {React.cloneElement(iconQuery.data.internal.to.reactElement, {
               get height() {
                 return isItemSquare ? this.width : '100%'
               },
