@@ -69,7 +69,10 @@ export default useRemount.with(
     const favoritedIcons = useFavoritedIcons()
     const {iconCustomisations} = useCustomizedIcons.useSelect(iconId)
     const store = useStore()
-    const isItemSquare = store.useSelectValue(({draft}) => draft.isItemSquare)
+
+    const iconOptions = customizedIcons.store.useSelectValue(
+      ({draft}) => draft.sharedOptions
+    )
 
     const [iconQuery] = useIconQueries({
       iconCustomisations,
@@ -126,6 +129,36 @@ export default useRemount.with(
         }
       ],
       [queryClient, iconQueryFilter]
+    )
+
+    const getTakumiBlob = useCallback(
+      async format =>
+        await takumi(
+          (format === 'jpeg' && !iconQuery.data.palette
+            ? React.cloneElement
+            : identity)(
+            iconQuery.data.internal.to.reactElement,
+            mergeProps(iconQuery.data.internal.to.reactElement.props, {
+              style: {
+                backgroundColor: 'white'
+              }
+            })
+          ),
+          {
+            get id() {
+              return getId(`[${iconQuery.data.id}]`, {
+                iconCustomisations,
+                iconOptions,
+                options: this.options
+              })
+            },
+            options: {
+              format,
+              height: iconQuery.data.data.height * iconCustomisations.scale,
+              width: iconQuery.data.data.width * iconCustomisations.scale
+            }
+          }
+        )
     )
 
     useUnmount(async () => {
@@ -206,68 +239,36 @@ export default useRemount.with(
                   {
                     label: 'Takumi WASM',
                     menu: Object.entries(takumi.formats).map(
-                      ([format, type]) => {
-                        const takumiArg = {
-                          component: (format === 'jpeg' &&
-                            !iconQuery.data.palette
-                            ? React.cloneElement
-                            : identity)(
-                            iconQuery.data.internal.to.reactElement,
-                            {
-                              style: {
-                                backgroundColor: 'white'
-                              }
+                      ([format, type]) => ({
+                        label: format.toUpperCase(),
+                        menu: type && [
+                          {
+                            label: 'View',
+                            onClick: async () => {
+                              openObjectURL(await getTakumiBlob(format))
                             }
-                          ),
-                          get id() {
-                            return getId(`[${iconQuery.data.id}]`, {
-                              iconCustomisations,
-                              options: this.options
-                            })
                           },
-                          options: {
-                            format,
-                            height:
-                              iconQuery.data.data.height *
-                              iconCustomisations.scale,
-                            width:
-                              iconQuery.data.data.width *
-                              iconCustomisations.scale
-                          }
-                        }
-
-                        return {
-                          label: format.toUpperCase(),
-                          menu: type && [
-                            {
-                              label: 'View',
-                              onClick: async () => {
-                                openObjectURL(await takumi(takumiArg))
-                              }
-                            },
-                            ClipboardItem.supports(type) && {
-                              label: 'Copy',
-                              onClick: async () => {
-                                await navigator.clipboard.write([
-                                  new ClipboardItem({
-                                    [type]: await takumi(takumiArg)
-                                  })
-                                ])
-                              }
-                            },
-                            {
-                              label: 'Download',
-                              onClick: async () => {
-                                await fileSaver(
-                                  await takumi(takumiArg),
-                                  getIconFilePaths(iconQuery.data, format)
-                                    .labeled
-                                )
-                              }
+                          ClipboardItem.supports(type) && {
+                            label: 'Copy',
+                            onClick: async () => {
+                              await navigator.clipboard.write([
+                                new ClipboardItem({
+                                  [type]: await getTakumiBlob(format)
+                                })
+                              ])
                             }
-                          ]
-                        }
-                      }
+                          },
+                          {
+                            label: 'Download',
+                            onClick: async () => {
+                              await fileSaver(
+                                await getTakumiBlob(format),
+                                getIconFilePaths(iconQuery.data, format).labeled
+                              )
+                            }
+                          }
+                        ]
+                      })
                     )
                   }
                 ]
@@ -483,7 +484,7 @@ export default useRemount.with(
             </React.Activity>
             {React.cloneElement(iconQuery.data.internal.to.reactElement, {
               get height() {
-                return isItemSquare ? this.width : '100%'
+                return iconOptions.square ? this.width : '100%'
               },
               id: iconQuery.data.id,
               width: '2.8rem'

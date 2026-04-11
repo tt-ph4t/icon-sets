@@ -15,7 +15,7 @@ import mime from 'mime/lite'
 import {getIconFilePaths, hasValues} from '../../misc'
 import {EMPTY_OBJECT, ICON_CACHE} from '../../misc/constants'
 
-const iconTypes = ['css', 'json', 'svg', 'txt', 'ico', 'pdf']
+const iconTypes = ['css', 'json', 'svg', 'txt', 'pdf']
 
 const idCases =
   // https://github.com/antfu-collective/icones/blob/e04ac9277776d791c1fc0696706708baa6a7d89f/src/utils/case.ts
@@ -47,6 +47,7 @@ const defaults = {
 export default (
   icon,
   {
+    color,
     hFlip,
     rotate,
     scale,
@@ -101,7 +102,10 @@ export default (
         })
 
         return {
-          css: getIconCSS(iconData, {iconSelector: '[icon]'}),
+          css: getIconCSS(iconData, {
+            color,
+            iconSelector: '[icon]'
+          }),
           get dataUrl() {
             return svgToData(this.html)
           },
@@ -111,7 +115,10 @@ export default (
               width: iconData.width * scale
             })
 
-            return iconToHTML(replaceIDs(svg.body), svg.attributes)
+            return iconToHTML(replaceIDs(svg.body), {
+              ...svg.attributes,
+              style: `color: ${color}`
+            })
           },
           get reactElement() {
             return parse(this.html)

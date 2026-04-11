@@ -4,11 +4,7 @@ import {
   useIsMutating,
   useIsRestoring
 } from '@tanstack/react-query'
-import {
-  VscodeFormContainer,
-  VscodeFormGroup,
-  VscodeFormHelper
-} from '@vscode-elements/react-elements'
+import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {useNetwork} from 'ahooks'
 import {omit} from 'es-toolkit'
 import React from 'react'
@@ -53,47 +49,41 @@ const Settings = component(({menu}) => {
   const settings = useSettings()
 
   return (
-    <VscodeFormContainer>
-      <VscodeFormGroup style={{paddingBottom: 12}} variant='settings-group'>
-        <VscodeFormHelper>
-          <Menu
-            data={[
-              {
-                label: 'Devtools',
-                onClick: () => {
-                  settings.set(({draft}) => {
-                    draft.showDevtools = !draft.showDevtools
-                  })
-                }
-              },
-              {
-                label: 'Layout',
-                menu: [
-                  {
-                    label: 'Reverse',
-                    onClick: () => {
-                      settings.set(({draft}) => {
-                        draft.layout.reverse = !draft.layout.reverse
-                      })
-                    }
-                  },
-                  {
-                    label: 'Fullscreen',
-                    onClick: () => {
-                      settings.set(({draft}) => {
-                        draft.layout.fullscreen = !draft.layout.fullscreen
-                      })
-                    }
-                  }
-                ]
-              },
-              ...menu
-            ]}
-            render={<ToolbarButton icon='settings'>Settings</ToolbarButton>}
-          />
-        </VscodeFormHelper>
-      </VscodeFormGroup>
-    </VscodeFormContainer>
+    <Menu
+      data={[
+        {
+          label: 'Devtools',
+          onClick: () => {
+            settings.set(({draft}) => {
+              draft.showDevtools = !draft.showDevtools
+            })
+          }
+        },
+        {
+          label: 'Layout',
+          menu: [
+            {
+              label: 'Reverse',
+              onClick: () => {
+                settings.set(({draft}) => {
+                  draft.layout.reverse = !draft.layout.reverse
+                })
+              }
+            },
+            {
+              label: 'Fullscreen',
+              onClick: () => {
+                settings.set(({draft}) => {
+                  draft.layout.fullscreen = !draft.layout.fullscreen
+                })
+              }
+            }
+          ]
+        },
+        ...menu
+      ]}
+      render={<ToolbarButton icon='settings'>Settings</ToolbarButton>}
+    />
   )
 })
 
@@ -157,17 +147,15 @@ export default useRemount.with(
             <FilteredIconSets />
           </Boundary>
         </Layout.Reverse>
-      </React.Activity>
-      <div
-        style={{
-          alignSelf: 'center',
-          bottom: 0,
-          position: 'absolute'
-        }}>
-        <React.Activity>
+        <VscodeToolbarContainer
+          style={{
+            alignSelf: 'center',
+            bottom: 'calc(var(--spacing) * 2)',
+            position: 'absolute'
+          }}>
           <Settings menu={[{separator: true}, INTERNAL_REMOUNT.menu]} />
-        </React.Activity>
-      </div>
+        </VscodeToolbarContainer>
+      </React.Activity>
     </Layout.Fullscreen>
   ))
 )

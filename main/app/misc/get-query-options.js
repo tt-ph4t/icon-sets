@@ -10,7 +10,8 @@ import {DELAY_MS} from './constants'
 
 const defaults = {
   gcTime: ms('50m'),
-  structuralSharing: (a, b) => (isEqual(a, b) ? a : b)
+  structuralSharing: (a, b) => (isEqual(a, b) ? a : b),
+  timeout: ms('3s')
 }
 
 export const getQueryOptions =
@@ -27,6 +28,7 @@ export const getQueryOptions =
     select = noop,
     staleTime = Infinity,
     structuralSharing = defaults.structuralSharing,
+    timeout = defaults.timeout,
     url,
     ...rest
   }) =>
@@ -38,7 +40,7 @@ export const getQueryOptions =
         (async () => {
           await delay(delayMs)
 
-          const {data} = await axios.get(url)
+          const {data} = await axios.get(url, {timeout})
 
           try {
             return decode(data)

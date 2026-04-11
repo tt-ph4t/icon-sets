@@ -1,12 +1,14 @@
 import uFuzzy from '@leeoniya/ufuzzy'
 import {useBatcher} from '@tanstack/react-pacer/batcher'
+import {Sketch} from '@uiw/react-color'
 import {
   VscodeBadge,
   VscodeFormContainer,
   VscodeFormGroup,
   VscodeFormHelper,
   VscodeLabel,
-  VscodeTextfield
+  VscodeTextfield,
+  VscodeToolbarContainer
 } from '@vscode-elements/react-elements'
 import {useSetState} from 'ahooks'
 import {sentenceCase} from 'change-case'
@@ -27,22 +29,28 @@ import {castArray, reverse} from 'es-toolkit/compat'
 import {sort} from 'fast-sort'
 import {isWordCharacter} from 'is-word-character'
 import ms from 'ms'
+import randomColor from 'randomcolor'
 import React from 'react'
 
 import {component} from '../../hocs'
+import {useCustomizedIcons} from '../../hooks/use-customized-icons'
 import {useEffect} from '../../hooks/use-effect'
 import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {useState} from '../../hooks/use-state'
-import {hasValues, validateIconId} from '../../misc'
+import {copy, hasValues, validateIconId} from '../../misc'
 import {
+  DEFAULT_ICON_CUSTOMISATIONS,
   EMPTY_ARRAY,
   EMPTY_SIZE_TEXT,
-  SORT_ORDER_LABELS
+  ICON_CACHE,
+  SORT_ORDER_LABELS,
+  THEME
 } from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {Menu} from '../menu'
+import {Popover} from '../popover'
 import {ToolbarButton} from '../toolbar-button'
 import Grid from './grid'
 import Item from './item'
@@ -90,24 +98,110 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
   )
 }
 
-const ItemSquareToggle = component(props => {
-  const store = useStore()
-  const isItemSquare = store.useSelectValue(({draft}) => draft.isItemSquare)
+const IconOptions = {
+  ColorPicker: component(props => {
+    const customizedIcons = useCustomizedIcons()
 
-  return (
-    <ToolbarButton
-      checked={isItemSquare}
-      icon='symbol-ruler'
-      onChange={event => {
-        store.set(({draft}) => {
-          draft.isItemSquare = event.target.checked
-        })
-      }}
-      toggleable
-      {...props}
-    />
-  )
-})
+    const batcher = useBatcher(items => {
+      last(items)()
+      ICON_CACHE.clear()
+    })
+
+    const iconOptions = customizedIcons.store.useSelectValue(({draft}) => ({
+      color: draft.sharedOptions.color
+    }))
+
+    return (
+      <Popover.Primitive
+        popupRender={
+          <>
+            <Sketch
+              color={iconOptions.color}
+              editableDisable={false}
+              onChange={colorResult => {
+                batcher.addItem(() => {
+                  customizedIcons.store.set(({draft}) => {
+                    draft.sharedOptions.color = colorResult.hexa
+                  })
+                })
+              }}
+              presetColors={false}
+              style={THEME.CARD_STYLE}
+              width={300}
+            />
+            <React.Activity>
+              <div
+                style={{
+                  display: 'flex',
+                  placeContent: 'space-between'
+                }}>
+                <ToolbarButton
+                  icon='copy'
+                  onClick={() => {
+                    copy(iconOptions.color)
+                  }}>
+                  {iconOptions.color}
+                </ToolbarButton>
+                <VscodeToolbarContainer>
+                  <ToolbarButton
+                    icon='wand'
+                    onClick={() => {
+                      batcher.addItem(() => {
+                        customizedIcons.store.set(({draft}) => {
+                          draft.sharedOptions.color = randomColor()
+                        })
+                      })
+                    }}
+                  />
+                  <ToolbarButton
+                    icon='eraser'
+                    onClick={() => {
+                      batcher.addItem(() => {
+                        customizedIcons.store.set(({draft}) => {
+                          draft.sharedOptions.color =
+                            DEFAULT_ICON_CUSTOMISATIONS.color
+                        })
+                      })
+                    }}
+                  />
+                </VscodeToolbarContainer>
+              </div>
+            </React.Activity>
+          </>
+        }
+        render={
+          <ToolbarButton
+            checked={iconOptions.color !== DEFAULT_ICON_CUSTOMISATIONS.color}
+            icon='paintcan'
+            preventToggle
+            {...props}
+          />
+        }
+      />
+    )
+  }),
+  SquareToggle: component(props => {
+    const customizedIcons = useCustomizedIcons()
+
+    const iconOptions = customizedIcons.store.useSelectValue(({draft}) => ({
+      square: draft.sharedOptions.square
+    }))
+
+    return (
+      <ToolbarButton
+        checked={iconOptions.square}
+        icon='symbol-ruler'
+        onChange={event => {
+          customizedIcons.store.set(({draft}) => {
+            draft.sharedOptions.square = event.target.checked
+          })
+        }}
+        toggleable
+        {...props}
+      />
+    )
+  })
+}
 
 export const IconGrid = useRemount.with(
   component(({iconIds, initialSearchTerm, INTERNAL_REMOUNT}) => {
@@ -219,7 +313,8 @@ export const IconGrid = useRemount.with(
                       </VscodeBadge>
                     }
                   />
-                  <ItemSquareToggle slot='content-after' />
+                  <IconOptions.SquareToggle slot='content-after' />
+                  <IconOptions.ColorPicker slot='content-after' />
                   <batcher.Subscribe
                     selector={state => pick(state, ['isPending'])}>
                     {batcherState => (

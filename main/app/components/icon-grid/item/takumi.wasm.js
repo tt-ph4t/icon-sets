@@ -1,7 +1,6 @@
-import {ImageResponse} from '@takumi-rs/image-response/wasm'
-import module from '@takumi-rs/wasm/takumi_wasm_bg.wasm?url'
 import {LRUCache} from 'lru-cache'
-import mime from 'mime/lite'
+import mime from 'mime/lite' // ?
+import {ImageResponse} from 'takumi-js/response'
 
 import {
   EMPTY_BLOB,
@@ -12,13 +11,12 @@ import {
 const cache = new LRUCache({max: ICON_CACHE.max})
 
 export default Object.assign(
-  async ({component, id, options}) => {
+  async (component, {id, options}) => {
     if (cache.has(id)) return cache.get(id)
 
     try {
       const imageResponse = new ImageResponse(component, {
         devicePixelRatio: 1,
-        module,
         quality: 100,
         ...options
       })
@@ -37,7 +35,13 @@ export default Object.assign(
     }
   },
   {
-    formats: ['png', 'jpeg', 'webp', 'raw'].reduce((a, b) => {
+    formats: [
+      'png',
+      'jpeg',
+      'webp',
+      'raw',
+      'ico' // ?
+    ].reduce((a, b) => {
       a[b] = mime.getType(b)
 
       return a
