@@ -2,7 +2,6 @@ import {QueryClient, QueryClientProvider, useQuery} from '@tanstack/react-query'
 import ms from 'ms'
 import React from 'react'
 import {useGlitch} from 'react-powerglitch'
-import semver from 'semver'
 
 import {component} from '../../app/hocs'
 import {useCallback} from '../../app/hooks/use-callback'
@@ -39,8 +38,7 @@ const DataVersion = component(() => {
   const query = useQuery(
     getQueryOptions({
       select: useCallback(
-        ({devDependencies}) =>
-          semver.minVersion(devDependencies['@iconify/json']).version
+        ({devDependencies}) => devDependencies['@iconify/json']
       ),
       url: `https://raw.githubusercontent.com/${GITHUB_REPO}/refs/heads/data/package.json`
     })
