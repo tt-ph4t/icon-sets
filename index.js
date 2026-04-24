@@ -13,11 +13,11 @@ import mapObject, { mapObjectSkip } from "map-obj";
 import fs from "node:fs";
 import spdxLicenseList from "spdx-license-list";
 
-const dataPath = "data";
+const dataDir = "data";
 
-const sortKeys = (o, options = {}) => {
+const sortKeys = (object, options = {}) => {
   const { order = "asc", deep = false } = options;
-  const a = sort(Object.entries(o))[order](([a]) => a);
+  const a = sort(Object.entries(object))[order](([a]) => a);
 
   return Object.fromEntries(
     deep
@@ -34,17 +34,18 @@ const validateToon = (value, fallback) => {
   }
 };
 
-const writeFileSync = (file, data) =>
+const writeFileSync = (file, data) => {
   fs.writeFileSync(`${file}.toon`, toon.encode(data));
+};
 
 fs.copyFileSync("node_modules/@iconify/json/collections.md", "readme.md");
 
-fs.rmSync(dataPath, {
+fs.rmSync(dataDir, {
   recursive: true,
   force: true,
 });
 
-fs.mkdirSync(dataPath);
+fs.mkdirSync(dataDir);
 
 const collections = Object.fromEntries(
   uniqWith(
@@ -58,14 +59,14 @@ const collections = Object.fromEntries(
 );
 
 writeFileSync(
-  `${dataPath}/index`,
+  `${dataDir}/index`,
   sortKeys(
     Object.fromEntries(
       await Promise.all(
         Object.keys(collections).map(async (name) => {
           const collection = collections[name];
           const iconSet = validateIconSet(await lookupCollection(name));
-          const iconSetPath = `${dataPath}/${iconSet.prefix}`;
+          const iconSetPath = `${dataDir}/${iconSet.prefix}`;
 
           delete collection.samples;
 
@@ -80,8 +81,8 @@ writeFileSync(
             {
               ...collection,
               chars: iconSet.chars ?? {},
-              aliases: mapObject(getIconsTree(iconSet), (key, value) =>
-                has(value) ? [key, value] : mapObjectSkip,
+              aliases: mapObject(getIconsTree(iconSet), (a, b) =>
+                has(b) ? [a, b] : mapObjectSkip,
               ),
               categories: validateToon(iconSet.categories, {}),
               category: iconSet.info.category ?? "Uncategorised",
@@ -101,10 +102,7 @@ writeFileSync(
               },
               get suffixes() {
                 return has(iconSet.suffixes)
-                  ? mapObject(iconSet.suffixes, (key, value) => [
-                      key,
-                      sentenceCase(value),
-                    ])
+                  ? mapObject(iconSet.suffixes, (a, b) => [a, sentenceCase(b)])
                   : {};
               },
               tags: sort(iconSet.info.tags ?? []).asc(),
