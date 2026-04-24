@@ -58,7 +58,6 @@ export default component(() => {
   return (
     <Boundary.Query
       query={query}
-      queryOptions={queryOptions}
       render={() => {
         const [state, setState] = useState('Category')
 

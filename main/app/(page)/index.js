@@ -55,7 +55,7 @@ const Settings = component(({menu}) => {
           label: 'Devtools',
           onClick: () => {
             settings.set(({draft}) => {
-              draft.showDevtools = !draft.showDevtools
+              draft.devtools = !draft.devtools
             })
           }
         },
@@ -132,7 +132,7 @@ export default useRemount.with(
 
               return (
                 <SplitLayout
-                  initialHandlePosition={layoutSettings.reverse ? '75%' : '25%'}
+                  initialHandlePosition={layoutSettings.reverse ? '73%' : '27%'}
                   ref={ref}
                   {...SplitLayoutProps}>
                   {children}

@@ -137,8 +137,8 @@ const IconOptions = {
                 }}>
                 <ToolbarButton
                   icon='copy'
-                  onClick={() => {
-                    copy(iconOptions.color)
+                  onClick={async () => {
+                    await copy(iconOptions.color)
                   }}>
                   {iconOptions.color}
                 </ToolbarButton>
@@ -262,7 +262,7 @@ export const IconGrid = useRemount.with(
                   })
                 }}
                 placeholder='Search'
-                style={{width: 260}}
+                style={{width: 300}}
                 value={searchTerm}>
                 <React.Activity>
                   <Menu

@@ -1,7 +1,7 @@
 import {validateIconName} from '@iconify/utils'
 import {isPrimitive, isString} from '@sindresorhus/is'
 import {downloadZip} from 'client-zip'
-import copyToClipboard from 'copy-to-clipboard'
+import internalCopy from 'copy-to-clipboard'
 import {mapValues, noop, omit} from 'es-toolkit'
 import FileSaver from 'file-saver'
 import has from 'has-values'
@@ -77,9 +77,11 @@ export const openObjectURL = (...args) => {
   URL.revokeObjectURL(url)
 }
 
-export const copy = (text, options) => {
-  if (!copyToClipboard(text, options)) prompt('Copy failed', text)
-}
+export const copy = async (text, options) =>
+  await internalCopy(text, {
+    fallbackToPrompt: true,
+    ...options
+  })
 
 export const getIconFilePaths = (icon, extension) => ({
   default: `${icon.name}.${extension}`,

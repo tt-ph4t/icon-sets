@@ -32,7 +32,6 @@ export default component(() => {
   return (
     <Boundary.Query
       query={query}
-      queryOptions={queryOptions}
       render={() => {
         const [state, setState] = useState()
         const prefixes = query.data.categories[state] ?? query.data.prefixes

@@ -21,12 +21,10 @@ const TanStackDevtoolsProps = {
 }
 
 export default component(() => {
-  const showDevtools = useSettings().useSelectValue(
-    ({draft}) => draft.showDevtools
-  )
+  const devtools = useSettings().useSelectValue(({draft}) => draft.devtools)
 
   return (
-    <React.Activity mode={showDevtools ? 'visible' : 'hidden'}>
+    <React.Activity mode={devtools ? 'visible' : 'hidden'}>
       <vscode-dev-toolbar
         style={{
           bottom: 'calc(var(--spacing) * 18)',

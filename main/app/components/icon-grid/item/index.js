@@ -221,8 +221,8 @@ export default useRemount.with(
                           },
                           {
                             label: 'Copy',
-                            onClick: () => {
-                              copy(icon.data)
+                            onClick: async () => {
+                              await copy(icon.data)
                             }
                           },
                           {
@@ -251,11 +251,9 @@ export default useRemount.with(
                           ClipboardItem.supports(type) && {
                             label: 'Copy',
                             onClick: async () => {
-                              await navigator.clipboard.write([
-                                new ClipboardItem({
-                                  [type]: await getTakumiBlob(format)
-                                })
-                              ])
+                              await copy(await getTakumiBlob(format), {
+                                format: type
+                              })
                             }
                           },
                           {

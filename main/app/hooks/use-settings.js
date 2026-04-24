@@ -1,6 +1,7 @@
 import {withImmerAtom} from '../hocs/with-immer-atom'
 
 export const useSettings = withImmerAtom({
+  devtools: import.meta.env.DEV,
   layout: {
     fullscreen: false,
     reverse: false,
@@ -8,6 +9,5 @@ export const useSettings = withImmerAtom({
       height: 0,
       width: 0
     }
-  },
-  showDevtools: import.meta.env.DEV
+  }
 })

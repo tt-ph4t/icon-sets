@@ -3,13 +3,13 @@ import {renderSlot as render} from 'render-slot'
 
 export const renderSlot = ({
   context,
-  default: d = React.Fragment,
+  default: internalDefault = React.Fragment,
   ...props
 }) => (
   <React.Activity>
     {render({
       context: {context},
-      default: d,
+      default: internalDefault,
       ...props
     })}
   </React.Activity>
