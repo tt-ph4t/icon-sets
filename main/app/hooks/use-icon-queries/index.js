@@ -2,7 +2,7 @@ import {useQueries, useQuery} from '@tanstack/react-query'
 import {mapValues} from 'es-toolkit'
 import ms from 'ms'
 
-import {DATA_BASE_URL, DEFAULT_QUERY_OPTIONS} from '../../misc/constants'
+import {DATABASE_URL, DEFAULT_QUERY_OPTIONS} from '../../misc/constants'
 import {getQueryOptions} from '../../misc/get-query-options'
 import {parseIconName} from '../../misc/parse-icon-name'
 import {useCustomizedIcons} from '../use-customized-icons'
@@ -43,7 +43,7 @@ export const useIconQueries = (...icons) => {
             },
             {...iconCustomisations, color: iconOptions.color}
           ),
-        url: `${DATA_BASE_URL}/${icon.prefix}/${icon.name}.toon`,
+        url: `${DATABASE_URL}/${icon.prefix}/${icon.name}.toon`,
         ...queryOptions
       })
     })

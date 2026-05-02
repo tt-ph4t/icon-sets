@@ -1,4 +1,3 @@
-import {VscodeProgressRing} from '@vscode-elements/react-elements'
 import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
 import React from 'react'
 import {preconnect} from 'react-dom'
@@ -8,14 +7,15 @@ import root from 'react-shadow'
 
 import Layout from './app/(page)/layout'
 import {Fallback} from './app/components/fallback'
-import {DATA_BASE_URL} from './app/misc/constants'
+import {ProgressRing} from './app/components/progress-ring'
+import {DATABASE_URL} from './app/misc/constants'
 import './misc/styles/index.css'
 
 const App = React.lazy(() => import('./app/(page)'))
 const Devtools = React.lazy(() => import('./misc/devtools'))
 const Providers = React.lazy(() => import('./misc/providers'))
 
-preconnect(new URL(DATA_BASE_URL).origin)
+preconnect(new URL(DATABASE_URL).origin)
 
 createRoot(document.querySelector('#root')).render(
   <>
@@ -27,30 +27,29 @@ createRoot(document.querySelector('#root')).render(
         justifyContent: 'center',
         width: 'var(--width)'
       }}>
-      <Layout.Resizable>
-        <root.div
-          style={{
-            display: 'flex',
-            height: 'inherit',
-            width: 'inherit'
-          }}>
-          <ErrorBoundary
-            fallbackRender={({error, resetErrorBoundary}) => (
-              <Fallback.Error
-                message={error.message}
-                progressBar={false}
-                retryFn={resetErrorBoundary}
-              />
-            )}>
-            <React.Suspense
-              fallback={<VscodeProgressRing style={{margin: 'auto'}} />}>
+      <ErrorBoundary
+        fallbackRender={({error, resetErrorBoundary}) => (
+          <Fallback.Error
+            message={error.message}
+            progressBar={false}
+            retryFn={resetErrorBoundary}
+          />
+        )}>
+        <React.Suspense fallback={<ProgressRing>Loading</ProgressRing>}>
+          <Layout.Resizable>
+            <root.div
+              style={{
+                display: 'flex',
+                height: 'inherit',
+                width: 'inherit'
+              }}>
               <Providers>
                 <App />
               </Providers>
-            </React.Suspense>
-          </ErrorBoundary>
-        </root.div>
-      </Layout.Resizable>
+            </root.div>
+          </Layout.Resizable>
+        </React.Suspense>
+      </ErrorBoundary>
     </div>
     <React.Activity>
       <link

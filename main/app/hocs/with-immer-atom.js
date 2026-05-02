@@ -19,7 +19,9 @@ const useAtomValueWithDelay =
 
     const [state, setState, throttler] = useThrottledState(
       () => store.get(atom),
-      {wait: delay}
+      {
+        wait: delay
+      }
     )
 
     useEffect(
@@ -70,6 +72,8 @@ export const withImmerAtom = (initialValue = EMPTY_OBJECT) => {
         })
       }
     },
-    {initial: initialValue}
+    {
+      initial: initialValue
+    }
   )
 }

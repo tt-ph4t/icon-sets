@@ -2,35 +2,33 @@ import {isTruthy} from '@sindresorhus/is'
 import {
   useIsFetching,
   useIsMutating,
-  useIsRestoring
+  useIsRestoring,
+  useQuery
 } from '@tanstack/react-query'
 import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {useNetwork} from 'ahooks'
-import {omit} from 'es-toolkit'
 import React from 'react'
 
 import {Boundary} from '../components/boundary'
 import {Fallback} from '../components/fallback'
 import {Menu} from '../components/menu'
-import {SplitLayout} from '../components/split-layout'
+import {ProgressRing} from '../components/progress-ring'
 import {ToolbarButton} from '../components/toolbar-button'
 import {component} from '../hocs'
-import {useEffect} from '../hooks/use-effect'
-import {useRef} from '../hooks/use-ref'
 import {useRemount} from '../hooks/use-remount'
 import {useSettings} from '../hooks/use-settings'
-import {THEME} from '../misc/constants'
+import {DEFAULT_QUERY_OPTIONS, THEME} from '../misc/constants'
 import Layout from './layout'
 
-const Sidebar = React.lazy(() => import('./sidebar'))
-const FilteredIconSets = React.lazy(() => import('./filtered-icon-sets'))
+const Sidebar = Boundary.lazy(() => import('./sidebar'))
+const FilteredIconSets = Boundary.lazy(() => import('./filtered-icon-sets'))
 
-const Activity = component(() => {
-  const isLoading = React.useDeferredValue(
-    [useIsFetching(), useIsMutating(), useIsRestoring()].some(isTruthy)
+const GlobalActivity = component(() => {
+  const isLoading = [useIsFetching(), useIsMutating(), useIsRestoring()].some(
+    isTruthy
   )
 
-  const network = React.useDeferredValue(useNetwork())
+  const network = useNetwork()
 
   return (
     <React.Activity mode={isLoading || !network.online ? 'visible' : 'hidden'}>
@@ -45,6 +43,16 @@ const Activity = component(() => {
   )
 })
 
+const DataLoading = component(() => {
+  const query = useQuery(DEFAULT_QUERY_OPTIONS)
+
+  return (
+    <React.Activity mode={query.isPending ? 'visible' : 'hidden'}>
+      <ProgressRing>Loading data</ProgressRing>
+    </React.Activity>
+  )
+})
+
 const Settings = component(({menu}) => {
   const settings = useSettings()
 
@@ -55,7 +63,7 @@ const Settings = component(({menu}) => {
           label: 'Devtools',
           onClick: () => {
             settings.set(({draft}) => {
-              draft.devtools = !draft.devtools
+              draft.isDev = !draft.isDev
             })
           }
         },
@@ -66,7 +74,7 @@ const Settings = component(({menu}) => {
               label: 'Reverse',
               onClick: () => {
                 settings.set(({draft}) => {
-                  draft.layout.reverse = !draft.layout.reverse
+                  draft.layout.isReverse = !draft.layout.isReverse
                 })
               }
             },
@@ -74,7 +82,7 @@ const Settings = component(({menu}) => {
               label: 'Fullscreen',
               onClick: () => {
                 settings.set(({draft}) => {
-                  draft.layout.fullscreen = !draft.layout.fullscreen
+                  draft.layout.isFullscreen = !draft.layout.isFullscreen
                 })
               }
             }
@@ -86,15 +94,6 @@ const Settings = component(({menu}) => {
     />
   )
 })
-
-const SplitLayoutProps = {
-  style: {
-    ...omit(THEME.CARD_STYLE, ['padding']),
-    get height() {
-      return `calc(var(--height) - ${this.borderWidth} * 2)`
-    }
-  }
-}
 
 export default useRemount.with(
   component(({INTERNAL_REMOUNT}) => (
@@ -112,40 +111,28 @@ export default useRemount.with(
           width: '100%',
           zIndex: 1
         }}>
-        <Activity />
+        <GlobalActivity />
+      </div>
+      <div
+        style={{
+          alignContent: 'center',
+          inset: '0',
+          justifySelf: 'center',
+          pointerEvents: 'none',
+          position: 'absolute',
+          zIndex: 1
+        }}>
+        <div
+          style={{
+            pointerEvents: 'auto'
+          }}>
+          <DataLoading />
+        </div>
       </div>
       <React.Activity>
-        <Layout.Reverse
-          render={{
-            wrapper: children => {
-              const ref = useRef()
-
-              const layoutSettings = useSettings().useSelectValue(
-                ({draft}) => ({
-                  reverse: draft.layout.reverse
-                })
-              )
-
-              useEffect.Update(() => {
-                ref.current.resetHandlePosition()
-              }, [layoutSettings.reverse])
-
-              return (
-                <SplitLayout
-                  initialHandlePosition={layoutSettings.reverse ? '73%' : '27%'}
-                  ref={ref}
-                  {...SplitLayoutProps}>
-                  {children}
-                </SplitLayout>
-              )
-            }
-          }}>
-          <Boundary>
-            <Sidebar />
-          </Boundary>
-          <Boundary>
-            <FilteredIconSets />
-          </Boundary>
+        <Layout.Reverse>
+          <Sidebar />
+          <FilteredIconSets />
         </Layout.Reverse>
         <VscodeToolbarContainer
           style={{

@@ -3,7 +3,7 @@ import {last} from 'es-toolkit'
 import React from 'react'
 
 import {component} from '../hocs'
-import {useMemo} from './use-memo'
+import {useCallback} from './use-callback'
 import {useState} from './use-state'
 
 export const useRemount = Object.assign(
@@ -14,26 +14,24 @@ export const useRemount = Object.assign(
       last(items)()
     })
 
-    return useMemo(() => {
-      const remount = () => {
-        batcher.addItem(() => {
-          setState(state => ++state)
-        })
-      }
-
-      return Object.assign(remount, {
-        batcher,
-        icon: 'refresh',
-        label: 'Reload',
-        get menu() {
-          return {
-            label: this.label,
-            onClick: remount
-          }
-        },
-        state
+    const remount = useCallback(() => {
+      batcher.addItem(() => {
+        setState(state => ++state)
       })
-    }, [batcher, state])
+    })
+
+    return Object.assign(remount, {
+      batcher,
+      icon: 'refresh',
+      label: 'Reload',
+      get menu() {
+        return {
+          label: this.label,
+          onClick: remount
+        }
+      },
+      state
+    })
   },
   {
     with: Component =>

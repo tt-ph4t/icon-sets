@@ -1,5 +1,12 @@
 import {validateIconName} from '@iconify/utils'
-import {isPrimitive, isString} from '@sindresorhus/is'
+import {
+  isBigint,
+  isNull,
+  isNumber,
+  isPrimitive,
+  isString,
+  isUndefined
+} from '@sindresorhus/is'
 import {downloadZip} from 'client-zip'
 import internalCopy from 'copy-to-clipboard'
 import {mapValues, noop, omit} from 'es-toolkit'
@@ -77,11 +84,12 @@ export const openObjectURL = (...args) => {
   URL.revokeObjectURL(url)
 }
 
-export const copy = async (text, options) =>
-  await internalCopy(text, {
+export const copy = async (value, options) => ({
+  isCopied: await internalCopy(value, {
     fallbackToPrompt: true,
     ...options
   })
+})
 
 export const getIconFilePaths = (icon, extension) => ({
   default: `${icon.name}.${extension}`,
@@ -92,3 +100,9 @@ export const getIconFilePaths = (icon, extension) => ({
     return `[${icon.setName}] ${this.default}`
   }
 })
+
+export const isReactKey = (value, allowNullish = true) =>
+  (allowNullish && (isNull(value) || isUndefined(value))) ||
+  isString(value) ||
+  isNumber(value) ||
+  isBigint(value)

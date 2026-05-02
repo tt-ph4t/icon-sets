@@ -26,11 +26,17 @@ export const useRef = Object.assign(
       const ref = useRef()
       const [isFullscreen, rest] = useFullscreen(ref, options)
 
-      return {isFullscreen, ref, ...rest}
+      return {
+        isFullscreen,
+        ref,
+        ...rest
+      }
     },
     Merge:
       // https://github.com/radix-ui/primitives/blob/22473d16404bfd446305db5b6c9308aece99fdec/packages/react/compose-refs/src/compose-refs.tsx#L55
-      (...refs) => ({mergedRef: useCallback(composeRefs(...refs), refs)}),
+      (...refs) => ({
+        mergedRef: useCallback(composeRefs(...refs), refs)
+      }),
     Size: () => {
       const ref = useRef()
 

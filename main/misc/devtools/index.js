@@ -16,15 +16,17 @@ const TanStackDevtoolsProps = {
       render: <ReactQueryDevtoolsPanel client={QUERY_CLIENT} />
     },
     pacerDevtoolsPlugin(),
-    githubDevtoolsPlugin({defaultOpen: true})
+    githubDevtoolsPlugin({
+      defaultOpen: true
+    })
   ]
 }
 
 export default component(() => {
-  const devtools = useSettings().useSelectValue(({draft}) => draft.devtools)
+  const isDev = useSettings().useSelectValue(({draft}) => draft.isDev)
 
   return (
-    <React.Activity mode={devtools ? 'visible' : 'hidden'}>
+    <React.Activity mode={isDev ? 'visible' : 'hidden'}>
       <vscode-dev-toolbar
         style={{
           bottom: 'calc(var(--spacing) * 18)',

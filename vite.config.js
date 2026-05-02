@@ -20,7 +20,9 @@ export default defineConfig({
     }
   },
   plugins: [
-    devtools({removeDevtoolsOnBuild: false}),
+    devtools({
+      removeDevtoolsOnBuild: false
+    }),
     {
       enforce: 'pre',
       async transform(code, id) {

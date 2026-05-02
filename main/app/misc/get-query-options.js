@@ -11,11 +11,13 @@ import {DELAY_MS} from './constants'
 const defaults = {
   gcTime: ms('50m'),
   structuralSharing: (a, b) => (isEqual(a, b) ? a : b),
-  timeout: ms('3s')
+  timeout: ms('1m')
 }
 
 export const getQueryOptions =
   // https://tanstack.com/query/latest/docs/framework/react/guides/render-optimizations
+  // https://tkdodo.eu/blog/react-query-selectors-supercharged
+  // https://www.npmjs.com/package/memoize-one
   ({
     delayMs = DELAY_MS,
     gcTime = defaults.gcTime,

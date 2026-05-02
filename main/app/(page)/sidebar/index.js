@@ -16,25 +16,36 @@ import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useCustomizedIcons} from '../../hooks/use-customized-icons'
 import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
+import {hasValues} from '../../misc'
 import {DEFAULT_QUERY_OPTIONS, ICON_CACHE} from '../../misc/constants'
 import IconGroups from './icon-groups'
 import IconSets from './icon-sets'
 
-const InternalIconGrid = component(props => {
+const InternalIconGrid = component(({menu, ...props}) => {
   const query = useQuery(DEFAULT_QUERY_OPTIONS)
 
   return (
     <Boundary.Query
       query={query}
       render={() => (
-        <VscodeFormContainer>
-          <VscodeFormGroup variant='settings-group'>
-            <VscodeFormHelper
-              style={{height: 'var(--sidebar-icon-grid-height)'}}>
-              <IconGrid {...props} />
-            </VscodeFormHelper>
-          </VscodeFormGroup>
-        </VscodeFormContainer>
+        <>
+          <VscodeFormContainer>
+            <VscodeFormGroup variant='settings-group'>
+              <VscodeFormHelper
+                style={{
+                  height: 'var(--sidebar-icon-grid-height)'
+                }}>
+                <IconGrid {...props} />
+              </VscodeFormHelper>
+            </VscodeFormGroup>
+          </VscodeFormContainer>
+          {hasValues(menu) && (
+            <Menu
+              data={menu}
+              render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
+            />
+          )}
+        </>
       )}
     />
   )
@@ -46,15 +57,14 @@ const CustomizedIcons = component(() => {
 
   return (
     <Collapsible description={iconIds.length} heading='customized icons'>
-      <InternalIconGrid iconIds={iconIds} />
-      <Menu
-        data={{
+      <InternalIconGrid
+        iconIds={iconIds}
+        menu={{
           label: 'Reset',
           onClick: () => {
             customizedIcons.delete(...iconIds)
           }
         }}
-        render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
       />
     </Collapsible>
   )
@@ -71,9 +81,9 @@ const CachedIcons = component(() => {
       onToggle={event => {
         if (event.detail.open) update()
       }}>
-      <InternalIconGrid iconIds={iconIds} />
-      <Menu
-        data={[
+      <InternalIconGrid
+        iconIds={iconIds}
+        menu={[
           {
             label: 'Update',
             onClick: update
@@ -87,7 +97,6 @@ const CachedIcons = component(() => {
             }
           }))
         ]}
-        render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
       />
     </Collapsible>
   )
@@ -99,20 +108,22 @@ const FavoritedIcons = component(() => {
 
   return (
     <Collapsible description={iconIds.length} heading='favorited icons'>
-      <InternalIconGrid iconIds={iconIds} />
-      <Menu
-        data={{
+      <InternalIconGrid
+        iconIds={iconIds}
+        menu={{
           label: 'Reset',
           onClick: favoritedIcons.reset
         }}
-        render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
       />
     </Collapsible>
   )
 })
 
 export default component(() => (
-  <div style={{'--sidebar-icon-grid-height': 'calc(var(--height) / 2)'}}>
+  <div
+    style={{
+      '--sidebar-icon-grid-height': 'calc(var(--height) / 2)'
+    }}>
     <React.Activity>
       <IconSets />
       <IconGroups />

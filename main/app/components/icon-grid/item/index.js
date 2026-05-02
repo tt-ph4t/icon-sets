@@ -36,11 +36,14 @@ import {Menu} from '../../menu'
 import useStore from '../use-store'
 import takumi from './takumi.wasm'
 
-const Fallback = component(({children, ...props}) => (
-  <span {...mergeProps(props, {style: {userSelect: 'none'}})}>
-    {children.slice(0, 3)}
-  </span>
-))
+const Fallback = component(({children, ...props}) => {
+  const style = useCustomizedIcons().store.useSelectValue(({draft}) => ({
+    color: draft.sharedOptions.color,
+    userSelect: 'none'
+  }))
+
+  return <span {...mergeProps({style}, props)}>{children.slice(0, 3)}</span>
+})
 
 const flipDirections = {
   hFlip: 'Horizontal flip',

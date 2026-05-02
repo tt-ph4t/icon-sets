@@ -30,7 +30,7 @@ const useIdleAsyncEffect = (
 }
 
 const Slot = component(({children, index, positionInPercentage}) => {
-  const isSlotStat = !isOdd(index)
+  const isSlotStart = !isOdd(index)
   const size = useRef.Size()
   const [state, setState] = useState()
 
@@ -52,7 +52,7 @@ const Slot = component(({children, index, positionInPercentage}) => {
 
   return (
     <div
-      slot={isSlotStat ? 'start' : 'end'}
+      slot={isSlotStart ? 'start' : 'end'}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -80,7 +80,7 @@ const Slot = component(({children, index, positionInPercentage}) => {
         }}>
         <React.Activity
           mode={
-            isSlotStat
+            isSlotStart
               ? positionInPercentage <= minPositionInPercentage
                 ? 'hidden'
                 : 'visible'

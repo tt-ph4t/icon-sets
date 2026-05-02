@@ -26,6 +26,15 @@ export const Boundary = Object.assign(
     </ErrorBoundary>
   )),
   {
+    lazy: load => {
+      const Component = React.lazy(load)
+
+      return component(props => (
+        <Boundary>
+          <Component {...props} />
+        </Boundary>
+      ))
+    },
     Query: component(
       ({query, queryOptions = DEFAULT_QUERY_OPTIONS, render}) => {
         const queryClient = useQueryClient()

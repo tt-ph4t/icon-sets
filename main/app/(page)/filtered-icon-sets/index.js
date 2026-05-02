@@ -8,14 +8,16 @@ import {pick} from 'es-toolkit'
 import React from 'react'
 
 import {Boundary} from '../../components/boundary'
+import {Fallback} from '../../components/fallback'
 import {IconGrid} from '../../components/icon-grid'
 import {component} from '../../hocs'
+import {useRemount} from '../../hooks/use-remount'
 import {getId} from '../../misc'
 import {DEFAULT_QUERY_OPTIONS} from '../../misc/constants'
 import Filter from './filter'
-import useStore from './use-store'
+import {useStore} from './misc'
 
-const FilteredIconSets = component(() => {
+const InternalIconGrid = component(() => {
   const selectedIconSetPrefixes = useStore().useSelectValue(
     ({draft}) => draft.selectedIconSetPrefixes
   )
@@ -31,24 +33,29 @@ const FilteredIconSets = component(() => {
   return <IconGrid iconIds={query.data} />
 })
 
-export default component(() => {
-  const query = useQuery(DEFAULT_QUERY_OPTIONS)
+export default useRemount.with(
+  component(({INTERNAL_REMOUNT}) => {
+    const query = useQuery(DEFAULT_QUERY_OPTIONS)
 
-  return (
-    <Boundary.Query
-      query={query}
-      render={() => {
-        const init = useStore.useInit()
+    return (
+      <Boundary.Query
+        query={query}
+        render={() => {
+          const init = useStore.useInit()
 
-        return (
-          <React.Activity mode={init.isSuccess ? 'visible' : 'hidden'}>
+          return init.isError ? (
+            <Fallback.Error
+              message={init.error.message}
+              retryFn={INTERNAL_REMOUNT}
+            />
+          ) : (
             <div
               style={{
                 flexGrow: 1,
                 position: 'relative'
               }}>
               <React.Activity>
-                <FilteredIconSets />
+                <InternalIconGrid />
               </React.Activity>
               <VscodeFormContainer
                 style={{
@@ -63,9 +70,9 @@ export default component(() => {
                 </VscodeFormGroup>
               </VscodeFormContainer>
             </div>
-          </React.Activity>
-        )
-      }}
-    />
-  )
-})
+          )
+        }}
+      />
+    )
+  })
+)

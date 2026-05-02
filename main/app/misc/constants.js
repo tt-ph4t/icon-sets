@@ -11,7 +11,8 @@ import {prettyBytes} from './pretty-bytes'
 
 export const GITHUB_REPO = 'tt-ph4t/icon-sets'
 
-export const DATA_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/refs/heads/data/data`
+export const // https://raw.githubusercontent.com/${GITHUB_REPO}/refs/heads/data/data
+  DATABASE_URL = `https://cdn.jsdelivr.net/gh/${GITHUB_REPO}@refs/heads/data/data`
 
 export const DELAY_MS = ms('.15s')
 
@@ -79,7 +80,7 @@ export const POWER_GLITCH_OPTIONS =
 
 export const DEFAULT_QUERY_OPTIONS = deepFreeze(
   getQueryOptions({
-    url: `${DATA_BASE_URL}/index.toon`
+    url: `${DATABASE_URL}/index.toon`
   })
 )
 

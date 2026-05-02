@@ -39,7 +39,7 @@ import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {useState} from '../../hooks/use-state'
-import {copy, hasValues, validateIconId} from '../../misc'
+import {hasValues, validateIconId} from '../../misc'
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
   EMPTY_ARRAY,
@@ -49,6 +49,7 @@ import {
   THEME
 } from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
+import {Clipboard} from '../clipboard'
 import {Menu} from '../menu'
 import {Popover} from '../popover'
 import {ToolbarButton} from '../toolbar-button'
@@ -135,13 +136,9 @@ const IconOptions = {
                   display: 'flex',
                   placeContent: 'space-between'
                 }}>
-                <ToolbarButton
-                  icon='copy'
-                  onClick={async () => {
-                    await copy(iconOptions.color)
-                  }}>
+                <Clipboard value={iconOptions.color}>
                   {iconOptions.color}
-                </ToolbarButton>
+                </Clipboard>
                 <VscodeToolbarContainer>
                   <ToolbarButton
                     icon='wand'
@@ -313,20 +310,21 @@ export const IconGrid = useRemount.with(
                       </VscodeBadge>
                     }
                   />
-                  <IconOptions.SquareToggle slot='content-after' />
-                  <IconOptions.ColorPicker slot='content-after' />
-                  <batcher.Subscribe
-                    selector={state => pick(state, ['isPending'])}>
-                    {batcherState => (
-                      <ToolbarButton
-                        checked={batcherState.isPending}
-                        icon={INTERNAL_REMOUNT.icon}
-                        onClick={INTERNAL_REMOUNT}
-                        preventToggle
-                        slot='content-after'
-                      />
-                    )}
-                  </batcher.Subscribe>
+                  <VscodeToolbarContainer slot='content-after'>
+                    <IconOptions.SquareToggle />
+                    <IconOptions.ColorPicker />
+                    <batcher.Subscribe
+                      selector={state => pick(state, ['isPending'])}>
+                      {batcherState => (
+                        <ToolbarButton
+                          checked={batcherState.isPending}
+                          icon={INTERNAL_REMOUNT.icon}
+                          onClick={INTERNAL_REMOUNT}
+                          preventToggle
+                        />
+                      )}
+                    </batcher.Subscribe>
+                  </VscodeToolbarContainer>
                 </React.Activity>
               </VscodeTextfield>
             </VscodeFormHelper>

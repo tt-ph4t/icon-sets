@@ -1,6 +1,7 @@
 import {isEmptyString, isSymbol} from '@sindresorhus/is'
 import {useQuery} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
+import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {compact} from 'es-toolkit'
 import {size} from 'es-toolkit/compat'
 
@@ -12,7 +13,7 @@ import {component} from '../../../hocs'
 import {withImmerAtom} from '../../../hocs/with-immer-atom'
 import {useCallback} from '../../../hooks/use-callback'
 import {getId} from '../../../misc'
-import {DEFAULT_QUERY_OPTIONS} from '../../../misc/constants'
+import {DEFAULT_QUERY_OPTIONS, EMPTY_OBJECT} from '../../../misc/constants'
 import {pluralize} from '../../../misc/pluralize'
 
 const initialState = {
@@ -23,7 +24,7 @@ const initialState = {
   }
 }
 
-const useStore = withImmerAtom()
+const useStore = withImmerAtom(EMPTY_OBJECT)
 
 const matchesIconTheme = (icon, theme) =>
   isEmptyString(
@@ -51,7 +52,9 @@ export default component(({context}) => {
 
   const state = store.useSelectValue(
     ({draft}) => draft[context.id] ?? initialState,
-    {deps: [context.id]}
+    {
+      deps: [context.id]
+    }
   )
 
   const query = useQuery({
@@ -90,81 +93,81 @@ export default component(({context}) => {
           ).map(icon => getId(query.data.prefix, icon))}
         />
       </div>
-      <ToolbarButton
-        icon='file-symlink-file'
-        onClick={() => {
-          open(`https://www.npmjs.com/package/@iconify-json/${context.id}`)
-        }}
-        slot='actions'
-      />
-      <Menu
-        data={[
-          {
-            label: 'Reset',
-            onClick: () => {
-              store.set(({draft}) => {
-                delete draft[context.id]
-              })
-            }
-          },
-          {separator: true},
-          {
-            label: pluralize(size(query.data.categories), 'category'),
-            menu: Object.keys(query.data.categories).map(category => {
-              const selected = category === state.category
-
-              return {
-                label: category,
-                onClick: () => {
-                  store.set(({draft}) => {
-                    draft[context.id] = {
-                      ...(draft[context.id] ?? initialState),
-                      category: selected ? initialState.category : category
-                    }
-                  })
-                },
-                selected
+      <VscodeToolbarContainer slot='actions'>
+        <ToolbarButton
+          icon='file-symlink-file'
+          onClick={() => {
+            open(`https://www.npmjs.com/package/@iconify-json/${context.id}`)
+          }}
+        />
+        <Menu
+          data={[
+            {
+              label: 'Reset',
+              onClick: () => {
+                store.set(({draft}) => {
+                  delete draft[context.id]
+                })
               }
-            })
-          },
-          ...[
-            ['prefix', query.data.prefixes],
-            ['suffix', query.data.suffixes]
-          ].map(([a, b], index) => ({
-            description: pluralize(size(b), a),
-            label: !index && 'Theme',
-            menu: Object.entries(b).map(([c, d]) => {
-              const selected = c === state.theme[a]
+            },
+            {separator: true},
+            {
+              label: pluralize(size(query.data.categories), 'category'),
+              menu: Object.keys(query.data.categories).map(category => {
+                const selected = category === state.category
 
-              return {
-                label: d,
-                onClick: () => {
-                  store.set(({draft}) => {
-                    const state = draft[context.id] ?? initialState
-
-                    draft[context.id] = {
-                      ...state,
-                      theme: {
-                        ...state.theme,
-                        [a]: selected ? initialState.theme[a] : c
+                return {
+                  label: category,
+                  onClick: () => {
+                    store.set(({draft}) => {
+                      draft[context.id] = {
+                        ...(draft[context.id] ?? initialState),
+                        category: selected ? initialState.category : category
                       }
-                    }
-                  })
-                },
-                selected
-              }
-            })
-          }))
-        ]}
-        render={
-          <ToolbarButton
-            checked={!isInitialState}
-            icon='filter'
-            preventToggle
-            slot='actions'
-          />
-        }
-      />
+                    })
+                  },
+                  selected
+                }
+              })
+            },
+            ...[
+              ['prefix', query.data.prefixes],
+              ['suffix', query.data.suffixes]
+            ].map(([a, b], c) => ({
+              description: pluralize(size(b), a),
+              label: !c && 'Theme',
+              menu: Object.entries(b).map(([c, d]) => {
+                const selected = c === state.theme[a]
+
+                return {
+                  label: d,
+                  onClick: () => {
+                    store.set(({draft}) => {
+                      const state = draft[context.id] ?? initialState
+
+                      draft[context.id] = {
+                        ...state,
+                        theme: {
+                          ...state.theme,
+                          [a]: selected ? initialState.theme[a] : c
+                        }
+                      }
+                    })
+                  },
+                  selected
+                }
+              })
+            }))
+          ]}
+          render={
+            <ToolbarButton
+              checked={!isInitialState}
+              icon='filter'
+              preventToggle
+            />
+          }
+        />
+      </VscodeToolbarContainer>
     </Collapsible>
   )
 })
