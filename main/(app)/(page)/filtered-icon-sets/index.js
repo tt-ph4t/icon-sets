@@ -14,7 +14,7 @@ import {component} from '../../hocs'
 import {useRemount} from '../../hooks/use-remount'
 import {getId} from '../../misc'
 import {DEFAULT_QUERY_OPTIONS} from '../../misc/constants'
-import Filter from './filter'
+import Filters from './filters'
 import {useStore} from './misc'
 
 const InternalIconGrid = component(() => {
@@ -65,7 +65,7 @@ export default useRemount.with(
                 }}>
                 <VscodeFormGroup variant='settings-group'>
                   <VscodeFormHelper>
-                    <Filter />
+                    <Filters />
                   </VscodeFormHelper>
                 </VscodeFormGroup>
               </VscodeFormContainer>
