@@ -17,7 +17,7 @@ export const Collapsible = component(
     ...props
   }) => {
     const internalRef = useRef()
-    const {mergedRef} = useRef.Merge(ref, internalRef)
+    const {mergedRef} = useRef.merge(ref, internalRef)
 
     const [open, setOpen] = useControllableValue(props, {
       defaultValue: defaultOpen,

@@ -21,7 +21,7 @@ const useIdleAsyncEffect = (
 ) => {
   const ref = useRef()
 
-  useEffect.Async(async () => {
+  useEffect.async(async () => {
     cancelIdleCallback(ref.current)
     await beforeEffect()
 
@@ -31,7 +31,7 @@ const useIdleAsyncEffect = (
 
 const Slot = component(({children, index, positionInPercentage}) => {
   const isSlotStart = !isOdd(index)
-  const size = useRef.Size()
+  const size = useRef.size()
   const [state, setState] = useState()
 
   useIdleAsyncEffect(

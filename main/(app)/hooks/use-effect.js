@@ -10,12 +10,12 @@ export const useEffect = Object.assign(
   {
     ...mapValues(
       {
-        Async: useAsyncEffect,
-        Update: useUpdateEffect
+        async: useAsyncEffect,
+        update: useUpdateEffect
       },
       useDeepCompareMemoize.with
     ),
-    Once: (fn, when = true) => {
+    once: (fn, when = true) => {
       const ref = useRef(() => true)
 
       let cleanup

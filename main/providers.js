@@ -2,8 +2,8 @@ import {PacerProvider} from '@tanstack/react-pacer'
 import {QueryClientProvider} from '@tanstack/react-query'
 import {mapValues} from 'es-toolkit'
 
-import {component} from '../app/hocs'
-import {DELAY_MS, EMPTY_OBJECT, QUERY_CLIENT} from '../app/misc/constants'
+import {component} from './(app)/hocs'
+import {DELAY_MS, EMPTY_OBJECT, QUERY_CLIENT} from './(app)/misc/constants'
 
 const PacerProviderProps = {
   defaultOptions: mapValues(

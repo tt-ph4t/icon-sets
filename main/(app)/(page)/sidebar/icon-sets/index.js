@@ -15,7 +15,7 @@ const CollapsibleList = collapsibleList()
 const queryOptions = {
   ...DEFAULT_QUERY_OPTIONS,
   select: iconSets => {
-    const categories = mapValues(
+    const categoryList = mapValues(
       Object.groupBy(Object.values(iconSets), iconSet => iconSet.category),
       iconSets =>
         iconSets.map(iconSet => ({
@@ -26,8 +26,8 @@ const queryOptions = {
     return {
       iconSet: {
         category: {
-          list: categories,
-          names: sort(Object.keys(categories)).asc()
+          list: categoryList,
+          names: sort(Object.keys(categoryList)).asc()
         },
         prefixes: Object.keys(iconSets)
       }

@@ -8,10 +8,10 @@ import {useState} from './use-state'
 
 const bodyElement = document.querySelector('body')
 
-// https://github.com/Shopify/quilt/blob/d98672060fc724f3fe7af9a25a0845b8d7c0774a/packages/react-hooks/src/hooks/lazy-ref.ts
 export const useRef = Object.assign(
   (getValue = noop) => {
-    const ref = React.useRef(useState(() => getValue())[0])
+    const // https://github.com/Shopify/quilt/blob/d98672060fc724f3fe7af9a25a0845b8d7c0774a/packages/react-hooks/src/hooks/lazy-ref.ts
+      ref = React.useRef(useState(() => getValue())[0])
 
     useUnmount(() => {
       React.startTransition(() => {
@@ -22,7 +22,7 @@ export const useRef = Object.assign(
     return ref
   },
   {
-    Fullscreen: options => {
+    fullscreen: options => {
       const ref = useRef()
       const [isFullscreen, rest] = useFullscreen(ref, options)
 
@@ -32,12 +32,12 @@ export const useRef = Object.assign(
         ...rest
       }
     },
-    Merge:
+    merge:
       // https://github.com/radix-ui/primitives/blob/22473d16404bfd446305db5b6c9308aece99fdec/packages/react/compose-refs/src/compose-refs.tsx#L55
       (...refs) => ({
         mergedRef: useCallback(composeRefs(...refs), refs)
       }),
-    Size: () => {
+    size: () => {
       const ref = useRef()
 
       return {

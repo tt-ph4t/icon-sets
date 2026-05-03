@@ -16,7 +16,7 @@ const defaults = {
 
 export const useFavoritedIcons = Object.assign(
   (key = defaults.key, throttlerOptions = defaults.throttlerOptions) => {
-    const [state, setState] = useState.LocalStorage(key, {
+    const [state, setState] = useState.localStorage(key, {
       defaultValue: defaults.value
     })
 

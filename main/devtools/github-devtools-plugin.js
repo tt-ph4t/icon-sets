@@ -3,10 +3,10 @@ import ms from 'ms'
 import React from 'react'
 import {useGlitch} from 'react-powerglitch'
 
-import {component} from '../../app/hocs'
-import {useCallback} from '../../app/hooks/use-callback'
-import {GITHUB_REPO, POWER_GLITCH_OPTIONS} from '../../app/misc/constants'
-import {getQueryOptions} from '../../app/misc/get-query-options'
+import {component} from '../(app)/hocs'
+import {useCallback} from '../(app)/hooks/use-callback'
+import {GITHUB_REPO, POWER_GLITCH_OPTIONS} from '../(app)/misc/constants'
+import {getQueryOptions} from '../(app)/misc/get-query-options'
 import fish from './xT9IgxY4eMijhmPgm4.webp'
 
 const queryClient = new QueryClient()

@@ -3,7 +3,7 @@ import {constantCase} from 'change-case'
 import {destr} from 'destr'
 
 export const useState = Object.assign(useSafeState, {
-  LocalStorage: (
+  localStorage: (
     key,
     {deserializer = destr, listenStorageChange = true, ...options}
   ) =>

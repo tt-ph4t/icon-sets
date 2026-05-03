@@ -5,15 +5,15 @@ import {createRoot} from 'react-dom/client'
 import {ErrorBoundary} from 'react-error-boundary'
 import root from 'react-shadow'
 
-import Layout from './app/(page)/layout'
-import {Fallback} from './app/components/fallback'
-import {ProgressRing} from './app/components/progress-ring'
-import {DATABASE_URL} from './app/misc/constants'
-import './misc/styles/index.css'
+import Layout from './(app)/(page)/layout'
+import {Fallback} from './(app)/components/fallback'
+import {ProgressRing} from './(app)/components/progress-ring'
+import {DATABASE_URL} from './(app)/misc/constants'
+import './styles/index.css'
 
-const App = React.lazy(() => import('./app/(page)'))
-const Devtools = React.lazy(() => import('./misc/devtools'))
-const Providers = React.lazy(() => import('./misc/providers'))
+const App = React.lazy(() => import('./(app)/(page)'))
+const Devtools = React.lazy(() => import('./devtools'))
+const Providers = React.lazy(() => import('./providers'))
 
 preconnect(new URL(DATABASE_URL).origin)
 

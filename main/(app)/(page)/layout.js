@@ -19,7 +19,7 @@ const DefaultReverseWrapper = component(({children}) => {
     ({draft}) => draft.layout.isReverse
   )
 
-  useEffect.Update(() => {
+  useEffect.update(() => {
     ref.current.resetHandlePosition()
   }, [isReverse])
 
@@ -46,8 +46,8 @@ export default {
       ({draft}) => draft.layout.isFullscreen
     )
 
-    const fullscreen = useRef.Fullscreen()
-    const {mergedRef} = useRef.Merge(ref, fullscreen.ref)
+    const fullscreen = useRef.fullscreen()
+    const {mergedRef} = useRef.merge(ref, fullscreen.ref)
 
     useEffect(() => {
       if (fullscreen.isEnabled) {
@@ -67,7 +67,7 @@ export default {
   }),
   Resizable: component(({children, onResize = asyncNoop}) => {
     const settings = useSettings()
-    const maxConstraints = useRef.Size()
+    const maxConstraints = useRef.size()
     const size = settings.useSelectValue(({draft}) => draft.layout.size)
 
     useEffect(() => {

@@ -84,7 +84,7 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
     setState(last(items))
   }, batcherOptions)
 
-  useEffect.Update(() => {
+  useEffect.update(() => {
     batcher.addItem(searchTerm)
   }, [batcher, searchTerm])
 
