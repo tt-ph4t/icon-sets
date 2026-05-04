@@ -80,7 +80,7 @@ export const POWER_GLITCH_OPTIONS =
 
 export const DEFAULT_QUERY_OPTIONS = deepFreeze(
   getQueryOptions({
-    url: `${DATABASE_URL}/index.toon`
+    url: `${DATABASE_URL}/index.msgpack`
   })
 )
 

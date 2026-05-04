@@ -19,7 +19,10 @@ const PacerProviderProps = {
       rateLimiter: EMPTY_OBJECT,
       throttler: EMPTY_OBJECT
     },
-    options => ({wait: DELAY_MS, ...options})
+    options => ({
+      wait: DELAY_MS,
+      ...options
+    })
   )
 }
 

@@ -1,11 +1,11 @@
 import {useLocalStorageState, useSafeState} from 'ahooks'
 import {constantCase} from 'change-case'
-import {destr} from 'destr'
+import {safeDestr} from 'destr'
 
 export const useState = Object.assign(useSafeState, {
   localStorage: (
     key,
-    {deserializer = destr, listenStorageChange = true, ...options}
+    {deserializer = safeDestr, listenStorageChange = true, ...options}
   ) =>
     useLocalStorageState(constantCase(key), {
       deserializer,

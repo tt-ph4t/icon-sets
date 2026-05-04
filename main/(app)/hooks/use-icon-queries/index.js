@@ -43,7 +43,7 @@ export const useIconQueries = (...icons) => {
             },
             {...iconCustomisations, color: iconOptions.color}
           ),
-        url: `${DATABASE_URL}/${icon.prefix}/${icon.name}.toon`,
+        url: `${DATABASE_URL}/${icon.prefix}/${icon.name}.msgpack`,
         ...queryOptions
       })
     })

@@ -1,8 +1,9 @@
+import {decode} from '@msgpack/msgpack'
 import {queryOptions} from '@tanstack/react-query'
-import {decode} from '@toon-format/toon'
 import {isEqual} from '@ver0/deep-equal'
 import axios from 'axios'
-import {delay, noop} from 'es-toolkit'
+import {safeDestr} from 'destr'
+import {delay, mapValues, noop} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import ms from 'ms'
 
@@ -13,6 +14,21 @@ const defaults = {
   structuralSharing: (a, b) => (isEqual(a, b) ? a : b),
   timeout: ms('1m')
 }
+
+const axiosInstances = mapValues(
+  {
+    msgpack: {
+      responseType: 'arraybuffer',
+      transformResponse: decode
+    },
+    safeDestr: {
+      transformResponse: safeDestr
+    },
+    // eslint-disable-next-line perfectionist/sort-objects
+    default: undefined
+  },
+  axios.create
+)
 
 export const getQueryOptions =
   // https://tanstack.com/query/latest/docs/framework/react/guides/render-optimizations
@@ -42,13 +58,14 @@ export const getQueryOptions =
         (async () => {
           await delay(delayMs)
 
-          const {data} = await axios.get(url, {timeout})
-
-          try {
-            return decode(data)
-          } catch {
-            return data
-          }
+          for (const axios of Object.values(axiosInstances))
+            try {
+              return (
+                await axios.get(url, {
+                  timeout
+                })
+              ).data
+            } catch {}
         }),
       queryKey: castArray(queryKey ?? url),
       refetchOnReconnect,
