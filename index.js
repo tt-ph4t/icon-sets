@@ -4,9 +4,9 @@ import {
   parseIconSetAsync,
   validateIconSet,
 } from "@iconify/utils";
-import * as toon from "@toon-format/toon";
+import msgpack from "@msgpack/msgpack";
 import { sentenceCase } from "change-case";
-import { isEqual, isPlainObject, pick, uniqWith } from "es-toolkit";
+import { isEqual, isPlainObject, mapValues, pick, uniqWith } from "es-toolkit";
 import { sort } from "fast-sort";
 import has from "has-values";
 import mapObject, { mapObjectSkip } from "map-obj";
@@ -26,16 +26,8 @@ const sortKeys = (object, options = {}) => {
   );
 };
 
-const validateToon = (value, fallback) => {
-  try {
-    return toon.decode(toon.encode(value ?? fallback));
-  } catch {
-    return fallback;
-  }
-};
-
 const writeFileSync = (file, data) => {
-  fs.writeFileSync(`${file}.toon`, toon.encode(data));
+  fs.writeFileSync(`${file}.msgpack`, msgpack.encode(data));
 };
 
 fs.copyFileSync("node_modules/@iconify/json/collections.md", "readme.md");
@@ -84,7 +76,7 @@ writeFileSync(
               aliases: mapObject(getIconsTree(iconSet), (a, b) =>
                 has(b) ? [a, b] : mapObjectSkip,
               ),
-              categories: validateToon(iconSet.categories, {}),
+              categories: iconSet.categories ?? {},
               category: iconSet.info.category ?? "Uncategorised",
               grid: iconSet.info.height ?? "No grid / mixed grid",
               hasAnimations: Boolean(
@@ -100,11 +92,9 @@ writeFileSync(
                   url: license.url ?? defaultLicense.url,
                 };
               },
-              get suffixes() {
-                return has(iconSet.suffixes)
-                  ? mapObject(iconSet.suffixes, (a, b) => [a, sentenceCase(b)])
-                  : {};
-              },
+              suffixes: mapValues(iconSet.suffixes ?? {}, (a) =>
+                sentenceCase(a ?? ""),
+              ),
               tags: sort(iconSet.info.tags ?? []).asc(),
               version: iconSet.info.version ?? "None",
               prefixes: iconSet.prefixes ?? {},
