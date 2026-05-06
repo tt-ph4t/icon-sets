@@ -71,11 +71,11 @@ export const trigger = mapValues(
     }
 )
 
-export const validateIconId = value =>
-  isString(value) &&
-  isWordCharacter(value) &&
-  value.includes(ID_SEPARATOR) &&
-  validateIconName(parseIconName(value))
+export const validateIconId = iconId =>
+  isString(iconId) &&
+  isWordCharacter(iconId) &&
+  iconId.includes(ID_SEPARATOR) &&
+  validateIconName(parseIconName(iconId).icon)
 
 export const openObjectURL = (...args) => {
   const url = URL.createObjectURL(...args)

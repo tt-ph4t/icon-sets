@@ -1,4 +1,4 @@
-import {useBatcher} from '@tanstack/react-pacer/batcher'
+import {useBatcher} from '@tanstack/react-pacer'
 import {last} from 'es-toolkit'
 import React from 'react'
 

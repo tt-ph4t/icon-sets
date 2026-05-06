@@ -1,5 +1,5 @@
 import {useQueries, useQuery} from '@tanstack/react-query'
-import {mapValues} from 'es-toolkit'
+import {mapValues, pick} from 'es-toolkit'
 import ms from 'ms'
 
 import {DATABASE_URL, DEFAULT_QUERY_OPTIONS} from '../../misc/constants'
@@ -17,35 +17,48 @@ const buildIconContextQueryOptions = {
     }))
 }
 
+const defaultQueryOptions = pick(DEFAULT_QUERY_OPTIONS, ['select'])
+
 export const useIconQueries = (...icons) => {
   const buildIconContextQuery = useQuery(buildIconContextQueryOptions)
 
   const iconOptions = useCustomizedIcons().store.useSelectValue(({draft}) => ({
-    color: draft.sharedOptions.color
+    color: draft.globalOptions.color
   }))
 
   return useQueries({
-    queries: icons.map(({iconCustomisations, iconId, queryOptions}) => {
-      const icon = parseIconName(iconId)
-      const buildIconContext = buildIconContextQuery.data[icon.prefix]
+    queries: icons.map(
+      ({
+        iconCustomisations,
+        iconId,
+        queryOptions = defaultQueryOptions // ?
+      }) => {
+        const {icon} = parseIconName(iconId)
+        const buildIconContext = buildIconContextQuery.data[icon.prefix]
 
-      return getQueryOptions({
-        enabled: buildIconContextQuery.isSuccess,
-        gcTime: ms('1m'),
-        queryKey: iconId,
-        select: data =>
-          buildIcon(
-            {
-              data,
-              id: iconId,
-              ...icon,
-              ...buildIconContext
-            },
-            {...iconCustomisations, color: iconOptions.color}
-          ),
-        url: `${DATABASE_URL}/${icon.prefix}/${icon.name}.msgpack`,
-        ...queryOptions
-      })
-    })
+        return getQueryOptions({
+          enabled: buildIconContextQuery.isSuccess,
+          gcTime: ms('1m'),
+          queryKey: iconId,
+          url: `${DATABASE_URL}/${icon.prefix}/${icon.name}.msgpack`,
+          ...queryOptions,
+          select: data =>
+            queryOptions.select(
+              buildIcon(
+                {
+                  data,
+                  id: iconId,
+                  ...icon,
+                  ...buildIconContext
+                },
+                {
+                  ...iconCustomisations,
+                  ...iconOptions
+                }
+              )
+            )
+        })
+      }
+    )
   })
 }

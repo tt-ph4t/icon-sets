@@ -1,5 +1,5 @@
 import uFuzzy from '@leeoniya/ufuzzy'
-import {useBatcher} from '@tanstack/react-pacer/batcher'
+import {useBatcher} from '@tanstack/react-pacer'
 import {Sketch} from '@uiw/react-color'
 import {
   VscodeBadge,
@@ -109,7 +109,7 @@ const IconOptions = {
     })
 
     const iconOptions = customizedIcons.store.useSelectValue(({draft}) => ({
-      color: draft.sharedOptions.color
+      color: draft.globalOptions.color
     }))
 
     return (
@@ -122,7 +122,7 @@ const IconOptions = {
               onChange={colorResult => {
                 batcher.addItem(() => {
                   customizedIcons.store.set(({draft}) => {
-                    draft.sharedOptions.color = colorResult.hexa
+                    draft.globalOptions.color = colorResult.hexa
                   })
                 })
               }}
@@ -145,7 +145,7 @@ const IconOptions = {
                     onClick={() => {
                       batcher.addItem(() => {
                         customizedIcons.store.set(({draft}) => {
-                          draft.sharedOptions.color = randomColor()
+                          draft.globalOptions.color = randomColor()
                         })
                       })
                     }}
@@ -155,7 +155,7 @@ const IconOptions = {
                     onClick={() => {
                       batcher.addItem(() => {
                         customizedIcons.store.set(({draft}) => {
-                          draft.sharedOptions.color =
+                          draft.globalOptions.color =
                             DEFAULT_ICON_CUSTOMISATIONS.color
                         })
                       })
@@ -181,7 +181,7 @@ const IconOptions = {
     const customizedIcons = useCustomizedIcons()
 
     const iconOptions = customizedIcons.store.useSelectValue(({draft}) => ({
-      square: draft.sharedOptions.square
+      square: draft.globalOptions.square
     }))
 
     return (
@@ -190,7 +190,7 @@ const IconOptions = {
         icon='symbol-ruler'
         onChange={event => {
           customizedIcons.store.set(({draft}) => {
-            draft.sharedOptions.square = event.target.checked
+            draft.globalOptions.square = event.target.checked
           })
         }}
         toggleable

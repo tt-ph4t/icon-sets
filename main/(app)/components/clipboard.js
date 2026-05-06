@@ -1,4 +1,4 @@
-import {useBatchedCallback} from '@tanstack/react-pacer/batcher'
+import {useBatchedCallback} from '@tanstack/react-pacer'
 import ms from 'ms'
 import React from 'react'
 

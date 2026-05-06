@@ -1,4 +1,4 @@
-import {useThrottledState} from '@tanstack/react-pacer/throttler'
+import {useThrottledState} from '@tanstack/react-pacer'
 import {isEqual} from '@ver0/deep-equal'
 import deepFreeze from 'deep-freeze-es6'
 import {flow} from 'es-toolkit'

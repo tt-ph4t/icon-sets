@@ -1,10 +1,9 @@
 import {mergeProps} from '@base-ui/react/merge-props'
-import {useQuery, useQueryClient} from '@tanstack/react-query'
+import {useQuery} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeIcon} from '@vscode-elements/react-elements'
-import {useUnmount} from 'ahooks'
 import {capitalCase, sentenceCase} from 'change-case'
-import {findKey, identity, range, uniq} from 'es-toolkit'
+import {findKey, identity, mapValues, pick, range, uniq} from 'es-toolkit'
 import {size, truncate} from 'es-toolkit/compat'
 import React from 'react'
 
@@ -14,7 +13,6 @@ import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
 import {useFavoritedIcons} from '../../../hooks/use-favorited-icons'
 import {useIconQueries} from '../../../hooks/use-icon-queries'
 import {useMemo} from '../../../hooks/use-memo'
-import {useRemount} from '../../../hooks/use-remount'
 import {
   copy,
   fileSaver,
@@ -35,15 +33,7 @@ import {timeAgo} from '../../../misc/time-ago'
 import {Menu} from '../../menu'
 import useStore from '../use-store'
 import takumi from './takumi.wasm'
-
-const Fallback = component(({children, ...props}) => {
-  const style = useCustomizedIcons().store.useSelectValue(({draft}) => ({
-    color: draft.sharedOptions.color,
-    userSelect: 'none'
-  }))
-
-  return <span {...mergeProps({style}, props)}>{children.slice(0, 3)}</span>
-})
+import withQueryBoundary from './with-query-boundary'
 
 const flipDirections = {
   hFlip: 'Horizontal flip',
@@ -57,38 +47,33 @@ const rotate = {
 
 const scales = range(
   DEFAULT_ICON_CUSTOMISATIONS.scale,
-  100 + DEFAULT_ICON_CUSTOMISATIONS.scale
+  DEFAULT_ICON_CUSTOMISATIONS.scale + 100
 )
 
-const sizeLabel = (width = 0, height = 0, scale = 1) =>
-  `${width * scale} x ${height * scale}`
+const sizeLabel = (
+  {height = 0, width = 0},
+  scale = DEFAULT_ICON_CUSTOMISATIONS.scale
+) => `${width * scale} x ${height * scale}`
 
-export default useRemount.with(
-  component(({iconId, index, INTERNAL_REMOUNT}) => {
-    const icon = parseIconName(iconId)
-
-    const queryClient = useQueryClient()
+export default withQueryBoundary(
+  component(({iconId, index, menu}) => {
+    const {icon} = parseIconName(iconId)
     const customizedIcons = useCustomizedIcons()
     const favoritedIcons = useFavoritedIcons()
     const {iconCustomisations} = useCustomizedIcons.useSelect(iconId)
     const store = useStore()
 
     const iconOptions = customizedIcons.store.useSelectValue(
-      ({draft}) => draft.sharedOptions
+      ({draft}) => draft.globalOptions
     )
 
     const [iconQuery] = useIconQueries({
       iconCustomisations,
-      iconId
+      iconId,
+      queryOptions: {
+        select: identity
+      }
     })
-
-    const iconQueryFilter = useMemo(
-      () => ({
-        exact: true,
-        queryKey: [iconId]
-      }),
-      [iconId]
-    )
 
     const iconSetQuery = useQuery({
       ...DEFAULT_QUERY_OPTIONS,
@@ -100,39 +85,9 @@ export default useRemount.with(
 
           return iconSet
         },
-        [icon]
+        [icon.prefix]
       )
     })
-
-    const iconQueryMenu = useMemo(
-      () => [
-        {
-          label: 'Refetch',
-          onClick: async () => {
-            await queryClient.refetchQueries(iconQueryFilter)
-          }
-        },
-        {
-          label: 'Invalidate',
-          onClick: async () => {
-            await queryClient.invalidateQueries(iconQueryFilter)
-          }
-        },
-        {
-          label: 'Reset',
-          onClick: async () => {
-            await queryClient.resetQueries(iconQueryFilter)
-          }
-        },
-        {
-          label: 'Cancel',
-          onClick: async () => {
-            await queryClient.cancelQueries(iconQueryFilter)
-          }
-        }
-      ],
-      [queryClient, iconQueryFilter]
-    )
 
     const getTakumiBlob = useCallback(
       async format =>
@@ -157,47 +112,23 @@ export default useRemount.with(
             },
             options: {
               format,
-              height: iconQuery.data.data.height * iconCustomisations.scale,
-              width: iconQuery.data.data.width * iconCustomisations.scale
+              ...mapValues(
+                pick(iconQuery.data.data, ['height', 'width']),
+                a => a * iconCustomisations.scale
+              )
             }
           }
         )
     )
 
-    useUnmount(async () => {
-      await queryClient.cancelQueries(iconQueryFilter)
-    })
-
-    if (iconQuery.isLoading || iconSetQuery.isLoading)
-      return (
-        <Menu
-          data={[...iconQueryMenu, {separator: true}, INTERNAL_REMOUNT.menu]}
-          render={<Fallback>{icon.name}</Fallback>}
-        />
-      )
-
-    if (iconQuery.isError)
-      return (
-        <Menu
-          data={[...iconQueryMenu, {separator: true}, INTERNAL_REMOUNT.menu]}
-          render={
-            <Fallback
-              onClick={() => {
-                prompt('Error', iconQuery.error.message)
-              }}
-              style={{
-                color: `var(${THEME.COLORS.ERROR})`
-              }}>
-              {icon.name}
-            </Fallback>
-          }
-        />
-      )
-
-    const iconAliases = uniq([
-      iconQuery.data.name,
-      ...(iconSetQuery.data.aliases[iconQuery.data.name] ?? EMPTY_ARRAY)
-    ])
+    const iconAliases = useMemo(
+      () =>
+        uniq([
+          iconQuery.data.name,
+          ...(iconSetQuery.data.aliases[iconQuery.data.name] ?? EMPTY_ARRAY)
+        ]),
+      [iconQuery.data.name, iconSetQuery.data.aliases]
+    )
 
     return (
       <Menu
@@ -209,12 +140,12 @@ export default useRemount.with(
                 label: 'To',
                 menu: [
                   ...Object.entries(iconQuery.data.internal.paths).map(
-                    ([fileType, fileName]) => {
-                      const icon = iconQuery.data.internal.as(fileType)
+                    ([a, b]) => {
+                      const icon = iconQuery.data.internal.as(a)
 
                       return {
                         description: prettyBytes(icon.blob),
-                        label: fileType.toUpperCase(),
+                        label: a.toUpperCase(),
                         menu: hasValues(icon) && [
                           {
                             label: 'View',
@@ -231,7 +162,7 @@ export default useRemount.with(
                           {
                             label: 'Download',
                             onClick: async () => {
-                              await fileSaver(icon.blob, fileName.labeled)
+                              await fileSaver(icon.blob, b.labeled)
                             }
                           }
                         ]
@@ -320,11 +251,7 @@ export default useRemount.with(
                   {
                     label: 'Size',
                     menu: scales.map(scale => ({
-                      label: sizeLabel(
-                        iconQuery.data.data.width,
-                        iconQuery.data.data.height,
-                        scale
-                      ),
+                      label: sizeLabel(iconQuery.data.data, scale),
                       onClick: () => {
                         customizedIcons.set(iconQuery.data.id, () => ({
                           scale
@@ -343,12 +270,7 @@ export default useRemount.with(
                   }
                 ]
               },
-              {
-                label: 'Query',
-                menu: iconQueryMenu
-              },
-              {separator: true},
-              INTERNAL_REMOUNT.menu
+              ...menu
             ],
             onClick: () => {
               favoritedIcons.toggle(iconQuery.data.id)
@@ -367,7 +289,9 @@ export default useRemount.with(
                 label = sentenceCase(label)
 
                 return {
-                  description: truncate(id, {length: 6}),
+                  description: truncate(id, {
+                    length: 6
+                  }),
                   label,
                   onClick: () => {
                     prompt(label, id)
@@ -393,8 +317,7 @@ export default useRemount.with(
           },
           {
             description: sizeLabel(
-              iconQuery.data.data.width,
-              iconQuery.data.data.height,
+              iconQuery.data.data,
               iconCustomisations.scale
             ),
             label: 'Size'
@@ -437,9 +360,11 @@ export default useRemount.with(
             }
           }
         ]}
-        key={iconQuery.data.id}
         render={
-          <div style={{position: 'relative'}}>
+          <div
+            style={{
+              position: 'relative'
+            }}>
             <React.Activity>
               <div
                 style={{

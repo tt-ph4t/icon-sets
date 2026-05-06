@@ -3,7 +3,7 @@ import {queryOptions} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import axios from 'axios'
 import {safeDestr} from 'destr'
-import {delay, flow, mapValues, noop} from 'es-toolkit'
+import {delay, mapValues, noop} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import ms from 'ms'
 
@@ -19,7 +19,7 @@ const axiosInstances = mapValues(
   {
     msgpack: {
       responseType: 'arraybuffer',
-      transformResponse: flow(decode, safeDestr)
+      transformResponse: [decode, safeDestr]
     },
     safeDestr: {
       transformResponse: safeDestr

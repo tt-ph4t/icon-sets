@@ -39,7 +39,7 @@ export const Boundary = Object.assign(
       ({query, queryOptions = DEFAULT_QUERY_OPTIONS, render}) => {
         const queryClient = useQueryClient()
 
-        const queryFilter = useMemo(
+        const filters = useMemo(
           () => ({
             exact: true,
             queryKey: queryOptions.queryKey
@@ -48,7 +48,7 @@ export const Boundary = Object.assign(
         )
 
         useUnmount(async () => {
-          await queryClient.cancelQueries(queryFilter)
+          await queryClient.cancelQueries(filters)
         })
 
         if (query.isLoading) return fallback
@@ -58,7 +58,7 @@ export const Boundary = Object.assign(
             <Fallback.Error
               message={query.error.message}
               retryFn={async () => {
-                await queryClient.resetQueries(queryFilter)
+                await queryClient.resetQueries(filters)
               }}
             />
           )

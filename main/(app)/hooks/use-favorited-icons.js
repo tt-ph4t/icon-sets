@@ -1,4 +1,4 @@
-import {useThrottler} from '@tanstack/react-pacer/throttler'
+import {useThrottler} from '@tanstack/react-pacer'
 import {union, uniq, without} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import ms from 'ms'

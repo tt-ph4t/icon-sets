@@ -1,5 +1,5 @@
 import {mergeCustomisations} from '@iconify/utils'
-import {useThrottler} from '@tanstack/react-pacer/throttler'
+import {useThrottler} from '@tanstack/react-pacer'
 import {isEqual} from '@ver0/deep-equal'
 import {pick} from 'es-toolkit'
 
@@ -15,7 +15,7 @@ mergeCustomisations
 
 const useStore = withImmerAtom({
   current: EMPTY_OBJECT,
-  sharedOptions: pick(DEFAULT_ICON_CUSTOMISATIONS, ['color', 'square'])
+  globalOptions: pick(DEFAULT_ICON_CUSTOMISATIONS, ['color', 'square'])
 })
 
 const result = iconCustomisations => ({iconCustomisations})

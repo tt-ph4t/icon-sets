@@ -5,15 +5,22 @@ import {LRUCache} from 'lru-cache'
 import {trigger} from './'
 import {ICON_CACHE} from './constants'
 
-const cache = new LRUCache({max: ICON_CACHE.max * 2})
+const cache = new LRUCache({
+  max: ICON_CACHE.max * 2
+})
 
-export const parseIconName = (value, validate = true) => {
-  if (cache.has(value)) return cache.get(value)
+export const parseIconName = (iconId, validate = true) => {
+  if (isWordCharacter(iconId)) {
+    if (cache.has(iconId)) return cache.get(iconId)
 
-  if (isWordCharacter(value)) {
-    const icon = stringToIcon(value, validate) ?? trigger.error()
+    let icon = stringToIcon(iconId, validate) ?? trigger.error()
 
-    cache.set(value, icon)
+    cache.set(
+      iconId,
+      (icon = {
+        icon
+      })
+    )
 
     return icon
   }

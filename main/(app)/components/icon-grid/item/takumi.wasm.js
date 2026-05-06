@@ -8,7 +8,9 @@ import {
   MAX_CACHEABLE_SIZE
 } from '../../../misc/constants'
 
-const cache = new LRUCache({max: ICON_CACHE.max})
+const cache = new LRUCache({
+  max: ICON_CACHE.max
+})
 
 export default Object.assign(
   async (component, {id, options}) => {
