@@ -1,5 +1,10 @@
 import {defaultIconCustomisations} from '@iconify/utils'
-import {QueryClient} from '@tanstack/react-query'
+import {
+  QueryClient,
+  useIsFetching,
+  useIsMutating,
+  useIsRestoring
+} from '@tanstack/react-query'
 import bytes from 'bytes'
 import deepFreeze from 'deep-freeze-es6'
 import {omit} from 'es-toolkit'
@@ -122,3 +127,17 @@ export const THEME = deepFreeze({
   },
   DEFAULT_COLOR_SCHEME: 'light'
 })
+
+export const QUERY_CLIENT_MENU = deepFreeze([
+  ['Refetch', 'refetchQueries'],
+  ['Invalidate', 'invalidateQueries'],
+  ['Reset', 'resetQueries'],
+  ['Cancel', 'cancelQueries'],
+  ['Remove', 'removeQueries']
+])
+
+export const REACT_QUERY_STATUS_HOOKS = deepFreeze([
+  useIsFetching,
+  useIsMutating,
+  useIsRestoring
+])

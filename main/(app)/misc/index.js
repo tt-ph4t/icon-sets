@@ -2,8 +2,8 @@ import {validateIconName} from '@iconify/utils'
 import {
   isBigint,
   isNull,
-  isNumber,
   isPrimitive,
+  isSafeInteger,
   isString,
   isUndefined
 } from '@sindresorhus/is'
@@ -104,5 +104,5 @@ export const getIconFilePaths = (icon, extension) => ({
 export const isReactKey = (value, allowNullish = true) =>
   (allowNullish && (isNull(value) || isUndefined(value))) ||
   isString(value) ||
-  isNumber(value) ||
+  isSafeInteger(value) ||
   isBigint(value)

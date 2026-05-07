@@ -1,10 +1,5 @@
 import {isTruthy} from '@sindresorhus/is'
-import {
-  useIsFetching,
-  useIsMutating,
-  useIsRestoring,
-  useQuery
-} from '@tanstack/react-query'
+import {useQuery} from '@tanstack/react-query'
 import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {useNetwork} from 'ahooks'
 import React from 'react'
@@ -17,17 +12,19 @@ import {ToolbarButton} from '../components/toolbar-button'
 import {component} from '../hocs'
 import {useRemount} from '../hooks/use-remount'
 import {useSettings} from '../hooks/use-settings'
-import {DEFAULT_QUERY_OPTIONS, THEME} from '../misc/constants'
+import {
+  DEFAULT_QUERY_OPTIONS,
+  REACT_QUERY_STATUS_HOOKS,
+  THEME
+} from '../misc/constants'
 import Layout from './layout'
+import QueryClient from './query-client'
 
 const Sidebar = Boundary.lazy(() => import('./sidebar'))
 const FilteredIconSets = Boundary.lazy(() => import('./filtered-icon-sets'))
 
 const GlobalActivity = component(() => {
-  const isLoading = [useIsFetching(), useIsMutating(), useIsRestoring()].some(
-    isTruthy
-  )
-
+  const isLoading = REACT_QUERY_STATUS_HOOKS.map(hook => hook()).some(isTruthy)
   const network = useNetwork()
 
   return (
@@ -141,6 +138,7 @@ export default useRemount.with(
             position: 'absolute'
           }}>
           <Settings menu={[{separator: true}, INTERNAL_REMOUNT.menu]} />
+          <QueryClient />
         </VscodeToolbarContainer>
       </React.Activity>
     </Layout.Fullscreen>
