@@ -10,7 +10,7 @@ import {ToolbarButton} from '../components/toolbar-button'
 import {component} from '../hocs'
 import {useCallback} from '../hooks/use-callback'
 import {useEffect} from '../hooks/use-effect'
-import {QUERY_CLIENT_MENU, REACT_QUERY_STATUS_HOOKS} from '../misc/constants'
+import {QUERY_CLIENT_ACTIONS, REACT_QUERY_STATUS_HOOKS} from '../misc/constants'
 import {pluralize} from '../misc/pluralize'
 
 const InternalToolbarButton = component(props => {
@@ -58,7 +58,7 @@ export default component(() => {
   return (
     <Menu
       data={[
-        ...QUERY_CLIENT_MENU.map(([a, b]) => ({
+        ...QUERY_CLIENT_ACTIONS.map(([a, b]) => ({
           label: a,
           onClick: () => {
             debouncer.maybeExecute(b)

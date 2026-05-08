@@ -7,7 +7,7 @@ import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
 import {useIconQueries} from '../../../hooks/use-icon-queries'
 import {useMemo} from '../../../hooks/use-memo'
 import {useRemount} from '../../../hooks/use-remount'
-import {QUERY_CLIENT_MENU, THEME} from '../../../misc/constants'
+import {QUERY_CLIENT_ACTIONS, THEME} from '../../../misc/constants'
 import {parseIconName} from '../../../misc/parse-icon-name'
 import {Menu} from '../../menu'
 
@@ -40,7 +40,7 @@ export default Component =>
 
       const menu = useMemo(
         () =>
-          QUERY_CLIENT_MENU.map(([a, b]) => ({
+          QUERY_CLIENT_ACTIONS.map(([a, b]) => ({
             label: a,
             onClick: async () => {
               await queryClient[b](filters)

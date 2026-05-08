@@ -5,14 +5,12 @@ import {
   useIsMutating,
   useIsRestoring
 } from '@tanstack/react-query'
-import bytes from 'bytes'
 import deepFreeze from 'deep-freeze-es6'
 import {omit} from 'es-toolkit'
 import {LRUCache} from 'lru-cache'
 import ms from 'ms'
 
 import {getQueryOptions} from './get-query-options'
-import {prettyBytes} from './pretty-bytes'
 
 export const GITHUB_REPO = 'tt-ph4t/icon-sets'
 
@@ -23,19 +21,17 @@ export const DELAY_MS = ms('.15s')
 
 export const ID_SEPARATOR = ':'
 
-export const ICON_CACHE = new LRUCache({max: 1000})
+export const ICON_CACHE = new LRUCache({
+  max: 1e3
+})
 
 export const QUERY_CLIENT = new QueryClient()
 
 export const EMPTY_BLOB = new Blob()
 
-export const MAX_CACHEABLE_SIZE = bytes.parse('256kb')
-
 export const EMPTY_OBJECT = deepFreeze({})
 
 export const EMPTY_ARRAY = deepFreeze([])
-
-export const EMPTY_SIZE_TEXT = prettyBytes(0)
 
 export const SORT_ORDER_LABELS = deepFreeze({
   asc: 'Ascending',
@@ -128,7 +124,7 @@ export const THEME = deepFreeze({
   DEFAULT_COLOR_SCHEME: 'light'
 })
 
-export const QUERY_CLIENT_MENU = deepFreeze([
+export const QUERY_CLIENT_ACTIONS = deepFreeze([
   ['Refetch', 'refetchQueries'],
   ['Invalidate', 'invalidateQueries'],
   ['Reset', 'resetQueries'],

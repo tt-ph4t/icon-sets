@@ -207,7 +207,7 @@ export default withQueryBoundary(
               },
               {
                 label: 'Favorite',
-                menu: useFavoritedIcons.menu.map(a => ({
+                menu: useFavoritedIcons.actions.map(a => ({
                   label: sentenceCase(a),
                   onClick: () => {
                     favoritedIcons[a](iconQuery.data.id)

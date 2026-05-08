@@ -1,16 +1,15 @@
+import bytes from 'bytes'
 import {LRUCache} from 'lru-cache'
 import mime from 'mime/lite' // ?
 import {ImageResponse} from 'takumi-js/response'
 
-import {
-  EMPTY_BLOB,
-  ICON_CACHE,
-  MAX_CACHEABLE_SIZE
-} from '../../../misc/constants'
+import {EMPTY_BLOB, ICON_CACHE} from '../../../misc/constants'
 
 const cache = new LRUCache({
   max: ICON_CACHE.max
 })
+
+const maxCacheSize = bytes.parse('256kb')
 
 export default Object.assign(
   async (component, {id, options}) => {
@@ -26,7 +25,7 @@ export default Object.assign(
       if (imageResponse.ok) {
         const blob = await imageResponse.blob()
 
-        if (blob.size <= MAX_CACHEABLE_SIZE) cache.set(id, blob)
+        if (blob.size <= maxCacheSize) cache.set(id, blob)
 
         return blob
       }

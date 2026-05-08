@@ -57,6 +57,6 @@ export const useFavoritedIcons = Object.assign(
     }
   },
   {
-    menu: ['toggle', 'add', 'delete'] // ?
+    actions: ['toggle', 'add', 'delete']
   }
 )

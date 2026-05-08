@@ -43,12 +43,12 @@ import {hasValues, validateIconId} from '../../misc'
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
   EMPTY_ARRAY,
-  EMPTY_SIZE_TEXT,
   ICON_CACHE,
   SORT_ORDER_LABELS,
   THEME
 } from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
+import {prettyBytes} from '../../misc/pretty-bytes'
 import {Clipboard} from '../clipboard'
 import {Menu} from '../menu'
 import {Popover} from '../popover'
@@ -267,7 +267,7 @@ export const IconGrid = useRemount.with(
                       hasFilteredIconIds && [
                         {
                           label: 'Favorite',
-                          menu: useFavoritedIcons.menu.map(a => ({
+                          menu: useFavoritedIcons.actions.map(a => ({
                             label: sentenceCase(a),
                             onClick: () => {
                               favoritedIcons[a](...state.iconIds)
@@ -299,7 +299,7 @@ export const IconGrid = useRemount.with(
                         },
                         {separator: true},
                         {
-                          description: EMPTY_SIZE_TEXT,
+                          description: prettyBytes(0),
                           label: 'Download'
                         }
                       ]
