@@ -136,8 +136,14 @@ export const Menu = component(
             <Positioner align={align} side={side}>
               <Popup
                 render={popupRender(data, {
-                  ItemProps: {closeOnClick},
-                  TriggerProps: {closeDelay, delay, openOnHover}
+                  ItemProps: {
+                    closeOnClick
+                  },
+                  TriggerProps: {
+                    closeDelay,
+                    delay,
+                    openOnHover
+                  }
                 })}
               />
             </Positioner>

@@ -17,6 +17,7 @@ import {
   REACT_QUERY_STATUS_HOOKS,
   THEME
 } from '../misc/constants'
+import IconQueries from './icon-queries'
 import Layout from './layout'
 import QueryClient from './query-client'
 
@@ -87,7 +88,7 @@ const Settings = component(({menu}) => {
         },
         ...menu
       ]}
-      render={<ToolbarButton icon='settings'>Settings</ToolbarButton>}
+      render={<ToolbarButton icon='settings' />}
     />
   )
 })
@@ -138,7 +139,10 @@ export default useRemount.with(
             position: 'absolute'
           }}>
           <Settings menu={[{separator: true}, INTERNAL_REMOUNT.menu]} />
-          <QueryClient />
+          <React.Activity>
+            <IconQueries />
+            <QueryClient />
+          </React.Activity>
         </VscodeToolbarContainer>
       </React.Activity>
     </Layout.Fullscreen>

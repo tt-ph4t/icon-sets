@@ -3,7 +3,7 @@ import {queryOptions} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import axios from 'axios'
 import {safeDestr} from 'destr'
-import {delay, mapValues, noop} from 'es-toolkit'
+import {delay, identity, mapValues, noop} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import ms from 'ms'
 
@@ -47,6 +47,7 @@ export const getQueryOptions =
     staleTime = Infinity,
     structuralSharing = defaults.structuralSharing,
     timeout = defaults.timeout,
+    transformData = identity,
     url,
     ...rest
   }) =>
@@ -60,11 +61,13 @@ export const getQueryOptions =
             try {
               await delay(delayMs)
 
-              return (
-                await axios.get(url, {
-                  timeout
-                })
-              ).data
+              return await transformData(
+                (
+                  await axios.get(url, {
+                    timeout
+                  })
+                ).data
+              )
             } catch {}
         }),
       queryKey: castArray(queryKey ?? url),

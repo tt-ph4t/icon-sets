@@ -1,5 +1,7 @@
+import {mergeProps} from '@base-ui/react'
 import {useDebouncer} from '@tanstack/react-pacer'
 import {useQueryClient} from '@tanstack/react-query'
+import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {useSetState} from 'ahooks'
 import {pick} from 'es-toolkit'
 import ms from 'ms'
@@ -37,7 +39,13 @@ const InternalToolbarButton = component(props => {
   useEffect.update(updateState, deps)
 
   return (
-    <ToolbarButton onClick={updateState} {...props}>
+    <ToolbarButton
+      {...mergeProps(
+        {
+          onClick: updateState
+        },
+        props
+      )}>
       {pluralize(state.totalQueries, 'query')}
     </ToolbarButton>
   )
@@ -73,16 +81,17 @@ export default component(() => {
         }
       ]}
       render={
-        <div>
+        <VscodeToolbarContainer>
           <debouncer.Subscribe selector={state => pick(state, ['isPending'])}>
             {debouncerState => (
               <InternalToolbarButton
                 checked={debouncerState.isPending}
+                icon='database'
                 preventToggle
               />
             )}
           </debouncer.Subscribe>
-        </div>
+        </VscodeToolbarContainer>
       }
     />
   )
