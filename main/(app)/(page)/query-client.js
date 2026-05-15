@@ -72,7 +72,9 @@ export default component(() => {
             debouncer.maybeExecute(b)
           }
         })),
-        {separator: true},
+        {
+          separator: true
+        },
         {
           label: 'Clear',
           onClick: () => {

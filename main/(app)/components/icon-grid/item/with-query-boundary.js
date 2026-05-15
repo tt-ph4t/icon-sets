@@ -1,4 +1,4 @@
-import {mergeProps} from '@base-ui/react/merge-props'
+import {mergeProps} from '@base-ui/react'
 import {useQueryClient} from '@tanstack/react-query'
 import {useUnmount} from 'ahooks'
 
@@ -50,7 +50,13 @@ export default Component =>
       )
 
       const fallbackMenu = useMemo(
-        () => [...menu, {separator: true}, INTERNAL_REMOUNT.menu],
+        () => [
+          ...menu,
+          {
+            separator: true
+          },
+          INTERNAL_REMOUNT.menu
+        ],
         [menu, INTERNAL_REMOUNT.menu]
       )
 
@@ -89,7 +95,9 @@ export default Component =>
               label: 'Query',
               menu
             },
-            {separator: true},
+            {
+              separator: true
+            },
             INTERNAL_REMOUNT.menu
           ]}
           {...props}

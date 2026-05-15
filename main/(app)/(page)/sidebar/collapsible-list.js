@@ -87,7 +87,10 @@ export default () => {
             data={[
               INTERNAL_REMOUNT.menu,
               {
-                label: `${hasOpenedIds ? 'Collapse' : 'Expand'} ${pluralize((hasOpenedIds ? openedIds : closedIds).length, 'item')}`,
+                label: `${hasOpenedIds ? 'Collapse' : 'Expand'} ${pluralize(
+                  (hasOpenedIds ? openedIds : closedIds).length,
+                  'item'
+                )}`,
                 onClick: () => {
                   store.set(({draft}) => {
                     for (const id of ids)
@@ -98,7 +101,14 @@ export default () => {
                   })
                 }
               },
-              ...(hasValues(menu) ? [{separator: true}, ...menu] : EMPTY_ARRAY)
+              ...(hasValues(menu)
+                ? [
+                    {
+                      separator: true
+                    },
+                    ...menu
+                  ]
+                : EMPTY_ARRAY)
             ]}
             render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
           />

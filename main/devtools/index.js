@@ -34,7 +34,9 @@ export default component(() => {
         }}
       />
       <TanStackDevtools
-        config={{theme: THEME.DEFAULT_COLOR_SCHEME}}
+        config={{
+          theme: THEME.DEFAULT_COLOR_SCHEME
+        }}
         {...TanStackDevtoolsProps}
       />
     </React.Activity>

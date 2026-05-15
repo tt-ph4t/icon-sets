@@ -1,108 +1,160 @@
-import {Menu as menu} from '@base-ui/react/menu'
-import {isPlainObject} from '@sindresorhus/is'
+import {Menu as InternalMenu, mergeProps} from '@base-ui/react'
+import {isFalsy, isPlainObject} from '@sindresorhus/is'
 import {
   VscodeContextMenuItem,
   VscodeFormContainer,
   VscodeFormGroup
 } from '@vscode-elements/react-elements'
-import {asyncNoop} from 'es-toolkit'
+import {useControllableValue} from 'ahooks'
+import {asyncNoop, omit} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import React from 'react'
 
 import {component} from '../hocs'
-import {useCallback} from '../hooks/use-callback'
 import {useMemo} from '../hooks/use-memo'
 import {useState} from '../hooks/use-state'
-import {getId, hasValues} from '../misc'
+import {getId, hasValues, isWordCharacter} from '../misc'
 import {EMPTY_ARRAY, THEME} from '../misc/constants'
 
-const {
-  Item,
-  Popup,
-  Portal,
-  Positioner,
-  Root,
-  SubmenuRoot,
-  SubmenuTrigger,
-  Trigger
-} = menu
+const validateData = data =>
+  Iterator.from(castArray(data))
+    .filter(value => isPlainObject(value) || isWordCharacter(value))
+    .map(value => {
+      if (isWordCharacter(value)) return value
 
-const popupRender = Object.assign(
-  (...args) => (
-    <VscodeFormContainer style={THEME.CARD_STYLE}>
-      <VscodeFormGroup
-        style={{
-          maxHeight: 500,
-          get maxWidth() {
-            return this.maxHeight * 0.7
-          },
-          overflow: 'auto',
-          padding: 'unset'
-        }}
-        variant='settings-group'>
-        {popupRender.children(...args)}
-      </VscodeFormGroup>
-    </VscodeFormContainer>
+      const {menu, ...data} = value
+
+      if (isFalsy(data.selected)) delete data.selected
+
+      return {
+        menu: validateData(menu),
+        ...data
+      }
+    })
+    .toArray()
+
+const Popup = component(({context, menu}) => (
+  <InternalMenu.Popup
+    render={
+      <VscodeFormContainer style={THEME.CARD_STYLE}>
+        <VscodeFormGroup
+          style={{
+            maxHeight: 500,
+            get maxWidth() {
+              return this.maxHeight * 0.7
+            },
+            overflow: 'auto',
+            padding: 'unset'
+          }}
+          variant='settings-group'>
+          <InternalMenu.Group>
+            <React.Activity>
+              {menu.map((data, index) => {
+                if (isWordCharacter(data))
+                  return (
+                    <InternalMenu.GroupLabel
+                      key={getId(index, data)}
+                      render={
+                        <VscodeContextMenuItem
+                          label={data}
+                          selected={false}
+                          style={{
+                            opacity: 0.5
+                          }}
+                        />
+                      }
+                    />
+                  )
+
+                const {menu, separator, ...ItemProps} = data
+                const item = <Item {...ItemProps} />
+
+                return (
+                  <React.Fragment
+                    key={getId(
+                      index,
+                      omit(data, ['menu']) // ?
+                    )}>
+                    {hasValues(menu) ? (
+                      <Item.Submenu {...context.TriggerProps} render={item}>
+                        <Popup context={context} menu={menu} />
+                      </Item.Submenu>
+                    ) : separator ? (
+                      Item.Separator
+                    ) : (
+                      <InternalMenu.Item render={item} {...context.ItemProps} />
+                    )}
+                  </React.Fragment>
+                )
+              })}
+            </React.Activity>
+          </InternalMenu.Group>
+        </VscodeFormGroup>
+      </VscodeFormContainer>
+    }
+  />
+))
+
+const Item = Object.assign(
+  component(
+    ({
+      description,
+      keybinding = description,
+      onMouseEnter = asyncNoop,
+      onMouseLeave = asyncNoop,
+      ...props
+    }) => {
+      const [selected, setSelected] = useControllableValue(props, {
+        defaultValue: false,
+        defaultValuePropName: 'defaultSelected',
+        trigger: 'onSelectedChange',
+        valuePropName: 'selected'
+      })
+
+      return (
+        <VscodeContextMenuItem
+          {...mergeProps(
+            {
+              keybinding,
+              onMouseEnter: async (...args) => {
+                setSelected(true)
+
+                await onMouseEnter(...args)
+              },
+              onMouseLeave: async (...args) => {
+                setSelected(false)
+
+                await onMouseLeave(...args)
+              },
+              selected
+            },
+            props
+          )}
+        />
+      )
+    }
   ),
   {
-    children: (data, context) =>
-      data.map(({menu, render, ...props}, index) => {
-        menu = castArray(menu).filter(isPlainObject)
+    Separator: (
+      <InternalMenu.Separator render={<VscodeContextMenuItem separator />} />
+    ),
+    Submenu: component(({children, onOpenChange = asyncNoop, ...props}) => {
+      const [state, setState] = useState(false)
 
-        const itemRender = render ?? <StyledItem {...props} />
+      return (
+        <InternalMenu.SubmenuRoot
+          onOpenChange={async (...args) => {
+            setState(args[0])
 
-        return (
-          <React.Fragment key={getId(index, props)}>
-            {hasValues(menu) ? (
-              <SubmenuRoot>
-                <SubmenuTrigger render={itemRender} {...context.TriggerProps} />
-                <Portal>
-                  <Positioner>
-                    <Popup render={popupRender(menu, context)} />
-                  </Positioner>
-                </Portal>
-              </SubmenuRoot>
-            ) : (
-              <Item render={itemRender} {...context.ItemProps} />
-            )}
-          </React.Fragment>
-        )
-      })
-  }
-)
-
-const StyledItem = component(
-  ({
-    description,
-    keybinding = description,
-    onMouseOut = asyncNoop,
-    onMouseOver = asyncNoop,
-    selected = false,
-    ...props
-  }) => {
-    const [state, setState] = useState(selected)
-
-    const setSelected = useCallback((...args) => {
-      if (!selected) setState(...args)
+            await onOpenChange(...args)
+          }}>
+          <InternalMenu.SubmenuTrigger {...props} selected={state} />
+          <InternalMenu.Portal>
+            <InternalMenu.Positioner>{children}</InternalMenu.Positioner>
+          </InternalMenu.Portal>
+        </InternalMenu.SubmenuRoot>
+      )
     })
-
-    return (
-      <VscodeContextMenuItem
-        keybinding={keybinding}
-        onMouseOut={async event => {
-          setSelected(false)
-
-          await onMouseOut(event)
-        }}
-        onMouseOver={async event => {
-          setSelected(true)
-
-          await onMouseOver(event)
-        }}
-        selected={state}
-        {...props}
-      />
-    )
   }
 )
 
@@ -119,37 +171,40 @@ export const Menu = component(
     render,
     side = 'bottom'
   }) => {
-    data = useMemo(() => castArray(data).filter(isPlainObject), [data])
+    const menu = useMemo(() => validateData(data), [data])
+
+    const TriggerProps = {
+      closeDelay,
+      delay,
+      openOnHover
+    }
 
     return (
-      <Root disabled={disabled}>
-        <Trigger
-          closeDelay={closeDelay}
-          delay={delay}
+      <InternalMenu.Root disabled={disabled}>
+        <InternalMenu.Trigger
+          {...TriggerProps}
           nativeButton={false}
-          openOnHover={openOnHover}
           render={render}>
           {children}
-        </Trigger>
-        {hasValues(data) && (
-          <Portal>
-            <Positioner align={align} side={side}>
-              <Popup
-                render={popupRender(data, {
-                  ItemProps: {
-                    closeOnClick
-                  },
-                  TriggerProps: {
-                    closeDelay,
-                    delay,
-                    openOnHover
-                  }
-                })}
-              />
-            </Positioner>
-          </Portal>
-        )}
-      </Root>
+        </InternalMenu.Trigger>
+        <React.Activity>
+          {hasValues(menu) && (
+            <InternalMenu.Portal>
+              <InternalMenu.Positioner align={align} side={side}>
+                <Popup
+                  context={{
+                    ItemProps: {
+                      closeOnClick
+                    },
+                    TriggerProps
+                  }}
+                  menu={menu}
+                />
+              </InternalMenu.Positioner>
+            </InternalMenu.Portal>
+          )}
+        </React.Activity>
+      </InternalMenu.Root>
     )
   }
 )

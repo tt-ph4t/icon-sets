@@ -1,8 +1,7 @@
 import {stringToIcon} from '@iconify/utils'
-import {isWordCharacter} from 'is-word-character'
 import {LRUCache} from 'lru-cache'
 
-import {trigger} from './'
+import {isWordCharacter, trigger} from './'
 import {ICON_CACHE} from './constants'
 
 const cache = new LRUCache({

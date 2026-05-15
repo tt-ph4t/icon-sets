@@ -18,6 +18,7 @@ import {
 } from '../misc/constants'
 import {getQueryOptions} from '../misc/get-query-options'
 import {pluralize} from '../misc/pluralize'
+import {prettyBytes} from '../misc/pretty-bytes'
 
 const defaultQueryOptions = {
   exact: true,
@@ -62,37 +63,51 @@ export default component(() => {
   const query = useQuery({
     ...DEFAULT_QUERY_OPTIONS,
     select: useCallback(iconSets => ({
-      label: pluralize(size(iconSets), 'icon set'),
       menu: [
-        {
-          label: `UNSTABLE_PREFETCH_ALL (${pluralize(
-            sumBy(Object.values(iconSets), iconSet => iconSet.icons.length),
-            'icon'
-          )})`,
-          onClick: () => {
-            debouncer.maybeExecute(() => {
-              mapValues(iconSets, async iconSet => {
-                await internalQueryClient('prefetchQuery', iconSet)
-              })
-            })
-          }
-        },
+        ...Object.entries(
+          Object.groupBy(
+            Object.values(iconSets).map(iconSet => ({
+              label: `${iconSet.name} (${iconSet.icons.length})`,
+              menu: [
+                {
+                  description: prettyBytes(0),
+                  label: 'Download'
+                },
+                {
+                  separator: true
+                },
+                ...queryClientActions.map(([a, b]) => ({
+                  label: a,
+                  onClick: () => {
+                    debouncer.maybeExecute(() => {
+                      setState({
+                        iconSetPrefix: iconSet.prefix,
+                        queryClientAction: b
+                      })
+                    })
+                  }
+                }))
+              ]
+            })),
+            ({label}) => label[0].toUpperCase()
+          )
+        ).flatMap(([a, b]) => [a, ...b]),
         {
           separator: true
         },
-        ...Object.values(iconSets).map(iconSet => ({
-          label: `${iconSet.name} (${iconSet.icons.length})`,
-          menu: queryClientActions.map(([a, b]) => ({
-            label: a,
-            onClick: () => {
-              debouncer.maybeExecute(() => {
-                setState({
-                  iconSetPrefix: iconSet.prefix,
-                  queryClientAction: b
-                })
+        `${pluralize(size(iconSets), 'icon set')} (${pluralize(
+          sumBy(Object.values(iconSets), iconSet => iconSet.icons.length),
+          'icon'
+        )})`,
+        ...queryClientActions.map(([a, b]) => ({
+          label: `unstable_${a}_all`.toUpperCase(),
+          onClick: () => {
+            debouncer.maybeExecute(() => {
+              mapValues(iconSets, async iconSet => {
+                await internalQueryClient(b, iconSet)
               })
-            }
-          }))
+            })
+          }
         }))
       ]
     }))
@@ -108,9 +123,8 @@ export default component(() => {
               <ToolbarButton
                 checked={state.isPending}
                 icon='symbol-field'
-                preventToggle>
-                {query.data.label}
-              </ToolbarButton>
+                preventToggle
+              />
             }
           />
         )}

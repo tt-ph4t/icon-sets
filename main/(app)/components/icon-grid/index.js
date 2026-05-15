@@ -27,7 +27,6 @@ import {
 } from 'es-toolkit'
 import {castArray, reverse} from 'es-toolkit/compat'
 import {sort} from 'fast-sort'
-import {isWordCharacter} from 'is-word-character'
 import ms from 'ms'
 import randomColor from 'randomcolor'
 import React from 'react'
@@ -39,7 +38,7 @@ import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {useState} from '../../hooks/use-state'
-import {hasValues, validateIconId} from '../../misc'
+import {hasValues, isWordCharacter, validateIconId} from '../../misc'
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
   EMPTY_ARRAY,
@@ -297,7 +296,9 @@ export const IconGrid = useRemount.with(
                             )
                           }
                         },
-                        {separator: true},
+                        {
+                          separator: true
+                        },
                         {
                           description: prettyBytes(0),
                           label: 'Download'

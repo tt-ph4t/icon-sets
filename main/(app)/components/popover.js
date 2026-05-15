@@ -1,4 +1,4 @@
-import {Popover as popover} from '@base-ui/react/popover'
+import {Popover as InternalPopover} from '@base-ui/react'
 import {
   VscodeFormContainer,
   VscodeFormGroup
@@ -9,8 +9,6 @@ import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
 import {THEME} from '../misc/constants'
 import {renderSlot} from '../misc/render-slot'
-
-const {Popup, Portal, Positioner, Root, Trigger} = popover
 
 export const Popover = Object.assign(
   component(props => (
@@ -49,47 +47,49 @@ export const Popover = Object.assign(
         const [state, setState] = useState(open)
 
         const portal = (
-          <Portal keepMounted={keepMounted}>
-            <Positioner
-              align={align}
-              render={(props, state) => (
-                <Popup
-                  render={
-                    <div>
-                      {renderSlot({
-                        bespoke: true,
-                        context: {
-                          props,
-                          setOpen: setState,
-                          state
-                        },
-                        default: popupRender,
-                        wrapper: popupWrapper
-                      })}
-                    </div>
-                  }
-                  {...props}
-                />
-              )}
-              side={side}
-            />
-          </Portal>
+          <React.Activity>
+            <InternalPopover.Portal keepMounted={keepMounted}>
+              <InternalPopover.Positioner
+                align={align}
+                render={(props, state) => (
+                  <InternalPopover.Popup
+                    render={
+                      <div>
+                        {renderSlot({
+                          bespoke: true,
+                          context: {
+                            props,
+                            setOpen: setState,
+                            state
+                          },
+                          default: popupRender,
+                          wrapper: popupWrapper
+                        })}
+                      </div>
+                    }
+                    {...props}
+                  />
+                )}
+                side={side}
+              />
+            </InternalPopover.Portal>
+          </React.Activity>
         )
 
         return (
-          <Root
+          <InternalPopover.Root
             onOpenChange={open => {
               setState(open)
             }}
             open={state}>
-            <Trigger
+            <InternalPopover.Trigger
               closeDelay={closeDelay}
               delay={delay}
               nativeButton={false}
               openOnHover={openOnHover}
               render={render}>
               {children}
-            </Trigger>
+            </InternalPopover.Trigger>
             {keepMounted ? (
               <React.Activity mode={state ? 'visible' : 'hidden'}>
                 {portal}
@@ -97,7 +97,7 @@ export const Popover = Object.assign(
             ) : (
               portal
             )}
-          </Root>
+          </InternalPopover.Root>
         )
       }
     )

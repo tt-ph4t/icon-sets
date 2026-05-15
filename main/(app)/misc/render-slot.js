@@ -1,5 +1,5 @@
 import React from 'react'
-import {renderSlot as render} from 'render-slot'
+import {renderSlot as internalRenderSlot} from 'render-slot'
 
 export const renderSlot = ({
   context,
@@ -7,7 +7,7 @@ export const renderSlot = ({
   ...props
 }) => (
   <React.Activity>
-    {render({
+    {internalRenderSlot({
       context: {context},
       default: internalDefault,
       ...props

@@ -110,7 +110,9 @@ export default component(({context}) => {
                 })
               }
             },
-            {separator: true},
+            {
+              separator: true
+            },
             {
               label: pluralize(size(query.data.categories), 'category'),
               menu: Object.keys(query.data.categories).map(category => {
@@ -130,12 +132,12 @@ export default component(({context}) => {
                 }
               })
             },
+            'Themes',
             ...[
               ['prefix', query.data.prefixes],
               ['suffix', query.data.suffixes]
-            ].map(([a, b], c) => ({
-              description: pluralize(size(b), a),
-              label: !c && 'Theme',
+            ].map(([a, b]) => ({
+              label: pluralize(size(b), a),
               menu: Object.entries(b).map(([c, d]) => {
                 const selected = c === state.theme[a]
 

@@ -10,7 +10,6 @@ export const Collapsible = component(
   ({
     alwaysShowHeaderActions = true,
     children,
-    defaultOpen,
     keepMounted,
     onToggle = asyncNoop,
     ref,
@@ -20,7 +19,8 @@ export const Collapsible = component(
     const {mergedRef} = useRef.merge(ref, internalRef)
 
     const [open, setOpen] = useControllableValue(props, {
-      defaultValue: defaultOpen,
+      defaultValue: false,
+      defaultValuePropName: 'defaultOpen',
       trigger: 'onOpenChange',
       valuePropName: 'open'
     })

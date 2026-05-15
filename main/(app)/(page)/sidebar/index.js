@@ -88,7 +88,9 @@ const CachedIcons = component(() => {
             label: 'Update',
             onClick: update
           },
-          {separator: true},
+          {
+            separator: true
+          },
           ...['purgeStale', 'pop', 'clear'].map(a => ({
             label: sentenceCase(a),
             onClick: () => {

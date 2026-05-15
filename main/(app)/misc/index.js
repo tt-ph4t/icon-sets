@@ -12,12 +12,15 @@ import internalCopy from 'copy-to-clipboard'
 import {mapValues, noop, omit} from 'es-toolkit'
 import FileSaver from 'file-saver'
 import has from 'has-values'
-import {isWordCharacter} from 'is-word-character'
+import {isWordCharacter as internalIsWordCharacter} from 'is-word-character'
 import jszip from 'jszip'
 import {hash} from 'ohash'
 
 import {ID_SEPARATOR} from '../misc/constants'
 import {parseIconName} from './parse-icon-name'
+
+export const isWordCharacter = value =>
+  isString(value) && internalIsWordCharacter(value)
 
 export const fileSaver = async (data, fileName) => {
   // jszip
@@ -72,7 +75,6 @@ export const trigger = mapValues(
 )
 
 export const validateIconId = iconId =>
-  isString(iconId) &&
   isWordCharacter(iconId) &&
   iconId.includes(ID_SEPARATOR) &&
   validateIconName(parseIconName(iconId).icon)

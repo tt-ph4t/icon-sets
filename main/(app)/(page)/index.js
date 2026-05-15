@@ -138,7 +138,14 @@ export default useRemount.with(
             bottom: 'calc(var(--spacing) * 2)',
             position: 'absolute'
           }}>
-          <Settings menu={[{separator: true}, INTERNAL_REMOUNT.menu]} />
+          <Settings
+            menu={[
+              {
+                separator: true
+              },
+              INTERNAL_REMOUNT.menu
+            ]}
+          />
           <React.Activity>
             <IconQueries />
             <QueryClient />

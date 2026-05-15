@@ -1,4 +1,4 @@
-import {mergeProps} from '@base-ui/react/merge-props'
+import {mergeProps} from '@base-ui/react'
 import {useQuery} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeIcon} from '@vscode-elements/react-elements'
@@ -36,8 +36,8 @@ import takumi from './takumi.wasm'
 import withQueryBoundary from './with-query-boundary'
 
 const flipDirections = {
-  hFlip: 'Horizontal flip',
-  vFlip: 'Vertical flip'
+  hFlip: 'Horizontal',
+  vFlip: 'Vertical'
 }
 
 const rotate = {
@@ -169,7 +169,9 @@ export default withQueryBoundary(
                       }
                     }
                   ),
-                  {separator: true},
+                  {
+                    separator: true
+                  },
                   {
                     label: 'Takumi WASM',
                     menu: Object.entries(takumi.formats).map(
@@ -223,19 +225,9 @@ export default withQueryBoundary(
                       customizedIcons.delete(iconQuery.data.id)
                     }
                   },
-                  {separator: true},
-                  ...Object.keys(flipDirections).map(flipDirection => ({
-                    label: flipDirections[flipDirection],
-                    onClick: () => {
-                      customizedIcons.set(
-                        iconQuery.data.id,
-                        ({iconCustomisations}) => ({
-                          [flipDirection]: !iconCustomisations[flipDirection]
-                        })
-                      )
-                    }
-                  })),
-                  {separator: true},
+                  {
+                    separator: true
+                  },
                   {
                     label: 'Rotate',
                     menu: rotate.values.map(value => ({
@@ -267,7 +259,21 @@ export default withQueryBoundary(
                         wrapSvgContentStart: `<!-- ${crypto.randomUUID()} -->`
                       }))
                     }
-                  }
+                  },
+                  'Flip',
+                  ...Object.entries(flipDirections).map(
+                    ([flipDirection, label]) => ({
+                      label,
+                      onClick: () => {
+                        customizedIcons.set(
+                          iconQuery.data.id,
+                          ({iconCustomisations}) => ({
+                            [flipDirection]: !iconCustomisations[flipDirection]
+                          })
+                        )
+                      }
+                    })
+                  )
                 ]
               },
               ...menu
@@ -276,7 +282,9 @@ export default withQueryBoundary(
               favoritedIcons.toggle(iconQuery.data.id)
             }
           },
-          {separator: true},
+          {
+            separator: true
+          },
           {
             description: index + 1,
             label: 'Order'
