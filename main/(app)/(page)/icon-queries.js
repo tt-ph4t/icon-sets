@@ -69,13 +69,6 @@ export default component(() => {
             Object.values(iconSets).map(iconSet => ({
               label: `${iconSet.name} (${iconSet.icons.length})`,
               menu: [
-                {
-                  description: prettyBytes(0),
-                  label: 'Download'
-                },
-                {
-                  separator: true
-                },
                 ...queryClientActions.map(([a, b]) => ({
                   label: a,
                   onClick: () => {
@@ -86,7 +79,14 @@ export default component(() => {
                       })
                     })
                   }
-                }))
+                })),
+                {
+                  separator: true
+                },
+                {
+                  description: prettyBytes(0),
+                  label: 'Download'
+                }
               ]
             })),
             ({label}) => label[0].toUpperCase()

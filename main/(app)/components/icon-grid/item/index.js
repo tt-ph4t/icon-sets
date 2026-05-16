@@ -169,42 +169,35 @@ export default withQueryBoundary(
                       }
                     }
                   ),
-                  {
-                    separator: true
-                  },
-                  {
-                    label: 'Takumi WASM',
-                    menu: Object.entries(takumi.formats).map(
-                      ([format, type]) => ({
-                        label: format.toUpperCase(),
-                        menu: type && [
-                          {
-                            label: 'View',
-                            onClick: async () => {
-                              openObjectURL(await getTakumiBlob(format))
-                            }
-                          },
-                          ClipboardItem.supports(type) && {
-                            label: 'Copy',
-                            onClick: async () => {
-                              await copy(await getTakumiBlob(format), {
-                                format: type
-                              })
-                            }
-                          },
-                          {
-                            label: 'Download',
-                            onClick: async () => {
-                              await fileSaver(
-                                await getTakumiBlob(format),
-                                getIconFilePaths(iconQuery.data, format).labeled
-                              )
-                            }
-                          }
-                        ]
-                      })
-                    )
-                  }
+                  'Takumi WASM',
+                  ...Object.entries(takumi.formats).map(([format, type]) => ({
+                    label: format.toUpperCase(),
+                    menu: type && [
+                      {
+                        label: 'View',
+                        onClick: async () => {
+                          openObjectURL(await getTakumiBlob(format))
+                        }
+                      },
+                      ClipboardItem.supports(type) && {
+                        label: 'Copy',
+                        onClick: async () => {
+                          await copy(await getTakumiBlob(format), {
+                            format: type
+                          })
+                        }
+                      },
+                      {
+                        label: 'Download',
+                        onClick: async () => {
+                          await fileSaver(
+                            await getTakumiBlob(format),
+                            getIconFilePaths(iconQuery.data, format).labeled
+                          )
+                        }
+                      }
+                    ]
+                  }))
                 ]
               },
               {
@@ -217,29 +210,8 @@ export default withQueryBoundary(
                 }))
               },
               {
-                label: 'Customisations',
+                label: 'Customisation',
                 menu: [
-                  {
-                    label: 'Reset',
-                    onClick: () => {
-                      customizedIcons.delete(iconQuery.data.id)
-                    }
-                  },
-                  {
-                    separator: true
-                  },
-                  {
-                    label: 'Rotate',
-                    menu: rotate.values.map(value => ({
-                      label: `${value * rotate.step}deg`,
-                      onClick: () => {
-                        customizedIcons.set(iconQuery.data.id, () => ({
-                          rotate: value
-                        }))
-                      },
-                      selected: value === iconCustomisations.rotate
-                    }))
-                  },
                   {
                     label: 'Size',
                     menu: scales.map(scale => ({
@@ -253,12 +225,16 @@ export default withQueryBoundary(
                     }))
                   },
                   {
-                    label: 'Restart animations',
-                    onClick: () => {
-                      customizedIcons.set(iconQuery.data.id, () => ({
-                        wrapSvgContentStart: `<!-- ${crypto.randomUUID()} -->`
-                      }))
-                    }
+                    label: 'Rotate',
+                    menu: rotate.values.map(value => ({
+                      label: `${value * rotate.step}deg`,
+                      onClick: () => {
+                        customizedIcons.set(iconQuery.data.id, () => ({
+                          rotate: value
+                        }))
+                      },
+                      selected: value === iconCustomisations.rotate
+                    }))
                   },
                   'Flip',
                   ...Object.entries(flipDirections).map(
@@ -273,7 +249,22 @@ export default withQueryBoundary(
                         )
                       }
                     })
-                  )
+                  ),
+                  'More',
+                  {
+                    label: 'Restart animations',
+                    onClick: () => {
+                      customizedIcons.set(iconQuery.data.id, () => ({
+                        wrapSvgContentStart: `<!-- ${crypto.randomUUID()} -->`
+                      }))
+                    }
+                  },
+                  {
+                    label: 'Reset',
+                    onClick: () => {
+                      customizedIcons.delete(iconQuery.data.id)
+                    }
+                  }
                 ]
               },
               ...menu
