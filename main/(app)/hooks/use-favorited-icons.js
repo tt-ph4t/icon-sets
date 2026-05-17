@@ -42,7 +42,6 @@ export const useFavoritedIcons = Object.assign(
       reset: useCallback(() => {
         set(() => defaults.value)
       }),
-      throttler,
       toggle: useCallback((...iconIds) => {
         set(state => {
           const a = new Set()

@@ -17,12 +17,9 @@ const useAtomValueWithDelay =
   (atom, {delay = DELAY_MS, ...options} = EMPTY_OBJECT) => {
     const store = useStore(options)
 
-    const [state, setState, throttler] = useThrottledState(
-      () => store.get(atom),
-      {
-        wait: delay
-      }
-    )
+    const [state, setState] = useThrottledState(() => store.get(atom), {
+      wait: delay
+    })
 
     useEffect(
       () =>
@@ -32,7 +29,7 @@ const useAtomValueWithDelay =
       [store, atom]
     )
 
-    return {state, throttler}
+    return state
   }
 
 export const withImmerAtom = (initialValue = EMPTY_OBJECT) => {
@@ -53,8 +50,8 @@ export const withImmerAtom = (initialValue = EMPTY_OBJECT) => {
           })
         }),
         useSelectValue: useCallback(
-          (fn, {deps = EMPTY_ARRAY, ...options} = EMPTY_OBJECT) => {
-            const atomValue = useAtomValueWithDelay(
+          (fn, {deps = EMPTY_ARRAY, ...options} = EMPTY_OBJECT) =>
+            useAtomValueWithDelay(
               selectAtom(
                 atom,
                 // https://jotai.org/docs/utilities/select#hold-stable-references
@@ -63,9 +60,6 @@ export const withImmerAtom = (initialValue = EMPTY_OBJECT) => {
               ),
               options
             )
-
-            return atomValue.state
-          }
         ),
         useValue: useCallback(function () {
           return this.useSelectValue(({draft}) => draft)

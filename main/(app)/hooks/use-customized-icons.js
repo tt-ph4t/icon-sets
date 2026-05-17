@@ -15,10 +15,8 @@ mergeCustomisations
 
 const useStore = withImmerAtom({
   current: EMPTY_OBJECT,
-  globalOptions: pick(DEFAULT_ICON_CUSTOMISATIONS, ['color', 'square'])
+  global: pick(DEFAULT_ICON_CUSTOMISATIONS, ['color', 'square'])
 })
-
-const result = iconCustomisations => ({iconCustomisations})
 
 const invalidateIconCache = (fn, ...iconIds) => {
   fn()
@@ -26,47 +24,52 @@ const invalidateIconCache = (fn, ...iconIds) => {
   for (const iconId of iconIds) ICON_CACHE.delete(iconId)
 }
 
-export const useCustomizedIcons = Object.assign(
-  () => {
-    const store = useStore()
-    const throttler = useThrottler(store.set)
+export const useCustomizedIcons = () => {
+  const store = useStore()
+  const throttler = useThrottler(store.set)
 
-    return {
-      delete: useCallback((...iconIds) => {
-        throttler.maybeExecute(({draft}) => {
-          invalidateIconCache(
-            () => {
-              for (const iconId of iconIds) delete draft.current[iconId]
-            },
-            ...iconIds
-          )
-        })
-      }),
-      set: useCallback((iconId, fn) => {
-        throttler.maybeExecute(({draft}) => {
-          invalidateIconCache(() => {
-            const a = draft.current[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS
-            const b = fn(result(a))
-            const c = {...a, ...b}
+  return {
+    delete: useCallback((...iconIds) => {
+      throttler.maybeExecute(({draft}) => {
+        invalidateIconCache(
+          () => {
+            for (const iconId of iconIds) delete draft.current[iconId]
+          },
+          ...iconIds
+        )
+      })
+    }),
+    set: useCallback((iconId, fn) => {
+      throttler.maybeExecute(({draft}) => {
+        invalidateIconCache(() => {
+          const a = draft.current[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS
 
-            if (isEqual(c, DEFAULT_ICON_CUSTOMISATIONS))
-              delete draft.current[iconId]
-            else draft.current[iconId] = c
-          }, iconId)
-        })
-      }),
-      store,
-      throttler
-    }
-  },
-  {
-    useIconIds: () =>
-      useStore().useSelectValue(({draft}) => Object.keys(draft.current)),
-    useSelect: iconId =>
-      useStore().useSelectValue(
-        ({draft}) =>
-          result(draft.current[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS),
-        {deps: [iconId]}
+          const b = fn({
+            iconCustomisations: a
+          })
+
+          const c = {
+            ...a,
+            ...b
+          }
+
+          if (isEqual(c, DEFAULT_ICON_CUSTOMISATIONS))
+            delete draft.current[iconId]
+          else draft.current[iconId] = c
+        }, iconId)
+      })
+    }),
+    store,
+    useSelect: useCallback(iconId =>
+      store.useSelectValue(
+        ({draft}) => ({
+          iconCustomisations:
+            draft.current[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS
+        }),
+        {
+          deps: [iconId]
+        }
       )
+    )
   }
-)
+}

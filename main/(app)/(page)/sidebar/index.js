@@ -53,7 +53,10 @@ const InternalIconGrid = component(({menu, ...props}) => {
 
 const CustomizedIcons = component(() => {
   const customizedIcons = useCustomizedIcons()
-  const iconIds = useCustomizedIcons.useIconIds()
+
+  const iconIds = customizedIcons.store.useSelectValue(({draft}) =>
+    Object.keys(draft.current)
+  )
 
   return (
     <Collapsible description={iconIds.length} heading='customized icons'>

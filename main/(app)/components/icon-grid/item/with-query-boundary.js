@@ -13,7 +13,7 @@ import {Menu} from '../../menu'
 
 const Fallback = component(({children, ...props}) => {
   const style = useCustomizedIcons().store.useSelectValue(({draft}) => ({
-    color: draft.globalOptions.color,
+    color: draft.global.color,
     userSelect: 'none'
   }))
 
@@ -25,8 +25,10 @@ export default Component =>
     component(({iconId, INTERNAL_REMOUNT, ...props}) => {
       const {icon} = parseIconName(iconId)
       const queryClient = useQueryClient()
+      const {iconCustomisations} = useCustomizedIcons().useSelect(iconId)
 
       const [iconQuery] = useIconQueries({
+        iconCustomisations, // ?
         iconId
       })
 

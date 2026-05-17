@@ -60,11 +60,11 @@ export default withQueryBoundary(
     const {icon} = parseIconName(iconId)
     const customizedIcons = useCustomizedIcons()
     const favoritedIcons = useFavoritedIcons()
-    const {iconCustomisations} = useCustomizedIcons.useSelect(iconId)
+    const {iconCustomisations} = customizedIcons.useSelect(iconId)
     const store = useStore()
 
     const iconOptions = customizedIcons.store.useSelectValue(
-      ({draft}) => draft.globalOptions
+      ({draft}) => draft.global
     )
 
     const [iconQuery] = useIconQueries({

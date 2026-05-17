@@ -21,7 +21,6 @@ export const useRemount = Object.assign(
     })
 
     return Object.assign(remount, {
-      batcher,
       icon: 'refresh',
       label: 'Reload',
       get menu() {

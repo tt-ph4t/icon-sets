@@ -99,7 +99,7 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
 }
 
 const IconOptions = {
-  ColorPicker: component(props => {
+  ColorPicker: component(() => {
     const customizedIcons = useCustomizedIcons()
 
     const batcher = useBatcher(items => {
@@ -108,7 +108,7 @@ const IconOptions = {
     })
 
     const iconOptions = customizedIcons.store.useSelectValue(({draft}) => ({
-      color: draft.globalOptions.color
+      color: draft.global.color
     }))
 
     return (
@@ -121,7 +121,7 @@ const IconOptions = {
               onChange={colorResult => {
                 batcher.addItem(() => {
                   customizedIcons.store.set(({draft}) => {
-                    draft.globalOptions.color = colorResult.hexa
+                    draft.global.color = colorResult.hexa
                   })
                 })
               }}
@@ -144,7 +144,7 @@ const IconOptions = {
                     onClick={() => {
                       batcher.addItem(() => {
                         customizedIcons.store.set(({draft}) => {
-                          draft.globalOptions.color = randomColor()
+                          draft.global.color = randomColor()
                         })
                       })
                     }}
@@ -154,8 +154,7 @@ const IconOptions = {
                     onClick={() => {
                       batcher.addItem(() => {
                         customizedIcons.store.set(({draft}) => {
-                          draft.globalOptions.color =
-                            DEFAULT_ICON_CUSTOMISATIONS.color
+                          draft.global.color = DEFAULT_ICON_CUSTOMISATIONS.color
                         })
                       })
                     }}
@@ -170,30 +169,30 @@ const IconOptions = {
             checked={iconOptions.color !== DEFAULT_ICON_CUSTOMISATIONS.color}
             icon='paintcan'
             preventToggle
-            {...props}
           />
         }
       />
     )
   }),
-  SquareToggle: component(props => {
+  SquareToggle: component(() => {
     const customizedIcons = useCustomizedIcons()
 
-    const iconOptions = customizedIcons.store.useSelectValue(({draft}) => ({
-      square: draft.globalOptions.square
-    }))
+    const ToolbarButtonProps = customizedIcons.store.useSelectValue(
+      ({draft}) => ({
+        checked: draft.global.square
+      })
+    )
 
     return (
       <ToolbarButton
-        checked={iconOptions.square}
         icon='symbol-ruler'
         onChange={event => {
           customizedIcons.store.set(({draft}) => {
-            draft.globalOptions.square = event.target.checked
+            draft.global.square = event.target.checked
           })
         }}
         toggleable
-        {...props}
+        {...ToolbarButtonProps}
       />
     )
   })

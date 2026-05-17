@@ -8,7 +8,7 @@ import {parseIconName} from '../../misc/parse-icon-name'
 import {useCustomizedIcons} from '../use-customized-icons'
 import buildIcon from './build-icon'
 
-const buildIconContextQueryOptions = {
+const contextMapQueryOptions = {
   ...DEFAULT_QUERY_OPTIONS,
   select: iconSets =>
     mapValues(iconSets, iconSet => ({
@@ -20,24 +20,19 @@ const buildIconContextQueryOptions = {
 const defaultQueryOptions = pick(DEFAULT_QUERY_OPTIONS, ['select'])
 
 export const useIconQueries = (...icons) => {
-  const buildIconContextQuery = useQuery(buildIconContextQueryOptions)
+  const contextMapQuery = useQuery(contextMapQueryOptions)
 
   const iconOptions = useCustomizedIcons().store.useSelectValue(({draft}) => ({
-    color: draft.globalOptions.color
+    color: draft.global.color
   }))
 
   return useQueries({
     queries: icons.map(
-      ({
-        iconCustomisations,
-        iconId,
-        queryOptions = defaultQueryOptions // ?
-      }) => {
+      ({iconCustomisations, iconId, queryOptions = defaultQueryOptions}) => {
         const {icon} = parseIconName(iconId)
-        const buildIconContext = buildIconContextQuery.data[icon.prefix]
 
         return getQueryOptions({
-          enabled: buildIconContextQuery.isSuccess,
+          enabled: contextMapQuery.isSuccess,
           gcTime: ms('1m'),
           queryKey: iconId,
           url: `${DATABASE_URL}/${icon.prefix}/${icon.name}.msgpack`,
@@ -49,7 +44,7 @@ export const useIconQueries = (...icons) => {
                   data,
                   id: iconId,
                   ...icon,
-                  ...buildIconContext
+                  ...contextMapQuery.data[icon.prefix]
                 },
                 {
                   ...iconCustomisations,

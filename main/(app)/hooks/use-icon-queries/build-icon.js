@@ -58,77 +58,78 @@ export default (
 ) => {
   if (ICON_CACHE.has(icon.id)) return ICON_CACHE.get(icon.id)
 
-  icon = {
-    ...icon,
-    internal: {
-      as(fileType) {
-        const data = {
-          css: this.to.css,
-          json: JSON.stringify(icon.data, undefined, 2),
-          svg: this.to.html,
-          txt: this.to.dataUrl
-        }[fileType]
+  ICON_CACHE.set(
+    icon.id,
+    (icon = {
+      ...icon,
+      internal: {
+        as(fileType) {
+          const data = {
+            css: this.to.css,
+            json: JSON.stringify(icon.data, undefined, 2),
+            svg: this.to.html,
+            txt: this.to.dataUrl
+          }[fileType]
 
-        return hasValues(data)
-          ? {
-              get blob() {
-                return new Blob([data], {
-                  type: this.type
-                })
-              },
-              data,
-              type: mime.getType(fileType)
+          return hasValues(data)
+            ? {
+                get blob() {
+                  return new Blob([data], {
+                    type: this.type
+                  })
+                },
+                data,
+                type: mime.getType(fileType)
+              }
+            : EMPTY_OBJECT
+        },
+        idCases: mapValues(idCases, value => value(icon.id)),
+        paths: iconTypes.reduce((a, b) => {
+          a[b] = getIconFilePaths(icon, b)
+
+          return a
+        }, {}),
+        get to() {
+          const iconData = mergeIconData(defaultIconProps, {
+            ...icon.data,
+            body: wrapSVGContent(
+              icon.data.body,
+              wrapSvgContentStart,
+              wrapSvgContentEnd
+            ),
+            hFlip,
+            hidden: undefined,
+            rotate,
+            vFlip
+          })
+
+          return {
+            css: getIconCSS(iconData, {
+              color,
+              iconSelector: '[icon]'
+            }),
+            get dataUrl() {
+              return svgToData(this.html)
+            },
+            get html() {
+              const svg = iconToSVG(iconData, {
+                height: iconData.height * scale,
+                width: iconData.width * scale
+              })
+
+              return iconToHTML(replaceIDs(svg.body), {
+                ...svg.attributes,
+                style: `color: ${color}`
+              })
+            },
+            get reactElement() {
+              return parse(this.html)
             }
-          : EMPTY_OBJECT
-      },
-      idCases: mapValues(idCases, value => value(icon.id)),
-      paths: iconTypes.reduce((a, b) => {
-        a[b] = getIconFilePaths(icon, b)
-
-        return a
-      }, {}),
-      get to() {
-        const iconData = mergeIconData(defaultIconProps, {
-          ...icon.data,
-          body: wrapSVGContent(
-            icon.data.body,
-            wrapSvgContentStart,
-            wrapSvgContentEnd
-          ),
-          hFlip,
-          hidden: undefined,
-          rotate,
-          vFlip
-        })
-
-        return {
-          css: getIconCSS(iconData, {
-            color,
-            iconSelector: '[icon]'
-          }),
-          get dataUrl() {
-            return svgToData(this.html)
-          },
-          get html() {
-            const svg = iconToSVG(iconData, {
-              height: iconData.height * scale,
-              width: iconData.width * scale
-            })
-
-            return iconToHTML(replaceIDs(svg.body), {
-              ...svg.attributes,
-              style: `color: ${color}`
-            })
-          },
-          get reactElement() {
-            return parse(this.html)
           }
         }
       }
-    }
-  }
-
-  ICON_CACHE.set(icon.id, icon)
+    })
+  )
 
   return icon
 }
