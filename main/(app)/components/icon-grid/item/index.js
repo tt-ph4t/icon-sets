@@ -276,9 +276,63 @@ export default withQueryBoundary(
           {
             separator: true
           },
+          'Info',
           {
-            description: index + 1,
-            label: 'Order'
+            description: iconSetQuery.data.name,
+            label: 'Set name'
+          },
+          {
+            description: iconSetQuery.data.author.name,
+            label: 'Author',
+            onClick: () => {
+              open(iconSetQuery.data.author.url)
+            }
+          },
+          {
+            description: iconSetQuery.data.category,
+            label: 'Category'
+          },
+          {
+            description: `${iconSetQuery.data.license.spdx}${iconSetQuery.data.license.osiApproved ? ' (OSI)' : ''}`,
+            label: 'License',
+            onClick: () => {
+              prompt(
+                iconSetQuery.data.license.name,
+                iconSetQuery.data.license.url
+              )
+            }
+          },
+          'Specs',
+          {
+            description: iconSetQuery.data.grid,
+            label: 'Grid'
+          },
+          {
+            description: sizeLabel(
+              iconQuery.data.data,
+              iconCustomisations.scale
+            ),
+            label: 'Size'
+          },
+          {
+            description: findKey(
+              iconSetQuery.data.chars,
+              iconName => iconName === iconQuery.data.name
+            ),
+            label: 'Character'
+          },
+          'Misc',
+          {
+            description: iconAliases.length,
+            label: 'Alias',
+            menu: iconAliases.map(iconAlias => ({
+              label: capitalCase(iconAlias),
+              onClick: () => {
+                store.set(({draft}) => {
+                  draft.searchTerm = iconAlias
+                })
+              }
+            }))
           },
           {
             description: size(iconQuery.data.internal.idCases),
@@ -300,54 +354,6 @@ export default withQueryBoundary(
             )
           },
           {
-            description: iconSetQuery.data.name,
-            label: 'Set name'
-          },
-          {
-            description: iconSetQuery.data.author.name,
-            label: 'Author',
-            onClick: () => {
-              open(iconSetQuery.data.author.url)
-            }
-          },
-          {
-            description: iconSetQuery.data.category,
-            label: 'Category'
-          },
-          {
-            description: sizeLabel(
-              iconQuery.data.data,
-              iconCustomisations.scale
-            ),
-            label: 'Size'
-          },
-          {
-            description: iconAliases.length,
-            label: 'Alias',
-            menu: iconAliases.map(iconAlias => ({
-              label: capitalCase(iconAlias),
-              onClick: () => {
-                store.set(({draft}) => {
-                  draft.searchTerm = iconAlias
-                })
-              }
-            }))
-          },
-          {
-            description: findKey(
-              iconSetQuery.data.chars,
-              iconName => iconName === iconQuery.data.name
-            ),
-            label: 'Character'
-          },
-          {
-            description: iconSetQuery.data.license.spdx,
-            label: 'License',
-            onClick: () => {
-              open(iconSetQuery.data.license.url)
-            }
-          },
-          {
             description: iconSetQuery.data.version,
             label: 'Version'
           },
@@ -357,6 +363,10 @@ export default withQueryBoundary(
             onClick: () => {
               prompt('Unix time', iconSetQuery.data.lastModified)
             }
+          },
+          {
+            description: index + 1,
+            label: 'Order'
           }
         ]}
         render={
