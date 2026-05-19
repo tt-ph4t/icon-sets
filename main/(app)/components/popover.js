@@ -3,6 +3,7 @@ import {
   VscodeFormContainer,
   VscodeFormGroup
 } from '@vscode-elements/react-elements'
+import {asyncNoop} from 'es-toolkit'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -37,6 +38,7 @@ export const Popover = Object.assign(
         closeDelay = 0,
         delay = 0,
         keepMounted = false,
+        onOpenChange = asyncNoop,
         open = false,
         openOnHover = true,
         popupRender,
@@ -47,39 +49,38 @@ export const Popover = Object.assign(
         const [state, setState] = useState(open)
 
         const portal = (
-          <React.Activity>
-            <InternalPopover.Portal keepMounted={keepMounted}>
-              <InternalPopover.Positioner
-                align={align}
-                render={(props, state) => (
-                  <InternalPopover.Popup
-                    render={
-                      <div>
-                        {renderSlot({
-                          bespoke: true,
-                          context: {
-                            props,
-                            setOpen: setState,
-                            state
-                          },
-                          default: popupRender,
-                          wrapper: popupWrapper
-                        })}
-                      </div>
-                    }
-                    {...props}
-                  />
-                )}
-                side={side}
-              />
-            </InternalPopover.Portal>
-          </React.Activity>
+          <InternalPopover.Portal keepMounted={keepMounted}>
+            <InternalPopover.Positioner
+              align={align}
+              render={(props, state) => (
+                <InternalPopover.Popup
+                  render={
+                    <div {...props}>
+                      {renderSlot({
+                        bespoke: true,
+                        context: {
+                          props,
+                          setOpen: setState,
+                          state
+                        },
+                        default: popupRender,
+                        wrapper: popupWrapper
+                      })}
+                    </div>
+                  }
+                />
+              )}
+              side={side}
+            />
+          </InternalPopover.Portal>
         )
 
         return (
           <InternalPopover.Root
-            onOpenChange={open => {
-              setState(open)
+            onOpenChange={async (...args) => {
+              setState(args[0])
+
+              await onOpenChange(...args)
             }}
             open={state}>
             <InternalPopover.Trigger

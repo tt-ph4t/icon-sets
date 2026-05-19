@@ -15,26 +15,24 @@ import {hasValues, isOdd} from '../misc'
 
 const minPositionInPercentage = 5
 
-const useIdleAsyncEffect = (
-  effect = asyncNoop,
-  {beforeEffect = asyncNoop, deps}
-) => {
+const useIdleEffect = (effect = asyncNoop, {before = asyncNoop, deps}) => {
   const ref = useRef()
 
   useEffect.async(async () => {
     cancelIdleCallback(ref.current)
-    await beforeEffect()
+
+    await before()
 
     ref.current = requestIdleCallback(effect)
   }, deps)
 }
 
 const Slot = component(({children, index, positionInPercentage}) => {
-  const isSlotStart = !isOdd(index)
+  const isSlotEnd = isOdd(index)
   const size = useRef.size()
   const [state, setState] = useState()
 
-  useIdleAsyncEffect(
+  useIdleEffect(
     async () => {
       await delay(ms('1s'))
 
@@ -43,20 +41,24 @@ const Slot = component(({children, index, positionInPercentage}) => {
       })
     },
     {
-      beforeEffect: () => {
-        if (hasValues(state)) setState(true)
+      before: () => {
+        if (hasValues(state))
+          React.startTransition(() => {
+            setState(true)
+          })
       },
-      deps: [size]
+      deps: [size.width, size.height]
     }
   )
 
   return (
     <div
-      slot={isSlotStart ? 'start' : 'end'}
+      slot={isSlotEnd ? 'end' : 'start'}
       style={{
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'auto'
+        overflow: 'auto',
+        position: 'relative'
       }}>
       <React.Activity mode={state ? 'visible' : 'hidden'}>
         <VscodeFormHelper
@@ -80,11 +82,11 @@ const Slot = component(({children, index, positionInPercentage}) => {
         }}>
         <React.Activity
           mode={
-            isSlotStart
-              ? positionInPercentage <= minPositionInPercentage
+            isSlotEnd
+              ? positionInPercentage >= 100 - minPositionInPercentage
                 ? 'hidden'
                 : 'visible'
-              : positionInPercentage >= 100 - minPositionInPercentage
+              : positionInPercentage <= minPositionInPercentage
                 ? 'hidden'
                 : 'visible'
           }>
@@ -106,11 +108,11 @@ export const SplitLayout = component(
 
     return (
       <VscodeSplitLayout
-        onVscSplitLayoutChange={async event => {
-          await onVscSplitLayoutChange(event)
+        onVscSplitLayoutChange={async (...args) => {
+          await onVscSplitLayoutChange(...args)
 
           React.startTransition(() => {
-            setState(event.detail.positionInPercentage)
+            setState(args[0].detail.positionInPercentage)
           })
         }}
         resetOnDblClick={resetOnDblClick}
