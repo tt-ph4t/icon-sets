@@ -79,6 +79,7 @@
     "use-context-selector": "2.0.0",
     "virtua": "0.49.1",
     "vite": "7.3.2",
-    "vite-plugin-compression2": "2.5.3"
+    "vite-plugin-compression2": "2.5.3",
+    "vite-plugin-preload": "0.7.0"
   }
 }
