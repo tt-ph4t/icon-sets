@@ -1,3 +1,5 @@
+// https://performance.dev/how-is-linear-so-fast-a-technical-breakdown
+
 import {devtools} from '@tanstack/devtools-vite'
 import react from '@vitejs/plugin-react'
 import {minimatch} from 'minimatch'
@@ -10,9 +12,6 @@ export default defineConfig({
     modulePreload: {
       polyfill: false
     },
-    target: 'esnext'
-  },
-  ebuild: {
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -23,7 +22,8 @@ export default defineConfig({
           }
         }
       }
-    }
+    },
+    target: 'esnext'
   },
   plugins: [
     devtools({
