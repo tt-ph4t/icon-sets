@@ -1,6 +1,7 @@
 import {PacerProvider} from '@tanstack/react-pacer'
 import {QueryClientProvider} from '@tanstack/react-query'
 import {mapValues} from 'es-toolkit'
+import {NuqsAdapter} from 'nuqs/adapters/react'
 
 import {component} from './(app)/hocs'
 import {DELAY_MS, EMPTY_OBJECT, QUERY_CLIENT} from './(app)/misc/constants'
@@ -28,6 +29,10 @@ const PacerProviderProps = {
 
 export default component(({children}) => (
   <PacerProvider {...PacerProviderProps}>
-    <QueryClientProvider client={QUERY_CLIENT}>{children}</QueryClientProvider>
+    <NuqsAdapter>
+      <QueryClientProvider client={QUERY_CLIENT}>
+        {children}
+      </QueryClientProvider>
+    </NuqsAdapter>
   </PacerProvider>
 ))

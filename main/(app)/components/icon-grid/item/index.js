@@ -31,7 +31,7 @@ import {parseIconName} from '../../../misc/parse-icon-name'
 import {prettyBytes} from '../../../misc/pretty-bytes'
 import {timeAgo} from '../../../misc/time-ago'
 import {Menu} from '../../menu'
-import useStore from '../use-store'
+import useSearchQueryState from '../use-search-query-state'
 import takumi from './takumi.wasm'
 import withQueryBoundary from './with-query-boundary'
 
@@ -61,7 +61,7 @@ export default withQueryBoundary(
     const customizedIcons = useCustomizedIcons()
     const favoritedIcons = useFavoritedIcons()
     const {iconCustomisations} = customizedIcons.useSelect(iconId)
-    const store = useStore()
+    const [, setSearchQueryState] = useSearchQueryState()
 
     const iconOptions = customizedIcons.store.useSelectValue(
       ({draft}) => draft.global
@@ -327,10 +327,8 @@ export default withQueryBoundary(
             label: 'Alias',
             menu: iconAliases.map(iconAlias => ({
               label: capitalCase(iconAlias),
-              onClick: () => {
-                store.set(({draft}) => {
-                  draft.searchTerm = iconAlias
-                })
+              onClick: async () => {
+                await setSearchQueryState(iconAlias)
               }
             }))
           },

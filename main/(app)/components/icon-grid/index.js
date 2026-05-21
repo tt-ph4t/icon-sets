@@ -41,7 +41,6 @@ import {useState} from '../../hooks/use-state'
 import {hasValues, isWordCharacter, validateIconId} from '../../misc'
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
-  EMPTY_ARRAY,
   ICON_CACHE,
   SORT_ORDER_LABELS,
   THEME
@@ -54,7 +53,7 @@ import {Popover} from '../popover'
 import {ToolbarButton} from '../toolbar-button'
 import Grid from './grid'
 import Item from './item'
-import useStore from './use-store'
+import useSearchQueryState from './use-search-query-state'
 
 const actions = mapValues(
   {
@@ -89,12 +88,10 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
 
   return useMemo(
     () =>
-      useStore.initial.searchTerm === state
+      useSearchQueryState.isDefault(state)
         ? iconIds
-        : isWordCharacter(state)
-          ? uf.search(iconIds, state)[0].map(index => iconIds[index])
-          : EMPTY_ARRAY,
-    [iconIds, state]
+        : uf.search(iconIds, state)[0].map(index => iconIds[index]),
+    [state, iconIds]
   )
 }
 
@@ -206,9 +203,8 @@ export const IconGrid = useRemount.with(
     )
 
     const favoritedIcons = useFavoritedIcons()
-    const store = useStore()
-    const searchTerm = store.useSelectValue(({draft}) => draft.searchTerm)
-    const filteredIconIds = useFilteredIconIds(searchTerm, iconIds)
+    const [searchQueryState, setSearchQueryState] = useSearchQueryState()
+    const filteredIconIds = useFilteredIconIds(searchQueryState, iconIds)
 
     const [state, setState] = useSetState({
       iconIds
@@ -247,18 +243,16 @@ export const IconGrid = useRemount.with(
               <VscodeTextfield
                 invalid={
                   !(
-                    searchTerm === useStore.initial.searchTerm ||
-                    isWordCharacter(searchTerm)
+                    useSearchQueryState.isDefault(searchQueryState) ||
+                    isWordCharacter(searchQueryState)
                   )
                 }
-                onInput={event => {
-                  store.set(({draft}) => {
-                    draft.searchTerm = event.target.value
-                  })
+                onInput={async event => {
+                  await setSearchQueryState(event.target.value)
                 }}
                 placeholder='Search'
                 style={{width: 300}}
-                value={searchTerm}>
+                value={searchQueryState}>
                 <React.Activity>
                   <Menu
                     data={
