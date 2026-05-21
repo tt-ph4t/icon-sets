@@ -279,13 +279,21 @@ export default withQueryBoundary(
           'Info',
           {
             description: iconSetQuery.data.name,
-            label: 'Set name'
+            label: 'Set name',
+            get onClick() {
+              return () => {
+                prompt(this.description, `[prefix] ${iconSetQuery.data.prefix}`)
+              }
+            }
           },
           {
             description: iconSetQuery.data.author.name,
             label: 'Author',
             onClick: () => {
-              open(iconSetQuery.data.author.url)
+              prompt(
+                iconSetQuery.data.author.name,
+                iconSetQuery.data.author.url
+              )
             }
           },
           {
@@ -319,7 +327,12 @@ export default withQueryBoundary(
               iconSetQuery.data.chars,
               iconName => iconName === iconQuery.data.name
             ),
-            label: 'Character'
+            label: 'Character',
+            get onClick() {
+              return () => {
+                prompt(capitalCase(iconQuery.data.name), this.description)
+              }
+            }
           },
           'Misc',
           {
@@ -327,9 +340,20 @@ export default withQueryBoundary(
             label: 'Alias',
             menu: iconAliases.map(iconAlias => ({
               label: capitalCase(iconAlias),
-              onClick: async () => {
-                await setSearchQueryState(iconAlias)
-              }
+              menu: [
+                {
+                  label: 'View',
+                  onClick: () => {
+                    prompt(undefined, iconAlias)
+                  }
+                },
+                {
+                  label: 'Search',
+                  onClick: async () => {
+                    await setSearchQueryState(iconAlias)
+                  }
+                }
+              ]
             }))
           },
           {

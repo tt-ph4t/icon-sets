@@ -97,7 +97,7 @@ export default component(({context}) => {
         <ToolbarButton
           icon='file-symlink-file'
           onClick={() => {
-            open(`https://www.npmjs.com/package/@iconify-json/${context.id}`)
+            ;`https://www.npmjs.com/package/@iconify-json/${context.id}`
           }}
         />
         <Menu
