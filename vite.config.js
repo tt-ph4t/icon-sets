@@ -2,10 +2,15 @@
 
 import {devtools} from '@tanstack/devtools-vite'
 import react from '@vitejs/plugin-react'
+import has from 'has-values'
 import {minimatch} from 'minimatch'
+import path from 'node:path'
 import {defineConfig, transformWithEsbuild} from 'vite'
 import {compression} from 'vite-plugin-compression2'
 import preload from 'vite-plugin-preload'
+
+const nodeModulesPath = 'node_modules/'
+const excludedPackages = ['@takumi-rs']
 
 export default defineConfig({
   build: {
@@ -15,10 +20,22 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules')) {
-            const [, pkg] = id.match(/node_modules\/([^/]+)/)
+          if (
+            id.includes(nodeModulesPath) &&
+            excludedPackages.every(a => !id.includes(a))
+          ) {
+            const [, a] = id.split(nodeModulesPath)
 
-            if (pkg) return `vendor-${pkg}`
+            if (a) {
+              const pathSegments = a.split('/')
+
+              if (has(pathSegments))
+                return `vendor-${
+                  pathSegments[0].startsWith('@')
+                    ? path.join(pathSegments[0], pathSegments[1])
+                    : pathSegments[0]
+                }`
+            }
           }
         }
       }
