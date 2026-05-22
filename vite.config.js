@@ -1,5 +1,6 @@
 // https://performance.dev/how-is-linear-so-fast-a-technical-breakdown
 
+import {isString} from '@sindresorhus/is'
 import {devtools} from '@tanstack/devtools-vite'
 import react from '@vitejs/plugin-react'
 import has from 'has-values'
@@ -26,7 +27,7 @@ export default defineConfig({
           ) {
             const [, a] = id.split(nodeModulesPath)
 
-            if (a) {
+            if (isString(a)) {
               const pathSegments = a.split('/')
 
               if (has(pathSegments))

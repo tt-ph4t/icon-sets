@@ -82,7 +82,7 @@ export const validateIconId = iconId =>
 export const openObjectURL = (...args) => {
   const url = URL.createObjectURL(...args)
 
-  window.open(url)
+  open(url)
   URL.revokeObjectURL(url)
 }
 
