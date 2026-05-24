@@ -122,7 +122,7 @@ export default component(() => {
             render={
               <ToolbarButton
                 checked={state.isPending}
-                icon='symbol-field'
+                icon='database'
                 preventToggle
               />
             }

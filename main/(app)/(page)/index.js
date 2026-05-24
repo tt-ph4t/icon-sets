@@ -19,7 +19,6 @@ import {
 } from '../misc/constants'
 import IconQueries from './icon-queries'
 import Layout from './layout'
-import QueryClient from './query-client'
 
 const Sidebar = Boundary.lazy(() => import('./sidebar'))
 const FilteredIconSets = Boundary.lazy(() => import('./filtered-icon-sets'))
@@ -148,7 +147,6 @@ export default useRemount.with(
             ]}
           />
           <IconQueries />
-          <QueryClient />
         </VscodeToolbarContainer>
       </React.Activity>
     </Layout.Fullscreen>
