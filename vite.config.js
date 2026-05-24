@@ -9,6 +9,7 @@ import path from 'node:path'
 import {defineConfig, transformWithEsbuild} from 'vite'
 import {compression} from 'vite-plugin-compression2'
 import preload from 'vite-plugin-preload'
+import {VitePWA} from 'vite-plugin-pwa'
 
 const nodeModulesPath = 'node_modules/'
 const excludedPackages = ['@takumi-rs']
@@ -63,6 +64,16 @@ export default defineConfig({
       }
     }),
     preload(),
-    compression()
+    compression(),
+    VitePWA({
+      injectRegister: 'script-defer',
+      manifest: false,
+      workbox: {
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        maximumFileSizeToCacheInBytes: Number.MAX_SAFE_INTEGER,
+        skipWaiting: true
+      }
+    })
   ]
 })

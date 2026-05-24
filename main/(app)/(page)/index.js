@@ -136,7 +136,8 @@ export default useRemount.with(
           style={{
             alignSelf: 'center',
             bottom: 'calc(var(--spacing) * 2)',
-            position: 'absolute'
+            position: 'absolute',
+            zIndex: 1
           }}>
           <Settings
             menu={[
@@ -146,10 +147,8 @@ export default useRemount.with(
               INTERNAL_REMOUNT.menu
             ]}
           />
-          <React.Activity>
-            <IconQueries />
-            <QueryClient />
-          </React.Activity>
+          <IconQueries />
+          <QueryClient />
         </VscodeToolbarContainer>
       </React.Activity>
     </Layout.Fullscreen>

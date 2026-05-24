@@ -96,81 +96,84 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
 }
 
 const IconOptions = {
-  ColorPicker: component(() => {
-    const customizedIcons = useCustomizedIcons()
+  ColorPicker:
+    // https://github.com/colorjs/color-name
+    component(() => {
+      const customizedIcons = useCustomizedIcons()
 
-    const batcher = useBatcher(items => {
-      last(items)()
-      ICON_CACHE.clear()
-    })
+      const batcher = useBatcher(items => {
+        last(items)()
+        ICON_CACHE.clear()
+      })
 
-    const iconOptions = customizedIcons.store.useSelectValue(({draft}) => ({
-      color: draft.global.color
-    }))
+      const iconOptions = customizedIcons.store.useSelectValue(({draft}) => ({
+        color: draft.global.color
+      }))
 
-    return (
-      <Popover.Primitive
-        popupRender={
-          <>
-            <Sketch
-              color={iconOptions.color}
-              editableDisable={false}
-              onChange={colorResult => {
-                batcher.addItem(() => {
-                  customizedIcons.store.set(({draft}) => {
-                    draft.global.color = colorResult.hexa
+      return (
+        <Popover.Primitive
+          popupRender={
+            <>
+              <Sketch
+                color={iconOptions.color}
+                editableDisable={false}
+                onChange={colorResult => {
+                  batcher.addItem(() => {
+                    customizedIcons.store.set(({draft}) => {
+                      draft.global.color = colorResult.hexa
+                    })
                   })
-                })
-              }}
-              presetColors={false}
-              style={THEME.CARD_STYLE}
-              width={300}
+                }}
+                presetColors={false}
+                style={THEME.CARD_STYLE}
+                width={300}
+              />
+              <React.Activity>
+                <div
+                  style={{
+                    display: 'flex',
+                    placeContent: 'space-between'
+                  }}>
+                  <Clipboard value={iconOptions.color}>
+                    {iconOptions.color}
+                  </Clipboard>
+                  <VscodeToolbarContainer>
+                    <ToolbarButton
+                      icon='wand'
+                      onClick={() => {
+                        batcher.addItem(() => {
+                          customizedIcons.store.set(({draft}) => {
+                            draft.global.color = randomColor()
+                          })
+                        })
+                      }}
+                    />
+                    <ToolbarButton
+                      icon='eraser'
+                      onClick={() => {
+                        batcher.addItem(() => {
+                          customizedIcons.store.set(({draft}) => {
+                            draft.global.color =
+                              DEFAULT_ICON_CUSTOMISATIONS.color
+                          })
+                        })
+                      }}
+                    />
+                  </VscodeToolbarContainer>
+                </div>
+              </React.Activity>
+            </>
+          }
+          render={
+            <ToolbarButton
+              checked={iconOptions.color !== DEFAULT_ICON_CUSTOMISATIONS.color}
+              icon='paintcan'
+              preventToggle
             />
-            <React.Activity>
-              <div
-                style={{
-                  display: 'flex',
-                  placeContent: 'space-between'
-                }}>
-                <Clipboard value={iconOptions.color}>
-                  {iconOptions.color}
-                </Clipboard>
-                <VscodeToolbarContainer>
-                  <ToolbarButton
-                    icon='wand'
-                    onClick={() => {
-                      batcher.addItem(() => {
-                        customizedIcons.store.set(({draft}) => {
-                          draft.global.color = randomColor()
-                        })
-                      })
-                    }}
-                  />
-                  <ToolbarButton
-                    icon='eraser'
-                    onClick={() => {
-                      batcher.addItem(() => {
-                        customizedIcons.store.set(({draft}) => {
-                          draft.global.color = DEFAULT_ICON_CUSTOMISATIONS.color
-                        })
-                      })
-                    }}
-                  />
-                </VscodeToolbarContainer>
-              </div>
-            </React.Activity>
-          </>
-        }
-        render={
-          <ToolbarButton
-            checked={iconOptions.color !== DEFAULT_ICON_CUSTOMISATIONS.color}
-            icon='paintcan'
-            preventToggle
-          />
-        }
-      />
-    )
-  }),
+          }
+        />
+      )
+    }),
   SquareToggle: component(() => {
     const customizedIcons = useCustomizedIcons()
 
