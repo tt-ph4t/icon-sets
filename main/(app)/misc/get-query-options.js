@@ -34,7 +34,7 @@ export const getQueryOptions =
     refetchOnWindowFocus = false,
     retry = false,
     select = noop,
-    staleTime = Number.MAX_SAFE_INTEGER,
+    staleTime = Infinity,
     structuralSharing = defaults.structuralSharing,
     timeout = defaults.timeout,
     url,

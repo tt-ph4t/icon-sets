@@ -2,6 +2,7 @@ import {TanStackDevtools} from '@tanstack/react-devtools'
 import {pacerDevtoolsPlugin} from '@tanstack/react-pacer-devtools'
 import {ReactQueryDevtoolsPanel} from '@tanstack/react-query-devtools/build/modern/production.js'
 import '@vscode-elements/webview-playground'
+import {omit} from 'es-toolkit'
 import React from 'react'
 
 import {component} from '../(app)/hocs'
@@ -11,10 +12,12 @@ import githubDevtoolsPlugin from './github-devtools-plugin'
 
 const TanStackDevtoolsProps = {
   plugins: [
-    {
-      name: 'TanStack Query',
-      render: <ReactQueryDevtoolsPanel client={QUERY_CLIENT} />
-    },
+    ...Object.entries(omit(QUERY_CLIENT, ['ACTIONS'])).map(
+      ([name, client]) => ({
+        name: `TanStack Query (${name})`,
+        render: <ReactQueryDevtoolsPanel client={client} />
+      })
+    ),
     pacerDevtoolsPlugin(),
     githubDevtoolsPlugin({
       defaultOpen: true

@@ -30,7 +30,7 @@ const PacerProviderProps = {
 export default component(({children}) => (
   <PacerProvider {...PacerProviderProps}>
     <NuqsAdapter>
-      <QueryClientProvider client={QUERY_CLIENT}>
+      <QueryClientProvider client={QUERY_CLIENT.GLOBAL}>
         {children}
       </QueryClientProvider>
     </NuqsAdapter>

@@ -25,7 +25,17 @@ export const ICON_CACHE = new LRUCache({
   max: 1e3
 })
 
-export const QUERY_CLIENT = new QueryClient()
+export const QUERY_CLIENT = {
+  ACTIONS: deepFreeze([
+    ['Refetch', 'refetchQueries'],
+    ['Invalidate', 'invalidateQueries'],
+    ['Reset', 'resetQueries'],
+    ['Cancel', 'cancelQueries'],
+    ['Remove', 'removeQueries']
+  ]),
+  GLOBAL: new QueryClient(),
+  INTERNAL: new QueryClient()
+}
 
 export const EMPTY_BLOB = new Blob()
 
@@ -123,14 +133,6 @@ export const THEME = deepFreeze({
   },
   DEFAULT_COLOR_SCHEME: 'light'
 })
-
-export const QUERY_CLIENT_ACTIONS = deepFreeze([
-  ['Refetch', 'refetchQueries'],
-  ['Invalidate', 'invalidateQueries'],
-  ['Reset', 'resetQueries'],
-  ['Cancel', 'cancelQueries'],
-  ['Remove', 'removeQueries']
-])
 
 export const REACT_QUERY_STATUS_HOOKS = deepFreeze([
   useIsFetching,

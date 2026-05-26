@@ -8,7 +8,7 @@ import {parseIconName} from '../../misc/parse-icon-name'
 import {useCustomizedIcons} from '../use-customized-icons'
 import buildIcon from './build-icon'
 
-const contextMapQueryOptions = {
+const contextQueryOptions = {
   ...DEFAULT_QUERY_OPTIONS,
   select: iconSets =>
     mapValues(iconSets, iconSet => ({
@@ -20,7 +20,7 @@ const contextMapQueryOptions = {
 const defaultQueryOptions = pick(DEFAULT_QUERY_OPTIONS, ['select'])
 
 export const useIconQueries = (...icons) => {
-  const contextMapQuery = useQuery(contextMapQueryOptions)
+  const contextQuery = useQuery(contextQueryOptions)
 
   const iconOptions = useCustomizedIcons().store.useSelectValue(({draft}) => ({
     color: draft.global.color
@@ -32,7 +32,7 @@ export const useIconQueries = (...icons) => {
         const {icon} = parseIconName(iconId)
 
         return getQueryOptions({
-          enabled: contextMapQuery.isSuccess,
+          enabled: contextQuery.isSuccess,
           gcTime: ms('1m'),
           queryKey: iconId,
           url: `${DATABASE_URL}/${icon.prefix}/${icon.name}.msgpack`,
@@ -44,7 +44,7 @@ export const useIconQueries = (...icons) => {
                   data,
                   id: iconId,
                   ...icon,
-                  ...contextMapQuery.data[icon.prefix]
+                  ...contextQuery.data[icon.prefix]
                 },
                 {
                   ...iconCustomisations,

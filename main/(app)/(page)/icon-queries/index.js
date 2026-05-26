@@ -4,21 +4,22 @@ import {mapValues, pick, sumBy} from 'es-toolkit'
 import {size} from 'es-toolkit/compat'
 import ms from 'ms'
 
-import {Menu} from '../components/menu'
-import {ToolbarButton} from '../components/toolbar-button'
-import {component} from '../hocs'
-import {useCallback} from '../hooks/use-callback'
-import {useState} from '../hooks/use-state'
-import {getId, hasValues} from '../misc'
+import {Menu} from '../../components/menu'
+import {ToolbarButton} from '../../components/toolbar-button'
+import {component} from '../../hocs'
+import {useCallback} from '../../hooks/use-callback'
+import {useState} from '../../hooks/use-state'
+import {getId, hasValues} from '../../misc'
 import {
   DATABASE_URL,
   DEFAULT_QUERY_OPTIONS,
   EMPTY_OBJECT,
-  QUERY_CLIENT_ACTIONS
-} from '../misc/constants'
-import {getQueryOptions} from '../misc/get-query-options'
-import {pluralize} from '../misc/pluralize'
-import {prettyBytes} from '../misc/pretty-bytes'
+  QUERY_CLIENT
+} from '../../misc/constants'
+import {getQueryOptions} from '../../misc/get-query-options'
+import {pluralize} from '../../misc/pluralize'
+import {prettyBytes} from '../../misc/pretty-bytes'
+import DataVersion from './data-version'
 
 const defaultQueryOptions = {
   exact: true,
@@ -27,7 +28,7 @@ const defaultQueryOptions = {
 
 const queryClientActions = [
   ['Prefetch', 'prefetchQuery'],
-  ...QUERY_CLIENT_ACTIONS
+  ...QUERY_CLIENT.ACTIONS
 ]
 
 export default component(() => {
@@ -123,8 +124,9 @@ export default component(() => {
               <ToolbarButton
                 checked={state.isPending}
                 icon='database'
-                preventToggle
-              />
+                preventToggle>
+                <DataVersion />
+              </ToolbarButton>
             }
           />
         )}
