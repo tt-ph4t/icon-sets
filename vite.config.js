@@ -4,7 +4,6 @@ import {isString} from '@sindresorhus/is'
 import {devtools} from '@tanstack/devtools-vite'
 import react from '@vitejs/plugin-react'
 import has from 'has-values'
-import {minimatch} from 'minimatch'
 import path from 'node:path'
 import {defineConfig, transformWithEsbuild} from 'vite'
 import {compression} from 'vite-plugin-compression2'
@@ -51,7 +50,7 @@ export default defineConfig({
     {
       enforce: 'pre',
       async transform(code, id) {
-        if (minimatch(id, '**/*.+(js|jsx)'))
+        if (['js', 'jsx'].some(a => id.endsWith(a)))
           return await transformWithEsbuild(code, id, {
             jsx: 'automatic',
             loader: 'jsx'

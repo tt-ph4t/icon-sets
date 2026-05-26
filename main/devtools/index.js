@@ -5,9 +5,9 @@ import '@vscode-elements/webview-playground'
 import {omit} from 'es-toolkit'
 import React from 'react'
 
-import {component} from '../(app)/hocs'
-import {useSettings} from '../(app)/hooks/use-settings'
-import {QUERY_CLIENT, THEME} from '../(app)/misc/constants'
+import {component} from '../app/hocs'
+import {useSettings} from '../app/hooks/use-settings'
+import {QUERY_CLIENT, THEME} from '../app/misc/constants'
 import githubDevtoolsPlugin from './github-devtools-plugin'
 
 const TanStackDevtoolsProps = {

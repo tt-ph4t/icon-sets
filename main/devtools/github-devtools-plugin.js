@@ -1,8 +1,8 @@
 import ms from 'ms'
 import {useGlitch} from 'react-powerglitch'
 
-import {component} from '../(app)/hocs'
-import {GITHUB_REPO, POWER_GLITCH_OPTIONS} from '../(app)/misc/constants'
+import {component} from '../app/hocs'
+import {GITHUB_REPO, POWER_GLITCH_OPTIONS} from '../app/misc/constants'
 import fish from './xT9IgxY4eMijhmPgm4.webp'
 
 const GlitchFish = component(() => {
