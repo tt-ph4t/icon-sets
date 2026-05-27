@@ -20,8 +20,11 @@ import {
 import IconQueries from './icon-queries'
 import Layout from './layout'
 
-const Sidebar = Boundary.lazy(() => import('./sidebar'))
-const FilteredIconSets = Boundary.lazy(() => import('./filtered-icon-sets'))
+const Sidebar = Boundary.with(React.lazy(() => import('./sidebar')))
+
+const FilteredIconSets = Boundary.with(
+  React.lazy(() => import('./filtered-icon-sets'))
+)
 
 const GlobalActivity = component(() => {
   const isLoading = REACT_QUERY_STATUS_HOOKS.map(hook => hook()).some(isTruthy)
