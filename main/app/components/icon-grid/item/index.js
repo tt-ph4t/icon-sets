@@ -3,8 +3,16 @@ import {useQuery} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeIcon} from '@vscode-elements/react-elements'
 import {capitalCase, sentenceCase} from 'change-case'
-import {findKey, identity, mapValues, pick, range, uniq} from 'es-toolkit'
-import {size, truncate} from 'es-toolkit/compat'
+import {
+  compact,
+  findKey,
+  identity,
+  mapValues,
+  pick,
+  range,
+  uniq
+} from 'es-toolkit'
+import {size} from 'es-toolkit/compat'
 import React from 'react'
 
 import {component} from '../../../hocs'
@@ -25,6 +33,7 @@ import {
   DEFAULT_ICON_CUSTOMISATIONS,
   DEFAULT_QUERY_OPTIONS,
   EMPTY_ARRAY,
+  ICONIFY_API_URLS,
   THEME
 } from '../../../misc/constants'
 import {parseIconName} from '../../../misc/parse-icon-name'
@@ -89,6 +98,15 @@ export default withQueryBoundary(
       )
     })
 
+    const test = useMemo(
+      () =>
+        mapValues(
+          pick(iconQuery.data.data, ['height', 'width']),
+          a => a * iconCustomisations.scale
+        ),
+      [iconQuery.data.data, iconCustomisations.scale]
+    )
+
     const getTakumiBlob = useCallback(
       async format =>
         await takumi(
@@ -112,10 +130,7 @@ export default withQueryBoundary(
             },
             options: {
               format,
-              ...mapValues(
-                pick(iconQuery.data.data, ['height', 'width']),
-                a => a * iconCustomisations.scale
-              )
+              ...test
             }
           }
         )
@@ -197,6 +212,87 @@ export default withQueryBoundary(
                         }
                       }
                     ]
+                  })),
+                  'Iconify API', // https://iconify.design/docs/api/
+                  ...[
+                    {
+                      label: 'SVG',
+                      onClick: () => {
+                        const url = new URL(
+                          `${ICONIFY_API_URLS[0]}/${iconSetQuery.data.prefix}/${iconQuery.data.name}.svg`
+                        )
+
+                        url.searchParams.set('color', iconOptions.color)
+
+                        mapValues(test, (a, b) => {
+                          url.searchParams.set(b, a)
+                        })
+
+                        url.searchParams.set(
+                          'flip',
+                          String(
+                            compact(
+                              Object.entries(
+                                pick(
+                                  iconCustomisations,
+                                  Object.keys(flipDirections)
+                                )
+                              ).map(([a, b]) => b && flipDirections[a])
+                            )
+                          ).toLowerCase()
+                        )
+
+                        url.searchParams.set(
+                          'rotate',
+                          iconCustomisations.rotate
+                        )
+
+                        url.searchParams.set('box', true)
+
+                        return url
+                      }
+                    },
+                    {
+                      label: 'CSS',
+                      onClick: () => {
+                        const url = new URL(
+                          `${ICONIFY_API_URLS[0]}/${iconSetQuery.data.prefix}.css?icons=${iconQuery.data.name}`
+                        )
+
+                        url.searchParams.set('color', iconOptions.color)
+
+                        return url
+                      }
+                    },
+                    {
+                      label: 'JSON',
+                      onClick: () => {
+                        const url = new URL(
+                          `${ICONIFY_API_URLS[0]}/${iconSetQuery.data.prefix}.json?icons=${iconQuery.data.name}`
+                        )
+
+                        url.searchParams.set('pretty', true)
+
+                        return url
+                      }
+                    }
+                  ].map(({label, onClick, ...rest}) => ({
+                    label,
+                    menu: ICONIFY_API_URLS.map(a => {
+                      const {hostname} = new URL(a)
+
+                      return {
+                        label: hostname,
+                        onClick: async (...args) => {
+                          const url = await onClick(...args)
+
+                          url.hostname = hostname
+
+                          prompt(label, url)
+                        }
+                      }
+                    }),
+                    ...rest
                   }))
                 ]
               },
@@ -282,7 +378,7 @@ export default withQueryBoundary(
             label: 'Set name',
             get onClick() {
               return () => {
-                prompt(this.description, `[prefix] ${iconSetQuery.data.prefix}`)
+                prompt(iconSetQuery.data.prefix, this.description)
               }
             }
           },
@@ -316,10 +412,7 @@ export default withQueryBoundary(
             label: 'Grid'
           },
           {
-            description: sizeLabel(
-              iconQuery.data.data,
-              iconCustomisations.scale
-            ),
+            description: sizeLabel(test, 1),
             label: 'Size'
           },
           {
@@ -364,9 +457,6 @@ export default withQueryBoundary(
                 label = sentenceCase(label)
 
                 return {
-                  description: truncate(id, {
-                    length: 6
-                  }),
                   label,
                   onClick: () => {
                     prompt(label, id)

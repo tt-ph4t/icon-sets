@@ -2,21 +2,12 @@ import {experimental_VGrid as VGrid} from 'virtua'
 
 import {component} from '../../hocs'
 import {useRef} from '../../hooks/use-ref'
-import {hasValues} from '../../misc'
 import {renderSlot} from '../../misc/render-slot'
-
-const defaultCol = 1
 
 export default component(({bufferSize, cellSize = 100, col, item, row}) => {
   const size = useRef.size()
 
-  col = Math.floor(
-    col ??
-      (hasValues(size)
-        ? Math.max(size.width / cellSize, defaultCol)
-        : defaultCol)
-  )
-
+  col = Math.floor(col ?? Math.max(size.width / cellSize, 1))
   row = Math.ceil(row ?? item.count / col)
 
   return (

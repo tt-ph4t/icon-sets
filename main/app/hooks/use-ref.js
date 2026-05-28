@@ -6,7 +6,13 @@ import React from 'react'
 import {useCallback} from './use-callback'
 import {useState} from './use-state'
 
-const bodyElement = document.querySelector('body')
+const defaultSize = {
+  target: document.querySelector('body'),
+  value: {
+    height: 0,
+    width: 0
+  }
+}
 
 export const useRef = Object.assign(
   (getValue = noop) => {
@@ -42,7 +48,9 @@ export const useRef = Object.assign(
 
       return {
         ref,
-        ...React.useDeferredValue(useSize(() => ref.current ?? bodyElement))
+        ...React.useDeferredValue(
+          useSize(() => ref.current ?? defaultSize.target)
+        )
       }
     }
   }

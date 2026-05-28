@@ -14,6 +14,12 @@ import {getQueryOptions} from './get-query-options'
 
 export const GITHUB_REPO = 'tt-ph4t/icon-sets'
 
+export const ICONIFY_API_URLS = deepFreeze([
+  'https://api.iconify.design',
+  'https://api.simplesvg.com',
+  'https://api.unisvg.com'
+])
+
 export const // https://raw.githubusercontent.com/${GITHUB_REPO}/refs/heads/data/data
   DATABASE_URL = `https://cdn.jsdelivr.net/gh/${GITHUB_REPO}@refs/heads/data/data`
 
