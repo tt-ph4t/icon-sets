@@ -43,18 +43,16 @@ const Popup = component(({menu}) => {
     <InternalMenu.Popup
       render={
         <VscodeFormContainer style={THEME.CARD_STYLE}>
-          <VscodeFormGroup
-            style={{
-              maxHeight: 500,
-              get maxWidth() {
-                return this.maxHeight * 0.7
-              },
-              overflow: 'auto',
-              padding: 'unset'
-            }}
-            variant='settings-group'>
-            <InternalMenu.Group>
-              <React.Activity>
+          <InternalMenu.Group
+            render={
+              <VscodeFormGroup
+                style={{
+                  maxHeight: 'calc(var(--spacing) * 120)',
+                  maxWidth: 'calc(var(--spacing) * 70)', // Virtualizer ?
+                  overflow: 'auto',
+                  padding: 'unset'
+                }}
+                variant='settings-group'>
                 {menu.map((data, index) => {
                   if (isWordCharacter(data))
                     return (
@@ -98,9 +96,9 @@ const Popup = component(({menu}) => {
                     </React.Fragment>
                   )
                 })}
-              </React.Activity>
-            </InternalMenu.Group>
-          </VscodeFormGroup>
+              </VscodeFormGroup>
+            }
+          />
         </VscodeFormContainer>
       }
     />

@@ -56,7 +56,7 @@ const rotate = {
 
 const scales = range(
   DEFAULT_ICON_CUSTOMISATIONS.scale,
-  DEFAULT_ICON_CUSTOMISATIONS.scale + 100
+  DEFAULT_ICON_CUSTOMISATIONS.scale + 1e3
 )
 
 const sizeLabel = (
@@ -98,7 +98,7 @@ export default withQueryBoundary(
       )
     })
 
-    const test = useMemo(
+    const iconSize = useMemo(
       () =>
         mapValues(
           pick(iconQuery.data.data, ['height', 'width']),
@@ -130,7 +130,7 @@ export default withQueryBoundary(
             },
             options: {
               format,
-              ...test
+              ...iconSize
             }
           }
         )
@@ -224,7 +224,7 @@ export default withQueryBoundary(
 
                         url.searchParams.set('color', iconOptions.color)
 
-                        mapValues(test, (a, b) => {
+                        mapValues(iconSize, (a, b) => {
                           url.searchParams.set(b, a)
                         })
 
@@ -412,7 +412,7 @@ export default withQueryBoundary(
             label: 'Grid'
           },
           {
-            description: sizeLabel(test, 1),
+            description: sizeLabel(iconSize, 1),
             label: 'Size'
           },
           {

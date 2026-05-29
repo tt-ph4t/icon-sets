@@ -48,7 +48,7 @@
     "eslint-plugin-promise": "7.3.0",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "7.1.1",
-    "eslint-plugin-react-you-might-not-need-an-effect": "0.10.2",
+    "eslint-plugin-react-you-might-not-need-an-effect": "0.10.3",
     "eslint-plugin-regexp": "3.1.0",
     "eslint-plugin-unicorn": "64.0.0",
     "fast-sort": "3.4.1",
