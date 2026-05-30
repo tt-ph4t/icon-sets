@@ -8,7 +8,7 @@ import {freezeAtom, selectAtom} from 'jotai/utils'
 
 import {useCallback} from '../hooks/use-callback'
 import {useEffect} from '../hooks/use-effect'
-import {DELAY_MS, EMPTY_ARRAY, EMPTY_OBJECT} from '../misc/constants'
+import {DELAY_MS, EMPTY_ARRAY, EMPTY_OBJECT} from './constants'
 
 const create = flow(atomWithImmer, freezeAtom)
 

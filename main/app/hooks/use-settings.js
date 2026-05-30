@@ -1,4 +1,4 @@
-import {withImmerAtom} from '../hocs/with-immer-atom'
+import {withImmerAtom} from '../misc/with-immer-atom'
 
 export const useSettings = withImmerAtom({
   isDev: import.meta.env.DEV,

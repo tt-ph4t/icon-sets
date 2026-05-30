@@ -9,13 +9,13 @@ import {VList} from 'virtua'
 import {Menu} from '../../components/menu'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
-import {withImmerAtom} from '../../hocs/with-immer-atom'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {hasValues} from '../../misc'
 import {EMPTY_ARRAY, EMPTY_OBJECT} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {renderSlot} from '../../misc/render-slot'
+import {withImmerAtom} from '../../misc/with-immer-atom'
 
 export default () => {
   const useStore = withImmerAtom(EMPTY_OBJECT)

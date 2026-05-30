@@ -15,7 +15,7 @@ import mime from 'mime/lite'
 import {getIconFilePaths, hasValues} from '../../misc'
 import {EMPTY_OBJECT, ICON_CACHE} from '../../misc/constants'
 
-const iconTypes = ['css', 'json', 'svg', 'txt', 'pdf']
+const types = ['css', 'json', 'svg', 'txt', 'pdf']
 
 const idCases =
   // https://github.com/antfu-collective/icones/blob/e04ac9277776d791c1fc0696706708baa6a7d89f/src/utils/case.ts
@@ -84,7 +84,7 @@ export default (
             : EMPTY_OBJECT
         },
         idCases: mapValues(idCases, value => value(icon.id)),
-        paths: iconTypes.reduce((a, b) => {
+        paths: types.reduce((a, b) => {
           a[b] = getIconFilePaths(icon, b)
 
           return a

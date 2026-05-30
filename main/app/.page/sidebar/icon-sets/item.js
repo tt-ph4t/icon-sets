@@ -10,11 +10,11 @@ import {IconGrid} from '../../../components/icon-grid'
 import {Menu} from '../../../components/menu'
 import {ToolbarButton} from '../../../components/toolbar-button'
 import {component} from '../../../hocs'
-import {withImmerAtom} from '../../../hocs/with-immer-atom'
 import {useCallback} from '../../../hooks/use-callback'
 import {getId} from '../../../misc'
 import {DEFAULT_QUERY_OPTIONS, EMPTY_OBJECT} from '../../../misc/constants'
 import {pluralize} from '../../../misc/pluralize'
+import {withImmerAtom} from '../../../misc/with-immer-atom'
 
 const initialState = {
   category: Symbol(),

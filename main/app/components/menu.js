@@ -1,5 +1,5 @@
 import {Menu as InternalMenu, mergeProps} from '@base-ui/react'
-import {isFalsy, isPlainObject} from '@sindresorhus/is'
+import {isFalsy, isPlainObject, isString} from '@sindresorhus/is'
 import {
   VscodeContextMenuItem,
   VscodeFormContainer,
@@ -13,15 +13,17 @@ import React from 'react'
 import {component} from '../hocs'
 import {useMemo} from '../hooks/use-memo'
 import {useState} from '../hooks/use-state'
-import {getId, hasValues, isWordCharacter} from '../misc'
+import {getId, hasValues} from '../misc'
 import {buildContext} from '../misc/build-context'
 import {EMPTY_ARRAY, THEME} from '../misc/constants'
 
+const isGroupLabel = isString
+
 const normalizeData = data =>
   Iterator.from(castArray(data))
-    .filter(value => isPlainObject(value) || isWordCharacter(value))
+    .filter(value => isPlainObject(value) || isGroupLabel(value))
     .map(value => {
-      if (isWordCharacter(value)) return value
+      if (isGroupLabel(value)) return value
 
       const {menu, ...data} = value
 
@@ -54,7 +56,7 @@ const Popup = component(({menu}) => {
                 }}
                 variant='settings-group'>
                 {menu.map((data, index) => {
-                  if (isWordCharacter(data))
+                  if (isGroupLabel(data))
                     return (
                       <InternalMenu.GroupLabel
                         key={getId(index, data)}
