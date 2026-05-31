@@ -3,7 +3,6 @@ import {
   VscodeDivider,
   VscodeToolbarContainer
 } from '@vscode-elements/react-elements'
-import React from 'react'
 
 import {Popover} from '../../../components/popover'
 import {ToolbarButton} from '../../../components/toolbar-button'
@@ -46,9 +45,7 @@ export default component(() => (
           <MultiSelect />
           <VscodeDivider />
         </div>
-        <React.Activity>
-          <Tree />
-        </React.Activity>
+        <Tree />
       </>
     }
     render={

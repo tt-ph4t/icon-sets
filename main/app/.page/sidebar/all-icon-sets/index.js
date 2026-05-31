@@ -7,6 +7,7 @@ import {Collapsible} from '../../../components/collapsible'
 import {component} from '../../../hocs'
 import {useState} from '../../../hooks/use-state'
 import {DEFAULT_QUERY_OPTIONS} from '../../../misc/constants'
+import {pluralize} from '../../../misc/pluralize'
 import collapsibleList from '../collapsible-list'
 import Item from './item'
 
@@ -56,13 +57,16 @@ export default component(() => {
             heading='icon sets'>
             <CollapsibleList
               ids={iconSetPrefixes}
-              menu={query.data.iconSet.category.names.map(category => ({
-                label: category,
-                onClick: () => {
-                  setState(state => state === category || category)
-                },
-                selected: category === state
-              }))}
+              menu={[
+                pluralize(query.data.iconSet.category.names.length, 'category'),
+                ...query.data.iconSet.category.names.map(category => ({
+                  label: category,
+                  onClick: () => {
+                    setState(state => state === category || category)
+                  },
+                  selected: category === state
+                }))
+              ]}
               renderItem={(...[, props]) => <Item {...props} />}
             />
           </Collapsible>

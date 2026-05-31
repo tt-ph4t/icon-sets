@@ -486,49 +486,47 @@ export default withQueryBoundary(
             style={{
               position: 'relative'
             }}>
-            <React.Activity>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'absolute',
-                  right: 0,
-                  top: 0
-                }}>
-                <React.Activity
-                  mode={
-                    favoritedIcons.has(iconQuery.data.id) ? 'visible' : 'hidden'
-                  }>
-                  <VscodeIcon
-                    name='circle-filled'
-                    onClick={() => {
-                      favoritedIcons.delete(iconQuery.data.id)
-                    }}
-                    size={13}
-                    style={{
-                      '--vscode-icon-foreground': `var(${THEME.COLORS.WARNING})`
-                    }}
-                  />
-                </React.Activity>
-                <React.Activity
-                  mode={
-                    isEqual(DEFAULT_ICON_CUSTOMISATIONS, iconCustomisations)
-                      ? 'hidden'
-                      : 'visible'
-                  }>
-                  <VscodeIcon
-                    name='circle-filled'
-                    onClick={() => {
-                      customizedIcons.delete(iconQuery.data.id)
-                    }}
-                    size={13}
-                    style={{
-                      '--vscode-icon-foreground': `var(${THEME.COLORS.PRIMARY})`
-                    }}
-                  />
-                </React.Activity>
-              </div>
-            </React.Activity>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'absolute',
+                right: 0,
+                top: 0
+              }}>
+              <React.Activity
+                mode={
+                  favoritedIcons.has(iconQuery.data.id) ? 'visible' : 'hidden'
+                }>
+                <VscodeIcon
+                  name='circle-filled'
+                  onClick={() => {
+                    favoritedIcons.delete(iconQuery.data.id)
+                  }}
+                  size={13}
+                  style={{
+                    '--vscode-icon-foreground': `var(${THEME.COLORS.WARNING})`
+                  }}
+                />
+              </React.Activity>
+              <React.Activity
+                mode={
+                  isEqual(DEFAULT_ICON_CUSTOMISATIONS, iconCustomisations)
+                    ? 'hidden'
+                    : 'visible'
+                }>
+                <VscodeIcon
+                  name='circle-filled'
+                  onClick={() => {
+                    customizedIcons.delete(iconQuery.data.id)
+                  }}
+                  size={13}
+                  style={{
+                    '--vscode-icon-foreground': `var(${THEME.COLORS.PRIMARY})`
+                  }}
+                />
+              </React.Activity>
+            </div>
             {React.cloneElement(iconQuery.data.internal.to.reactElement, {
               get height() {
                 return iconOptions.square ? this.width : '100%'

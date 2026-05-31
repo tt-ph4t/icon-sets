@@ -128,40 +128,37 @@ const IconOptions = {
                 style={THEME.CARD_STYLE}
                 width={300}
               />
-              <React.Activity>
-                <div
-                  style={{
-                    display: 'flex',
-                    placeContent: 'space-between'
-                  }}>
-                  <Clipboard value={iconOptions.color}>
-                    {iconOptions.color}
-                  </Clipboard>
-                  <VscodeToolbarContainer>
-                    <ToolbarButton
-                      icon='wand'
-                      onClick={() => {
-                        batcher.addItem(() => {
-                          customizedIcons.store.set(({draft}) => {
-                            draft.global.color = randomColor()
-                          })
+              <div
+                style={{
+                  display: 'flex',
+                  placeContent: 'space-between'
+                }}>
+                <Clipboard value={iconOptions.color}>
+                  {iconOptions.color}
+                </Clipboard>
+                <VscodeToolbarContainer>
+                  <ToolbarButton
+                    icon='wand'
+                    onClick={() => {
+                      batcher.addItem(() => {
+                        customizedIcons.store.set(({draft}) => {
+                          draft.global.color = randomColor()
                         })
-                      }}
-                    />
-                    <ToolbarButton
-                      icon='eraser'
-                      onClick={() => {
-                        batcher.addItem(() => {
-                          customizedIcons.store.set(({draft}) => {
-                            draft.global.color =
-                              DEFAULT_ICON_CUSTOMISATIONS.color
-                          })
+                      })
+                    }}
+                  />
+                  <ToolbarButton
+                    icon='eraser'
+                    onClick={() => {
+                      batcher.addItem(() => {
+                        customizedIcons.store.set(({draft}) => {
+                          draft.global.color = DEFAULT_ICON_CUSTOMISATIONS.color
                         })
-                      }}
-                    />
-                  </VscodeToolbarContainer>
-                </div>
-              </React.Activity>
+                      })
+                    }}
+                  />
+                </VscodeToolbarContainer>
+              </div>
             </>
           }
           render={

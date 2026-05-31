@@ -18,8 +18,8 @@ import {useCustomizedIcons} from '../../hooks/use-customized-icons'
 import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {hasValues} from '../../misc'
 import {DEFAULT_QUERY_OPTIONS, ICON_CACHE} from '../../misc/constants'
+import AllIconSets from './all-icon-sets'
 import IconGroups from './icon-groups'
-import IconSets from './icon-sets'
 
 const InternalIconGrid = component(({menu, ...props}) => {
   const query = useQuery(DEFAULT_QUERY_OPTIONS)
@@ -130,7 +130,7 @@ export default component(() => (
       '--sidebar-icon-grid-height': 'calc(var(--height) / 2)'
     }}>
     <React.Activity>
-      <IconSets />
+      <AllIconSets />
       <IconGroups />
     </React.Activity>
     <FavoritedIcons />

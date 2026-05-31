@@ -77,15 +77,20 @@ export default component(() => {
             heading='icon groups'>
             <CollapsibleList
               ids={query.data.CollapsibleListIdsMap[state]}
-              menu={sort(Object.keys(query.data.groupedIconIds))
-                .asc()
-                .map(a => ({
-                  label: a,
-                  onClick: () => {
-                    setState(a)
-                  },
-                  selected: a === state
-                }))}
+              menu={[
+                {
+                  separator: true
+                },
+                ...sort(Object.keys(query.data.groupedIconIds))
+                  .asc()
+                  .map(a => ({
+                    label: a,
+                    onClick: () => {
+                      setState(a)
+                    },
+                    selected: a === state
+                  }))
+              ]}
               renderItem={(...[, {context}]) => {
                 const [, heading] = context.id.split(ID_SEPARATOR)
                 const iconIds = query.data.groupedIconIds[state][heading]

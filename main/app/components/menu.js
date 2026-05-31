@@ -65,7 +65,8 @@ const Popup = component(({menu}) => {
                             label={data}
                             selected={false}
                             style={{
-                              opacity: 0.5
+                              opacity: 0.5,
+                              pointerEvents: 'none'
                             }}
                           />
                         }

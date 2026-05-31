@@ -12,7 +12,7 @@ import {component} from '../../hocs'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {hasValues} from '../../misc'
-import {EMPTY_ARRAY, EMPTY_OBJECT} from '../../misc/constants'
+import {EMPTY_OBJECT} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {renderSlot} from '../../misc/render-slot'
 import {withImmerAtom} from '../../misc/with-immer-atom'
@@ -51,69 +51,67 @@ export default () => {
     })
   })
 
-  return useRemount.with(
-    component(({ids, INTERNAL_REMOUNT, menu, ...props}) => {
-      const store = useStore()
+  return Object.assign(
+    useRemount.with(
+      component(({ids, INTERNAL_REMOUNT, menu, ...props}) => {
+        const store = useStore()
 
-      const openMap = store.useSelectValue(({draft}) =>
-        mapValues(draft, props => props.open)
-      )
+        const openMap = store.useSelectValue(({draft}) =>
+          mapValues(draft, props => props.open)
+        )
 
-      const [openedIds, closedIds] = useMemo(
-        () => partition(ids, id => openMap[id]),
-        [ids, openMap]
-      )
+        const [openedIds, closedIds] = useMemo(
+          () => partition(ids, id => openMap[id]),
+          [ids, openMap]
+        )
 
-      const hasOpenedIds = hasValues(openedIds)
+        const hasOpenedIds = hasValues(openedIds)
 
-      return (
-        <>
-          <VscodeFormContainer>
-            <VscodeFormGroup variant='settings-group'>
-              <VscodeFormHelper>
-                <VList
-                  data={ids}
-                  style={{
-                    height: 'calc(var(--sidebar-icon-grid-height) * 1.5)'
-                  }}>
-                  {(id, index) => (
-                    <Item id={id} index={index} key={id} {...props} />
-                  )}
-                </VList>
-              </VscodeFormHelper>
-            </VscodeFormGroup>
-          </VscodeFormContainer>
-          <Menu
-            data={[
-              INTERNAL_REMOUNT.menu,
-              {
-                label: `${hasOpenedIds ? 'Collapse' : 'Expand'} ${pluralize(
-                  (hasOpenedIds ? openedIds : closedIds).length,
-                  'item'
-                )}`,
-                onClick: () => {
-                  store.set(({draft}) => {
-                    for (const id of ids)
-                      draft[id] = {
-                        ...draft[id],
-                        open: !hasOpenedIds
-                      }
-                  })
-                }
-              },
-              ...(hasValues(menu)
-                ? [
-                    {
-                      separator: true
-                    },
-                    ...menu
-                  ]
-                : EMPTY_ARRAY)
-            ]}
-            render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
-          />
-        </>
-      )
-    })
+        return (
+          <>
+            <VscodeFormContainer>
+              <VscodeFormGroup variant='settings-group'>
+                <VscodeFormHelper>
+                  <VList
+                    data={ids}
+                    style={{
+                      height: 'calc(var(--sidebar-icon-grid-height) * 1.5)'
+                    }}>
+                    {(id, index) => (
+                      <Item id={id} index={index} key={id} {...props} />
+                    )}
+                  </VList>
+                </VscodeFormHelper>
+              </VscodeFormGroup>
+            </VscodeFormContainer>
+            <Menu
+              data={[
+                INTERNAL_REMOUNT.menu,
+                {
+                  label: `${hasOpenedIds ? 'Collapse' : 'Expand'} ${pluralize(
+                    (hasOpenedIds ? openedIds : closedIds).length,
+                    'item'
+                  )}`,
+                  onClick: () => {
+                    store.set(({draft}) => {
+                      for (const id of ids)
+                        draft[id] = {
+                          ...draft[id],
+                          open: !hasOpenedIds
+                        }
+                    })
+                  }
+                },
+                ...menu
+              ]}
+              render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
+            />
+          </>
+        )
+      })
+    ),
+    {
+      useStore
+    }
   )
 }

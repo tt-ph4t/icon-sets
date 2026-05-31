@@ -21,10 +21,7 @@ import IconQueries from './icon-queries'
 import Layout from './layout'
 
 const Sidebar = Boundary.with(React.lazy(() => import('./sidebar')))
-
-const FilteredIconSets = Boundary.with(
-  React.lazy(() => import('./filtered-icon-sets'))
-)
+const AllIcons = Boundary.with(React.lazy(() => import('./all-icons')))
 
 const GlobalActivity = component(() => {
   const isLoading = REACT_QUERY_STATUS_HOOKS.map(hook => hook()).some(isTruthy)
@@ -132,7 +129,7 @@ export default useRemount.with(
       <React.Activity>
         <Layout.Reverse>
           <Sidebar />
-          <FilteredIconSets />
+          <AllIcons />
         </Layout.Reverse>
         <VscodeToolbarContainer
           style={{

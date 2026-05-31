@@ -69,7 +69,10 @@ export default component(({context}) => {
       description={query.data.category}
       heading={`${context.index + 1}. ${query.data.name}`}
       {...context.CollapsibleProps}>
-      <div style={{height: 'var(--sidebar-icon-grid-height)'}}>
+      <div
+        style={{
+          height: 'var(--sidebar-icon-grid-height)'
+        }}>
         <IconGrid
           iconIds={(isInitialState
             ? query.data.icons

@@ -5,7 +5,6 @@ import {
   VscodeFormHelper
 } from '@vscode-elements/react-elements'
 import {pick} from 'es-toolkit'
-import React from 'react'
 
 import {Boundary} from '../../components/boundary'
 import {Fallback} from '../../components/fallback'
@@ -17,7 +16,7 @@ import {DEFAULT_QUERY_OPTIONS} from '../../misc/constants'
 import Filters from './filters'
 import {useStore} from './misc'
 
-const InternalIconGrid = component(() => {
+const AllIcons = component(() => {
   const selectedIconSetPrefixes = useStore().useSelectValue(
     ({draft}) => draft.selectedIconSetPrefixes
   )
@@ -54,9 +53,7 @@ export default useRemount.with(
                 flexGrow: 1,
                 position: 'relative'
               }}>
-              <React.Activity>
-                <InternalIconGrid />
-              </React.Activity>
+              <AllIcons />
               <VscodeFormContainer
                 style={{
                   left: 0,
