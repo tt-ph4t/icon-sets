@@ -4,32 +4,41 @@ import {component} from '../../hocs'
 import {useRef} from '../../hooks/use-ref'
 import {renderSlot} from '../../misc/render-slot'
 
-export default component(({bufferSize, cellSize = 100, col, item, row}) => {
-  const size = useRef.size()
+export default component(
+  ({
+    bufferSize,
+    cellHeight = Number.MIN_SAFE_INTEGER,
+    cellWidth = Number.MIN_SAFE_INTEGER,
+    col,
+    count = 0,
+    renderItem,
+    row
+  }) => {
+    const size = useRef.size()
 
-  col = Math.floor(col ?? Math.max(size.width / cellSize, 1))
-  row = Math.ceil(row ?? item.count / col)
+    col ??= Math.floor(size.width / cellWidth)
+    row ??= Math.ceil(count / col)
 
-  return (
-    <VGrid
-      bufferSize={bufferSize ?? size.height * 0.2}
-      cellHeight={cellSize}
-      cellWidth={cellSize}
-      col={col}
-      domRef={size.ref}
-      row={row}>
-      {context =>
-        renderSlot({
-          bespoke: item.render,
-          context: {
-            ...context,
-            cellSize,
-            col,
-            index: context.rowIndex * col + context.colIndex,
-            row
-          }
-        })
-      }
-    </VGrid>
-  )
-})
+    return (
+      <VGrid
+        bufferSize={bufferSize ?? size.height * 0.2}
+        cellHeight={cellHeight}
+        cellWidth={cellWidth}
+        col={col}
+        domRef={size.ref}
+        row={row}>
+        {context =>
+          renderSlot({
+            bespoke: renderItem,
+            context: {
+              ...context,
+              col,
+              index: context.rowIndex * col + context.colIndex,
+              row
+            }
+          })
+        }
+      </VGrid>
+    )
+  }
+)

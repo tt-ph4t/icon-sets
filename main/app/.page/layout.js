@@ -12,7 +12,7 @@ import {hasValues} from '../misc'
 import {THEME} from '../misc/constants'
 import {renderSlot} from '../misc/render-slot'
 
-const DefaultReverseWrapper = component(({children}) => {
+const ReverseWrapper = component(({children}) => {
   const ref = useRef()
 
   const isReverse = useSettings().useSelectValue(
@@ -105,7 +105,7 @@ export default {
     )
   }),
   Reverse: component(({children, render}) => {
-    const Wrapper = hasValues(render) ? React.Fragment : DefaultReverseWrapper
+    const Wrapper = hasValues(render) ? React.Fragment : ReverseWrapper
 
     const isReverse = useSettings().useSelectValue(
       ({draft}) => draft.layout.isReverse
