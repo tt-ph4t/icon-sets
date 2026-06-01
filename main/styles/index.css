@@ -5,7 +5,9 @@
   --WIDTH: 100dvw;
   --SPACING: 0.25rem;
   --SIDEBAR-ICON-GRID-HEIGHT: calc(var(--HEIGHT) / 2);
+}
 
+:root {
   height: var(--HEIGHT);
   width: var(--WIDTH);
 
