@@ -1,12 +1,13 @@
 @import './react-resizable.css';
 
 :root {
-  --height: 100dvh;
-  --width: 100dvw;
-  --spacing: 0.25rem;
+  --HEIGHT: 100dvh;
+  --WIDTH: 100dvw;
+  --SPACING: 0.25rem;
+  --SIDEBAR-ICON-GRID-HEIGHT: calc(var(--HEIGHT) / 2);
 
-  height: var(--height);
-  width: var(--width);
+  height: var(--HEIGHT);
+  width: var(--WIDTH);
 
   body {
     padding: 0;

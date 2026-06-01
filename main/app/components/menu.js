@@ -49,8 +49,8 @@ const Popup = component(({menu}) => {
             render={
               <VscodeFormGroup
                 style={{
-                  maxHeight: 'calc(var(--spacing) * 120)',
-                  maxWidth: 'calc(var(--spacing) * 75)', // Virtualizer ?
+                  maxHeight: 'calc(var(--SPACING) * 120)',
+                  maxWidth: 'calc(var(--SPACING) * 75)', // Virtualizer ?
                   overflow: 'auto',
                   padding: 'unset'
                 }}

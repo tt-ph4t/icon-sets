@@ -30,7 +30,7 @@ const ReverseWrapper = component(({children}) => {
       style={{
         ...omit(THEME.CARD_STYLE, ['padding']),
         get height() {
-          return `calc(var(--height) - ${this.borderWidth} * 2)`
+          return `calc(var(--HEIGHT) - ${this.borderWidth} * 2)`
         }
       }}>
       {children}

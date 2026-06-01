@@ -75,7 +75,7 @@ export default () => {
                   <VList
                     data={ids}
                     style={{
-                      height: 'calc(var(--sidebar-icon-grid-height) * 1.5)'
+                      height: 'calc(var(--SIDEBAR-ICON-GRID-HEIGHT) * 1.5)'
                     }}>
                     {(id, index) => (
                       <Item id={id} index={index} key={id} {...props} />

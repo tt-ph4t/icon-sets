@@ -33,7 +33,7 @@ const InternalIconGrid = component(({menu, ...props}) => {
             <VscodeFormGroup variant='settings-group'>
               <VscodeFormHelper
                 style={{
-                  height: 'var(--sidebar-icon-grid-height)'
+                  height: 'var(--SIDEBAR-ICON-GRID-HEIGHT)'
                 }}>
                 <IconGrid {...props} />
               </VscodeFormHelper>
@@ -125,10 +125,7 @@ const FavoritedIcons = component(() => {
 })
 
 export default component(() => (
-  <div
-    style={{
-      '--sidebar-icon-grid-height': 'calc(var(--height) / 2)'
-    }}>
+  <>
     <React.Activity>
       <AllIconSets />
       <IconGroups />
@@ -136,5 +133,5 @@ export default component(() => (
     <FavoritedIcons />
     <CustomizedIcons />
     <CachedIcons />
-  </div>
+  </>
 ))

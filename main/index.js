@@ -23,9 +23,9 @@ createRoot(document.querySelector('#root')).render(
       style={{
         alignItems: 'center',
         display: 'flex',
-        height: 'var(--height)',
+        height: 'var(--HEIGHT)',
         justifyContent: 'center',
-        width: 'var(--width)'
+        width: 'var(--WIDTH)'
       }}>
       <ErrorBoundary
         fallbackRender={({error, resetErrorBoundary}) => (

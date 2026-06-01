@@ -532,7 +532,7 @@ export default withQueryBoundary(
                 return iconOptions.square ? this.width : '100%'
               },
               id: iconQuery.data.id,
-              width: 'calc(var(--spacing) * 12)'
+              width: 'calc(var(--SPACING) * 12)'
             })}
           </div>
         }

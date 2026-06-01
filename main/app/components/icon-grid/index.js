@@ -234,7 +234,7 @@ export const IconGrid = useRemount.with(
         <VscodeFormContainer
           style={{
             position: 'absolute',
-            right: 'calc(var(--spacing) * 2)',
+            right: 'calc(var(--SPACING) * 2)',
             top: 0,
             zIndex: 1
           }}>

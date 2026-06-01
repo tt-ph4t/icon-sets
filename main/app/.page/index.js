@@ -134,7 +134,7 @@ export default useRemount.with(
         <VscodeToolbarContainer
           style={{
             alignSelf: 'center',
-            bottom: 'calc(var(--spacing) * 2)',
+            bottom: 'calc(var(--SPACING) * 2)',
             position: 'absolute',
             zIndex: 1
           }}>

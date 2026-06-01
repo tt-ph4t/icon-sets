@@ -32,8 +32,8 @@ export default component(() => {
     <React.Activity mode={isDev ? 'visible' : 'hidden'}>
       <vscode-dev-toolbar
         style={{
-          bottom: 'calc(var(--spacing) * 18)',
-          right: 'calc(var(--spacing) * 4)'
+          bottom: 'calc(var(--SPACING) * 18)',
+          right: 'calc(var(--SPACING) * 4)'
         }}
       />
       <TanStackDevtools
