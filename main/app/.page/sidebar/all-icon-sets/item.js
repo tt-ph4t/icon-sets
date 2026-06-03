@@ -97,12 +97,6 @@ export default component(({context}) => {
         />
       </div>
       <VscodeToolbarContainer slot='actions'>
-        <ToolbarButton
-          icon='file-symlink-file'
-          onClick={() => {
-            ;`https://www.npmjs.com/package/@iconify-json/${context.id}`
-          }}
-        />
         <Menu
           data={[
             {

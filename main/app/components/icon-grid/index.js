@@ -1,13 +1,11 @@
 import uFuzzy from '@leeoniya/ufuzzy'
 import {useBatcher} from '@tanstack/react-pacer'
-import {Sketch} from '@uiw/react-color'
 import {
   VscodeBadge,
   VscodeFormContainer,
   VscodeFormGroup,
   VscodeFormHelper,
   VscodeLabel,
-  VscodeTextfield,
   VscodeToolbarContainer
 } from '@vscode-elements/react-elements'
 import {useSetState} from 'ahooks'
@@ -28,31 +26,23 @@ import {
 import {castArray, reverse} from 'es-toolkit/compat'
 import {sort} from 'fast-sort'
 import ms from 'ms'
-import randomColor from 'randomcolor'
 import React from 'react'
 
 import {component} from '../../hocs'
-import {useCustomizedIcons} from '../../hooks/use-customized-icons'
 import {useEffect} from '../../hooks/use-effect'
 import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {useState} from '../../hooks/use-state'
-import {hasValues, isWordCharacter, validateIconId} from '../../misc'
-import {
-  DEFAULT_ICON_CUSTOMISATIONS,
-  ICON_CACHE,
-  SORT_ORDER_LABELS,
-  THEME
-} from '../../misc/constants'
+import {hasValues, validateIconId} from '../../misc'
+import {SORT_ORDER_LABELS} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {prettyBytes} from '../../misc/pretty-bytes'
-import {Clipboard} from '../clipboard'
 import {Menu} from '../menu'
-import {Popover} from '../popover'
 import {ToolbarButton} from '../toolbar-button'
 import Grid from './grid'
 import Item from './item'
+import Search from './search'
 import useSearchQueryState from './use-search-query-state'
 
 const actions = mapValues(
@@ -95,165 +85,53 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
   )
 }
 
-const IconOptions = {
-  ColorPicker:
-    // https://github.com/colorjs/color-name
-    component(() => {
-      const customizedIcons = useCustomizedIcons()
+export const IconGrid = Object.assign(
+  useRemount.with(
+    component(({iconIds, INTERNAL_REMOUNT}) => {
+      iconIds = useMemo(
+        () => castArray(iconIds).filter(validateIconId),
+        [iconIds]
+      )
+
+      const favoritedIcons = useFavoritedIcons()
+      const [searchQueryState] = useSearchQueryState()
+      const filteredIconIds = useFilteredIconIds(searchQueryState, iconIds)
+
+      const [state, setState] = useSetState({
+        iconIds
+      })
 
       const batcher = useBatcher(items => {
-        last(items)()
-        ICON_CACHE.clear()
-      })
+        setState(state => ({
+          iconIds: last(items)(state.iconIds)
+        }))
+      }, batcherOptions)
 
-      const iconOptions = customizedIcons.store.useSelectValue(({draft}) => ({
-        color: draft.global.color
-      }))
+      const hasFilteredIconIds = hasValues(filteredIconIds)
+
+      useEffect(() => {
+        batcher.addItem(() => filteredIconIds)
+      }, [batcher, filteredIconIds])
 
       return (
-        <Popover.Primitive
-          popupRender={
-            <>
-              <Sketch
-                color={iconOptions.color}
-                editableDisable={false}
-                onChange={colorResult => {
-                  batcher.addItem(() => {
-                    customizedIcons.store.set(({draft}) => {
-                      draft.global.color = colorResult.hexa
-                    })
-                  })
-                }}
-                presetColors={false}
-                style={THEME.CARD_STYLE}
-                width={300}
-              />
-              <div
-                style={{
-                  display: 'flex',
-                  placeContent: 'space-between'
-                }}>
-                <Clipboard value={iconOptions.color}>
-                  {iconOptions.color}
-                </Clipboard>
-                <VscodeToolbarContainer>
-                  <ToolbarButton
-                    icon='wand'
-                    onClick={() => {
-                      batcher.addItem(() => {
-                        customizedIcons.store.set(({draft}) => {
-                          draft.global.color = randomColor()
-                        })
-                      })
-                    }}
-                  />
-                  <ToolbarButton
-                    icon='eraser'
-                    onClick={() => {
-                      batcher.addItem(() => {
-                        customizedIcons.store.set(({draft}) => {
-                          draft.global.color = DEFAULT_ICON_CUSTOMISATIONS.color
-                        })
-                      })
-                    }}
-                  />
-                </VscodeToolbarContainer>
-              </div>
-            </>
-          }
-          render={
-            <ToolbarButton
-              checked={iconOptions.color !== DEFAULT_ICON_CUSTOMISATIONS.color}
-              icon='paintcan'
-              preventToggle
-            />
-          }
-        />
-      )
-    }),
-  SquareToggle: component(() => {
-    const customizedIcons = useCustomizedIcons()
-
-    const ToolbarButtonProps = customizedIcons.store.useSelectValue(
-      ({draft}) => ({
-        checked: draft.global.square
-      })
-    )
-
-    return (
-      <ToolbarButton
-        icon='symbol-ruler'
-        onChange={event => {
-          customizedIcons.store.set(({draft}) => {
-            draft.global.square = event.target.checked
-          })
-        }}
-        toggleable
-        {...ToolbarButtonProps}
-      />
-    )
-  })
-}
-
-export const IconGrid = useRemount.with(
-  component(({iconIds, initialSearchTerm, INTERNAL_REMOUNT}) => {
-    iconIds = useMemo(
-      () => castArray(iconIds).filter(validateIconId),
-      [iconIds]
-    )
-
-    const favoritedIcons = useFavoritedIcons()
-    const [searchQueryState, setSearchQueryState] = useSearchQueryState()
-    const filteredIconIds = useFilteredIconIds(searchQueryState, iconIds)
-
-    const [state, setState] = useSetState({
-      iconIds
-    })
-
-    const batcher = useBatcher(items => {
-      setState(state => ({
-        iconIds: last(items)(state.iconIds)
-      }))
-    }, batcherOptions)
-
-    const hasFilteredIconIds = hasValues(filteredIconIds)
-
-    useEffect(() => {
-      batcher.addItem(() => filteredIconIds)
-    }, [batcher, filteredIconIds])
-
-    return (
-      <div
-        style={{
-          '--size': '100%',
-
-          height: 'var(--size)',
-          position: 'relative',
-          width: 'var(--size)'
-        }}>
-        <VscodeFormContainer
+        <div
           style={{
-            position: 'absolute',
-            right: 'calc(var(--SPACING) * 2)',
-            top: 0,
-            zIndex: 1
+            '--size': '100%',
+
+            height: 'var(--size)',
+            position: 'relative',
+            width: 'var(--size)'
           }}>
-          <VscodeFormGroup variant='settings-group'>
-            <VscodeFormHelper>
-              <VscodeTextfield
-                invalid={
-                  !(
-                    useSearchQueryState.isDefault(searchQueryState) ||
-                    isWordCharacter(searchQueryState)
-                  )
-                }
-                onInput={async event => {
-                  await setSearchQueryState(event.target.value)
-                }}
-                placeholder='Search'
-                style={{width: 300}}
-                value={searchQueryState}>
-                <React.Activity>
+          <VscodeFormContainer
+            style={{
+              position: 'absolute',
+              right: 'calc(var(--SPACING) * 2)',
+              top: 0,
+              zIndex: 1
+            }}>
+            <VscodeFormGroup variant='settings-group'>
+              <VscodeFormHelper>
+                <VscodeToolbarContainer>
                   <Menu
                     data={
                       hasFilteredIconIds && [
@@ -299,69 +177,68 @@ export const IconGrid = useRemount.with(
                       ]
                     }
                     render={
-                      <VscodeBadge slot='content-after'>
+                      <VscodeBadge>
                         {pluralize(state.iconIds.length, 'icon')}
                       </VscodeBadge>
                     }
                   />
-                  <VscodeToolbarContainer slot='content-after'>
-                    <IconOptions.SquareToggle />
-                    <IconOptions.ColorPicker />
-                    <batcher.Subscribe
-                      selector={state => pick(state, ['isPending'])}>
-                      {batcherState => (
-                        <ToolbarButton
-                          checked={batcherState.isPending}
-                          icon={INTERNAL_REMOUNT.icon}
-                          onClick={INTERNAL_REMOUNT}
-                          preventToggle
-                        />
-                      )}
-                    </batcher.Subscribe>
-                  </VscodeToolbarContainer>
-                </React.Activity>
-              </VscodeTextfield>
-            </VscodeFormHelper>
-          </VscodeFormGroup>
-        </VscodeFormContainer>
-        <React.Activity>
-          {hasFilteredIconIds ? (
-            <Grid
-              cellHeight={100}
-              cellWidth={100}
-              count={state.iconIds.length}
-              renderItem={(...[, {context}]) => {
-                const iconId = state.iconIds[context.index]
+                  <batcher.Subscribe
+                    selector={state => pick(state, ['isPending'])}>
+                    {batcherState => (
+                      <ToolbarButton
+                        checked={batcherState.isPending}
+                        icon={INTERNAL_REMOUNT.icon}
+                        onClick={INTERNAL_REMOUNT}
+                        preventToggle
+                      />
+                    )}
+                  </batcher.Subscribe>
+                </VscodeToolbarContainer>
+              </VscodeFormHelper>
+            </VscodeFormGroup>
+          </VscodeFormContainer>
+          <React.Activity>
+            {hasFilteredIconIds ? (
+              <Grid
+                cellHeight={100}
+                cellWidth={100}
+                count={state.iconIds.length}
+                renderItem={(...[, {context}]) => {
+                  const iconId = state.iconIds[context.index]
 
-                if (validateIconId(iconId))
-                  return (
-                    <div
-                      style={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        justifyContent: 'center'
-                      }}>
-                      <Item iconId={iconId} index={context.index} />
-                    </div>
-                  )
-              }}
-            />
-          ) : (
-            <VscodeFormContainer
-              style={{
-                alignItems: 'center',
-                display: 'flex',
-                height: '100%',
-                justifyContent: 'center',
-                maxWidth: 'unset'
-              }}>
-              <VscodeFormGroup variant='settings-group'>
-                <VscodeLabel required>No Icons</VscodeLabel>
-              </VscodeFormGroup>
-            </VscodeFormContainer>
-          )}
-        </React.Activity>
-      </div>
-    )
-  })
+                  if (validateIconId(iconId))
+                    return (
+                      <div
+                        style={{
+                          alignItems: 'center',
+                          display: 'flex',
+                          justifyContent: 'center'
+                        }}>
+                        <Item iconId={iconId} index={context.index} />
+                      </div>
+                    )
+                }}
+              />
+            ) : (
+              <VscodeFormContainer
+                style={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  height: '100%',
+                  justifyContent: 'center',
+                  maxWidth: 'unset'
+                }}>
+                <VscodeFormGroup variant='settings-group'>
+                  <VscodeLabel required>No Icons</VscodeLabel>
+                </VscodeFormGroup>
+              </VscodeFormContainer>
+            )}
+          </React.Activity>
+        </div>
+      )
+    })
+  ),
+  {
+    Search
+  }
 )

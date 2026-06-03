@@ -1,11 +1,16 @@
 import {isTruthy} from '@sindresorhus/is'
 import {useQuery} from '@tanstack/react-query'
-import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
+import {
+  VscodeFormContainer,
+  VscodeFormGroup,
+  VscodeToolbarContainer
+} from '@vscode-elements/react-elements'
 import {useNetwork} from 'ahooks'
 import React from 'react'
 
 import {Boundary} from '../components/boundary'
 import {Fallback} from '../components/fallback'
+import {IconGrid} from '../components/icon-grid'
 import {Menu} from '../components/menu'
 import {ProgressRing} from '../components/progress-ring'
 import {ToolbarButton} from '../components/toolbar-button'
@@ -17,38 +22,44 @@ import {
   REACT_QUERY_STATUS_HOOKS,
   THEME
 } from '../misc/constants'
-import IconQueries from './icon-queries'
+import AllIconQueries from './all-icon-queries'
 import Layout from './layout'
 
 const Sidebar = Boundary.with(React.lazy(() => import('./sidebar')))
 const AllIcons = Boundary.with(React.lazy(() => import('./all-icons')))
 
-const GlobalActivity = component(() => {
-  const isLoading = REACT_QUERY_STATUS_HOOKS.map(hook => hook()).some(isTruthy)
-  const network = useNetwork()
+const Loading = Object.assign(
+  component(() => {
+    const isLoading = REACT_QUERY_STATUS_HOOKS.map(hook => hook()).some(
+      isTruthy
+    )
+    const network = useNetwork()
 
-  return (
-    <React.Activity mode={isLoading || !network.online ? 'visible' : 'hidden'}>
-      <Fallback
-        style={
-          network.online || {
-            '--vscode-progressBar-background': `var(${THEME.COLORS.ERROR})`
+    return (
+      <React.Activity
+        mode={isLoading || !network.online ? 'visible' : 'hidden'}>
+        <Fallback
+          style={
+            network.online || {
+              '--vscode-progressBar-background': `var(${THEME.COLORS.ERROR})`
+            }
           }
-        }
-      />
-    </React.Activity>
-  )
-})
+        />
+      </React.Activity>
+    )
+  }),
+  {
+    Data: component(() => {
+      const query = useQuery(DEFAULT_QUERY_OPTIONS)
 
-const DataLoading = component(() => {
-  const query = useQuery(DEFAULT_QUERY_OPTIONS)
-
-  return (
-    <React.Activity mode={query.isPending ? 'visible' : 'hidden'}>
-      <ProgressRing>Loading data</ProgressRing>
-    </React.Activity>
-  )
-})
+      return (
+        <React.Activity mode={query.isPending ? 'visible' : 'hidden'}>
+          <ProgressRing>Loading data</ProgressRing>
+        </React.Activity>
+      )
+    })
+  }
+)
 
 const Settings = component(({menu}) => {
   const settings = useSettings()
@@ -108,7 +119,7 @@ export default useRemount.with(
           width: '100%',
           zIndex: 1
         }}>
-        <GlobalActivity />
+        <Loading />
       </div>
       <div
         style={{
@@ -123,7 +134,7 @@ export default useRemount.with(
           style={{
             pointerEvents: 'auto'
           }}>
-          <DataLoading />
+          <Loading.Data />
         </div>
       </div>
       <React.Activity>
@@ -131,23 +142,28 @@ export default useRemount.with(
           <Sidebar />
           <AllIcons />
         </Layout.Reverse>
-        <VscodeToolbarContainer
+        <VscodeFormContainer
           style={{
             alignSelf: 'center',
-            bottom: 'calc(var(--SPACING) * 2)',
-            position: 'absolute',
-            zIndex: 1
+            bottom: 0,
+            position: 'absolute'
           }}>
-          <Settings
-            menu={[
-              {
-                separator: true
-              },
-              INTERNAL_REMOUNT.menu
-            ]}
-          />
-          <IconQueries />
-        </VscodeToolbarContainer>
+          <VscodeFormGroup variant='settings-group'>
+            <VscodeToolbarContainer>
+              <Settings
+                menu={[
+                  {
+                    separator: true
+                  },
+                  INTERNAL_REMOUNT.menu
+                ]}
+              />
+              <IconGrid.Search>
+                <AllIconQueries />
+              </IconGrid.Search>
+            </VscodeToolbarContainer>
+          </VscodeFormGroup>
+        </VscodeFormContainer>
       </React.Activity>
     </Layout.Fullscreen>
   ))

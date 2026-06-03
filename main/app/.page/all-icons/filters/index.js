@@ -23,11 +23,7 @@ const Label = component(() => {
       isFiltering(Object.keys(iconSets), selectedIconSetPrefixes)
   })
 
-  return (
-    <ToolbarButton checked={query.data} icon='filter' preventToggle>
-      Filter
-    </ToolbarButton>
-  )
+  return <ToolbarButton checked={query.data} icon='filter' preventToggle />
 })
 
 export default component(() => (
