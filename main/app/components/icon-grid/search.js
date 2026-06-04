@@ -6,6 +6,7 @@ import {
   VscodeToolbarContainer
 } from '@vscode-elements/react-elements'
 import {last} from 'es-toolkit'
+import {truncate} from 'es-toolkit/compat'
 import randomColor from 'randomcolor'
 import React from 'react'
 
@@ -158,8 +159,11 @@ const Search = component(({children}) => {
       onClick={() => {
         setState(true)
       }}
-      preventToggle
-    />
+      preventToggle>
+      {truncate(searchQueryState, {
+        length: 6
+      })}
+    </ToolbarButton>
   )
 })
 
