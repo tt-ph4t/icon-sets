@@ -3,6 +3,7 @@ import {useQuery} from '@tanstack/react-query'
 import {
   VscodeFormContainer,
   VscodeFormGroup,
+  VscodeFormHelper,
   VscodeToolbarContainer
 } from '@vscode-elements/react-elements'
 import {useNetwork} from 'ahooks'
@@ -149,19 +150,21 @@ export default useRemount.with(
             position: 'absolute'
           }}>
           <VscodeFormGroup variant='settings-group'>
-            <VscodeToolbarContainer>
-              <Settings
-                menu={[
-                  {
-                    separator: true
-                  },
-                  INTERNAL_REMOUNT.menu
-                ]}
-              />
-              <IconGrid.Search>
-                <AllIconQueries />
-              </IconGrid.Search>
-            </VscodeToolbarContainer>
+            <VscodeFormHelper>
+              <VscodeToolbarContainer>
+                <Settings
+                  menu={[
+                    {
+                      separator: true
+                    },
+                    INTERNAL_REMOUNT.menu
+                  ]}
+                />
+                <IconGrid.Search>
+                  <AllIconQueries />
+                </IconGrid.Search>
+              </VscodeToolbarContainer>
+            </VscodeFormHelper>
           </VscodeFormGroup>
         </VscodeFormContainer>
       </React.Activity>

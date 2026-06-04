@@ -27,6 +27,7 @@ const ReverseWrapper = component(({children}) => {
     <SplitLayout
       initialHandlePosition={isReverse ? '73%' : '27%'}
       ref={ref}
+      showSizeHint
       style={{
         ...omit(THEME.CARD_STYLE, ['padding']),
         get height() {
