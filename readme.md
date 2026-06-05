@@ -2,7 +2,7 @@
 
 
 ## Material Symbols
-* Number of icons: 15341
+* Number of icons: 15450
 * Author: Google
 * URL: https://github.com/google/material-design-icons
 * License: Apache 2.0
@@ -12,7 +12,7 @@
 * File: [json/material-symbols.json](json/material-symbols.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Material Symbols Light
-* Number of icons: 15419
+* Number of icons: 15524
 * Author: Google
 * URL: https://github.com/google/material-design-icons
 * License: Apache 2.0
@@ -74,12 +74,12 @@
 * File: [json/solar.json](json/solar.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Tabler Icons
-* Number of icons: 6092
+* Number of icons: 6146
 * Author: Paweł Kuna
 * URL: https://github.com/tabler/tabler-icons
 * License: MIT
 * License URL: https://github.com/tabler/tabler-icons/blob/master/LICENSE
-* Version: 3.41.1
+* Version: 3.44.0
 * Palette: Colorless
 * Icon set prefix: `tabler`
 * File: [json/tabler.json](json/tabler.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
@@ -148,7 +148,7 @@
 * File: [json/iconoir.json](json/iconoir.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Lucide
-* Number of icons: 1703
+* Number of icons: 1714
 * Author: Lucide Contributors
 * URL: https://github.com/lucide-icons/lucide
 * License: ISC
@@ -241,12 +241,12 @@
 * File: [json/basil.json](json/basil.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Pixelarticons
-* Number of icons: 800
+* Number of icons: 813
 * Author: Gerrit Halfmann
 * URL: https://github.com/halfmage/pixelarticons
 * License: MIT
 * License URL: https://github.com/halfmage/pixelarticons/blob/master/LICENSE
-* Version: 2.1.0
+* Version: 2.1.2
 * Palette: Colorless
 * Icon set prefix: `pixelarticons`
 * File: [json/pixelarticons.json](json/pixelarticons.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
@@ -476,7 +476,7 @@
 * File: [json/svg-spinners.json](json/svg-spinners.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Huge Icons
-* Number of icons: 5062
+* Number of icons: 5065
 * Author: Hugeicons
 * URL: https://icon-sets.iconify.design/icon-sets/hugeicons/
 * License: MIT
@@ -628,11 +628,11 @@
 * File: [json/guidance.json](json/guidance.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Carbon
-* Number of icons: 2491
+* Number of icons: 2529
 * Author: IBM
 * URL: https://github.com/carbon-design-system/carbon/tree/main/packages/icons
 * License: Apache 2.0
-* Version: 11.79.0
+* Version: 11.82.0
 * Palette: Colorless
 * Icon set prefix: `carbon`
 * File: [json/carbon.json](json/carbon.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
@@ -701,15 +701,15 @@
 * Icon set prefix: `cil`
 * File: [json/cil.json](json/cil.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
-## Röntgen
-* Number of icons: 550
-* Author: Sergey Vartanov
-* URL: https://github.com/enzet/Roentgen
-* License: CC BY 4.0
-* License URL: https://creativecommons.org/licenses/by/4.0/
+## @icons
+* Number of icons: 400
+* Author: Valentin Fossati
+* URL: https://github.com/Voxybuns/at-icons
+* License: MIT
+* License URL: https://github.com/Voxybuns/at-icons/blob/main/LICENSE
 * Palette: Colorless
-* Icon set prefix: `roentgen`
-* File: [json/roentgen.json](json/roentgen.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
+* Icon set prefix: `at-icons`
+* File: [json/at-icons.json](json/at-icons.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Element Plus
 * Number of icons: 293
@@ -817,12 +817,12 @@
 * File: [json/formkit.json](json/formkit.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Fluent UI System Icons
-* Number of icons: 19296
+* Number of icons: 19448
 * Author: Microsoft Corporation
 * URL: https://github.com/microsoft/fluentui-system-icons
 * License: MIT
 * License URL: https://github.com/microsoft/fluentui-system-icons/blob/main/LICENSE
-* Version: 1.1.325
+* Version: 1.1.328
 * Palette: Colorless
 * Icon set prefix: `fluent`
 * File: [json/fluent.json](json/fluent.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
@@ -900,12 +900,12 @@
 * File: [json/ix.json](json/ix.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Octicons
-* Number of icons: 729
+* Number of icons: 732
 * Author: GitHub
 * URL: https://github.com/primer/octicons/
 * License: MIT
 * License URL: https://github.com/primer/octicons/blob/main/LICENSE
-* Version: 19.25.0
+* Version: 19.28.0
 * Palette: Colorless
 * Icon set prefix: `octicon`
 * File: [json/octicon.json](json/octicon.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
@@ -1124,7 +1124,7 @@
 * File: [json/picon.json](json/picon.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## OOUI
-* Number of icons: 371
+* Number of icons: 414
 * Author: OOUI Team
 * URL: https://github.com/wikimedia/oojs-ui
 * License: MIT
@@ -1133,28 +1133,6 @@
 * Palette: Colorless
 * Icon set prefix: `ooui`
 * File: [json/ooui.json](json/ooui.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
-
-## Maki
-* Number of icons: 215
-* Author: Mapbox
-* URL: https://github.com/mapbox/maki
-* License: CC0
-* License URL: https://creativecommons.org/publicdomain/zero/1.0/
-* Version: 8.2.0
-* Palette: Colorless
-* Icon set prefix: `maki`
-* File: [json/maki.json](json/maki.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
-
-## Temaki
-* Number of icons: 557
-* Author: Bryan Housel
-* URL: https://github.com/rapideditor/temaki
-* License: CC0
-* License URL: https://creativecommons.org/publicdomain/zero/1.0/
-* Version: 5.13.0
-* Palette: Colorless
-* Icon set prefix: `temaki`
-* File: [json/temaki.json](json/temaki.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## OpenSearch UI
 * Number of icons: 437
@@ -1253,7 +1231,7 @@
 * URL: https://github.com/microsoft/fluentui-system-icons
 * License: MIT
 * License URL: https://github.com/microsoft/fluentui-system-icons/blob/main/LICENSE
-* Version: 1.1.325
+* Version: 1.1.328
 * Palette: Colorful
 * Icon set prefix: `fluent-color`
 * File: [json/fluent-color.json](json/fluent-color.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
@@ -1318,7 +1296,7 @@
 * File: [json/marketeq.json](json/marketeq.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## VSCode Icons
-* Number of icons: 1488
+* Number of icons: 1504
 * Author: Roberto Huertas
 * URL: https://github.com/vscode-icons/vscode-icons
 * License: MIT
@@ -1329,7 +1307,7 @@
 * File: [json/vscode-icons.json](json/vscode-icons.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Codicons
-* Number of icons: 544
+* Number of icons: 601
 * Author: Microsoft Corporation
 * URL: https://github.com/microsoft/vscode-codicons
 * License: CC BY 4.0
@@ -1340,7 +1318,7 @@
 * File: [json/codicon.json](json/codicon.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Material Icon Theme
-* Number of icons: 1165
+* Number of icons: 900
 * Author: Material Extensions
 * URL: https://github.com/material-extensions/vscode-material-icon-theme
 * License: MIT
@@ -1418,12 +1396,12 @@
 * File: [json/unjs.json](json/unjs.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Simple Icons
-* Number of icons: 3429
+* Number of icons: 3438
 * Author: Simple Icons Collaborators
 * URL: https://github.com/simple-icons/simple-icons
 * License: CC0 1.0
 * License URL: https://github.com/simple-icons/simple-icons/blob/develop/LICENSE.md
-* Version: 16.18.0
+* Version: 16.22.0
 * Palette: Colorless
 * Icon set prefix: `simple-icons`
 * File: [json/simple-icons.json](json/simple-icons.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
@@ -1493,7 +1471,7 @@
 * File: [json/nonicons.json](json/nonicons.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Arcticons
-* Number of icons: 14559
+* Number of icons: 14714
 * Author: Donnnno
 * URL: https://github.com/Arcticons-Team/Arcticons
 * License: CC BY-SA 4.0
@@ -1503,7 +1481,7 @@
 * File: [json/arcticons.json](json/arcticons.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Custom Brand Icons
-* Number of icons: 1581
+* Number of icons: 1584
 * Author: Emanuele & rchiileea
 * URL: https://github.com/elax46/custom-brand-icons
 * License: CC BY-NC-SA 4.0
@@ -1734,6 +1712,48 @@
 * Icon set prefix: `cif`
 * File: [json/cif.json](json/cif.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
+## Pinhead Map Icons
+* Number of icons: 2061
+* Author: Quincy Morgan
+* URL: https://github.com/waysidemapping/pinhead
+* License: CC0
+* License URL: https://creativecommons.org/publicdomain/zero/1.0/
+* Palette: Colorless
+* Icon set prefix: `pinhead`
+* File: [json/pinhead.json](json/pinhead.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
+
+## Röntgen
+* Number of icons: 566
+* Author: Sergey Vartanov
+* URL: https://github.com/enzet/Roentgen
+* License: CC BY 4.0
+* License URL: https://creativecommons.org/licenses/by/4.0/
+* Palette: Colorless
+* Icon set prefix: `roentgen`
+* File: [json/roentgen.json](json/roentgen.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
+
+## Maki
+* Number of icons: 215
+* Author: Mapbox
+* URL: https://github.com/mapbox/maki
+* License: CC0
+* License URL: https://creativecommons.org/publicdomain/zero/1.0/
+* Version: 8.2.0
+* Palette: Colorless
+* Icon set prefix: `maki`
+* File: [json/maki.json](json/maki.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
+
+## Temaki
+* Number of icons: 557
+* Author: Bryan Housel
+* URL: https://github.com/rapideditor/temaki
+* License: CC0
+* License URL: https://creativecommons.org/publicdomain/zero/1.0/
+* Version: 5.13.0
+* Palette: Colorless
+* Icon set prefix: `temaki`
+* File: [json/temaki.json](json/temaki.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
+
 ## Font-GIS
 * Number of icons: 367
 * Author: Jean-Marc Viglino
@@ -1851,6 +1871,16 @@
 * Palette: Colorless
 * Icon set prefix: `covid`
 * File: [json/covid.json](json/covid.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
+
+## Ginetex Care Symbols
+* Number of icons: 50
+* Author: YESSIR Organization
+* URL: https://github.com/yessir-web-tech/ginetex-icons
+* License: MIT
+* License URL: https://github.com/yessir-web-tech/ginetex-icons/blob/main/LICENSE
+* Palette: Colorless
+* Icon set prefix: `ginetex`
+* File: [json/ginetex.json](json/ginetex.json) ([in IconifyJSON format](https://docs.iconify.design/types/iconify-json.html))
 
 ## Line Awesome
 * Number of icons: 1544
