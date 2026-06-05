@@ -13,7 +13,6 @@ import './styles/index.css'
 
 const App = React.lazy(() => import('./app/.page'))
 const Devtools = React.lazy(() => import('./devtools'))
-const Providers = React.lazy(() => import('./providers'))
 
 preconnect(new URL(DATABASE_URL).origin)
 
@@ -43,9 +42,7 @@ createRoot(document.querySelector('#root')).render(
                 height: 'inherit',
                 width: 'inherit'
               }}>
-              <Providers>
-                <App />
-              </Providers>
+              <App />
             </root.div>
           </Layout.Resizable>
         </React.Suspense>

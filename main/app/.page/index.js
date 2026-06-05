@@ -11,20 +11,17 @@ import React from 'react'
 
 import {Boundary} from '../components/boundary'
 import {Fallback} from '../components/fallback'
-import {IconGrid} from '../components/icon-grid'
-import {Menu} from '../components/menu'
 import {ProgressRing} from '../components/progress-ring'
-import {ToolbarButton} from '../components/toolbar-button'
 import {component} from '../hocs'
 import {useRemount} from '../hooks/use-remount'
-import {useSettings} from '../hooks/use-settings'
 import {
   DEFAULT_QUERY_OPTIONS,
   REACT_QUERY_STATUS_HOOKS,
   THEME
 } from '../misc/constants'
-import AllIconQueries from './all-icon-queries'
 import Layout from './layout'
+import Toolbar from './toolbar'
+import withProviders from './with-providers'
 
 const Sidebar = Boundary.with(React.lazy(() => import('./sidebar')))
 const AllIcons = Boundary.with(React.lazy(() => import('./all-icons')))
@@ -34,6 +31,7 @@ const Loading = Object.assign(
     const isLoading = REACT_QUERY_STATUS_HOOKS.map(hook => hook()).some(
       isTruthy
     )
+
     const network = useNetwork()
 
     return (
@@ -62,112 +60,69 @@ const Loading = Object.assign(
   }
 )
 
-const Settings = component(({menu}) => {
-  const settings = useSettings()
-
-  return (
-    <Menu
-      data={[
-        {
-          label: 'Devtools',
-          onClick: () => {
-            settings.set(({draft}) => {
-              draft.isDev = !draft.isDev
-            })
-          }
-        },
-        {
-          label: 'Layout',
-          menu: [
-            {
-              label: 'Reverse',
-              onClick: () => {
-                settings.set(({draft}) => {
-                  draft.layout.isReverse = !draft.layout.isReverse
-                })
-              }
-            },
-            {
-              label: 'Fullscreen',
-              onClick: () => {
-                settings.set(({draft}) => {
-                  draft.layout.isFullscreen = !draft.layout.isFullscreen
-                })
-              }
-            }
-          ]
-        },
-        ...menu
-      ]}
-      render={<ToolbarButton icon='settings' />}
-    />
-  )
-})
-
-export default useRemount.with(
-  component(({INTERNAL_REMOUNT}) => (
-    <Layout.Fullscreen
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: 'inherit',
-        position: 'relative',
-        width: 'inherit'
-      }}>
-      <div
+export default withProviders(
+  useRemount.with(
+    component(({INTERNAL_REMOUNT}) => (
+      <Layout.Fullscreen
         style={{
-          position: 'absolute',
-          width: '100%',
-          zIndex: 1
-        }}>
-        <Loading />
-      </div>
-      <div
-        style={{
-          alignContent: 'center',
-          inset: '0',
-          justifySelf: 'center',
-          pointerEvents: 'none',
-          position: 'absolute',
-          zIndex: 1
+          display: 'flex',
+          flexDirection: 'column',
+          height: 'inherit',
+          position: 'relative',
+          width: 'inherit'
         }}>
         <div
           style={{
-            pointerEvents: 'auto'
+            position: 'absolute',
+            width: '100%',
+            zIndex: 1
           }}>
-          <Loading.Data />
+          <Loading />
         </div>
-      </div>
-      <React.Activity>
-        <Layout.Reverse>
-          <Sidebar />
-          <AllIcons />
-        </Layout.Reverse>
-        <VscodeFormContainer
+        <div
           style={{
-            alignSelf: 'center',
-            bottom: 0,
-            position: 'absolute'
+            alignContent: 'center',
+            inset: '0',
+            justifySelf: 'center',
+            pointerEvents: 'none',
+            position: 'absolute',
+            zIndex: 1
           }}>
-          <VscodeFormGroup variant='settings-group'>
-            <VscodeFormHelper>
-              <VscodeToolbarContainer>
-                <Settings
-                  menu={[
-                    {
-                      separator: true
-                    },
-                    INTERNAL_REMOUNT.menu
-                  ]}
-                />
-                <IconGrid.Search>
-                  <AllIconQueries />
-                </IconGrid.Search>
-              </VscodeToolbarContainer>
-            </VscodeFormHelper>
-          </VscodeFormGroup>
-        </VscodeFormContainer>
-      </React.Activity>
-    </Layout.Fullscreen>
-  ))
+          <div
+            style={{
+              pointerEvents: 'auto'
+            }}>
+            <Loading.Data />
+          </div>
+        </div>
+        <React.Activity>
+          <Layout.Reverse>
+            <Sidebar />
+            <AllIcons />
+          </Layout.Reverse>
+          <VscodeFormContainer
+            style={{
+              alignSelf: 'center',
+              bottom: 0,
+              position: 'absolute'
+            }}>
+            <VscodeFormGroup variant='settings-group'>
+              <VscodeFormHelper>
+                <VscodeToolbarContainer>
+                  <Toolbar
+                    menu={[
+                      {
+                        separator: true
+                      },
+                      INTERNAL_REMOUNT.menu
+                    ]}
+                  />
+                </VscodeToolbarContainer>
+              </VscodeFormHelper>
+            </VscodeFormGroup>
+          </VscodeFormContainer>
+        </React.Activity>
+      </Layout.Fullscreen>
+    ))
+  )
 )
