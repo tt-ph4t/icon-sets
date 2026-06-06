@@ -16,7 +16,7 @@ export default component(
   }) => {
     const size = useRef.size()
 
-    col ??= Math.floor(size.width / cellWidth)
+    col ??= Math.max(1, Math.floor(size.width / cellWidth))
     row ??= Math.ceil(count / col)
 
     return (

@@ -116,13 +116,14 @@ export default component(() => {
 
   if (query.isSuccess)
     return (
-      <debouncer.Subscribe selector={state => pick(state, ['isPending'])}>
-        {state => (
+      <debouncer.Subscribe
+        selector={debouncerState => pick(debouncerState, ['isPending'])}>
+        {debouncerState => (
           <Menu
             data={query.data.menu}
             render={
               <ToolbarButton
-                checked={state.isPending}
+                checked={debouncerState.isPending}
                 icon='database'
                 preventToggle>
                 <DataVersion />

@@ -17,16 +17,15 @@ export const useEffect = Object.assign(
     ),
     once: (fn, when = true) => {
       const ref = useRef(() => true)
-
-      let cleanup
+      const cleanupRef = useRef()
 
       useEffect(() => {
-        if (when && ref.current) cleanup = fn()
+        if (when && ref.current) cleanupRef.current = fn()
 
         return () => {
           ref.current = false
 
-          cleanup?.()
+          cleanupRef.current?.()
         }
       }, [fn, when])
     }

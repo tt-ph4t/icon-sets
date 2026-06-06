@@ -23,15 +23,23 @@ const defaults = {
   }
 }
 
-const useIdleEffect = (effect = asyncNoop, {before = asyncNoop, deps}) => {
+const useIdleEffect = (fn = asyncNoop, {before = asyncNoop, deps, options}) => {
   const ref = useRef()
+  const cleanupRef = useRef()
 
   useEffect.async(async () => {
     cancelIdleCallback(ref.current)
 
     await before()
 
-    ref.current = requestIdleCallback(effect)
+    ref.current = requestIdleCallback(async (...args) => {
+      cleanupRef.current = await fn(...args)
+    }, options)
+
+    return () => {
+      cancelIdleCallback(ref.current)
+      cleanupRef.current?.()
+    }
   }, deps)
 }
 
@@ -46,17 +54,12 @@ const Slot = component(
         if (showSizeHint) {
           await delay(ms('1s'))
 
-          React.startTransition(() => {
-            setState(false)
-          })
+          setState(false)
         }
       },
       {
         before: () => {
-          if (showSizeHint && hasValues(state))
-            React.startTransition(() => {
-              setState(true)
-            })
+          if (showSizeHint && hasValues(state)) setState(true)
         },
         deps: [showSizeHint, size]
       }

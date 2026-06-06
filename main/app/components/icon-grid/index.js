@@ -33,7 +33,7 @@ import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {useState} from '../../hooks/use-state'
 import {hasValues, validateIconId} from '../../misc'
-import {SORT_ORDER_LABELS} from '../../misc/constants'
+import {EMPTY_ARRAY, SORT_ORDER_LABELS} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {prettyBytes} from '../../misc/pretty-bytes'
 import {ButtonGroup} from '../button-group'
@@ -60,7 +60,7 @@ const actions = mapValues(
 const uf = new uFuzzy()
 
 const batcherOptions = {
-  wait: ms('.4s')
+  wait: ms('.3s')
 }
 
 const useFilteredIconIds = (searchTerm, iconIds) => {
@@ -74,13 +74,15 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
     batcher.addItem(searchTerm)
   }, [batcher, searchTerm])
 
-  return useMemo(
-    () =>
-      useSearchQueryState.isDefault(state)
-        ? iconIds
-        : uf.search(iconIds, state)[0].map(index => iconIds[index]),
-    [state, iconIds]
-  )
+  return useMemo(() => {
+    if (useSearchQueryState.isDefault(state)) return iconIds
+
+    const [filteredIconIds] = uf.search(iconIds, state)
+
+    return filteredIconIds
+      ? filteredIconIds.map(index => iconIds[index])
+      : EMPTY_ARRAY
+  }, [state, iconIds])
 }
 
 export const IconGrid = Object.assign(
