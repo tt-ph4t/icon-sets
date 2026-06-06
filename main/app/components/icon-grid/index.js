@@ -1,7 +1,6 @@
 import uFuzzy from '@leeoniya/ufuzzy'
 import {useBatcher} from '@tanstack/react-pacer'
 import {
-  VscodeBadge,
   VscodeFormContainer,
   VscodeFormGroup,
   VscodeFormHelper,
@@ -17,7 +16,6 @@ import {
   initial,
   last,
   mapValues,
-  pick,
   sampleSize,
   shuffle,
   tail,
@@ -38,8 +36,8 @@ import {hasValues, validateIconId} from '../../misc'
 import {SORT_ORDER_LABELS} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {prettyBytes} from '../../misc/pretty-bytes'
+import {ButtonGroup} from '../button-group'
 import {Menu} from '../menu'
-import {ToolbarButton} from '../toolbar-button'
 import Grid from './grid'
 import Item from './item'
 import Search from './search'
@@ -177,22 +175,14 @@ export const IconGrid = Object.assign(
                       ]
                     }
                     render={
-                      <VscodeBadge>
+                      <ButtonGroup
+                        icon={INTERNAL_REMOUNT.icon}
+                        onMenuClick={INTERNAL_REMOUNT}
+                        secondary>
                         {pluralize(state.iconIds.length, 'icon')}
-                      </VscodeBadge>
+                      </ButtonGroup>
                     }
                   />
-                  <batcher.Subscribe
-                    selector={state => pick(state, ['isPending'])}>
-                    {batcherState => (
-                      <ToolbarButton
-                        checked={batcherState.isPending}
-                        icon={INTERNAL_REMOUNT.icon}
-                        onClick={INTERNAL_REMOUNT}
-                        preventToggle
-                      />
-                    )}
-                  </batcher.Subscribe>
                 </VscodeToolbarContainer>
               </VscodeFormHelper>
             </VscodeFormGroup>

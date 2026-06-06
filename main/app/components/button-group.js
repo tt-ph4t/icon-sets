@@ -5,7 +5,7 @@ import {component} from '../hocs'
 import {Menu} from './menu'
 
 export const ButtonGroup = component(
-  ({icon = 'chevron-down', menu, ...props}) => (
+  ({icon = 'chevron-down', menu, onMenuClick, ...props}) => (
     <VscodeButtonGroup>
       <VscodeButton {...props} />
       <Menu
@@ -13,6 +13,7 @@ export const ButtonGroup = component(
         render={
           <VscodeButton
             icon={icon}
+            onClick={onMenuClick}
             {...pick(props, ['disabled', 'secondary'])}
           />
         }

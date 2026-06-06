@@ -68,8 +68,7 @@ const Slot = component(
         style={{
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'auto',
-          position: 'relative'
+          overflow: 'auto'
         }}>
         <React.Activity mode={showSizeHint && state ? 'visible' : 'hidden'}>
           <VscodeFormHelper
