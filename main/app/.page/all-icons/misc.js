@@ -6,7 +6,7 @@ import {hasValues} from '../../misc'
 import {DEFAULT_QUERY_OPTIONS, EMPTY_ARRAY} from '../../misc/constants'
 import {withImmerAtom} from '../../misc/with-immer-atom'
 
-export const isFiltering = flow(xor, hasValues)
+export const isFiltered = flow(xor, hasValues)
 
 export const useStore = Object.assign(
   withImmerAtom({

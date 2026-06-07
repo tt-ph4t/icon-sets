@@ -1,23 +1,25 @@
+import {mergeProps} from '@base-ui/react'
+import {isPlainObject} from '@sindresorhus/is'
 import {VscodeButton, VscodeButtonGroup} from '@vscode-elements/react-elements'
-import {pick} from 'es-toolkit'
+import {castArray} from 'es-toolkit/compat'
 
 import {component} from '../hocs'
+import {getId} from '../misc'
 import {Menu} from './menu'
 
-export const ButtonGroup = component(
-  ({icon = 'chevron-down', menu, onMenuClick, ...props}) => (
-    <VscodeButtonGroup>
-      <VscodeButton {...props} />
-      <Menu
-        data={menu}
-        render={
-          <VscodeButton
-            icon={icon}
-            onClick={onMenuClick}
-            {...pick(props, ['disabled', 'secondary'])}
-          />
-        }
-      />
-    </VscodeButtonGroup>
-  )
-)
+export const ButtonGroup = component(({data, secondary = true, ...props}) => (
+  <VscodeButtonGroup>
+    {Iterator.from(castArray(data))
+      .filter(isPlainObject)
+      .map(({menu, ...ButtonProps}, index) => (
+        <Menu
+          data={menu}
+          key={getId(index, menu, ButtonProps)}
+          render={
+            <VscodeButton {...mergeProps({secondary, ...props}, ButtonProps)} />
+          }
+        />
+      ))
+      .toArray()}
+  </VscodeButtonGroup>
+))

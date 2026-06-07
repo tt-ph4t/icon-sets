@@ -4,8 +4,7 @@ import {
   VscodeFormContainer,
   VscodeFormGroup,
   VscodeFormHelper,
-  VscodeLabel,
-  VscodeToolbarContainer
+  VscodeLabel
 } from '@vscode-elements/react-elements'
 import {useSetState} from 'ahooks'
 import {sentenceCase} from 'change-case'
@@ -16,6 +15,7 @@ import {
   initial,
   last,
   mapValues,
+  pick,
   sampleSize,
   shuffle,
   tail,
@@ -37,7 +37,6 @@ import {EMPTY_ARRAY, SORT_ORDER_LABELS} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {prettyBytes} from '../../misc/pretty-bytes'
 import {ButtonGroup} from '../button-group'
-import {Menu} from '../menu'
 import Grid from './grid'
 import Item from './item'
 import Search from './search'
@@ -131,61 +130,68 @@ export const IconGrid = Object.assign(
             }}>
             <VscodeFormGroup variant='settings-group'>
               <VscodeFormHelper>
-                <VscodeToolbarContainer>
-                  <Menu
-                    data={
-                      hasFilteredIconIds && [
+                <batcher.Subscribe
+                  selector={batcherState => pick(batcherState, ['isPending'])}>
+                  {batcherState => (
+                    <ButtonGroup
+                      data={[
                         {
-                          label: 'Favorite',
-                          menu: useFavoritedIcons.actions.map(a => ({
-                            label: sentenceCase(a),
-                            onClick: () => {
-                              favoritedIcons[a](...state.iconIds)
+                          children: pluralize(state.iconIds.length, 'icon'),
+                          menu: hasFilteredIconIds && [
+                            {
+                              label: 'Favorite',
+                              menu: useFavoritedIcons.actions.map(a => ({
+                                label: sentenceCase(a),
+                                onClick: () => {
+                                  favoritedIcons[a](...state.iconIds)
+                                }
+                              }))
+                            },
+                            {
+                              label: 'Sort',
+                              menu: Object.keys(SORT_ORDER_LABELS).map(
+                                order => ({
+                                  label: SORT_ORDER_LABELS[order],
+                                  onClick: () => {
+                                    batcher.addItem(iconIds =>
+                                      sort(iconIds)[order]()
+                                    )
+                                  }
+                                })
+                              )
+                            },
+                            ...Object.entries(actions).map(([a, b]) => ({
+                              label: sentenceCase(a),
+                              onClick: () => {
+                                batcher.addItem(b)
+                              }
+                            })),
+                            {
+                              label: 'Sample',
+                              onClick: () => {
+                                batcher.addItem(() =>
+                                  sampleSize(filteredIconIds, 1)
+                                )
+                              }
+                            },
+                            {
+                              separator: true
+                            },
+                            {
+                              description: prettyBytes(0),
+                              label: 'Download'
                             }
-                          }))
+                          ]
                         },
                         {
-                          label: 'Sort',
-                          menu: Object.keys(SORT_ORDER_LABELS).map(order => ({
-                            label: SORT_ORDER_LABELS[order],
-                            onClick: () => {
-                              batcher.addItem(iconIds => sort(iconIds)[order]())
-                            }
-                          }))
-                        },
-                        ...Object.entries(actions).map(([a, b]) => ({
-                          label: sentenceCase(a),
-                          onClick: () => {
-                            batcher.addItem(b)
-                          }
-                        })),
-                        {
-                          label: 'Sample',
-                          onClick: () => {
-                            batcher.addItem(() =>
-                              sampleSize(filteredIconIds, 1)
-                            )
-                          }
-                        },
-                        {
-                          separator: true
-                        },
-                        {
-                          description: prettyBytes(0),
-                          label: 'Download'
+                          icon: INTERNAL_REMOUNT.icon,
+                          onClick: INTERNAL_REMOUNT,
+                          secondary: !batcherState.isPending
                         }
-                      ]
-                    }
-                    render={
-                      <ButtonGroup
-                        icon={INTERNAL_REMOUNT.icon}
-                        onMenuClick={INTERNAL_REMOUNT}
-                        secondary>
-                        {pluralize(state.iconIds.length, 'icon')}
-                      </ButtonGroup>
-                    }
-                  />
-                </VscodeToolbarContainer>
+                      ]}
+                    />
+                  )}
+                </batcher.Subscribe>
               </VscodeFormHelper>
             </VscodeFormGroup>
           </VscodeFormContainer>

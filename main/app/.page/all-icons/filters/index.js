@@ -4,50 +4,69 @@ import {
   VscodeToolbarContainer
 } from '@vscode-elements/react-elements'
 
+import {ButtonGroup} from '../../../components/button-group'
 import {Popover} from '../../../components/popover'
-import {ToolbarButton} from '../../../components/toolbar-button'
 import {component} from '../../../hocs'
+import {useRemount} from '../../../hooks/use-remount'
 import {DEFAULT_QUERY_OPTIONS} from '../../../misc/constants'
-import {isFiltering, useStore} from '../misc'
+import {isFiltered, useStore} from '../misc'
 import MultiSelect from './multi-select'
 import Tree from './tree'
 
-const Label = component(() => {
+const Label = component(({remountButton}) => {
   const selectedIconSetPrefixes = useStore().useSelectValue(
     ({draft}) => draft.selectedIconSetPrefixes
   )
 
   const query = useQuery({
     ...DEFAULT_QUERY_OPTIONS,
-    select: iconSets =>
-      isFiltering(Object.keys(iconSets), selectedIconSetPrefixes)
+    select: iconSets => ({
+      isFiltered: isFiltered(Object.keys(iconSets), selectedIconSetPrefixes)
+    })
   })
 
-  return <ToolbarButton checked={query.data} icon='filter' preventToggle />
+  return (
+    <ButtonGroup
+      data={[
+        {
+          icon: 'filter',
+          secondary: !query.data.isFiltered
+        },
+        remountButton
+      ]}
+    />
+  )
 })
 
-export default component(() => (
-  <Popover
-    keepMounted
-    open
-    popupRender={
-      <>
-        <div
-          style={{
-            inset: 0,
-            position: 'sticky',
-            zIndex: 1
-          }}>
-          <MultiSelect />
-          <VscodeDivider />
-        </div>
-        <Tree />
-      </>
-    }
-    render={
-      <VscodeToolbarContainer>
-        <Label />
-      </VscodeToolbarContainer>
-    }
-  />
-))
+export default useRemount.with(
+  component(({INTERNAL_REMOUNT}) => (
+    <Popover
+      keepMounted
+      open
+      popupRender={
+        <>
+          <div
+            style={{
+              inset: 0,
+              position: 'sticky',
+              zIndex: 1
+            }}>
+            <MultiSelect />
+            <VscodeDivider />
+          </div>
+          <Tree />
+        </>
+      }
+      render={
+        <VscodeToolbarContainer>
+          <Label
+            remountButton={{
+              icon: INTERNAL_REMOUNT.icon,
+              onClick: INTERNAL_REMOUNT
+            }}
+          />
+        </VscodeToolbarContainer>
+      }
+    />
+  ))
+)
