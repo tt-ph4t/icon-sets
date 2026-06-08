@@ -70,7 +70,7 @@ export const trigger = mapValues(
   },
   fn =>
     (enabled = true) => {
-      if (enabled) return fn()
+      if (import.meta.env.DEV && enabled) return fn()
     }
 )
 

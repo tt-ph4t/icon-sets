@@ -39,7 +39,7 @@ const normalizeData = data =>
 const {Provider: PopupProvider, useContext: usePopupContext} = buildContext()
 
 const Popup = component(({menu}) => {
-  const popupContext = usePopupContext(identity)
+  const context = usePopupContext(identity)
 
   return (
     <InternalMenu.Popup
@@ -83,16 +83,14 @@ const Popup = component(({menu}) => {
                         omit(data, ['menu']) // ?
                       )}>
                       {hasValues(menu) ? (
-                        <Item.Submenu
-                          {...popupContext.TriggerProps}
-                          render={item}>
+                        <Item.Submenu {...context.TriggerProps} render={item}>
                           <Popup menu={menu} />
                         </Item.Submenu>
                       ) : separator ? (
                         Item.Separator
                       ) : (
                         <InternalMenu.Item
-                          {...popupContext.ItemProps}
+                          {...context.ItemProps}
                           render={item}
                         />
                       )}

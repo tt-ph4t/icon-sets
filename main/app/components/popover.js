@@ -18,7 +18,7 @@ export const Popover = Object.assign(
         <VscodeFormContainer style={THEME.CARD_STYLE}>
           <VscodeFormGroup
             style={{
-              maxHeight: 'calc(var(--available-height) / 1.6)',
+              maxHeight: 'calc(var(--available-height) / 1.4)',
               maxWidth: 'calc(var(--available-width) / 3)',
               overflow: 'auto'
             }}

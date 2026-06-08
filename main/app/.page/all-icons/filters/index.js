@@ -3,6 +3,7 @@ import {
   VscodeDivider,
   VscodeToolbarContainer
 } from '@vscode-elements/react-elements'
+import {castArray} from 'es-toolkit/compat'
 
 import {ButtonGroup} from '../../../components/button-group'
 import {Popover} from '../../../components/popover'
@@ -13,7 +14,7 @@ import {isFiltered, useStore} from '../misc'
 import MultiSelect from './multi-select'
 import Tree from './tree'
 
-const Label = component(({remountButton}) => {
+const Label = component(({buttons}) => {
   const selectedIconSetPrefixes = useStore().useSelectValue(
     ({draft}) => draft.selectedIconSetPrefixes
   )
@@ -32,7 +33,7 @@ const Label = component(({remountButton}) => {
           icon: 'filter',
           secondary: !query.data.isFiltered
         },
-        remountButton
+        ...castArray(buttons)
       ]}
     />
   )
@@ -60,7 +61,7 @@ export default useRemount.with(
       render={
         <VscodeToolbarContainer>
           <Label
-            remountButton={{
+            buttons={{
               icon: INTERNAL_REMOUNT.icon,
               onClick: INTERNAL_REMOUNT
             }}

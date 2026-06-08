@@ -1,9 +1,9 @@
-import {composeRefs} from '@radix-ui/react-compose-refs'
+import {useMergedRefs, useMergedRefsN} from '@base-ui/utils/useMergedRefs'
 import {useFullscreen, useSize, useUnmount} from 'ahooks'
 import {noop} from 'es-toolkit'
+import {castArray} from 'es-toolkit/compat'
 import React from 'react'
 
-import {useCallback} from './use-callback'
 import {useState} from './use-state'
 
 const defaultSize = {
@@ -13,6 +13,8 @@ const defaultSize = {
     width: 0
   }
 }
+
+const internalUseMergedRefs = refs => useMergedRefs(...castArray(refs))
 
 export const useRef = Object.assign(
   (getValue = noop) => {
@@ -38,11 +40,11 @@ export const useRef = Object.assign(
         ...rest
       }
     },
-    merge:
-      // https://github.com/radix-ui/primitives/blob/22473d16404bfd446305db5b6c9308aece99fdec/packages/react/compose-refs/src/compose-refs.tsx#L55
-      (...refs) => ({
-        mergedRef: useCallback(composeRefs(...refs), refs)
-      }),
+    merge: (...refs) => ({
+      mergedRef: (refs.length <= 4 ? internalUseMergedRefs : useMergedRefsN)(
+        refs
+      )
+    }),
     size: () => {
       const ref = useRef()
 
