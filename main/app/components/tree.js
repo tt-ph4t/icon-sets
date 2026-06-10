@@ -4,7 +4,6 @@ import {
   VscodeTree,
   VscodeTreeItem
 } from '@vscode-elements/react-elements'
-import {asyncNoop} from 'es-toolkit'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -22,18 +21,16 @@ const Item = Object.assign(
           slot='icon-leaf'
         />
       </React.Activity>
-      {Item.renderChildren(children)}
+      <Item.List data={children} />
     </VscodeTreeItem>
   )),
   {
-    renderChildren: (data = EMPTY_ARRAY) => (
-      <React.Activity>
-        {data.map(({id, ...props}) => {
-          trigger.error(!isReactKey(id, false))
+    List: component(({data = EMPTY_ARRAY}) =>
+      data.map(({id, ...props}) => {
+        trigger.error(!isReactKey(id, false))
 
-          return <Item key={id} {...props} />
-        })}
-      </React.Activity>
+        return <Item key={id} {...props} />
+      })
     )
   }
 )
@@ -52,17 +49,22 @@ export const Tree = Object.assign(
         indentGuides={indentGuides}
         onVscTreeSelect={
           onVscTreeSelect ??
-          (async event => {
-            const {onClick = asyncNoop} = event.detail[0]._path.reduce(
-              (a, b) => (a.children ?? a)[b],
-              data
-            )
+          (async (...args) => {
+            const [
+              {
+                detail: [item]
+              }
+            ] = args
 
-            await onClick(event)
+            await item._path
+              .reduce((a, b) => (a.children ?? a)[b], data)
+              .onClick?.(...args)
+
+            if (item.branch) item.open // ? useStore
           })
         }
         {...props}>
-        {Item.renderChildren(data)}
+        <Item.List data={data} />
       </VscodeTree>
     )
   ),
