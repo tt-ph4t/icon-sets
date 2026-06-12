@@ -43,7 +43,6 @@ export default useRemount.with(
   component(({INTERNAL_REMOUNT}) => (
     <Popover
       keepMounted
-      open
       popupRender={
         <>
           <div

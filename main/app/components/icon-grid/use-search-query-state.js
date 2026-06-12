@@ -4,11 +4,7 @@ import {createParser, throttle, useQueryState} from 'nuqs'
 import {isWordCharacter} from '../../misc'
 
 const parse = value =>
-  isDefault(value)
-    ? value
-    : isWordCharacter(value)
-      ? value
-      : parse(value.slice(1))
+  isDefault(value) || isWordCharacter(value) ? value : parse(value.slice(1))
 
 const defaultSearchQueryState = ''
 

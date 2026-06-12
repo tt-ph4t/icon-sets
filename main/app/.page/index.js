@@ -1,4 +1,5 @@
 import {isTruthy} from '@sindresorhus/is'
+import {formatForDisplay, useHotkey} from '@tanstack/react-hotkeys'
 import {useQuery} from '@tanstack/react-query'
 import {
   VscodeFormContainer,
@@ -62,67 +63,74 @@ const Loading = Object.assign(
 
 export default withProviders(
   useRemount.with(
-    component(({INTERNAL_REMOUNT}) => (
-      <Layout.Fullscreen
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: 'inherit',
-          position: 'relative',
-          width: 'inherit'
-        }}>
-        <div
+    component(({INTERNAL_REMOUNT}) => {
+      useHotkey('f5', INTERNAL_REMOUNT)
+
+      return (
+        <Layout.Fullscreen
           style={{
-            position: 'absolute',
-            width: '100%',
-            zIndex: 1
-          }}>
-          <Loading />
-        </div>
-        <div
-          style={{
-            alignContent: 'center',
-            inset: '0',
-            justifySelf: 'center',
-            pointerEvents: 'none',
-            position: 'absolute',
-            zIndex: 1
+            display: 'flex',
+            flexDirection: 'column',
+            height: 'inherit',
+            position: 'relative',
+            width: 'inherit'
           }}>
           <div
             style={{
-              pointerEvents: 'auto'
+              position: 'absolute',
+              width: '100%',
+              zIndex: 1
             }}>
-            <Loading.Data />
+            <Loading />
           </div>
-        </div>
-        <React.Activity>
-          <Layout.Reverse>
-            <Sidebar />
-            <AllIcons />
-          </Layout.Reverse>
-          <VscodeFormContainer
+          <div
             style={{
-              alignSelf: 'center',
-              bottom: 0,
-              position: 'absolute'
+              alignContent: 'center',
+              inset: '0',
+              justifySelf: 'center',
+              pointerEvents: 'none',
+              position: 'absolute',
+              zIndex: 1
             }}>
-            <VscodeFormGroup variant='settings-group'>
-              <VscodeFormHelper>
-                <VscodeToolbarContainer>
-                  <Toolbar
-                    menu={[
-                      {
-                        separator: true
-                      },
-                      INTERNAL_REMOUNT.menu
-                    ]}
-                  />
-                </VscodeToolbarContainer>
-              </VscodeFormHelper>
-            </VscodeFormGroup>
-          </VscodeFormContainer>
-        </React.Activity>
-      </Layout.Fullscreen>
-    ))
+            <div
+              style={{
+                pointerEvents: 'auto'
+              }}>
+              <Loading.Data />
+            </div>
+          </div>
+          <React.Activity>
+            <Layout.Reverse>
+              <Sidebar />
+              <AllIcons />
+            </Layout.Reverse>
+            <VscodeFormContainer
+              style={{
+                alignSelf: 'center',
+                bottom: 0,
+                position: 'absolute'
+              }}>
+              <VscodeFormGroup variant='settings-group'>
+                <VscodeFormHelper>
+                  <VscodeToolbarContainer>
+                    <Toolbar
+                      menu={[
+                        {
+                          separator: true
+                        },
+                        {
+                          ...INTERNAL_REMOUNT.menu,
+                          description: formatForDisplay('f5')
+                        }
+                      ]}
+                    />
+                  </VscodeToolbarContainer>
+                </VscodeFormHelper>
+              </VscodeFormGroup>
+            </VscodeFormContainer>
+          </React.Activity>
+        </Layout.Fullscreen>
+      )
+    })
   )
 )

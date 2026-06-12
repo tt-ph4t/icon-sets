@@ -93,15 +93,15 @@ export const copy = async (value, options) => ({
   })
 })
 
-export const getIconFilePaths = (icon, extension) => ({
-  default: `${icon.name}.${extension}`,
-  get fullPath() {
-    return `${icon.setName}/${this.default}`
-  },
-  get labeled() {
-    return `[${icon.setName}] ${this.default}`
+export const getIconFilePaths = (icon, extension) => {
+  const fileName = `${icon.name}.${extension}`
+
+  return {
+    default: fileName,
+    fullPath: `${icon.setName}/${fileName}`,
+    labeled: `[${icon.setName}] ${fileName}`
   }
-})
+}
 
 export const isReactKey = (value, allowNullish = true) =>
   (allowNullish && (isNull(value) || isUndefined(value))) ||

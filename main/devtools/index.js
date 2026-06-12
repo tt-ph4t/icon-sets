@@ -1,4 +1,5 @@
 import {TanStackDevtools} from '@tanstack/react-devtools'
+import {hotkeysDevtoolsPlugin} from '@tanstack/react-hotkeys-devtools'
 import {pacerDevtoolsPlugin} from '@tanstack/react-pacer-devtools'
 import {ReactQueryDevtoolsPanel} from '@tanstack/react-query-devtools/build/modern/production.js'
 import '@vscode-elements/webview-playground'
@@ -19,6 +20,7 @@ const TanStackDevtoolsProps = {
       })
     ),
     pacerDevtoolsPlugin(),
+    hotkeysDevtoolsPlugin(),
     githubDevtoolsPlugin({
       defaultOpen: true
     })
