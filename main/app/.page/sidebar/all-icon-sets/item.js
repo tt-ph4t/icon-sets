@@ -12,7 +12,7 @@ import {ToolbarButton} from '../../../components/toolbar-button'
 import {component} from '../../../hocs'
 import {useCallback} from '../../../hooks/use-callback'
 import {getId} from '../../../misc'
-import {DEFAULT_QUERY_OPTIONS, EMPTY_OBJECT} from '../../../misc/constants'
+import {DEFAULT_QUERY_OPTIONS} from '../../../misc/constants'
 import {pluralize} from '../../../misc/pluralize'
 import {withImmerAtom} from '../../../misc/with-immer-atom'
 
@@ -24,7 +24,7 @@ const initialState = {
   }
 }
 
-const useStore = withImmerAtom(EMPTY_OBJECT)
+const useStore = withImmerAtom()
 
 const matchesIconTheme = (icon, theme) =>
   isEmptyString(

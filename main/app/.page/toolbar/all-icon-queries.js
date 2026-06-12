@@ -13,7 +13,7 @@ import {getId, hasValues} from '../../misc'
 import {
   DATABASE_URL,
   DEFAULT_QUERY_OPTIONS,
-  EMPTY_OBJECT,
+  EMPTY,
   QUERY_CLIENT
 } from '../../misc/constants'
 import {getQueryOptions} from '../../misc/get-query-options'
@@ -33,7 +33,7 @@ const queryClientActions = [
 
 export default component(() => {
   const queryClient = useQueryClient()
-  const [state, setState] = useState(EMPTY_OBJECT)
+  const [state, setState] = useState(EMPTY.OBJECT)
 
   const debouncer = useDebouncer(async fn => await fn(), {
     wait: ms('1s')

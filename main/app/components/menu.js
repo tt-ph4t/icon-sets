@@ -15,7 +15,7 @@ import {useMemo} from '../hooks/use-memo'
 import {useState} from '../hooks/use-state'
 import {getId, hasValues} from '../misc'
 import {buildContext} from '../misc/build-context'
-import {EMPTY_ARRAY, THEME} from '../misc/constants'
+import {EMPTY, THEME} from '../misc/constants'
 
 const isGroupLabel = isString
 
@@ -175,7 +175,7 @@ export const Menu = component(
     children,
     closeDelay = 0,
     closeOnClick = false,
-    data = EMPTY_ARRAY,
+    data = EMPTY.ARRAY,
     delay = 0,
     disabled = false,
     openOnHover = true,

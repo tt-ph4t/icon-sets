@@ -8,7 +8,7 @@ import React from 'react'
 
 import {component} from '../hocs'
 import {isReactKey, trigger} from '../misc'
-import {EMPTY_ARRAY} from '../misc/constants'
+import {EMPTY} from '../misc/constants'
 
 const Item = Object.assign(
   component(({checked, children, label, ...props}) => (
@@ -25,7 +25,7 @@ const Item = Object.assign(
     </VscodeTreeItem>
   )),
   {
-    List: component(({data = EMPTY_ARRAY}) =>
+    List: component(({data = EMPTY.ARRAY}) =>
       data.map(({id, ...props}) => {
         trigger.error(!isReactKey(id, false))
 
@@ -38,7 +38,7 @@ const Item = Object.assign(
 export const Tree = Object.assign(
   component(
     ({
-      data = EMPTY_ARRAY,
+      data = EMPTY.ARRAY,
       hideArrows = true,
       indentGuides = 'always',
       onVscTreeSelect,

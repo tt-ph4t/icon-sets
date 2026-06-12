@@ -43,11 +43,11 @@ export const QUERY_CLIENT = {
   INTERNAL: new QueryClient()
 }
 
-export const EMPTY_BLOB = new Blob()
-
-export const EMPTY_OBJECT = deepFreeze({})
-
-export const EMPTY_ARRAY = deepFreeze([])
+export const EMPTY = deepFreeze({
+  ARRAY: [],
+  BLOB: new Blob(),
+  OBJECT: {}
+})
 
 export const SORT_ORDER_LABELS = deepFreeze({
   asc: 'Ascending',
@@ -86,7 +86,7 @@ export const POWER_GLITCH_OPTIONS =
         velocity: 4
       }
     },
-    MEDIUM: EMPTY_OBJECT,
+    MEDIUM: EMPTY.OBJECT,
     NONE: {
       shake: false,
       slice: {

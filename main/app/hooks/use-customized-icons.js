@@ -3,18 +3,14 @@ import {useThrottler} from '@tanstack/react-pacer'
 import {isEqual} from '@ver0/deep-equal'
 import {pick} from 'es-toolkit'
 
-import {
-  DEFAULT_ICON_CUSTOMISATIONS,
-  EMPTY_OBJECT,
-  ICON_CACHE
-} from '../misc/constants'
+import {DEFAULT_ICON_CUSTOMISATIONS, EMPTY, ICON_CACHE} from '../misc/constants'
 import {withImmerAtom} from '../misc/with-immer-atom'
 import {useCallback} from './use-callback'
 
 mergeCustomisations
 
 const useStore = withImmerAtom({
-  current: EMPTY_OBJECT,
+  current: EMPTY.OBJECT,
   global: pick(DEFAULT_ICON_CUSTOMISATIONS, ['color', 'square'])
 })
 

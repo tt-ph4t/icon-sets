@@ -32,7 +32,7 @@ import {
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
   DEFAULT_QUERY_OPTIONS,
-  EMPTY_ARRAY,
+  EMPTY,
   ICONIFY_API_URLS,
   THEME
 } from '../../../misc/constants'
@@ -140,7 +140,7 @@ export default withQueryBoundary(
       () =>
         uniq([
           iconQuery.data.name,
-          ...(iconSetQuery.data.aliases[iconQuery.data.name] ?? EMPTY_ARRAY)
+          ...(iconSetQuery.data.aliases[iconQuery.data.name] ?? EMPTY.ARRAY)
         ]),
       [iconQuery.data.name, iconSetQuery.data.aliases]
     )

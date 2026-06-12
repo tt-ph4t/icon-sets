@@ -8,13 +8,13 @@ import {freezeAtom, selectAtom} from 'jotai/utils'
 
 import {useCallback} from '../hooks/use-callback'
 import {useEffect} from '../hooks/use-effect'
-import {DELAY_MS, EMPTY_ARRAY, EMPTY_OBJECT} from './constants'
+import {DELAY_MS, EMPTY} from './constants'
 
 const create = flow(atomWithImmer, freezeAtom)
 
 const useAtomValueWithDelay =
   // https://github.com/pmndrs/jotai/pull/3264
-  (atom, {delay = DELAY_MS, ...options} = EMPTY_OBJECT) => {
+  (atom, {delay = DELAY_MS, ...options} = EMPTY.OBJECT) => {
     const store = useStore(options)
 
     const [state, setState] = useThrottledState(() => store.get(atom), {
@@ -32,7 +32,7 @@ const useAtomValueWithDelay =
     return state
   }
 
-export const withImmerAtom = (initialValue = EMPTY_OBJECT) => {
+export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
   const atom = create((initialValue = deepFreeze(initialValue)))
 
   return Object.assign(
@@ -50,7 +50,7 @@ export const withImmerAtom = (initialValue = EMPTY_OBJECT) => {
           })
         }),
         useSelectValue: useCallback(
-          (fn, {deps = EMPTY_ARRAY, ...options} = EMPTY_OBJECT) =>
+          (fn, {deps = EMPTY.ARRAY, ...options} = EMPTY.OBJECT) =>
             useAtomValueWithDelay(
               selectAtom(
                 atom,

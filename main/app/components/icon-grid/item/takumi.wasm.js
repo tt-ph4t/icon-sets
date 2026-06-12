@@ -3,7 +3,7 @@ import {LRUCache} from 'lru-cache'
 import mime from 'mime/lite' // ?
 import {ImageResponse} from 'takumi-js/response'
 
-import {EMPTY_BLOB, ICON_CACHE} from '../../../misc/constants'
+import {EMPTY, ICON_CACHE} from '../../../misc/constants'
 
 const cache = new LRUCache({
   max: ICON_CACHE.max
@@ -30,9 +30,9 @@ export default Object.assign(
         return blob
       }
 
-      return EMPTY_BLOB
+      return EMPTY.BLOB
     } catch {
-      return EMPTY_BLOB
+      return EMPTY.BLOB
     }
   },
   {

@@ -5,9 +5,9 @@ import {createContext, useContextSelector} from 'use-context-selector'
 
 import {component} from '../hocs'
 import {useMemo} from '../hooks/use-memo'
-import {EMPTY_OBJECT} from './constants'
+import {EMPTY} from './constants'
 
-export const buildContext = (defaultValues = EMPTY_OBJECT) => {
+export const buildContext = (defaultValues = EMPTY.OBJECT) => {
   const Context = createContext(defaultValues)
 
   return {

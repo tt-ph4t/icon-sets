@@ -18,6 +18,7 @@ import {useRef} from '../../hooks/use-ref'
 import {isWordCharacter} from '../../misc'
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
+  EMPTY,
   ICON_CACHE,
   THEME
 } from '../../misc/constants'
@@ -149,7 +150,7 @@ const Search = component(({children}) => {
 
   useEffect.update(() => {
     ref.current = ref.current.renderRoot.querySelector('input')
-  }, [])
+  }, EMPTY.ARRAY)
 
   return (
     <VscodeTextfield

@@ -4,14 +4,14 @@ import {castArray} from 'es-toolkit/compat'
 import ms from 'ms'
 
 import {validateIconId} from '../misc'
-import {EMPTY_ARRAY} from '../misc/constants'
+import {EMPTY} from '../misc/constants'
 import {useCallback} from './use-callback'
 import {useState} from './use-state'
 
 const defaults = {
   key: 'useFavoritedIcons',
   throttlerOptions: {wait: ms('1s')},
-  value: EMPTY_ARRAY
+  value: EMPTY.ARRAY
 }
 
 export const useFavoritedIcons = Object.assign(

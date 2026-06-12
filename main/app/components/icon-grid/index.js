@@ -33,7 +33,7 @@ import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {useState} from '../../hooks/use-state'
 import {hasValues, validateIconId} from '../../misc'
-import {EMPTY_ARRAY, SORT_ORDER_LABELS} from '../../misc/constants'
+import {EMPTY, SORT_ORDER_LABELS} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {prettyBytes} from '../../misc/pretty-bytes'
 import {ButtonGroup} from '../button-group'
@@ -80,7 +80,7 @@ const useFilteredIconIds = (searchTerm, iconIds) => {
 
     return filteredIconIds
       ? filteredIconIds.map(index => iconIds[index])
-      : EMPTY_ARRAY
+      : EMPTY.ARRAY
   }, [state, iconIds])
 }
 

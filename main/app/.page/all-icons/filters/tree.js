@@ -9,7 +9,7 @@ import {ToolbarButton} from '../../../components/toolbar-button'
 import {Tree} from '../../../components/tree'
 import {component} from '../../../hocs'
 import {useCallback} from '../../../hooks/use-callback'
-import {DEFAULT_QUERY_OPTIONS, EMPTY_ARRAY} from '../../../misc/constants'
+import {DEFAULT_QUERY_OPTIONS, EMPTY} from '../../../misc/constants'
 import {pluralize} from '../../../misc/pluralize'
 import {isFiltered, useStore} from '../misc'
 
@@ -55,7 +55,7 @@ const queryOptions = {
                 Object.fromEntries(
                   sort(
                     Object.entries(
-                      mapValues(a, (iconSets = EMPTY_ARRAY) =>
+                      mapValues(a, (iconSets = EMPTY.ARRAY) =>
                         iconSets.map(iconSet => ({
                           prefix: iconSet.prefix
                         }))

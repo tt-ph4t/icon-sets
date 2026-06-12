@@ -6,21 +6,21 @@ import {mapValues} from 'es-toolkit'
 import {NuqsAdapter} from 'nuqs/adapters/react'
 
 import {component} from '../hocs'
-import {DELAY_MS, EMPTY_OBJECT, QUERY_CLIENT} from '../misc/constants'
+import {DELAY_MS, EMPTY, QUERY_CLIENT} from '../misc/constants'
 
 const PacerProviderProps = {
   defaultOptions: mapValues(
     {
-      asyncBatcher: EMPTY_OBJECT,
-      asyncDebouncer: EMPTY_OBJECT,
-      asyncQueuer: EMPTY_OBJECT,
-      asyncRateLimiter: EMPTY_OBJECT,
-      asyncThrottler: EMPTY_OBJECT,
-      batcher: EMPTY_OBJECT,
-      debouncer: EMPTY_OBJECT,
-      queuer: EMPTY_OBJECT,
-      rateLimiter: EMPTY_OBJECT,
-      throttler: EMPTY_OBJECT
+      asyncBatcher: EMPTY.OBJECT,
+      asyncDebouncer: EMPTY.OBJECT,
+      asyncQueuer: EMPTY.OBJECT,
+      asyncRateLimiter: EMPTY.OBJECT,
+      asyncThrottler: EMPTY.OBJECT,
+      batcher: EMPTY.OBJECT,
+      debouncer: EMPTY.OBJECT,
+      queuer: EMPTY.OBJECT,
+      rateLimiter: EMPTY.OBJECT,
+      throttler: EMPTY.OBJECT
     },
     options => ({
       wait: DELAY_MS,

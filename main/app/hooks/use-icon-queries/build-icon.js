@@ -13,7 +13,7 @@ import parse from 'html-react-parser'
 import mime from 'mime/lite'
 
 import {getIconFilePaths, hasValues} from '../../misc'
-import {EMPTY_OBJECT, ICON_CACHE} from '../../misc/constants'
+import {EMPTY, ICON_CACHE} from '../../misc/constants'
 
 const types = ['css', 'json', 'svg', 'txt', 'pdf']
 
@@ -81,7 +81,7 @@ export default (
                 data,
                 type: mime.getType(fileType)
               }
-            : EMPTY_OBJECT
+            : EMPTY.OBJECT
         },
         idCases: mapValues(idCases, value => value(icon.id)),
         paths: types.reduce((a, b) => {
