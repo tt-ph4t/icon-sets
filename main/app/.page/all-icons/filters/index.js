@@ -3,18 +3,17 @@ import {
   VscodeDivider,
   VscodeToolbarContainer
 } from '@vscode-elements/react-elements'
-import {castArray} from 'es-toolkit/compat'
 
 import {ButtonGroup} from '../../../components/button-group'
 import {Popover} from '../../../components/popover'
 import {component} from '../../../hocs'
-import {useRemount} from '../../../hooks/use-remount'
 import {DEFAULT_QUERY_OPTIONS} from '../../../misc/constants'
+import {pluralize} from '../../../misc/pluralize'
 import {isFiltered, useStore} from '../misc'
 import MultiSelect from './multi-select'
 import Tree from './tree'
 
-const Label = component(({buttons}) => {
+const Label = component(() => {
   const selectedIconSetPrefixes = useStore().useSelectValue(
     ({draft}) => draft.selectedIconSetPrefixes
   )
@@ -33,40 +32,34 @@ const Label = component(({buttons}) => {
           icon: 'filter',
           secondary: !query.data.isFiltered
         },
-        ...castArray(buttons)
+        {
+          children: pluralize(selectedIconSetPrefixes.length, 'icon set')
+        }
       ]}
     />
   )
 })
 
-export default useRemount.with(
-  component(({INTERNAL_REMOUNT}) => (
-    <Popover
-      keepMounted
-      popupRender={
-        <>
-          <div
-            style={{
-              inset: 0,
-              position: 'sticky',
-              zIndex: 1
-            }}>
-            <MultiSelect />
-            <VscodeDivider />
-          </div>
-          <Tree />
-        </>
-      }
-      render={
-        <VscodeToolbarContainer>
-          <Label
-            buttons={{
-              icon: INTERNAL_REMOUNT.icon,
-              onClick: INTERNAL_REMOUNT
-            }}
-          />
-        </VscodeToolbarContainer>
-      }
-    />
-  ))
-)
+export default component(() => (
+  <Popover
+    popupRender={
+      <>
+        <div
+          style={{
+            inset: 0,
+            position: 'sticky',
+            zIndex: 1
+          }}>
+          <MultiSelect />
+          <VscodeDivider />
+        </div>
+        <Tree />
+      </>
+    }
+    render={
+      <VscodeToolbarContainer>
+        <Label />
+      </VscodeToolbarContainer>
+    }
+  />
+))

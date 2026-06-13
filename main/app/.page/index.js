@@ -61,10 +61,12 @@ const Loading = Object.assign(
   }
 )
 
+const remountHotkey = 'f5'
+
 export default withProviders(
   useRemount.with(
     component(({INTERNAL_REMOUNT}) => {
-      useHotkey('f5', INTERNAL_REMOUNT)
+      useHotkey(remountHotkey, INTERNAL_REMOUNT)
 
       return (
         <Layout.Fullscreen
@@ -120,7 +122,7 @@ export default withProviders(
                         },
                         {
                           ...INTERNAL_REMOUNT.menu,
-                          description: formatForDisplay('f5')
+                          description: formatForDisplay(remountHotkey)
                         }
                       ]}
                     />

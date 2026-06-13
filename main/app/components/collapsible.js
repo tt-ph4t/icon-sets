@@ -27,12 +27,16 @@ export const Collapsible = component(
 
     useEventListener(
       'vsc-collapsible-toggle',
-      async event => {
-        await onToggle(event)
+      async (...args) => {
+        await onToggle(...args)
 
-        setOpen(event.detail.open) // ?
+        React.startTransition(() => {
+          setOpen(args[0].detail.open) // ?
+        })
       },
-      {target: internalRef}
+      {
+        target: internalRef
+      }
     )
 
     return (
