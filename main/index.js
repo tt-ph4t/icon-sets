@@ -1,3 +1,4 @@
+import '@vscode-elements/webview-playground'
 import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
 import React from 'react'
 import {preconnect} from 'react-dom'

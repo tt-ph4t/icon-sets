@@ -2,10 +2,10 @@ import {formatForDisplay, useHotkey} from '@tanstack/react-hotkeys'
 
 import {IconGrid} from '../../components/icon-grid'
 import {Menu} from '../../components/menu'
+import {useTheme} from '../../components/theme'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useSettings} from '../../hooks/use-settings'
-import {useTheme} from '../../hooks/use-theme'
 import AllIconQueries from './all-icon-queries'
 
 const themeHotkey = 't'
