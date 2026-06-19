@@ -31,7 +31,6 @@ import {useEffect} from '../../hooks/use-effect'
 import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
-import {useState} from '../../hooks/use-state'
 import {hasValues, validateIconId} from '../../misc'
 import {EMPTY, SORT_ORDER_LABELS} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
@@ -40,7 +39,7 @@ import {ButtonGroup} from '../button-group'
 import Grid from './grid'
 import Item from './item'
 import Search from './search'
-import useSearchQueryState from './use-search-query-state'
+import useStore from './use-store'
 
 const actions = mapValues(
   {
@@ -58,30 +57,18 @@ const actions = mapValues(
 
 const uf = new uFuzzy()
 
-const batcherOptions = {
-  wait: ms('.3s')
-}
-
-const useFilteredIconIds = (searchTerm, iconIds) => {
-  const [state, setState] = useState(searchTerm)
-
-  const batcher = useBatcher(items => {
-    setState(last(items))
-  }, batcherOptions)
-
-  useEffect.update(() => {
-    batcher.addItem(searchTerm)
-  }, [batcher, searchTerm])
+const useFilteredIconIds = iconIds => {
+  const store = useStore()
+  const searchTerm = store.useSelectValue(({draft}) => draft.searchTerm)
 
   return useMemo(() => {
-    if (useSearchQueryState.isDefault(state)) return iconIds
+    if (store.searchTerm.isDefault(searchTerm)) return iconIds
 
-    const [filteredIconIds] = uf.search(iconIds, state)
-
-    return filteredIconIds
-      ? filteredIconIds.map(index => iconIds[index])
-      : EMPTY.ARRAY
-  }, [state, iconIds])
+    return (
+      uf.search(iconIds, searchTerm)[0]?.map(index => iconIds[index]) ??
+      EMPTY.ARRAY
+    )
+  }, [searchTerm, iconIds])
 }
 
 export const IconGrid = Object.assign(
@@ -93,24 +80,28 @@ export const IconGrid = Object.assign(
       )
 
       const favoritedIcons = useFavoritedIcons()
-      const [searchQueryState] = useSearchQueryState()
-      const filteredIconIds = useFilteredIconIds(searchQueryState, iconIds)
+      const filteredIconIds = useFilteredIconIds(iconIds)
 
       const [state, setState] = useSetState({
         iconIds
       })
 
-      const batcher = useBatcher(items => {
-        setState(state => ({
-          iconIds: last(items)(state.iconIds)
-        }))
-      }, batcherOptions)
+      const batcher = useBatcher(
+        items => {
+          setState(state => ({
+            iconIds: last(items)(state.iconIds)
+          }))
+        },
+        {
+          wait: ms('.3s')
+        }
+      )
 
       const hasFilteredIconIds = hasValues(filteredIconIds)
 
       useEffect(() => {
         batcher.addItem(() => filteredIconIds)
-      }, [batcher, filteredIconIds])
+      }, [filteredIconIds])
 
       return (
         <div

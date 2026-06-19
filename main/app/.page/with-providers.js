@@ -3,7 +3,6 @@ import {HotkeysProvider} from '@tanstack/react-hotkeys'
 import {PacerProvider} from '@tanstack/react-pacer'
 import {QueryClientProvider} from '@tanstack/react-query'
 import {mapValues} from 'es-toolkit'
-import {NuqsAdapter} from 'nuqs/adapters/react'
 
 import {component} from '../hocs'
 import {DELAY_MS, EMPTY, QUERY_CLIENT} from '../misc/constants'
@@ -32,14 +31,12 @@ const PacerProviderProps = {
 export default Component =>
   component(() => (
     <DirectionProvider>
-      <NuqsAdapter>
-        <QueryClientProvider client={QUERY_CLIENT.GLOBAL}>
-          <PacerProvider {...PacerProviderProps}>
-            <HotkeysProvider>
-              <Component />
-            </HotkeysProvider>
-          </PacerProvider>
-        </QueryClientProvider>
-      </NuqsAdapter>
+      <QueryClientProvider client={QUERY_CLIENT.GLOBAL}>
+        <PacerProvider {...PacerProviderProps}>
+          <HotkeysProvider>
+            <Component />
+          </HotkeysProvider>
+        </PacerProvider>
+      </QueryClientProvider>
     </DirectionProvider>
   ))

@@ -26,7 +26,7 @@ import {Clipboard} from '../clipboard'
 import {Menu} from '../menu'
 import {Popover} from '../popover'
 import {ToolbarButton} from '../toolbar-button'
-import useSearchQueryState from './use-search-query-state'
+import useStore from './use-store'
 
 const ColorPicker =
   // https://github.com/colorjs/color-name
@@ -130,8 +130,9 @@ const SquareToggle = component(() => {
 const hotkeys = ['/', 'ctrl + f', 'ctrl + k', 'ctrl + e']
 
 const Search = component(({children}) => {
-  const [searchQueryState, setSearchQueryState] = useSearchQueryState()
   const ref = useRef()
+  const store = useStore()
+  const searchTerm = store.useSelectValue(({draft}) => draft.searchTerm)
 
   const focusFn = useCallback(() => {
     ref.current.focus()
@@ -155,16 +156,13 @@ const Search = component(({children}) => {
   return (
     <VscodeTextfield
       invalid={
-        !(
-          useSearchQueryState.isDefault(searchQueryState) ||
-          isWordCharacter(searchQueryState)
-        )
+        !(store.searchTerm.isDefault(searchTerm) || isWordCharacter(searchTerm))
       }
-      onInput={async event => {
-        await setSearchQueryState(event.target.value)
+      onInput={event => {
+        store.searchTerm.set(event.target.value)
       }}
       ref={ref}
-      value={searchQueryState}>
+      value={searchTerm}>
       <React.Activity>
         <Menu
           data={[

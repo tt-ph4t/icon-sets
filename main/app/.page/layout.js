@@ -8,47 +8,16 @@ import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
 import {useSettings} from '../hooks/use-settings'
-import {hasValues} from '../misc'
 import {THEME} from '../misc/constants'
-import {renderSlot} from '../misc/render-slot'
-
-const ReverseWrapper = component(({children}) => {
-  const ref = useRef()
-
-  const isReverse = useSettings().useSelectValue(
-    ({draft}) => draft.layout.isReverse
-  )
-
-  useEffect.update(() => {
-    ref.current.resetHandlePosition()
-  }, [isReverse])
-
-  return (
-    <SplitLayout
-      initialHandlePosition={isReverse ? '73%' : '27%'}
-      ref={ref}
-      showSizeHint
-      style={{
-        ...omit(THEME.CARD_STYLE, ['padding']),
-        get height() {
-          return `calc(var(--HEIGHT) - ${this.borderWidth} * 2)`
-        }
-      }}>
-      {children}
-    </SplitLayout>
-  )
-})
 
 export default {
-  Fullscreen: component(({ref, ...props}) => {
+  Fullscreen: component(props => {
     const settings = useSettings()
+    const fullscreen = useRef.fullscreen()
 
     const isFullscreen = settings.useSelectValue(
       ({draft}) => draft.layout.isFullscreen
     )
-
-    const fullscreen = useRef.fullscreen()
-    const {mergedRef} = useRef.merge(ref, fullscreen.ref)
 
     useEffect(() => {
       if (fullscreen.isEnabled) {
@@ -64,7 +33,7 @@ export default {
       }
     }, [isFullscreen, fullscreen, settings])
 
-    return <div ref={mergedRef} {...props} />
+    return <div ref={fullscreen.ref} {...props} />
   }),
   Resizable: component(({children, onResize = asyncNoop}) => {
     const settings = useSettings()
@@ -91,12 +60,12 @@ export default {
           useSettings.initial.layout.size.width,
           useSettings.initial.layout.size.height
         ]}
-        onResize={async (event, data) => {
-          await onResize(event, data)
+        onResize={async (...args) => {
+          await onResize(...args)
 
           React.startTransition(() => {
             settings.set(({draft}) => {
-              draft.layout.size = data.size
+              draft.layout.size = args[1].size
             })
           })
         }}
@@ -105,20 +74,30 @@ export default {
       </ResizableBox>
     )
   }),
-  Reverse: component(({children, render}) => {
-    const Wrapper = hasValues(render) ? React.Fragment : ReverseWrapper
+  Split: component(({children}) => {
+    const ref = useRef()
 
     const isReverse = useSettings().useSelectValue(
       ({draft}) => draft.layout.isReverse
     )
 
-    return renderSlot({
-      bespoke: () => (
-        <Wrapper>
-          {(isReverse ? reverse : identity)(React.Children.toArray(children))}
-        </Wrapper>
-      ),
-      ...render
-    })
+    useEffect.update(() => {
+      ref.current.resetHandlePosition()
+    }, [isReverse])
+
+    return (
+      <SplitLayout
+        initialHandlePosition={isReverse ? '73%' : '27%'}
+        ref={ref}
+        showSizeHint
+        style={{
+          ...omit(THEME.CARD_STYLE, ['padding']),
+          get height() {
+            return `calc(var(--HEIGHT) - ${this.borderWidth} * 2)`
+          }
+        }}>
+        {(isReverse ? reverse : identity)(React.Children.toArray(children))}
+      </SplitLayout>
+    )
   })
 }

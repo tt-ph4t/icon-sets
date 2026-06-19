@@ -102,10 +102,10 @@ export default withProviders(
             </div>
           </div>
           <React.Activity>
-            <Layout.Reverse>
+            <Layout.Split>
               <Sidebar />
               <AllIcons />
-            </Layout.Reverse>
+            </Layout.Split>
             <VscodeFormContainer
               style={{
                 alignSelf: 'center',
