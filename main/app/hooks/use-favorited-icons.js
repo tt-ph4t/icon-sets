@@ -10,7 +10,9 @@ import {useState} from './use-state'
 
 const defaults = {
   key: 'useFavoritedIcons',
-  throttlerOptions: {wait: ms('1s')},
+  throttlerOptions: {
+    wait: ms('1s')
+  },
   value: EMPTY.ARRAY
 }
 
