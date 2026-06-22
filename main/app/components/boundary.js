@@ -8,6 +8,7 @@ import {component} from '../hocs'
 import {useMemo} from '../hooks/use-memo'
 import {DEFAULT_QUERY_OPTIONS} from '../misc/constants'
 import {renderSlot} from '../misc/render-slot'
+import {Progress} from './progress'
 
 const ErrorBoundaryProps = {
   FallbackComponent: component(({error, resetErrorBoundary}) => (
@@ -15,7 +16,7 @@ const ErrorBoundaryProps = {
   ))
 }
 
-const fallback = <Fallback />
+const fallback = <Progress.Bar />
 
 export const Boundary = Object.assign(
   component(({children}) => (

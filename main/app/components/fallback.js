@@ -1,12 +1,10 @@
-import {mergeProps} from '@base-ui/react'
 import {isFunction} from '@sindresorhus/is'
 import {
   VscodeButton,
   VscodeFormContainer,
   VscodeFormGroup,
   VscodeFormHelper,
-  VscodeLabel,
-  VscodeProgressBar
+  VscodeLabel
 } from '@vscode-elements/react-elements'
 import {delay, negate} from 'es-toolkit'
 import ms from 'ms'
@@ -15,6 +13,7 @@ import React from 'react'
 import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
 import {THEME} from '../misc/constants'
+import {Progress} from './progress'
 
 const Retry = component(({onClick}) => {
   const [state, setState] = useState(false)
@@ -40,54 +39,40 @@ const Retry = component(({onClick}) => {
   )
 })
 
-export const Fallback = Object.assign(
-  component(props => (
-    <VscodeProgressBar
-      {...mergeProps(
-        {
-          style: {
-            '--vscode-progressBar-background': `color-mix(var(${THEME.COLORS.FOREGROUND}) 30%, transparent)`
-          }
-        },
-        props
-      )}
-    />
-  )),
-  {
-    Error: component(({message, progressBar = true, retryFn}) => (
-      <div
-        style={{
-          '--size': '100%',
+export const Fallback = {
+  Error: component(({message, progressBar = true, retryFn}) => (
+    <div
+      style={{
+        '--size': '100%',
 
-          display: 'flex',
-          flexDirection: 'column',
-          height: 'var(--size)',
-          width: 'var(--size)'
-        }}>
-        <React.Activity mode={progressBar ? 'visible' : 'hidden'}>
-          <VscodeProgressBar
-            style={{
-              '--vscode-progressBar-background': `var(${THEME.COLORS.ERROR})`
-            }}
-          />
-        </React.Activity>
-        <VscodeFormContainer
+        display: 'flex',
+        flexDirection: 'column',
+        height: 'var(--size)',
+        width: 'var(--size)'
+      }}>
+      <React.Activity mode={progressBar ? 'visible' : 'hidden'}>
+        <Progress.Bar
           style={{
-            alignContent: 'center',
-            alignSelf: 'center',
-            flexGrow: 1
-          }}>
-          <VscodeFormGroup variant='settings-group'>
-            <VscodeLabel required>Error</VscodeLabel>
-            <VscodeFormHelper>
-              {message}
-              <React.Activity mode={isFunction(retryFn) ? 'visible' : 'hidden'}>
-                <Retry onClick={retryFn} />
-              </React.Activity>
-            </VscodeFormHelper>
-          </VscodeFormGroup>
-        </VscodeFormContainer>
-      </div>
-    ))
-  }
-)
+            '--vscode-progressBar-background': `var(${THEME.COLORS.ERROR})`
+          }}
+        />
+      </React.Activity>
+      <VscodeFormContainer
+        style={{
+          alignContent: 'center',
+          alignSelf: 'center',
+          flexGrow: 1
+        }}>
+        <VscodeFormGroup variant='settings-group'>
+          <VscodeLabel required>Error</VscodeLabel>
+          <VscodeFormHelper>
+            {message}
+            <React.Activity mode={isFunction(retryFn) ? 'visible' : 'hidden'}>
+              <Retry onClick={retryFn} />
+            </React.Activity>
+          </VscodeFormHelper>
+        </VscodeFormGroup>
+      </VscodeFormContainer>
+    </div>
+  ))
+}

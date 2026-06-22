@@ -11,7 +11,7 @@ import {useNetwork} from 'ahooks'
 import React from 'react'
 
 import {Boundary} from '../components/boundary'
-import {Fallback} from '../components/fallback'
+import {Progress} from '../components/progress'
 import {ProgressRing} from '../components/progress-ring'
 import {component} from '../hocs'
 import {useRemount} from '../hooks/use-remount'
@@ -36,16 +36,14 @@ const Loading = Object.assign(
     const network = useNetwork()
 
     return (
-      <React.Activity
-        mode={isLoading || !network.online ? 'visible' : 'hidden'}>
-        <Fallback
-          style={
-            network.online || {
-              '--vscode-progressBar-background': `var(${THEME.COLORS.ERROR})`
-            }
+      <Progress
+        style={
+          network.online || {
+            '--vscode-progressBar-background': `var(${THEME.COLORS.ERROR})`
           }
-        />
-      </React.Activity>
+        }
+        visible={isLoading || !network.online}
+      />
     )
   }),
   {

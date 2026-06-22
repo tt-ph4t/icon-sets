@@ -7,6 +7,7 @@ import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
 import {EMPTY} from '../misc/constants'
 import {withImmerAtom} from '../misc/with-immer-atom'
+import {useProgress} from './progress'
 
 const defaultIds = EMPTY.ARRAY
 const cycled = new Cycled(defaultIds)
@@ -33,6 +34,7 @@ export const VscodeDevToolbar = component(props => {
   const selectorElementRef = useRef()
   const store = useStore()
   const state = store.useValue()
+  const progress = useProgress()
 
   useEffect.once(() => {
     const selectorElement = ref.current.shadowRoot
@@ -65,13 +67,15 @@ export const VscodeDevToolbar = component(props => {
 
   useEventListener(
     'change',
-    () => {
-      cycled.index = state.ids.findIndex(
-        id => id.value === selectorElementRef.current.value
-      )
+    async () => {
+      await progress.with(() => {
+        cycled.index = state.ids.findIndex(
+          id => id.value === selectorElementRef.current.value
+        )
 
-      store.set(({draft}) => {
-        draft.id = selectorElementRef.current.value
+        store.set(({draft}) => {
+          draft.id = selectorElementRef.current.value
+        })
       })
     },
     {

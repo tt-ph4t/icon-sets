@@ -1,7 +1,7 @@
 import {useThrottledState} from '@tanstack/react-pacer'
 import {isEqual} from '@ver0/deep-equal'
 import deepFreeze from 'deep-freeze-es6'
-import {flow} from 'es-toolkit'
+import {flow, noop} from 'es-toolkit'
 import {useSetAtom, useStore} from 'jotai'
 import {atomWithImmer} from 'jotai-immer'
 import {freezeAtom, selectAtom} from 'jotai/utils'
@@ -11,6 +11,8 @@ import {useEffect} from '../hooks/use-effect'
 import {DELAY_MS, EMPTY} from './constants'
 
 const create = flow(atomWithImmer, freezeAtom)
+const draftKey = 'draft'
+const selectDraft = ({[draftKey]: draft}) => draft
 
 const useAtomValueWithDelay =
   // https://github.com/pmndrs/jotai/pull/3264
@@ -34,6 +36,21 @@ const useAtomValueWithDelay =
 
 export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
   const atom = create((initialValue = deepFreeze(initialValue)))
+  const useValue = () => useSelectValue(selectDraft)
+
+  const useSelectValue = (
+    fn = noop,
+    {deps = EMPTY.ARRAY, ...options} = EMPTY.OBJECT
+  ) =>
+    useAtomValueWithDelay(
+      selectAtom(
+        atom,
+        // https://jotai.org/docs/utilities/select#hold-stable-references
+        useCallback(draft => fn({[draftKey]: draft}), deps),
+        isEqual
+      ),
+      options
+    )
 
   return Object.assign(
     () => {
@@ -44,26 +61,13 @@ export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
         reset: useCallback(() => {
           setAtom(initialValue)
         }),
-        set: useCallback(fn => {
+        set: useCallback((fn = noop) => {
           setAtom(draft => {
-            fn({draft})
+            fn({[draftKey]: draft})
           })
         }),
-        useSelectValue: useCallback(
-          (fn, {deps = EMPTY.ARRAY, ...options} = EMPTY.OBJECT) =>
-            useAtomValueWithDelay(
-              selectAtom(
-                atom,
-                // https://jotai.org/docs/utilities/select#hold-stable-references
-                useCallback(draft => fn({draft}), deps),
-                isEqual
-              ),
-              options
-            )
-        ),
-        useValue: useCallback(function () {
-          return this.useSelectValue(({draft}) => draft)
-        })
+        useSelectValue,
+        useValue
       }
     },
     {

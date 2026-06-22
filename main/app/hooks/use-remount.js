@@ -1,15 +1,19 @@
-import {useBatchedCallback} from '@tanstack/react-pacer'
+import {useAsyncBatchedCallback} from '@tanstack/react-pacer'
 import React from 'react'
 
+import {useProgress} from '../components/progress'
 import {component} from '../hocs'
 import {useState} from './use-state'
 
 export const useRemount = Object.assign(
   () => {
     const [state, setState] = useState(0)
+    const progress = useProgress()
 
-    const remount = useBatchedCallback(() => {
-      setState(state => ++state)
+    const remount = useAsyncBatchedCallback(async () => {
+      await progress.with(() => {
+        setState(state => ++state)
+      })
     })
 
     return Object.assign(remount, {

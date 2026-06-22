@@ -40,6 +40,7 @@ import {parseIconName} from '../../../misc/parse-icon-name'
 import {prettyBytes} from '../../../misc/pretty-bytes'
 import {timeAgo} from '../../../misc/time-ago'
 import {Menu} from '../../menu'
+import {useProgress} from '../../progress'
 import useStore from '../use-store'
 import takumi from './takumi.wasm'
 import withQueryBoundary from './with-query-boundary'
@@ -71,6 +72,7 @@ export default withQueryBoundary(
     const favoritedIcons = useFavoritedIcons()
     const {iconCustomisations} = customizedIcons.useSelect(iconId)
     const store = useStore()
+    const progress = useProgress()
 
     const iconOptions = customizedIcons.store.useSelectValue(
       ({draft}) => draft.global
@@ -107,34 +109,38 @@ export default withQueryBoundary(
       [iconQuery.data.data, iconCustomisations.scale]
     )
 
-    const getTakumiBlob = useCallback(
-      async format =>
-        await takumi(
-          (format === 'jpeg' && !iconQuery.data.palette
-            ? React.cloneElement
-            : identity)(
-            iconQuery.data.internal.to.reactElement,
-            mergeProps(iconQuery.data.internal.to.reactElement.props, {
-              style: {
-                backgroundColor: 'white'
-              }
-            })
-          ),
-          {
-            get id() {
-              return getId(`[${iconQuery.data.id}]`, {
-                iconCustomisations,
-                iconOptions,
-                options: this.options
+    const getTakumiBlob = useCallback(async format => {
+      const options = {
+        format,
+        ...iconSize
+      }
+
+      return await progress.with(
+        async () =>
+          await takumi(
+            (format === 'jpeg' && !iconQuery.data.palette
+              ? React.cloneElement
+              : identity)(
+              iconQuery.data.internal.to.reactElement,
+              mergeProps(iconQuery.data.internal.to.reactElement.props, {
+                style: {
+                  backgroundColor: 'white'
+                }
               })
-            },
-            options: {
-              format,
-              ...iconSize
+            ),
+            {
+              get id() {
+                return getId(`[${iconQuery.data.id}]`, {
+                  iconCustomisations,
+                  iconOptions,
+                  options
+                })
+              },
+              options
             }
-          }
-        )
-    )
+          )
+      )
+    })
 
     const iconAliases = useMemo(
       () =>
