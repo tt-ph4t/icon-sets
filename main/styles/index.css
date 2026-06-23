@@ -5,6 +5,8 @@
   --WIDTH: 100dvw;
   --SPACING: 0.25rem;
   --SIDEBAR-ICON-GRID-HEIGHT: calc(var(--HEIGHT) / 2);
+
+  --vscode-font-family: 'Geist', sans-serif !important;
 }
 
 :root {

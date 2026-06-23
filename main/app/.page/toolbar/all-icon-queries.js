@@ -1,8 +1,7 @@
-import {useDebouncer} from '@tanstack/react-pacer'
+import {useAsyncBatcher} from '@tanstack/react-pacer'
 import {useQuery, useQueryClient} from '@tanstack/react-query'
-import {mapValues, pick, sumBy} from 'es-toolkit'
+import {last, mapValues, pick, sumBy} from 'es-toolkit'
 import {size} from 'es-toolkit/compat'
-import ms from 'ms'
 
 import {Menu} from '../../components/menu'
 import {ToolbarButton} from '../../components/toolbar-button'
@@ -18,119 +17,117 @@ import {
 } from '../../misc/constants'
 import {getQueryOptions} from '../../misc/get-query-options'
 import {pluralize} from '../../misc/pluralize'
-import {prettyBytes} from '../../misc/pretty-bytes'
 import DataVersion from './data-version'
-
-const defaultQueryOptions = {
-  exact: true,
-  gcTime: ms('10m')
-}
 
 const queryClientActions = [
   ['Prefetch', 'prefetchQuery'],
   ...QUERY_CLIENT.ACTIONS
 ]
 
+const dataVersion = <DataVersion />
+
 export default component(() => {
   const queryClient = useQueryClient()
   const [state, setState] = useState(EMPTY.OBJECT)
 
-  const debouncer = useDebouncer(async fn => await fn(), {
-    wait: ms('1s')
+  const asyncBatcher = useAsyncBatcher(async items => {
+    if (confirm()) await last(items)()
   })
 
-  const internalQueryClient = useCallback(
-    async (queryClientAction, iconSet) => {
-      if (hasValues(iconSet))
-        for (const icon of iconSet.icons)
-          await queryClient[queryClientAction](
-            getQueryOptions({
-              ...defaultQueryOptions,
-              queryKey: getId(iconSet.prefix, icon),
-              url: `${DATABASE_URL}/${iconSet.prefix}/${icon}.msgpack`
-            })
-          )
-    }
-  )
+  const internalQueryClient = useCallback(async (method, iconSet) => {
+    if (hasValues(iconSet))
+      for (const icon of iconSet.icons)
+        await queryClient[method](
+          getQueryOptions({
+            exact: true,
+            gcTime: 0,
+            queryKey: getId(iconSet.prefix, icon),
+            url: `${DATABASE_URL}/${iconSet.prefix}/${icon}.msgpack`
+          })
+        )
+  })
 
   useQuery({
     ...DEFAULT_QUERY_OPTIONS,
     enabled: hasValues(state),
     select: async ({[state.iconSetPrefix]: iconSet}) => {
-      await internalQueryClient(state.queryClientAction, iconSet)
+      await internalQueryClient(state.queryClientMethod, iconSet)
     }
   })
 
   const query = useQuery({
     ...DEFAULT_QUERY_OPTIONS,
-    select: useCallback(iconSets => ({
-      menu: [
-        ...Object.entries(
-          Object.groupBy(
-            Object.values(iconSets).map(iconSet => ({
-              label: `${iconSet.name} (${iconSet.icons.length})`,
-              menu: [
-                ...queryClientActions.map(([a, b]) => ({
+    select: useCallback(iconSets => {
+      const iconCount = sumBy(
+        Object.values(iconSets),
+        iconSet => iconSet.icons.length
+      )
+
+      const iconCountLabel = pluralize(iconCount, 'icon')
+
+      return {
+        menu: [
+          {
+            label: iconCountLabel,
+            menu: queryClientActions.map(([a, b]) => ({
+              label: a,
+              onClick: () => {
+                asyncBatcher.addItem(() => {
+                  mapValues(iconSets, async iconSet => {
+                    await internalQueryClient(b, iconSet)
+                  })
+                })
+              }
+            })),
+            onClick: () => {
+              prompt(pluralize(size(iconSets), 'icon set'), iconCountLabel)
+            }
+          },
+          {
+            separator: true
+          },
+          ...Object.entries(
+            Object.groupBy(
+              Object.values(iconSets).map(iconSet => ({
+                label: `${iconSet.name} (${iconSet.icons.length})`,
+                menu: queryClientActions.map(([a, b]) => ({
                   label: a,
                   onClick: () => {
-                    debouncer.maybeExecute(() => {
+                    asyncBatcher.addItem(() => {
                       setState({
                         iconSetPrefix: iconSet.prefix,
-                        queryClientAction: b
+                        queryClientMethod: b
                       })
                     })
                   }
-                })),
-                {
-                  separator: true
-                },
-                {
-                  description: prettyBytes(0),
-                  label: 'Download'
-                }
-              ]
-            })),
-            ({label}) => label[0].toUpperCase()
-          )
-        ).flatMap(([a, b]) => [a, ...b]),
-        {
-          separator: true
-        },
-        `${pluralize(size(iconSets), 'icon set')} (${pluralize(
-          sumBy(Object.values(iconSets), iconSet => iconSet.icons.length),
-          'icon'
-        )})`,
-        ...queryClientActions.map(([a, b]) => ({
-          label: `unstable_${a}_all`.toUpperCase(),
-          onClick: () => {
-            debouncer.maybeExecute(() => {
-              mapValues(iconSets, async iconSet => {
-                await internalQueryClient(b, iconSet)
-              })
-            })
-          }
-        }))
-      ]
-    }))
+                }))
+              })),
+              ({label}) => label[0].toUpperCase()
+            )
+          ).flatMap(([a, b]) => [a, ...b])
+        ]
+      }
+    })
   })
 
   if (query.isSuccess)
     return (
-      <debouncer.Subscribe
-        selector={debouncerState => pick(debouncerState, ['isPending'])}>
-        {debouncerState => (
+      <asyncBatcher.Subscribe
+        selector={asyncBatcherState => pick(asyncBatcherState, ['isPending'])}>
+        {asyncBatcherState => (
           <Menu
             data={query.data.menu}
             render={
               <ToolbarButton
-                checked={debouncerState.isPending}
-                icon='database'
+                checked={asyncBatcherState.isPending}
                 preventToggle>
-                <DataVersion />
+                {dataVersion}
               </ToolbarButton>
             }
           />
         )}
-      </debouncer.Subscribe>
+      </asyncBatcher.Subscribe>
     )
+
+  return <ToolbarButton>{dataVersion}</ToolbarButton>
 })

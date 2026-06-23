@@ -9,6 +9,7 @@ import {defineConfig, transformWithEsbuild} from 'vite'
 import {compression} from 'vite-plugin-compression2'
 import preload from 'vite-plugin-preload'
 import {VitePWA} from 'vite-plugin-pwa'
+import webfontDownload from 'vite-plugin-webfont-dl'
 
 const nodeModulesPath = 'node_modules/'
 const excludedPackages = ['@takumi-rs']
@@ -64,6 +65,7 @@ export default defineConfig({
     }),
     preload(),
     compression(),
+    webfontDownload(),
     VitePWA({
       injectRegister: 'script-defer',
       manifest: false,
