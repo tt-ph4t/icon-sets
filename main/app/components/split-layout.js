@@ -1,3 +1,4 @@
+import {isFunction} from '@sindresorhus/is'
 import {
   VscodeBadge,
   VscodeFormHelper,
@@ -38,7 +39,8 @@ const useIdleEffect = (fn = asyncNoop, {before = asyncNoop, deps, options}) => {
 
     return () => {
       cancelIdleCallback(ref.current)
-      cleanupRef.current?.()
+
+      if (isFunction(cleanupRef.current)) cleanupRef.current()
     }
   }, deps)
 }

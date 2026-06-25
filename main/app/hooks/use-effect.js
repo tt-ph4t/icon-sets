@@ -1,5 +1,6 @@
+import {isFunction} from '@sindresorhus/is'
 import {useAsyncEffect, useUpdateEffect} from 'ahooks'
-import {mapValues} from 'es-toolkit'
+import {mapValues, noop} from 'es-toolkit'
 import React from 'react'
 
 import {useDeepCompareMemoize} from './use-deep-compare-memoize'
@@ -15,19 +16,21 @@ export const useEffect = Object.assign(
       },
       useDeepCompareMemoize.with
     ),
-    once: (fn, when = true) => {
-      const ref = useRef(() => true)
-      const cleanupRef = useRef()
+    once:
+      // neu nhu re-mount thi ref dc tao moi
+      (fn = noop, when = true) => {
+        const ref = useRef(() => true)
+        const cleanupRef = useRef()
 
-      useEffect(() => {
-        if (when && ref.current) cleanupRef.current = fn()
+        useEffect(() => {
+          if (when && ref.current) cleanupRef.current = fn()
 
-        return () => {
-          ref.current = false
+          return () => {
+            ref.current = false
 
-          cleanupRef.current?.()
-        }
-      }, [fn, when])
-    }
+            if (isFunction(cleanupRef.current)) cleanupRef.current()
+          }
+        }, [fn, when])
+      }
   }
 )
