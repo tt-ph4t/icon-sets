@@ -114,15 +114,10 @@ export default withProviders(
                 <VscodeFormHelper>
                   <VscodeToolbarContainer>
                     <Toolbar
-                      menu={[
-                        {
-                          separator: true
-                        },
-                        {
-                          ...INTERNAL_REMOUNT.menu,
-                          description: formatForDisplay(remountHotkey)
-                        }
-                      ]}
+                      menu={{
+                        ...INTERNAL_REMOUNT.menu,
+                        description: formatForDisplay(remountHotkey)
+                      }}
                     />
                   </VscodeToolbarContainer>
                 </VscodeFormHelper>

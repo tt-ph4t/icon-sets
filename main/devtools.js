@@ -5,11 +5,10 @@ import {ReactQueryDevtoolsPanel} from '@tanstack/react-query-devtools/build/mode
 import {omit} from 'es-toolkit'
 import React from 'react'
 
-import {VscodeDevToolbar} from '../app/components/theme'
-import {component} from '../app/hocs'
-import {useSettings} from '../app/hooks/use-settings'
-import {QUERY_CLIENT, THEME} from '../app/misc/constants'
-import githubDevtoolsPlugin from './github-devtools-plugin'
+import {VscodeDevToolbar} from './app/components/theme'
+import {component} from './app/hocs'
+import {useSettings} from './app/hooks/use-settings'
+import {QUERY_CLIENT, THEME} from './app/misc/constants'
 
 const TanStackDevtoolsProps = {
   plugins: [
@@ -20,10 +19,7 @@ const TanStackDevtoolsProps = {
       })
     ),
     pacerDevtoolsPlugin(),
-    hotkeysDevtoolsPlugin(),
-    githubDevtoolsPlugin({
-      defaultOpen: true
-    })
+    hotkeysDevtoolsPlugin()
   ]
 }
 

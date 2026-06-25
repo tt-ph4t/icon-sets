@@ -1,5 +1,6 @@
 import {formatForDisplay, useHotkey} from '@tanstack/react-hotkeys'
 import {isEqual} from '@ver0/deep-equal'
+import {castArray} from 'es-toolkit/compat'
 
 import {IconGrid} from '../../components/icon-grid'
 import {Menu} from '../../components/menu'
@@ -7,6 +8,7 @@ import {useTheme} from '../../components/theme'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useSettings} from '../../hooks/use-settings'
+import {GITHUB_REPO} from '../../misc/constants'
 import AllIconQueries from './all-icon-queries'
 import useFont from './use-font'
 
@@ -28,14 +30,6 @@ const Settings = component(({menu}) => {
   return (
     <Menu
       data={[
-        {
-          label: 'Devtools',
-          onClick: () => {
-            settings.set(({draft}) => {
-              draft.isDev = !draft.isDev
-            })
-          }
-        },
         {
           description: formatForDisplay(themeHotkey),
           label: 'Theme',
@@ -90,7 +84,22 @@ const Settings = component(({menu}) => {
             })
           }
         },
-        ...menu
+        'Misc',
+        {
+          label: 'Devtools',
+          onClick: () => {
+            settings.set(({draft}) => {
+              draft.isDev = !draft.isDev
+            })
+          }
+        },
+        {
+          label: 'GitHub',
+          onClick: () => {
+            open(`https://github.com/${GITHUB_REPO}`)
+          }
+        },
+        ...castArray(menu)
       ]}
       render={<ToolbarButton icon='settings' />}
     />
