@@ -92,9 +92,7 @@ export default {
         showSizeHint
         style={{
           ...omit(THEME.CARD_STYLE, ['padding']),
-          get height() {
-            return `calc(var(--HEIGHT) - ${this.borderWidth} * 2)`
-          }
+          height: `calc(var(--HEIGHT) - ${THEME.CARD_STYLE.borderWidth} * 2)`
         }}>
         {(isReverse ? reverse : identity)(React.Children.toArray(children))}
       </SplitLayout>

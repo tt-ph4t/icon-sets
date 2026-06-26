@@ -8,6 +8,7 @@ import {freezeAtom, selectAtom} from 'jotai/utils'
 
 import {useCallback} from '../hooks/use-callback'
 import {useEffect} from '../hooks/use-effect'
+import {hasValues} from './'
 import {DELAY_MS, EMPTY} from './constants'
 
 const create = flow(atomWithImmer, freezeAtom)
@@ -58,8 +59,14 @@ export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
 
       return {
         // https://jotai.org/docs/utilities/resettable
-        reset: useCallback(() => {
-          setAtom(initialValue)
+        reset: useCallback((...keys) => {
+          setAtom(
+            hasValues(keys)
+              ? draft => {
+                  for (const key of keys) draft[key] = initialValue[key]
+                }
+              : initialValue
+          )
         }),
         set: useCallback((fn = noop) => {
           setAtom(draft => {

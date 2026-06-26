@@ -60,9 +60,7 @@ const CustomizedIcons = component(() => {
         iconIds={iconIds}
         menu={{
           label: 'Reset',
-          onClick: () => {
-            customizedIcons.delete(...iconIds)
-          }
+          onClick: customizedIcons.reset
         }}
       />
     </Collapsible>

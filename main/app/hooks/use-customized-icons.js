@@ -32,6 +32,9 @@ export const useCustomizedIcons = Object.assign(
           })
         }, iconIds)
       }),
+      reset: useThrottledCallback(() => {
+        store.reset('current')
+      }),
       set: useThrottledCallback((iconId, fn) => {
         withInvalidatedIconCache(() => {
           store.set(({draft}) => {
