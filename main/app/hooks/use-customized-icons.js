@@ -1,63 +1,64 @@
 import {mergeCustomisations} from '@iconify/utils'
-import {useThrottler} from '@tanstack/react-pacer'
+import {useThrottledCallback} from '@tanstack/react-pacer'
 import {isEqual} from '@ver0/deep-equal'
-import {pick} from 'es-toolkit'
+import {noop, pick} from 'es-toolkit'
+import {castArray} from 'es-toolkit/compat'
 
 import {DEFAULT_ICON_CUSTOMISATIONS, EMPTY, ICON_CACHE} from '../misc/constants'
 import {withImmerAtom} from '../misc/with-immer-atom'
-import {useCallback} from './use-callback'
 
-mergeCustomisations
+mergeCustomisations // ?
 
 const useStore = withImmerAtom({
   current: EMPTY.OBJECT,
   global: pick(DEFAULT_ICON_CUSTOMISATIONS, ['color', 'square'])
 })
 
-const invalidateIconCache = (fn, ...iconIds) => {
+const withInvalidatedIconCache = (fn = noop, iconIds) => {
   fn()
 
-  for (const iconId of iconIds) ICON_CACHE.delete(iconId)
+  for (const iconId of castArray(iconIds)) ICON_CACHE.delete(iconId)
 }
 
-export const useCustomizedIcons = () => {
-  const store = useStore()
-  const throttler = useThrottler(store.set)
+export const useCustomizedIcons = Object.assign(
+  () => {
+    const store = useStore()
 
-  return {
-    delete: useCallback((...iconIds) => {
-      throttler.maybeExecute(({draft}) => {
-        invalidateIconCache(
-          () => {
+    return {
+      delete: useThrottledCallback((...iconIds) => {
+        withInvalidatedIconCache(() => {
+          store.set(({draft}) => {
             for (const iconId of iconIds) delete draft.current[iconId]
-          },
-          ...iconIds
-        )
-      })
-    }),
-    set: useCallback((iconId, fn) => {
-      throttler.maybeExecute(({draft}) => {
-        invalidateIconCache(() => {
-          const a = draft.current[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS
-
-          const b = fn({
-            iconCustomisations: a
           })
+        }, iconIds)
+      }),
+      set: useThrottledCallback((iconId, fn) => {
+        withInvalidatedIconCache(() => {
+          store.set(({draft}) => {
+            const a = draft.current[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS
 
-          const c = {
-            ...a,
-            ...b
-          }
+            const b = fn({
+              iconCustomisations: a
+            })
 
-          if (isEqual(c, DEFAULT_ICON_CUSTOMISATIONS))
-            delete draft.current[iconId]
-          else draft.current[iconId] = c
+            const c = {
+              ...a,
+              ...b
+            }
+
+            if (isEqual(c, DEFAULT_ICON_CUSTOMISATIONS))
+              delete draft.current[iconId]
+            else draft.current[iconId] = c
+          })
         }, iconId)
       })
-    }),
-    store,
-    useSelect: useCallback(iconId =>
-      store.useSelectValue(
+    }
+  },
+  {
+    useIconIds: () =>
+      useStore().useSelectValue(({draft}) => Object.keys(draft.current)),
+    useSelect: iconId =>
+      useStore().useSelectValue(
         ({draft}) => ({
           iconCustomisations:
             draft.current[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS
@@ -65,7 +66,7 @@ export const useCustomizedIcons = () => {
         {
           deps: [iconId]
         }
-      )
-    )
+      ),
+    useStore
   }
-}
+)

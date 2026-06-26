@@ -6,7 +6,6 @@ import {
 } from '@vscode-elements/react-elements'
 import {useUpdate} from 'ahooks'
 import {sentenceCase} from 'change-case'
-import React from 'react'
 
 import {Boundary} from '../../components/boundary'
 import {Collapsible} from '../../components/collapsible'
@@ -53,10 +52,7 @@ const InternalIconGrid = component(({menu, ...props}) => {
 
 const CustomizedIcons = component(() => {
   const customizedIcons = useCustomizedIcons()
-
-  const iconIds = customizedIcons.store.useSelectValue(({draft}) =>
-    Object.keys(draft.current)
-  )
+  const iconIds = useCustomizedIcons.useIconIds()
 
   return (
     <Collapsible description={iconIds.length} heading='customized icons'>
@@ -126,10 +122,8 @@ const FavoritedIcons = component(() => {
 
 export default component(() => (
   <>
-    <React.Activity>
-      <AllIconSets />
-      <IconGroups />
-    </React.Activity>
+    <AllIconSets />
+    <IconGroups />
     <FavoritedIcons />
     <CustomizedIcons />
     <CachedIcons />

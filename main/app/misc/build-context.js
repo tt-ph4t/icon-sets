@@ -1,5 +1,3 @@
-/* eslint-disable @eslint-react/no-context-provider */
-
 import {noop} from 'es-toolkit'
 import {createContext, useContextSelector} from 'use-context-selector'
 

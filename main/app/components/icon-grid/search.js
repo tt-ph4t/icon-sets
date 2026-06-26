@@ -31,14 +31,14 @@ import useStore from './use-store'
 const ColorPicker =
   // https://github.com/colorjs/color-name
   component(() => {
-    const customizedIcons = useCustomizedIcons()
+    const customizedIconsStore = useCustomizedIcons.useStore()
 
     const batcher = useBatcher(items => {
       last(items)()
       ICON_CACHE.clear()
     })
 
-    const iconOptions = customizedIcons.store.useSelectValue(({draft}) => ({
+    const iconOptions = customizedIconsStore.useSelectValue(({draft}) => ({
       color: draft.global.color
     }))
 
@@ -51,7 +51,7 @@ const ColorPicker =
               editableDisable={false}
               onChange={colorResult => {
                 batcher.addItem(() => {
-                  customizedIcons.store.set(({draft}) => {
+                  customizedIconsStore.set(({draft}) => {
                     draft.global.color = colorResult.hexa
                   })
                 })
@@ -73,7 +73,7 @@ const ColorPicker =
                   icon='wand'
                   onClick={() => {
                     batcher.addItem(() => {
-                      customizedIcons.store.set(({draft}) => {
+                      customizedIconsStore.set(({draft}) => {
                         draft.global.color = randomColor()
                       })
                     })
@@ -83,7 +83,7 @@ const ColorPicker =
                   icon='eraser'
                   onClick={() => {
                     batcher.addItem(() => {
-                      customizedIcons.store.set(({draft}) => {
+                      customizedIconsStore.set(({draft}) => {
                         draft.global.color = DEFAULT_ICON_CUSTOMISATIONS.color
                       })
                     })
@@ -105,19 +105,17 @@ const ColorPicker =
   })
 
 const SquareToggle = component(() => {
-  const customizedIcons = useCustomizedIcons()
+  const customizedIconsStore = useCustomizedIcons.useStore()
 
-  const ToolbarButtonProps = customizedIcons.store.useSelectValue(
-    ({draft}) => ({
-      checked: draft.global.square
-    })
-  )
+  const ToolbarButtonProps = customizedIconsStore.useSelectValue(({draft}) => ({
+    checked: draft.global.square
+  }))
 
   return (
     <ToolbarButton
       icon='symbol-ruler'
       onChange={event => {
-        customizedIcons.store.set(({draft}) => {
+        customizedIconsStore.set(({draft}) => {
           draft.global.square = event.target.checked
         })
       }}
