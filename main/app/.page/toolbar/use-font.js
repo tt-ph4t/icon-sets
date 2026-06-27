@@ -7,6 +7,11 @@ import {hasValues} from '../../misc'
 import {EMPTY} from '../../misc/constants'
 import {withImmerAtom} from '../../misc/with-immer-atom'
 
+const fallbackMap = {
+  monospace: 'monospace',
+  sansSerif: 'sans-serif'
+}
+
 const families = mapValues(
   {
     Fira: {
@@ -20,6 +25,9 @@ const families = mapValues(
     'IBM Plex': {
       monospace: 'IBM Plex Mono',
       sansSerif: 'IBM Plex Sans'
+    },
+    Inter: {
+      sansSerif: 'Inter'
     },
     Noto: {
       monospace: 'Noto Sans Mono',
@@ -38,14 +46,11 @@ const families = mapValues(
       sansSerif: 'Source Sans 3'
     }
   },
-  ({monospace, sansSerif}) => ({
-    monospace: `"${monospace}", monospace`,
-    sansSerif: `"${sansSerif}", sans-serif`
-  })
+  a => mapValues(a, (a, b) => `"${a}", ${fallbackMap[b]}`)
 )
 
 const useStore = withImmerAtom({
-  current: families.Geist,
+  current: families.Inter,
   default: EMPTY.OBJECT
 })
 
@@ -63,7 +68,10 @@ export default Object.assign(useStore, {
 
     const updateCssVariables = useBatchedCallback(() => {
       mapValues(cssVariables, (a, b) => {
-        document.documentElement.style.setProperty(a, state.current[b])
+        document.documentElement.style.setProperty(
+          a,
+          state.current[b] ?? state.default[b]
+        )
       })
     })
 
