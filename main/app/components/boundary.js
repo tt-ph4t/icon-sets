@@ -10,17 +10,18 @@ import {DEFAULT_QUERY_OPTIONS} from '../misc/constants'
 import {renderSlot} from '../misc/render-slot'
 import {Progress} from './progress'
 
-const ErrorBoundaryProps = {
-  FallbackComponent: component(({error, resetErrorBoundary}) => (
-    <Fallback.Error message={error.message} retryFn={resetErrorBoundary} />
-  ))
+const defaults = {
+  ErrorBoundaryProps: {
+    FallbackComponent: component(({error, resetErrorBoundary}) => (
+      <Fallback.Error message={error.message} retryFn={resetErrorBoundary} />
+    ))
+  },
+  fallback: <Progress.Bar />
 }
 
-const fallback = <Progress.Bar />
-
 export const Boundary = Object.assign(
-  component(({children}) => (
-    <ErrorBoundary {...ErrorBoundaryProps}>
+  component(({children, fallback = defaults.fallback}) => (
+    <ErrorBoundary {...defaults.ErrorBoundaryProps}>
       <React.Suspense fallback={fallback}>
         <React.Activity>{children}</React.Activity>
       </React.Suspense>
@@ -28,7 +29,12 @@ export const Boundary = Object.assign(
   )),
   {
     Query: component(
-      ({query, queryOptions = DEFAULT_QUERY_OPTIONS, render}) => {
+      ({
+        fallback = defaults.fallback,
+        query,
+        queryOptions = DEFAULT_QUERY_OPTIONS,
+        render
+      }) => {
         const queryClient = useQueryClient()
 
         const filters = useMemo(

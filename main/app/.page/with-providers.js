@@ -29,12 +29,12 @@ const PacerProviderProps = {
 }
 
 export default Component =>
-  component(() => (
+  component(props => (
     <DirectionProvider>
       <QueryClientProvider client={QUERY_CLIENT.GLOBAL}>
         <PacerProvider {...PacerProviderProps}>
           <HotkeysProvider>
-            <Component />
+            <Component {...props} />
           </HotkeysProvider>
         </PacerProvider>
       </QueryClientProvider>

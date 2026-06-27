@@ -29,11 +29,11 @@ const Label = component(() => {
     <ButtonGroup
       data={[
         {
-          icon: 'filter',
-          secondary: !query.data.isFiltered
+          children: pluralize(selectedIconSetPrefixes.length, 'icon set')
         },
         {
-          children: pluralize(selectedIconSetPrefixes.length, 'icon set')
+          icon: 'filter',
+          secondary: !query.data.isFiltered
         }
       ]}
     />

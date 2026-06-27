@@ -1,4 +1,3 @@
-import {useQuery} from '@tanstack/react-query'
 import {
   VscodeFormContainer,
   VscodeFormGroup,
@@ -7,7 +6,6 @@ import {
 import {useUpdate} from 'ahooks'
 import {sentenceCase} from 'change-case'
 
-import {Boundary} from '../../components/boundary'
 import {Collapsible} from '../../components/collapsible'
 import {IconGrid} from '../../components/icon-grid'
 import {Menu} from '../../components/menu'
@@ -16,39 +14,30 @@ import {component} from '../../hocs'
 import {useCustomizedIcons} from '../../hooks/use-customized-icons'
 import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {hasValues} from '../../misc'
-import {DEFAULT_QUERY_OPTIONS, ICON_CACHE} from '../../misc/constants'
+import {ICON_CACHE} from '../../misc/constants'
 import AllIconSets from './all-icon-sets'
 import IconGroups from './icon-groups'
 
-const InternalIconGrid = component(({menu, ...props}) => {
-  const query = useQuery(DEFAULT_QUERY_OPTIONS)
-
-  return (
-    <Boundary.Query
-      query={query}
-      render={() => (
-        <>
-          <VscodeFormContainer>
-            <VscodeFormGroup variant='settings-group'>
-              <VscodeFormHelper
-                style={{
-                  height: 'var(--SIDEBAR-ICON-GRID-HEIGHT)'
-                }}>
-                <IconGrid {...props} />
-              </VscodeFormHelper>
-            </VscodeFormGroup>
-          </VscodeFormContainer>
-          {hasValues(menu) && (
-            <Menu
-              data={menu}
-              render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
-            />
-          )}
-        </>
-      )}
-    />
-  )
-})
+const InternalIconGrid = component(({menu, ...props}) => (
+  <>
+    <VscodeFormContainer>
+      <VscodeFormGroup variant='settings-group'>
+        <VscodeFormHelper
+          style={{
+            height: 'var(--SIDEBAR-ICON-GRID-HEIGHT)'
+          }}>
+          <IconGrid {...props} />
+        </VscodeFormHelper>
+      </VscodeFormGroup>
+    </VscodeFormContainer>
+    {hasValues(menu) && (
+      <Menu
+        data={menu}
+        render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
+      />
+    )}
+  </>
+))
 
 const CustomizedIcons = component(() => {
   const customizedIcons = useCustomizedIcons()

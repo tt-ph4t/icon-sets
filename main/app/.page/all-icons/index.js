@@ -1,16 +1,9 @@
 import {useQuery} from '@tanstack/react-query'
-import {
-  VscodeFormContainer,
-  VscodeFormGroup,
-  VscodeFormHelper
-} from '@vscode-elements/react-elements'
 import {pick} from 'es-toolkit'
 
-import {Boundary} from '../../components/boundary'
-import {Fallback} from '../../components/fallback'
 import {IconGrid} from '../../components/icon-grid'
 import {component} from '../../hocs'
-import {useRemount} from '../../hooks/use-remount'
+import {useCallback} from '../../hooks/use-callback'
 import {getId} from '../../misc'
 import {DEFAULT_QUERY_OPTIONS} from '../../misc/constants'
 import Filters from './filters'
@@ -29,47 +22,24 @@ const AllIcons = component(() => {
       )
   })
 
-  return <IconGrid iconIds={query.data} />
+  return (
+    <IconGrid iconIds={query.data}>
+      <Filters />
+    </IconGrid>
+  )
 })
 
-export default useRemount.with(
-  component(({INTERNAL_REMOUNT}) => {
-    const query = useQuery(DEFAULT_QUERY_OPTIONS)
+export default component(() => {
+  const store = useStore()
 
-    return (
-      <Boundary.Query
-        query={query}
-        render={() => {
-          const init = useStore.useInit()
-
-          return init.isError ? (
-            <Fallback.Error
-              message={init.error.message}
-              retryFn={INTERNAL_REMOUNT}
-            />
-          ) : (
-            <div
-              style={{
-                flexGrow: 1,
-                position: 'relative'
-              }}>
-              <AllIcons />
-              <VscodeFormContainer
-                style={{
-                  left: 0,
-                  position: 'absolute',
-                  top: 0
-                }}>
-                <VscodeFormGroup variant='settings-group'>
-                  <VscodeFormHelper>
-                    <Filters />
-                  </VscodeFormHelper>
-                </VscodeFormGroup>
-              </VscodeFormContainer>
-            </div>
-          )
-        }}
-      />
-    )
+  useQuery({
+    ...DEFAULT_QUERY_OPTIONS,
+    select: useCallback(iconSets => {
+      store.set(({draft}) => {
+        draft.selectedIconSetPrefixes = Object.keys(iconSets)
+      })
+    })
   })
-)
+
+  return <AllIcons />
+})

@@ -71,9 +71,24 @@ const useFilteredIconIds = iconIds => {
   }, [searchTerm, iconIds])
 }
 
+const noIcons = (
+  <VscodeFormContainer
+    style={{
+      alignItems: 'center',
+      display: 'flex',
+      height: '100%',
+      justifyContent: 'center',
+      maxWidth: 'unset'
+    }}>
+    <VscodeFormGroup variant='settings-group'>
+      <VscodeLabel required>No Icons</VscodeLabel>
+    </VscodeFormGroup>
+  </VscodeFormContainer>
+)
+
 export const IconGrid = Object.assign(
   useRemount.with(
-    component(({iconIds, INTERNAL_REMOUNT}) => {
+    component(({children, iconIds, INTERNAL_REMOUNT}) => {
       iconIds = useMemo(
         () => castArray(iconIds).filter(validateIconId),
         [iconIds]
@@ -120,7 +135,13 @@ export const IconGrid = Object.assign(
               zIndex: 1
             }}>
             <VscodeFormGroup variant='settings-group'>
-              <VscodeFormHelper>
+              <VscodeFormHelper
+                style={{
+                  alignItems: 'flex-end',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 'calc(var(--SPACING) * 2)'
+                }}>
                 <batcher.Subscribe
                   selector={batcherState => pick(batcherState, ['isPending'])}>
                   {batcherState => (
@@ -183,6 +204,7 @@ export const IconGrid = Object.assign(
                     />
                   )}
                 </batcher.Subscribe>
+                {children}
               </VscodeFormHelper>
             </VscodeFormGroup>
           </VscodeFormContainer>
@@ -209,18 +231,7 @@ export const IconGrid = Object.assign(
                 }}
               />
             ) : (
-              <VscodeFormContainer
-                style={{
-                  alignItems: 'center',
-                  display: 'flex',
-                  height: '100%',
-                  justifyContent: 'center',
-                  maxWidth: 'unset'
-                }}>
-                <VscodeFormGroup variant='settings-group'>
-                  <VscodeLabel required>No Icons</VscodeLabel>
-                </VscodeFormGroup>
-              </VscodeFormContainer>
+              noIcons
             )}
           </React.Activity>
         </div>
