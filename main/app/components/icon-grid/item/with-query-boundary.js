@@ -13,7 +13,7 @@ import {Menu} from '../../menu'
 
 const Fallback = component(({children, ...props}) => {
   const style = useCustomizedIcons.useStore().useSelectValue(({draft}) => ({
-    color: draft.global.color,
+    // color: draft.global.color,
     userSelect: 'none'
   }))
 

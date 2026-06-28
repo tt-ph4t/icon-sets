@@ -1,10 +1,8 @@
-import {isTruthy} from '@sindresorhus/is'
 import {formatForDisplay, useHotkey} from '@tanstack/react-hotkeys'
 import {
   VscodeFormContainer,
   VscodeFormGroup,
-  VscodeFormHelper,
-  VscodeToolbarContainer
+  VscodeFormHelper
 } from '@vscode-elements/react-elements'
 import {useNetwork} from 'ahooks'
 import React from 'react'
@@ -12,8 +10,9 @@ import React from 'react'
 import {Boundary} from '../components/boundary'
 import {Progress} from '../components/progress'
 import {component} from '../hocs'
+import {useIsQueryBusy} from '../hooks/use-is-query-busy'
 import {useRemount} from '../hooks/use-remount'
-import {REACT_QUERY_STATUS_HOOKS, THEME} from '../misc/constants'
+import {THEME} from '../misc/constants'
 import Layout from './layout'
 import Toolbar from './toolbar'
 import withProviders from './with-providers'
@@ -23,8 +22,7 @@ const Sidebar = Boundary.with(React.lazy(() => import('./sidebar')))
 const AllIcons = Boundary.with(React.lazy(() => import('./all-icons')))
 
 const Loading = component(() => {
-  const isLoading = REACT_QUERY_STATUS_HOOKS.map(hook => hook()).some(isTruthy)
-
+  const isQueryBusy = useIsQueryBusy()
   const network = useNetwork()
 
   return (
@@ -34,7 +32,7 @@ const Loading = component(() => {
           '--vscode-progressBar-background': `var(${THEME.COLORS.ERROR})`
         }
       }
-      visible={isLoading || !network.online}
+      visible={isQueryBusy || !network.online}
     />
   )
 })
@@ -77,14 +75,12 @@ export default withProviders(
                 }}>
                 <VscodeFormGroup variant='settings-group'>
                   <VscodeFormHelper>
-                    <VscodeToolbarContainer>
-                      <Toolbar
-                        menu={{
-                          ...INTERNAL_REMOUNT.menu,
-                          description: formatForDisplay(remountHotkey)
-                        }}
-                      />
-                    </VscodeToolbarContainer>
+                    <Toolbar
+                      menu={{
+                        ...INTERNAL_REMOUNT.menu,
+                        description: formatForDisplay(remountHotkey)
+                      }}
+                    />
                   </VscodeFormHelper>
                 </VscodeFormGroup>
               </VscodeFormContainer>

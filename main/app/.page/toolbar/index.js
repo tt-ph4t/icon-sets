@@ -1,5 +1,6 @@
 import {formatForDisplay, useHotkey} from '@tanstack/react-hotkeys'
 import {isEqual} from '@ver0/deep-equal'
+import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {castArray} from 'es-toolkit/compat'
 
 import {IconGrid} from '../../components/icon-grid'
@@ -10,6 +11,7 @@ import {component} from '../../hocs'
 import {useSettings} from '../../hooks/use-settings'
 import {GITHUB_REPO} from '../../misc/constants'
 import AllIconQueries from './all-icon-queries'
+import ErroredQueries from './errored-queries'
 import useFont from './use-font'
 
 const themeHotkey = 't'
@@ -107,10 +109,11 @@ const Settings = component(({menu}) => {
 })
 
 export default component(({menu}) => (
-  <>
+  <VscodeToolbarContainer>
     <Settings menu={menu} />
     <IconGrid.Search>
       <AllIconQueries />
     </IconGrid.Search>
-  </>
+    <ErroredQueries />
+  </VscodeToolbarContainer>
 ))
