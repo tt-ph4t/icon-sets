@@ -1,7 +1,9 @@
 import {formatForDisplay, useHotkey} from '@tanstack/react-hotkeys'
+import {useIsFetching, useQueryClient} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {castArray} from 'es-toolkit/compat'
+import React from 'react'
 
 import {IconGrid} from '../../components/icon-grid'
 import {Menu} from '../../components/menu'
@@ -10,8 +12,9 @@ import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useSettings} from '../../hooks/use-settings'
 import {GITHUB_REPO} from '../../misc/constants'
+import {pluralize} from '../../misc/pluralize'
 import AllIconQueries from './all-icon-queries'
-import ErroredQueries from './errored-queries'
+import FailedQueries from './failed-queries'
 import useFont from './use-font'
 
 const themeHotkey = 't'
@@ -108,12 +111,38 @@ const Settings = component(({menu}) => {
   )
 })
 
+const FetchingQueries = component(() => {
+  const isFetching = useIsFetching()
+
+  const queries = useQueryClient()
+    .getQueryCache()
+    .findAll({
+      predicate: query => query.state.fetchStatus === 'fetching'
+    })
+
+  return (
+    <React.Activity mode={isFetching ? 'visible' : 'hidden'}>
+      <ToolbarButton>
+        Fetching {pluralize(queries.length, 'query')}
+      </ToolbarButton>
+    </React.Activity>
+  )
+})
+
 export default component(({menu}) => (
-  <VscodeToolbarContainer>
-    <Settings menu={menu} />
-    <IconGrid.Search>
-      <AllIconQueries />
-    </IconGrid.Search>
-    <ErroredQueries />
-  </VscodeToolbarContainer>
+  <div
+    style={{
+      alignItems: 'flex-end',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+    <FetchingQueries />
+    <FailedQueries />
+    <VscodeToolbarContainer>
+      <Settings menu={menu} />
+      <IconGrid.Search>
+        <AllIconQueries />
+      </IconGrid.Search>
+    </VscodeToolbarContainer>
+  </div>
 ))

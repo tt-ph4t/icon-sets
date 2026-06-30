@@ -22,7 +22,7 @@ const Fallback = component(({children, ...props}) => {
 
 export default Component =>
   useRemount.with(
-    component(({iconId, INTERNAL_REMOUNT, ...props}) => {
+    component(({iconId, REMOUNT, ...props}) => {
       const {icon} = parseIconName(iconId)
       const queryClient = useQueryClient()
       const {iconCustomisations} = useCustomizedIcons.useSelect(iconId)
@@ -32,7 +32,7 @@ export default Component =>
         iconId
       })
 
-      const filters = useMemo(
+      const queryClientFilters = useMemo(
         () => ({
           exact: true,
           queryKey: [iconId]
@@ -42,28 +42,22 @@ export default Component =>
 
       const menu = useMemo(
         () =>
-          QUERY_CLIENT.ACTIONS.map(([a, b]) => ({
+          Object.entries(QUERY_CLIENT.METHODS).map(([a, b]) => ({
             label: a,
             onClick: async () => {
-              await queryClient[b](filters)
+              await queryClient[b](queryClientFilters)
             }
           })),
-        [queryClient, filters]
+        [queryClient, queryClientFilters]
       )
 
       const fallbackMenu = useMemo(
-        () => [
-          ...menu,
-          {
-            separator: true
-          },
-          INTERNAL_REMOUNT.menu
-        ],
-        [menu, INTERNAL_REMOUNT.menu]
+        () => [REMOUNT.menu, 'Query', ...menu],
+        [REMOUNT.menu, menu]
       )
 
       useUnmount(async () => {
-        await queryClient.cancelQueries(filters)
+        await queryClient.cancelQueries(queryClientFilters)
       })
 
       if (iconQuery.isLoading)
@@ -100,7 +94,7 @@ export default Component =>
             {
               separator: true
             },
-            INTERNAL_REMOUNT.menu
+            REMOUNT.menu
           ]}
           {...props}
         />

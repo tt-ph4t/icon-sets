@@ -7,13 +7,13 @@ import {useIsQueryBusy} from '../../hooks/use-is-query-busy'
 import {hasValues} from '../../misc'
 import {pluralize} from '../../misc/pluralize'
 
-const filters = {
+const queryClientFilters = {
   predicate: query => query.state.status === 'error'
 }
 
 export default component(() => {
   const queryClient = useQueryClient()
-  const queries = queryClient.getQueryCache().findAll(filters)
+  const queries = queryClient.getQueryCache().findAll(queryClientFilters)
 
   useIsQueryBusy()
 
@@ -22,7 +22,7 @@ export default component(() => {
       <ToolbarButton
         icon='error'
         onClick={async () => {
-          await queryClient.refetchQueries(filters)
+          await queryClient.refetchQueries(queryClientFilters)
         }}>
         {pluralize(queries.length, 'failed query')}. Retry?
       </ToolbarButton>

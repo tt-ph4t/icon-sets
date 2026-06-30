@@ -16,7 +16,7 @@ const DataVersion = component(() => {
 })
 
 export default component(() => (
-  <QueryClientProvider client={QUERY_CLIENT.INTERNAL}>
+  <QueryClientProvider client={QUERY_CLIENT.MISC}>
     <DataVersion />
   </QueryClientProvider>
 ))

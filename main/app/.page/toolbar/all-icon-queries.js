@@ -1,5 +1,6 @@
 import {useAsyncBatcher} from '@tanstack/react-pacer'
 import {useQuery, useQueryClient} from '@tanstack/react-query'
+import {useSetState} from 'ahooks'
 import {last, mapValues, pick, sumBy} from 'es-toolkit'
 import {size} from 'es-toolkit/compat'
 
@@ -7,28 +8,30 @@ import {Menu} from '../../components/menu'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
-import {useState} from '../../hooks/use-state'
 import {getId, hasValues} from '../../misc'
 import {
   DATABASE_URL,
   DEFAULT_QUERY_OPTIONS,
-  EMPTY,
   QUERY_CLIENT
 } from '../../misc/constants'
 import {getQueryOptions} from '../../misc/get-query-options'
 import {pluralize} from '../../misc/pluralize'
 import DataVersion from './data-version'
 
-const queryClientActions = [
-  ['Prefetch', 'prefetchQuery'],
-  ...QUERY_CLIENT.ACTIONS
-]
+const queryClientMethods = {
+  Prefetch: 'prefetchQuery',
+  ...QUERY_CLIENT.METHODS
+}
 
 const dataVersion = <DataVersion />
 
 export default component(() => {
   const queryClient = useQueryClient()
-  const [state, setState] = useState(EMPTY.OBJECT)
+
+  const [state, setState] = useSetState({
+    iconSetPrefix: undefined,
+    queryClientMethod: undefined
+  })
 
   const asyncBatcher = useAsyncBatcher(async items => {
     if (confirm()) await last(items)()
@@ -49,9 +52,9 @@ export default component(() => {
 
   useQuery({
     ...DEFAULT_QUERY_OPTIONS,
-    enabled: hasValues(state),
     select: async ({[state.iconSetPrefix]: iconSet}) => {
-      await internalQueryClient(state.queryClientMethod, iconSet)
+      if (hasValues(state))
+        await internalQueryClient(state.queryClientMethod, iconSet)
     }
   })
 
@@ -69,16 +72,22 @@ export default component(() => {
         menu: [
           {
             label: iconCountLabel,
-            menu: queryClientActions.map(([a, b]) => ({
-              label: a,
-              onClick: () => {
-                asyncBatcher.addItem(() => {
-                  mapValues(iconSets, async iconSet => {
-                    await internalQueryClient(b, iconSet)
+            menu: [
+              {
+                label: 'Download'
+              },
+              'Query',
+              ...Object.entries(queryClientMethods).map(([a, b]) => ({
+                label: a,
+                onClick: () => {
+                  asyncBatcher.addItem(() => {
+                    mapValues(iconSets, async iconSet => {
+                      await internalQueryClient(b, iconSet)
+                    })
                   })
-                })
-              }
-            })),
+                }
+              }))
+            ],
             onClick: () => {
               prompt(pluralize(size(iconSets), 'icon set'), iconCountLabel)
             }
@@ -90,17 +99,23 @@ export default component(() => {
             Object.groupBy(
               Object.values(iconSets).map(iconSet => ({
                 label: `${iconSet.name} (${iconSet.icons.length})`,
-                menu: queryClientActions.map(([a, b]) => ({
-                  label: a,
-                  onClick: () => {
-                    asyncBatcher.addItem(() => {
-                      setState({
-                        iconSetPrefix: iconSet.prefix,
-                        queryClientMethod: b
+                menu: [
+                  {
+                    label: 'Download'
+                  },
+                  'Query',
+                  ...Object.entries(queryClientMethods).map(([a, b]) => ({
+                    label: a,
+                    onClick: () => {
+                      asyncBatcher.addItem(() => {
+                        setState({
+                          iconSetPrefix: iconSet.prefix,
+                          queryClientMethod: b
+                        })
                       })
-                    })
-                  }
-                }))
+                    }
+                  }))
+                ]
               })),
               ({label}) => label[0].toUpperCase()
             )

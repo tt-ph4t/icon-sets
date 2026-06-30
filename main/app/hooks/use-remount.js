@@ -5,6 +5,11 @@ import {useProgress} from '../components/progress'
 import {component} from '../hocs'
 import {useState} from './use-state'
 
+const context = {
+  icon: 'refresh',
+  label: 'Reload'
+}
+
 export const useRemount = Object.assign(
   () => {
     const [state, setState] = useState(0)
@@ -17,13 +22,10 @@ export const useRemount = Object.assign(
     })
 
     return Object.assign(remount, {
-      icon: 'refresh',
-      label: 'Reload',
-      get menu() {
-        return {
-          label: this.label,
-          onClick: remount
-        }
+      ...context,
+      menu: {
+        label: context.label,
+        onClick: remount
       },
       state
     })
@@ -35,7 +37,7 @@ export const useRemount = Object.assign(
 
         return (
           <React.Fragment key={remount.state}>
-            <Component {...props} INTERNAL_REMOUNT={remount} />
+            <Component {...props} REMOUNT={remount} />
           </React.Fragment>
         )
       })

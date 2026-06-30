@@ -27,15 +27,17 @@ export const ICON_CACHE = new LRUCache({
 })
 
 export const QUERY_CLIENT = {
-  ACTIONS: deepFreeze([
-    ['Refetch', 'refetchQueries'],
-    ['Invalidate', 'invalidateQueries'],
-    ['Reset', 'resetQueries'],
-    ['Cancel', 'cancelQueries'],
-    ['Remove', 'removeQueries']
-  ]),
   GLOBAL: new QueryClient(),
-  INTERNAL: new QueryClient()
+  METHODS: deepFreeze({
+    Refetch: 'refetchQueries',
+    // eslint-disable-next-line perfectionist/sort-objects
+    Invalidate: 'invalidateQueries',
+    Reset: 'resetQueries',
+    // eslint-disable-next-line perfectionist/sort-objects
+    Cancel: 'cancelQueries',
+    Remove: 'removeQueries'
+  }),
+  MISC: new QueryClient()
 }
 
 export const EMPTY = deepFreeze({

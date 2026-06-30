@@ -12,7 +12,7 @@ import {QUERY_CLIENT, THEME} from './app/misc/constants'
 
 const TanStackDevtoolsProps = {
   plugins: [
-    ...Object.entries(omit(QUERY_CLIENT, ['ACTIONS'])).map(
+    ...Object.entries(omit(QUERY_CLIENT, ['METHODS'])).map(
       ([name, client]) => ({
         name: `TanStack Query (${name})`,
         render: <ReactQueryDevtoolsPanel client={client} />

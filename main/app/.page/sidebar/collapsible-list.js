@@ -52,7 +52,7 @@ export default () => {
 
   return Object.assign(
     useRemount.with(
-      component(({ids, INTERNAL_REMOUNT, menu, ...props}) => {
+      component(({ids, REMOUNT, menu, ...props}) => {
         const store = useStore()
 
         const openMap = store.useSelectValue(({draft}) =>
@@ -85,7 +85,7 @@ export default () => {
             </VscodeFormContainer>
             <Menu
               data={[
-                INTERNAL_REMOUNT.menu,
+                REMOUNT.menu,
                 {
                   label: `${hasOpenedIds ? 'Collapse' : 'Expand'} ${pluralize(
                     (hasOpenedIds ? openedIds : closedIds).length,
