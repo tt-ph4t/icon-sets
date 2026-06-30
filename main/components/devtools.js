@@ -5,10 +5,10 @@ import {ReactQueryDevtoolsPanel} from '@tanstack/react-query-devtools/build/mode
 import {omit} from 'es-toolkit'
 import React from 'react'
 
-import {VscodeDevToolbar} from './app/components/theme'
-import {component} from './app/hocs'
-import {useSettings} from './app/hooks/use-settings'
-import {QUERY_CLIENT, THEME} from './app/misc/constants'
+import {component} from '../hocs'
+import {useSettings} from '../hooks/use-settings'
+import {QUERY_CLIENT, THEME} from '../misc/constants'
+import {VscodeDevToolbar} from './theme'
 
 const TanStackDevtoolsProps = {
   plugins: [
