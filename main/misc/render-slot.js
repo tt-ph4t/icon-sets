@@ -1,16 +1,20 @@
+import {isPlainObject} from '@sindresorhus/is'
 import {identity, noop} from 'es-toolkit'
-import React from 'react'
-import {renderSlot as internalRenderSlot} from 'render-slot'
+import {renderSlot as render} from 'render-slot'
 
-export const renderSlot = ({context, wrapper = identity, ...props}) => (
-  <React.Activity>
-    {internalRenderSlot({
+export const renderSlot = options => {
+  if (isPlainObject(options)) {
+    const {context, wrapper = identity, ...props} = options
+
+    return render({
       context: {
         context
       },
       wrapper,
       ...props,
       default: props.default ?? noop
-    })}
-  </React.Activity>
-)
+    })
+  }
+
+  return render(options)
+}

@@ -14,12 +14,12 @@ import {useIsQueryBusy} from '../hooks/use-is-query-busy'
 import {useRemount} from '../hooks/use-remount'
 import {THEME} from '../misc/constants'
 import Layout from './layout'
-import Toolbar from './toolbar'
 import withProviders from './with-providers'
 import withQueryBoundary from './with-query-boundary'
 
 const Sidebar = Boundary.with(React.lazy(() => import('./sidebar')))
 const AllIcons = Boundary.with(React.lazy(() => import('./all-icons')))
+const Toolbar = React.lazy(() => import('./toolbar'))
 
 const Loading = component(() => {
   const isQueryBusy = useIsQueryBusy()
@@ -67,24 +67,24 @@ export default withProviders(
                 <Sidebar />
                 <AllIcons />
               </Layout.Split>
-              <VscodeFormContainer
-                style={{
-                  alignSelf: 'center',
-                  bottom: 0,
-                  position: 'absolute'
-                }}>
-                <VscodeFormGroup variant='settings-group'>
-                  <VscodeFormHelper>
-                    <Toolbar
-                      menu={{
-                        ...REMOUNT.menu,
-                        description: formatForDisplay(remountHotkey)
-                      }}
-                    />
-                  </VscodeFormHelper>
-                </VscodeFormGroup>
-              </VscodeFormContainer>
             </React.Activity>
+            <VscodeFormContainer
+              style={{
+                alignSelf: 'center',
+                bottom: 0,
+                position: 'absolute'
+              }}>
+              <VscodeFormGroup variant='settings-group'>
+                <VscodeFormHelper>
+                  <Toolbar
+                    menu={{
+                      ...REMOUNT.menu,
+                      description: formatForDisplay(remountHotkey)
+                    }}
+                  />
+                </VscodeFormHelper>
+              </VscodeFormGroup>
+            </VscodeFormContainer>
           </Layout.Fullscreen>
         )
       })

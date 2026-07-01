@@ -22,9 +22,7 @@ const defaults = {
 export const Boundary = Object.assign(
   component(({children, fallback = defaults.fallback}) => (
     <ErrorBoundary {...defaults.ErrorBoundaryProps}>
-      <React.Suspense fallback={fallback}>
-        <React.Activity>{children}</React.Activity>
-      </React.Suspense>
+      <React.Suspense fallback={fallback}>{children}</React.Suspense>
     </ErrorBoundary>
   )),
   {
@@ -61,10 +59,7 @@ export const Boundary = Object.assign(
             />
           )
 
-        return renderSlot({
-          bespoke: true,
-          default: render
-        })
+        return renderSlot(render)
       }
     ),
     with: Component =>

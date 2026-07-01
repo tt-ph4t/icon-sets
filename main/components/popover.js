@@ -57,13 +57,12 @@ export const Popover = Object.assign(
                   render={
                     <div {...props}>
                       {renderSlot({
-                        bespoke: true,
+                        bespoke: popupRender,
                         context: {
                           props,
                           setOpen: setState,
                           state
                         },
-                        default: popupRender,
                         wrapper: popupWrapper
                       })}
                     </div>
