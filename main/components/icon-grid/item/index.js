@@ -74,9 +74,9 @@ export default withQueryBoundary(
     const store = useStore()
     const progress = useProgress()
 
-    const iconOptions = useCustomizedIcons
+    const {global: iconOptions} = useCustomizedIcons
       .useStore()
-      .useSelectValue(({draft}) => draft.global)
+      .useSelectValue('global')
 
     const [iconQuery] = useIconQueries({
       iconCustomisations,

@@ -59,7 +59,7 @@ const uf = new uFuzzy()
 
 const useFilteredIconIds = iconIds => {
   const store = useStore()
-  const searchTerm = store.useSelectValue(({draft}) => draft.searchTerm)
+  const {searchTerm} = store.useSelectValue('searchTerm')
 
   return useMemo(() => {
     if (store.searchTerm.isDefault(searchTerm)) return iconIds

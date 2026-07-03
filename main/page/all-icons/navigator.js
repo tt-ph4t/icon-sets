@@ -20,15 +20,15 @@ const queryOptions = {
 export default component(() => {
   const store = useStore()
 
-  const selectedIconSetPrefixes = store.useSelectValue(
-    ({draft}) => draft.selectedIconSetPrefixes
+  const {selectedIconSetPrefixes} = store.useSelectValue(
+    'selectedIconSetPrefixes'
   )
 
   const step = useCallback((steps = 0) => {
-    if (selectedIconSetPrefixes.length === 1)
-      cycled.index = cycled.indexOf(selectedIconSetPrefixes[0]) + steps
-
-    if (selectedIconSetPrefixes.length > 1) cycled.index = 0
+    cycled.index =
+      selectedIconSetPrefixes.length === 1
+        ? cycled.indexOf(selectedIconSetPrefixes[0]) + steps
+        : 0
 
     store.set(({draft}) => {
       draft.selectedIconSetPrefixes = [cycled.current()]

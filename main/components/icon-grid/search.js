@@ -130,7 +130,7 @@ const hotkeys = ['/', 'ctrl + f', 'ctrl + k', 'ctrl + e']
 const Search = component(({children}) => {
   const ref = useRef()
   const store = useStore()
-  const searchTerm = store.useSelectValue(({draft}) => draft.searchTerm)
+  const {searchTerm} = store.useSelectValue('searchTerm')
 
   const focusFn = useCallback(() => {
     ref.current.focus()

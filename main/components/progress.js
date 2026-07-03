@@ -44,7 +44,7 @@ export const useProgress = () => {
 
 export const Progress = Object.assign(
   component(({visible = false, ...props}) => {
-    const isPending = useStore().useSelectValue(({draft}) => draft.isPending)
+    const {isPending} = useStore().useSelectValue('isPending')
 
     return (
       <React.Activity mode={isPending || visible ? 'visible' : 'hidden'}>

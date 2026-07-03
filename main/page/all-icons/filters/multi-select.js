@@ -29,8 +29,8 @@ export default component(() => {
   const store = useStore()
   const query = useQuery(queryOptions)
 
-  const selectedIconSetPrefixes = store.useSelectValue(
-    ({draft}) => draft.selectedIconSetPrefixes
+  const {selectedIconSetPrefixes} = store.useSelectValue(
+    'selectedIconSetPrefixes'
   )
 
   return (

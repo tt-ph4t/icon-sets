@@ -14,8 +14,8 @@ import MultiSelect from './multi-select'
 import Tree from './tree'
 
 const Label = component(() => {
-  const selectedIconSetPrefixes = useStore().useSelectValue(
-    ({draft}) => draft.selectedIconSetPrefixes
+  const {selectedIconSetPrefixes} = useStore().useSelectValue(
+    'selectedIconSetPrefixes'
   )
 
   const query = useQuery({

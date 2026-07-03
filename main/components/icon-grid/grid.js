@@ -21,7 +21,7 @@ export default component(
 
     return (
       <VGrid
-        bufferSize={bufferSize ?? size.height * 0.2}
+        bufferSize={bufferSize ?? size.height * 0.1}
         cellHeight={cellHeight}
         cellWidth={cellWidth}
         col={col}

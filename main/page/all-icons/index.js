@@ -11,8 +11,8 @@ import {useStore} from './misc'
 import Navigator from './navigator'
 
 const AllIcons = component(() => {
-  const selectedIconSetPrefixes = useStore().useSelectValue(
-    ({draft}) => draft.selectedIconSetPrefixes
+  const {selectedIconSetPrefixes} = useStore().useSelectValue(
+    'selectedIconSetPrefixes'
   )
 
   const query = useQuery({

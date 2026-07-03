@@ -24,7 +24,7 @@ const TanStackDevtoolsProps = {
 }
 
 export default component(() => {
-  const isDev = useSettings().useSelectValue(({draft}) => draft.isDev)
+  const {isDev} = useSettings().useSelectValue('isDev')
 
   return (
     <>

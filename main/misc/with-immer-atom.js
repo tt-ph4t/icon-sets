@@ -1,7 +1,8 @@
+import {isFunction} from '@sindresorhus/is'
 import {useThrottledState} from '@tanstack/react-pacer'
 import {isEqual} from '@ver0/deep-equal'
 import deepFreeze from 'deep-freeze-es6'
-import {flow, noop} from 'es-toolkit'
+import {flow, noop, pick} from 'es-toolkit'
 import {useSetAtom, useStore} from 'jotai'
 import {atomWithImmer} from 'jotai-immer'
 import {freezeAtom, selectAtom} from 'jotai/utils'
@@ -39,19 +40,25 @@ export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
   const atom = create((initialValue = deepFreeze(initialValue)))
   const useValue = () => useSelectValue(selectDraft)
 
-  const useSelectValue = (
-    fn = noop,
-    {deps = EMPTY.ARRAY, ...options} = EMPTY.OBJECT
-  ) =>
-    useAtomValueWithDelay(
+  const useSelectValue = (...args) => {
+    const [, {deps = EMPTY.ARRAY, ...options} = EMPTY.OBJECT] = args
+    const [selector] = args
+    const isSelector = isFunction(selector)
+
+    return useAtomValueWithDelay(
       selectAtom(
         atom,
         // https://jotai.org/docs/utilities/select#hold-stable-references
-        useCallback(draft => fn({[draftKey]: draft}), deps),
+        useCallback(
+          draft =>
+            isSelector ? selector({[draftKey]: draft}) : pick(draft, args),
+          deps
+        ),
         isEqual
       ),
       options
     )
+  }
 
   return Object.assign(
     () => {

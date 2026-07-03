@@ -76,8 +76,8 @@ export default component(() => {
   const query = useQuery(queryOptions)
   const store = useStore()
 
-  const selectedIconSetPrefixes = store.useSelectValue(
-    ({draft}) => draft.selectedIconSetPrefixes
+  const {selectedIconSetPrefixes} = store.useSelectValue(
+    'selectedIconSetPrefixes'
   )
 
   const filtered = isFiltered(
