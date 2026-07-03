@@ -1,9 +1,9 @@
-import {useCreation} from 'ahooks'
+import React from 'react'
 
 import {useDeepCompareMemoize} from './use-deep-compare-memoize'
 import {useRef} from './use-ref'
 
-const useInternalCreation = useDeepCompareMemoize.with(useCreation)
+const internalUseMemo = useDeepCompareMemoize.with(React.useMemo)
 
 export const useMemo = Object.assign(
   (fn, deps = useMemo.deps.default) => {
@@ -15,15 +15,15 @@ export const useMemo = Object.assign(
           // If you need a reference to an object or array that doesn't require recalculation,
           // useRef could be a better choice
           useRef
-        : useInternalCreation
-    )(fn, deps === useMemo.deps.noDeps ? undefined : deps)
+        : internalUseMemo
+    )(fn, deps === useMemo.deps.empty ? undefined : deps)
 
     return isDefaultDeps ? value.current : value
   },
   {
     deps: {
       default: Symbol(),
-      noDeps: Symbol()
+      empty: Symbol()
     }
   }
 )

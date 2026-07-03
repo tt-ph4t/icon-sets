@@ -25,10 +25,8 @@ export default {
 
         fullscreen[isFullscreen ? 'enterFullscreen' : 'exitFullscreen']()
 
-        React.startTransition(() => {
-          settings.set(({draft}) => {
-            draft.layout.isFullscreen = fullscreen.isFullscreen
-          })
+        settings.set(({draft}) => {
+          draft.layout.isFullscreen = fullscreen.isFullscreen
         })
       }
     }, [isFullscreen, fullscreen, settings])

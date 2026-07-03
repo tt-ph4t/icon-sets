@@ -1,4 +1,5 @@
 import {isFunction} from '@sindresorhus/is'
+import {useBatchedCallback} from '@tanstack/react-pacer'
 import {
   VscodeBadge,
   VscodeFormHelper,
@@ -127,14 +128,14 @@ export const SplitLayout = component(
       positionInPercentage: undefined
     })
 
+    const updateState = useBatchedCallback(setState)
+
     return (
       <VscodeSplitLayout
         onVscSplitLayoutChange={async (...args) => {
           await onVscSplitLayoutChange(...args)
 
-          React.startTransition(() => {
-            setState(args[0].detail)
-          })
+          updateState(args[0].detail)
         }}
         resetOnDblClick={resetOnDblClick}
         style={

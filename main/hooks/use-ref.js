@@ -1,30 +1,21 @@
 import {useMergedRefs, useMergedRefsN} from '@base-ui/utils/useMergedRefs'
 import {useFullscreen, useSize, useUnmount} from 'ahooks'
-import {noop} from 'es-toolkit'
-import {castArray} from 'es-toolkit/compat'
+import {noop, spread} from 'es-toolkit'
 import React from 'react'
 
 import {useState} from './use-state'
 
-const defaultSize = {
-  target: document.querySelector('body'),
-  value: {
-    height: 0,
-    width: 0
-  }
-}
-
-const internalUseMergedRefs = refs => useMergedRefs(...castArray(refs))
+const bodyElement = document.querySelector('body')
+const defaultGetValue = noop
+const internalUseMergedRefs = spread(useMergedRefs)
 
 export const useRef = Object.assign(
-  (getValue = noop) => {
+  (getValue = defaultGetValue) => {
     const // https://github.com/Shopify/quilt/blob/d98672060fc724f3fe7af9a25a0845b8d7c0774a/packages/react-hooks/src/hooks/lazy-ref.ts
       ref = React.useRef(useState(() => getValue())[0])
 
     useUnmount(() => {
-      React.startTransition(() => {
-        ref.current = noop()
-      })
+      ref.current = defaultGetValue()
     })
 
     return ref
@@ -50,9 +41,7 @@ export const useRef = Object.assign(
 
       return {
         ref,
-        ...React.useDeferredValue(
-          useSize(() => ref.current ?? defaultSize.target)
-        )
+        ...React.useDeferredValue(useSize(() => ref.current ?? bodyElement))
       }
     }
   }
