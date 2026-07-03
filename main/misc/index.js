@@ -62,7 +62,7 @@ export const isOdd =
 export const trigger = mapValues(
   {
     error: () => {
-      throw new Error(crypto.randomUUID())
+      throw new Error(String(new Date()))
     },
     suspense: () => {
       throw new Promise(noop)

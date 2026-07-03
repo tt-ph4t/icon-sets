@@ -8,6 +8,7 @@ import {getId} from '../../misc'
 import {DEFAULT_QUERY_OPTIONS} from '../../misc/constants'
 import Filters from './filters'
 import {useStore} from './misc'
+import Navigator from './navigator'
 
 const AllIcons = component(() => {
   const selectedIconSetPrefixes = useStore().useSelectValue(
@@ -25,6 +26,7 @@ const AllIcons = component(() => {
   return (
     <IconGrid iconIds={query.data}>
       <Filters />
+      <Navigator />
     </IconGrid>
   )
 })

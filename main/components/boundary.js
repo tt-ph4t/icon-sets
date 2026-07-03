@@ -1,3 +1,4 @@
+import {isFunction} from '@sindresorhus/is'
 import {useQueryClient} from '@tanstack/react-query'
 import {useUnmount} from 'ahooks'
 import React from 'react'
@@ -6,6 +7,7 @@ import {ErrorBoundary} from 'react-error-boundary'
 import {Fallback} from '../components/fallback'
 import {component} from '../hocs'
 import {useMemo} from '../hooks/use-memo'
+import {trigger} from '../misc'
 import {DEFAULT_QUERY_OPTIONS} from '../misc/constants'
 import {renderSlot} from '../misc/render-slot'
 import {Progress} from './progress'
@@ -33,6 +35,8 @@ export const Boundary = Object.assign(
         queryOptions = DEFAULT_QUERY_OPTIONS,
         render
       }) => {
+        trigger.error(!isFunction(render))
+
         const queryClient = useQueryClient()
 
         const queryClientFilters = useMemo(
