@@ -1,5 +1,5 @@
 import {isFunction} from '@sindresorhus/is'
-import {useBatchedCallback} from '@tanstack/react-pacer'
+import {useThrottledCallback} from '@tanstack/react-pacer'
 import {
   VscodeBadge,
   VscodeFormHelper,
@@ -17,12 +17,12 @@ import {useState} from '../hooks/use-state'
 import {hasValues, isOdd} from '../misc'
 import {THEME} from '../misc/constants'
 
-const defaults = {
-  style: {
-    ...omit(THEME.CARD_STYLE, ['padding']),
-    height: '100%',
-    width: '100%'
-  }
+const defaultStyle = {
+  ...omit(THEME.CARD_STYLE, ['padding']),
+  '--size': '100%',
+
+  height: 'var(--size)',
+  width: 'var(--size)'
 }
 
 const useIdleEffect = (fn = asyncNoop, {before = asyncNoop, deps, options}) => {
@@ -98,13 +98,14 @@ const Slot = component(
           }}>
           <React.Activity
             mode={
-              isEnd
+              'visible' || // ?
+              (isEnd
                 ? positionInPercentage >= 100 - 5
                   ? 'hidden'
                   : 'visible'
                 : positionInPercentage <= 5
                   ? 'hidden'
-                  : 'visible'
+                  : 'visible')
             }>
             {children}
           </React.Activity>
@@ -128,7 +129,7 @@ export const SplitLayout = component(
       positionInPercentage: undefined
     })
 
-    const updateState = useBatchedCallback(setState)
+    const updateState = useThrottledCallback(setState)
 
     return (
       <VscodeSplitLayout
@@ -144,7 +145,7 @@ export const SplitLayout = component(
                 border: 'unset',
                 ...style
               }
-            : defaults.style
+            : defaultStyle
         }
         {...props}>
         {React.Children.map(children, (children, index) => (
