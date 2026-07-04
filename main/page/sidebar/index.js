@@ -1,8 +1,3 @@
-import {
-  VscodeFormContainer,
-  VscodeFormGroup,
-  VscodeFormHelper
-} from '@vscode-elements/react-elements'
 import {useUpdate} from 'ahooks'
 import {sentenceCase} from 'change-case'
 
@@ -16,20 +11,14 @@ import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {hasValues} from '../../misc'
 import {ICON_CACHE} from '../../misc/constants'
 import AllIconSets from './all-icon-sets'
+import ContentLayout from './content-layout'
 import IconGroups from './icon-groups'
 
-const InternalIconGrid = component(({menu, ...props}) => (
+const iconGrid = (menu, props) => (
   <>
-    <VscodeFormContainer>
-      <VscodeFormGroup variant='settings-group'>
-        <VscodeFormHelper
-          style={{
-            height: 'var(--SIDEBAR-ICON-GRID-HEIGHT)'
-          }}>
-          <IconGrid {...props} />
-        </VscodeFormHelper>
-      </VscodeFormGroup>
-    </VscodeFormContainer>
+    <ContentLayout>
+      <IconGrid {...props} />
+    </ContentLayout>
     {hasValues(menu) && (
       <Menu
         data={menu}
@@ -37,7 +26,7 @@ const InternalIconGrid = component(({menu, ...props}) => (
       />
     )}
   </>
-))
+)
 
 const CustomizedIcons = component(() => {
   const customizedIcons = useCustomizedIcons()
@@ -45,13 +34,15 @@ const CustomizedIcons = component(() => {
 
   return (
     <Collapsible description={iconIds.length} heading='customized icons'>
-      <InternalIconGrid
-        iconIds={iconIds}
-        menu={{
+      {iconGrid(
+        {
           label: 'Reset',
           onClick: customizedIcons.reset
-        }}
-      />
+        },
+        {
+          iconIds
+        }
+      )}
     </Collapsible>
   )
 })
@@ -67,9 +58,8 @@ const CachedIcons = component(() => {
       onToggle={event => {
         if (event.detail.open) update()
       }}>
-      <InternalIconGrid
-        iconIds={iconIds}
-        menu={[
+      {iconGrid(
+        [
           {
             label: 'Update',
             onClick: update
@@ -84,8 +74,11 @@ const CachedIcons = component(() => {
               update()
             }
           }))
-        ]}
-      />
+        ],
+        {
+          iconIds
+        }
+      )}
     </Collapsible>
   )
 })
@@ -96,13 +89,15 @@ const FavoritedIcons = component(() => {
 
   return (
     <Collapsible description={iconIds.length} heading='favorited icons'>
-      <InternalIconGrid
-        iconIds={iconIds}
-        menu={{
+      {iconGrid(
+        {
           label: 'Reset',
           onClick: favoritedIcons.reset
-        }}
-      />
+        },
+        {
+          iconIds
+        }
+      )}
     </Collapsible>
   )
 })

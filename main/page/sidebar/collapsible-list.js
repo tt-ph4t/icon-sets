@@ -1,8 +1,3 @@
-import {
-  VscodeFormContainer,
-  VscodeFormGroup,
-  VscodeFormHelper
-} from '@vscode-elements/react-elements'
 import {mapValues, partition} from 'es-toolkit'
 import {VList} from 'virtua'
 
@@ -15,6 +10,7 @@ import {hasValues} from '../../misc'
 import {pluralize} from '../../misc/pluralize'
 import {renderSlot} from '../../misc/render-slot'
 import {withImmerAtom} from '../../misc/with-immer-atom'
+import ContentLayout from './content-layout'
 
 export default () => {
   const useStore = withImmerAtom()
@@ -52,7 +48,7 @@ export default () => {
 
   return Object.assign(
     useRemount.with(
-      component(({ids, REMOUNT, menu, ...props}) => {
+      component(({ids, menu, REMOUNT, ...props}) => {
         const store = useStore()
 
         const openMap = store.useSelectValue(({draft}) =>
@@ -68,21 +64,16 @@ export default () => {
 
         return (
           <>
-            <VscodeFormContainer>
-              <VscodeFormGroup variant='settings-group'>
-                <VscodeFormHelper>
-                  <VList
-                    data={ids}
-                    style={{
-                      height: 'calc(var(--SIDEBAR-ICON-GRID-HEIGHT) * 1.5)'
-                    }}>
-                    {(id, index) => (
-                      <Item id={id} index={index} key={id} {...props} />
-                    )}
-                  </VList>
-                </VscodeFormHelper>
-              </VscodeFormGroup>
-            </VscodeFormContainer>
+            <ContentLayout
+              style={{
+                height: 'calc(var(--SIDEBAR-CONTENT-HEIGHT) * 1.5)'
+              }}>
+              <VList data={ids}>
+                {(id, index) => (
+                  <Item id={id} index={index} key={id} {...props} />
+                )}
+              </VList>
+            </ContentLayout>
             <Menu
               data={[
                 REMOUNT.menu,

@@ -71,7 +71,7 @@ export default component(({context}) => {
       {...context.CollapsibleProps}>
       <div
         style={{
-          height: 'var(--SIDEBAR-ICON-GRID-HEIGHT)'
+          height: 'var(--SIDEBAR-CONTENT-HEIGHT)'
         }}>
         <IconGrid
           iconIds={(isInitialState

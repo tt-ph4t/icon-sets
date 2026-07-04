@@ -100,7 +100,10 @@ export default component(() => {
                     description={iconIds.length}
                     heading={heading}
                     {...context.CollapsibleProps}>
-                    <div style={{height: 'var(--SIDEBAR-ICON-GRID-HEIGHT)'}}>
+                    <div
+                      style={{
+                        height: 'var(--SIDEBAR-CONTENT-HEIGHT)'
+                      }}>
                       <IconGrid iconIds={iconIds} />
                     </div>
                   </Collapsible>
