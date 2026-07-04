@@ -104,7 +104,7 @@ const Settings = component(({menu}) => {
             open(`https://github.com/${GITHUB_REPO}`)
           }
         },
-        ...castArray(menu)
+        ...menu
       ]}
       render={<ToolbarButton icon='settings' />}
     />
@@ -129,7 +129,7 @@ const FetchingQueries = component(() => {
   )
 })
 
-export default component(({menu}) => (
+export default menu => (
   <div
     style={{
       alignItems: 'flex-end',
@@ -139,10 +139,10 @@ export default component(({menu}) => (
     <FetchingQueries />
     <FailedQueries />
     <VscodeToolbarContainer>
-      <Settings menu={menu} />
+      <Settings menu={castArray(menu)} />
       <IconGrid.Search>
         <AllIconQueries />
       </IconGrid.Search>
     </VscodeToolbarContainer>
   </div>
-))
+)

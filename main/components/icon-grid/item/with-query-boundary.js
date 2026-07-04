@@ -1,4 +1,3 @@
-import {mergeProps} from '@base-ui/react'
 import {useQueryClient} from '@tanstack/react-query'
 import {useUnmount} from 'ahooks'
 
@@ -11,14 +10,16 @@ import {QUERY_CLIENT, THEME} from '../../../misc/constants'
 import {parseIconName} from '../../../misc/parse-icon-name'
 import {Menu} from '../../menu'
 
-const Fallback = component(({children, ...props}) => {
-  const style = useCustomizedIcons.useStore().useSelectValue(({draft}) => ({
-    // color: draft.global.color,
-    userSelect: 'none'
-  }))
-
-  return <span {...mergeProps({style}, props)}>{children.slice(0, 3)}</span>
-})
+const Fallback = component(({children, style, ...props}) => (
+  <span
+    style={{
+      userSelect: 'none',
+      ...style
+    }}
+    {...props}>
+    {children.slice(0, 3)}
+  </span>
+))
 
 export default Component =>
   useRemount.with(

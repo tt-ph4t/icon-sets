@@ -14,12 +14,12 @@ import {useIsQueryBusy} from '../hooks/use-is-query-busy'
 import {useRemount} from '../hooks/use-remount'
 import {THEME} from '../misc/constants'
 import Layout from './layout'
+import toolbar from './toolbar'
 import withProviders from './with-providers'
 import withQueryBoundary from './with-query-boundary'
 
 const Sidebar = Boundary.with(React.lazy(() => import('./sidebar')))
 const AllIcons = Boundary.with(React.lazy(() => import('./all-icons')))
-const Toolbar = React.lazy(() => import('./toolbar'))
 
 const Loading = component(() => {
   const isQueryBusy = useIsQueryBusy()
@@ -76,12 +76,10 @@ export default withProviders(
               }}>
               <VscodeFormGroup variant='settings-group'>
                 <VscodeFormHelper>
-                  <Toolbar
-                    menu={{
-                      ...REMOUNT.menu,
-                      description: formatForDisplay(remountHotkey)
-                    }}
-                  />
+                  {toolbar({
+                    ...REMOUNT.menu,
+                    description: formatForDisplay(remountHotkey)
+                  })}
                 </VscodeFormHelper>
               </VscodeFormGroup>
             </VscodeFormContainer>

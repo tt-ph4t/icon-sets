@@ -44,7 +44,7 @@ const Label = component(() => {
   )
 })
 
-export default component(() => (
+export default (
   <Popover
     popupRender={
       <>
@@ -66,4 +66,4 @@ export default component(() => (
       </VscodeToolbarContainer>
     }
   />
-))
+)

@@ -10,30 +10,26 @@ import {component} from '../hocs'
 import {isReactKey, trigger} from '../misc'
 import {EMPTY} from '../misc/constants'
 
-const Item = Object.assign(
-  component(({checked, children, label, ...props}) => (
-    <VscodeTreeItem {...props}>
-      {label}
-      <React.Activity mode={isBoolean(checked) ? 'visible' : 'hidden'}>
-        <VscodeIcon
-          name={checked ? 'check' : 'blank'}
-          size={14}
-          slot='icon-leaf'
-        />
-      </React.Activity>
-      <Item.List data={children} />
-    </VscodeTreeItem>
-  )),
-  {
-    List: component(({data = EMPTY.ARRAY}) =>
-      data.map(({id, ...props}) => {
-        trigger.error(!isReactKey(id, false))
+const renderItems = (data = EMPTY.ARRAY) =>
+  data.map(({id, ...props}) => {
+    trigger.error(!isReactKey(id, false))
 
-        return <Item key={id} {...props} />
-      })
-    )
-  }
-)
+    return <Item key={id} {...props} />
+  })
+
+const Item = component(({checked, children, label, ...props}) => (
+  <VscodeTreeItem {...props}>
+    {label}
+    <React.Activity mode={isBoolean(checked) ? 'visible' : 'hidden'}>
+      <VscodeIcon
+        name={checked ? 'check' : 'blank'}
+        size={14}
+        slot='icon-leaf'
+      />
+    </React.Activity>
+    {renderItems(children)}
+  </VscodeTreeItem>
+))
 
 export const Tree = Object.assign(
   component(
@@ -64,7 +60,7 @@ export const Tree = Object.assign(
           })
         }
         {...props}>
-        <Item.List data={data} />
+        {renderItems(data)}
       </VscodeTree>
     )
   ),

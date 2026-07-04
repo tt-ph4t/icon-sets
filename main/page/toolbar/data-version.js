@@ -15,8 +15,8 @@ const DataVersion = component(() => {
   if (query.isSuccess) return query.data
 })
 
-export default component(() => (
+export default (
   <QueryClientProvider client={QUERY_CLIENT.MISC}>
     <DataVersion />
   </QueryClientProvider>
-))
+)

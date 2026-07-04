@@ -6,7 +6,7 @@ import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
 import {getId} from '../../misc'
 import {DEFAULT_QUERY_OPTIONS} from '../../misc/constants'
-import Filters from './filters'
+import filters from './filters'
 import {useStore} from './misc'
 import Navigator from './navigator'
 
@@ -25,7 +25,7 @@ const AllIcons = component(() => {
 
   return (
     <IconGrid iconIds={query.data}>
-      <Filters />
+      {filters}
       <Navigator />
     </IconGrid>
   )

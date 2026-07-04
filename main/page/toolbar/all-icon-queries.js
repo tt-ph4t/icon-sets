@@ -16,14 +16,12 @@ import {
 } from '../../misc/constants'
 import {getQueryOptions} from '../../misc/get-query-options'
 import {pluralize} from '../../misc/pluralize'
-import DataVersion from './data-version'
+import dataVersion from './data-version'
 
 const queryClientMethods = {
   Prefetch: 'prefetchQuery',
   ...QUERY_CLIENT.METHODS
 }
-
-const dataVersion = <DataVersion />
 
 export default component(() => {
   const queryClient = useQueryClient()
