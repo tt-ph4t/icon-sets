@@ -112,6 +112,8 @@ writeFileSync(
         }),
       ),
     ),
-    { deep: true },
+    {
+      deep: true,
+    },
   ),
 );
