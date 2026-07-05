@@ -20,13 +20,17 @@ const Label = component(() => {
 
   const query = useQuery({
     ...DEFAULT_QUERY_OPTIONS,
-    select: iconSets => ({
-      isFiltered: isFiltered(Object.keys(iconSets), selectedIconSetPrefixes),
-      label:
-        selectedIconSetPrefixes.length === 1
-          ? iconSets[selectedIconSetPrefixes[0]].name
-          : pluralize(selectedIconSetPrefixes.length, 'icon set')
-    })
+    select: iconSets => {
+      const iconSetPrefixes = Object.keys(iconSets)
+
+      return {
+        isFiltered: isFiltered(iconSetPrefixes, selectedIconSetPrefixes),
+        label:
+          selectedIconSetPrefixes.length === 1
+            ? `${iconSetPrefixes.indexOf(selectedIconSetPrefixes[0]) + 1}. ${iconSets[selectedIconSetPrefixes[0]].name}`
+            : pluralize(selectedIconSetPrefixes.length, 'icon set')
+      }
+    }
   })
 
   return (
