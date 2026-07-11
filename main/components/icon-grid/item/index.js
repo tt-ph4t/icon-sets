@@ -13,6 +13,7 @@ import {
   uniq
 } from 'es-toolkit'
 import {size} from 'es-toolkit/compat'
+import mime from 'mime/lite'
 import React from 'react'
 
 import {component} from '../../../hocs'
@@ -42,7 +43,7 @@ import {timeAgo} from '../../../misc/time-ago'
 import {Menu} from '../../menu'
 import {useProgress} from '../../progress'
 import useStore from '../use-store'
-import takumi from './takumi.wasm'
+import takumi from './takumi'
 import withQueryBoundary from './with-query-boundary'
 
 const flipDirections = {
@@ -117,26 +118,31 @@ export default withQueryBoundary(
 
       return await progress.with(
         async () =>
-          await takumi(
-            (format === 'jpeg' && !iconQuery.data.palette
-              ? React.cloneElement
-              : identity)(
-              iconQuery.data.internal.to.reactElement,
-              mergeProps(iconQuery.data.internal.to.reactElement.props, {
-                style: {
-                  backgroundColor: 'white'
-                }
-              })
-            ),
-            {
-              get id() {
-                return getId(`[${iconQuery.data.id}]`, {
-                  iconCustomisations,
-                  iconOptions,
+          new Blob(
+            [
+              await takumi(
+                (format === 'jpeg' && !iconQuery.data.palette
+                  ? React.cloneElement
+                  : identity)(
+                  iconQuery.data.internal.to.reactElement,
+                  mergeProps(iconQuery.data.internal.to.reactElement.props, {
+                    style: {
+                      backgroundColor: 'white'
+                    }
+                  })
+                ),
+                {
+                  id: getId(`[${iconQuery.data.id}]`, {
+                    iconCustomisations,
+                    iconOptions,
+                    options
+                  }),
                   options
-                })
-              },
-              options
+                }
+              )
+            ],
+            {
+              type: mime.getType(format)
             }
           )
       )

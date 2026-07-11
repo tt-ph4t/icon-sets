@@ -2,9 +2,11 @@ import eslintReact from '@eslint-react/eslint-plugin'
 import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import eslintConfigPrettier from 'eslint-config-prettier/flat'
+import deMorgan from 'eslint-plugin-de-morgan'
 import perfectionist from 'eslint-plugin-perfectionist'
 import pluginPromise from 'eslint-plugin-promise'
 import reactPlugin from 'eslint-plugin-react'
+import reactDoctor from 'eslint-plugin-react-doctor'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactYouMightNotNeedAnEffect from 'eslint-plugin-react-you-might-not-need-an-effect'
 import * as regexpPlugin from 'eslint-plugin-regexp'
@@ -25,6 +27,8 @@ export default defineConfig([
       eslintPluginUnicorn.configs.recommended,
       pluginPromise.configs['flat/recommended'],
       regexpPlugin.configs['flat/recommended'],
+      deMorgan.configs.recommended,
+      // reactPerfPlugin.configs.flat.recommended,
 
       reactPlugin.configs.flat.recommended,
       reactPlugin.configs.flat['jsx-runtime'],
@@ -34,6 +38,7 @@ export default defineConfig([
       eslintReact.configs.recommended,
       reactYouMightNotNeedAnEffect.configs.recommended,
       pluginQuery.configs['flat/recommended'],
+      reactDoctor.configs.recommended,
 
       eslintConfigPrettier // ?
     ],
@@ -151,7 +156,9 @@ export default defineConfig([
         '@eslint-react/no-children-map',
         '@eslint-react/no-clone-element',
         '@eslint-react/no-children-to-array',
-        '@eslint-react/no-context-provider'
+        '@eslint-react/no-context-provider',
+
+        'react-doctor/exhaustive-deps'
       )
     }
   }

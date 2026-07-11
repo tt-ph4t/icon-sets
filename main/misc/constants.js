@@ -42,7 +42,6 @@ export const QUERY_CLIENT = {
 
 export const EMPTY = deepFreeze({
   ARRAY: [],
-  BLOB: new Blob(),
   OBJECT: {}
 })
 

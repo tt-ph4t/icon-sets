@@ -1,4 +1,4 @@
-import {useMergedRefs, useMergedRefsN} from '@base-ui/utils/useMergedRefs'
+import {useMergedRefs} from '@base-ui/utils/useMergedRefs'
 import {useFullscreen, useSize, useUnmount} from 'ahooks'
 import {noop, spread} from 'es-toolkit'
 import React from 'react'
@@ -31,11 +31,6 @@ export const useRef = Object.assign(
         ...rest
       }
     },
-    merge: (...refs) => ({
-      mergedRef: (refs.length <= 4 ? internalUseMergedRefs : useMergedRefsN)(
-        refs
-      )
-    }),
     size: () => {
       const ref = useRef()
 

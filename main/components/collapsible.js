@@ -1,22 +1,15 @@
 import {VscodeCollapsible} from '@vscode-elements/react-elements'
 import {useControllableValue, useEventListener} from 'ahooks'
 import {asyncNoop} from 'es-toolkit'
+import {Slot} from 'radix-ui'
 import React from 'react'
 
 import {component} from '../hocs'
 import {useRef} from '../hooks/use-ref'
 
 export const Collapsible = component(
-  ({
-    alwaysShowHeaderActions = true,
-    children,
-    keepMounted,
-    onToggle = asyncNoop,
-    ref,
-    ...props
-  }) => {
-    const internalRef = useRef()
-    const {mergedRef} = useRef.merge(ref, internalRef)
+  ({children, onToggle = asyncNoop, ...props}) => {
+    const ref = useRef()
 
     const [open, setOpen] = useControllableValue(props, {
       defaultValue: false,
@@ -35,24 +28,16 @@ export const Collapsible = component(
         })
       },
       {
-        target: internalRef
+        target: ref
       }
     )
 
     return (
-      <VscodeCollapsible
-        alwaysShowHeaderActions={alwaysShowHeaderActions}
-        open={open}
-        ref={mergedRef}
-        {...props}>
-        {keepMounted ? (
-          <React.Activity mode={open ? 'visible' : 'hidden'}>
-            {children}
-          </React.Activity>
-        ) : (
-          open && children
-        )}
-      </VscodeCollapsible>
+      <Slot.Root alwaysShowHeaderActions ref={ref}>
+        <VscodeCollapsible open={open} {...props}>
+          {open && children}
+        </VscodeCollapsible>
+      </Slot.Root>
     )
   }
 )
