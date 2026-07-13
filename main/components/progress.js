@@ -1,6 +1,6 @@
-import {mergeProps} from '@base-ui/react'
 import {VscodeProgressBar} from '@vscode-elements/react-elements'
 import {asyncNoop} from 'es-toolkit'
+import {Slot} from 'radix-ui'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -54,16 +54,12 @@ export const Progress = Object.assign(
   }),
   {
     Bar: component(props => (
-      <VscodeProgressBar
-        {...mergeProps(
-          {
-            style: {
-              '--vscode-progressBar-background': `color-mix(var(${THEME.COLORS.FOREGROUND}) 30%, transparent)`
-            }
-          },
-          props
-        )}
-      />
+      <Slot.Root
+        style={{
+          '--vscode-progressBar-background': `color-mix(var(${THEME.COLORS.FOREGROUND}) 30%, transparent)`
+        }}>
+        <VscodeProgressBar {...props} />
+      </Slot.Root>
     ))
   }
 )

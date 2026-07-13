@@ -2,12 +2,13 @@ import {mergeProps} from '@base-ui/react'
 import {isPlainObject} from '@sindresorhus/is'
 import {VscodeButton, VscodeButtonGroup} from '@vscode-elements/react-elements'
 import {castArray} from 'es-toolkit/compat'
+import {Slot} from 'radix-ui'
 
 import {component} from '../hocs'
 import {getId} from '../misc/get-id'
 import {Menu} from './menu'
 
-export const ButtonGroup = component(({data, secondary = true, ...props}) => (
+export const ButtonGroup = component(({data, ...props}) => (
   <VscodeButtonGroup>
     {Iterator.from(castArray(data))
       .filter(isPlainObject)
@@ -16,7 +17,9 @@ export const ButtonGroup = component(({data, secondary = true, ...props}) => (
           data={menu}
           key={getId(index, menu, ButtonProps)}
           render={
-            <VscodeButton {...mergeProps({secondary, ...props}, ButtonProps)} />
+            <Slot.Root secondary>
+              <VscodeButton {...mergeProps(props, ButtonProps)} />
+            </Slot.Root>
           }
         />
       ))

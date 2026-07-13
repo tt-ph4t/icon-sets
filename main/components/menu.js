@@ -1,4 +1,4 @@
-import {Menu as InternalMenu, mergeProps} from '@base-ui/react'
+import {Menu as InternalMenu} from '@base-ui/react'
 import {isFalsy, isPlainObject, isString} from '@sindresorhus/is'
 import {
   VscodeContextMenuItem,
@@ -8,6 +8,7 @@ import {
 import {useControllableValue} from 'ahooks'
 import {asyncNoop, identity, omit} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
+import {Slot} from 'radix-ui'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -108,44 +109,30 @@ const Popup = component(({menu}) => {
 })
 
 const Item = Object.assign(
-  component(
-    ({
-      description,
-      keybinding = description,
-      onMouseEnter = asyncNoop,
-      onMouseLeave = asyncNoop,
-      ...props
-    }) => {
-      const [selected, setSelected] = useControllableValue(props, {
-        defaultValue: false,
-        defaultValuePropName: 'defaultSelected',
-        trigger: 'onSelectedChange',
-        valuePropName: 'selected'
-      })
+  component(({description, keybinding = description, ...props}) => {
+    const [selected, setSelected] = useControllableValue(props, {
+      defaultValue: false,
+      defaultValuePropName: 'defaultSelected',
+      trigger: 'onSelectedChange',
+      valuePropName: 'selected'
+    })
 
-      return (
+    return (
+      <Slot.Root
+        onMouseEnter={() => {
+          setSelected(true)
+        }}
+        onMouseLeave={() => {
+          setSelected(false)
+        }}>
         <VscodeContextMenuItem
-          {...mergeProps(
-            {
-              keybinding,
-              onMouseEnter: async (...args) => {
-                setSelected(true)
-
-                await onMouseEnter(...args)
-              },
-              onMouseLeave: async (...args) => {
-                setSelected(false)
-
-                await onMouseLeave(...args)
-              },
-              selected
-            },
-            props
-          )}
+          keybinding={keybinding}
+          selected={selected}
+          {...props}
         />
-      )
-    }
-  ),
+      </Slot.Root>
+    )
+  }),
   {
     Separator: (
       <InternalMenu.Separator render={<VscodeContextMenuItem separator />} />

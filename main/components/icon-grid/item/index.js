@@ -14,6 +14,7 @@ import {
 } from 'es-toolkit'
 import {size} from 'es-toolkit/compat'
 import mime from 'mime/lite'
+import {AccessibleIcon} from 'radix-ui'
 import React from 'react'
 
 import {component} from '../../../hocs'
@@ -64,6 +65,8 @@ const sizeLabel = (
   {height = 0, width = 0},
   scale = DEFAULT_ICON_CUSTOMISATIONS.scale
 ) => `${width * scale} x ${height * scale}`
+
+const width = 'calc(var(--SPACING) * 12)'
 
 export default withQueryBoundary(
   component(({iconId, index, menu}) => {
@@ -530,13 +533,12 @@ export default withQueryBoundary(
                 />
               </React.Activity>
             </div>
-            {React.cloneElement(iconQuery.data.internal.to.reactElement, {
-              get height() {
-                return iconOptions.square ? this.width : '100%'
-              },
-              id: iconQuery.data.id,
-              width: 'calc(var(--SPACING) * 12)'
-            })}
+            <AccessibleIcon.Root label={iconQuery.data.id}>
+              {React.cloneElement(iconQuery.data.internal.to.reactElement, {
+                height: iconOptions.square ? width : '100%',
+                width
+              })}
+            </AccessibleIcon.Root>
           </div>
         }
       />

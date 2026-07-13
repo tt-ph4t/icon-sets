@@ -100,28 +100,24 @@ export default cache(
           vFlip
         })
 
+        const svg = iconToSVG(iconData, {
+          height: iconData.height * scale,
+          width: iconData.width * scale
+        })
+
+        const html = iconToHTML(replaceIDs(svg.body), {
+          ...svg.attributes,
+          style: `color: ${color}`
+        })
+
         return {
           css: getIconCSS(iconData, {
             color,
             iconSelector: '[icon]'
           }),
-          get dataUrl() {
-            return svgToData(this.html)
-          },
-          get html() {
-            const svg = iconToSVG(iconData, {
-              height: iconData.height * scale,
-              width: iconData.width * scale
-            })
-
-            return iconToHTML(replaceIDs(svg.body), {
-              ...svg.attributes,
-              style: `color: ${color}`
-            })
-          },
-          get reactElement() {
-            return parse(this.html)
-          }
+          dataUrl: svgToData(html),
+          html,
+          reactElement: parse(html)
         }
       }
     }
