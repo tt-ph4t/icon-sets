@@ -1,28 +1,15 @@
 import {stringToIcon} from '@iconify/utils'
-import {LRUCache} from 'lru-cache'
 
-import {isWordCharacter, trigger} from './'
+import {cache} from './cache'
 import {ICON_CACHE} from './constants'
+import {trigger} from './trigger'
 
-const cache = new LRUCache({
-  max: ICON_CACHE.max * 2
-})
-
-export const parseIconName = (iconId, validate = true) => {
-  if (isWordCharacter(iconId)) {
-    if (cache.has(iconId)) return cache.get(iconId)
-
-    let icon = stringToIcon(iconId, validate) ?? trigger.error()
-
-    cache.set(
-      iconId,
-      (icon = {
-        icon
-      })
-    )
-
-    return icon
+export const parseIconName = cache(
+  iconId => ({
+    icon: stringToIcon(iconId, true) ?? trigger.error()
+  }),
+  {
+    getCacheKey: iconId => iconId,
+    max: ICON_CACHE.max
   }
-
-  trigger.error()
-}
+)

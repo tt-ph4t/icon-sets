@@ -9,8 +9,8 @@ import {Collapsible} from '../../components/collapsible'
 import {IconGrid} from '../../components/icon-grid'
 import {component} from '../../hocs'
 import {useState} from '../../hooks/use-state'
-import {getId} from '../../misc'
 import {DEFAULT_QUERY_OPTIONS, ID_SEPARATOR} from '../../misc/constants'
+import {getId} from '../../misc/get-id'
 import collapsibleList from './collapsible-list'
 
 const CollapsibleList = collapsibleList()

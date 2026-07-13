@@ -1,5 +1,6 @@
-import {asyncNoop, identity, omit} from 'es-toolkit'
+import {identity, omit} from 'es-toolkit'
 import {reverse} from 'es-toolkit/compat'
+import {Slot} from 'radix-ui'
 import React from 'react'
 import {ResizableBox} from 'react-resizable'
 
@@ -31,9 +32,13 @@ export default {
       }
     }, [isFullscreen, fullscreen, settings])
 
-    return <div ref={fullscreen.ref} {...props} />
+    return (
+      <Slot.Root ref={fullscreen.ref}>
+        <div {...props} />
+      </Slot.Root>
+    )
   }),
-  Resizable: component(({children, onResize = asyncNoop}) => {
+  Resizable: component(props => {
     const settings = useSettings()
     const maxConstraints = useRef.size()
     const size = settings.useSelectValue(({draft}) => draft.layout.size)
@@ -52,27 +57,25 @@ export default {
     }, [maxConstraints, settings])
 
     return (
-      <ResizableBox
-        maxConstraints={[maxConstraints.width, maxConstraints.height]}
-        minConstraints={[
-          useSettings.initial.layout.size.width,
-          useSettings.initial.layout.size.height
-        ]}
-        onResize={async (...args) => {
-          await onResize(...args)
-
-          React.startTransition(() => {
-            settings.set(({draft}) => {
-              draft.layout.size = args[1].size
-            })
+      <Slot.Root
+        onResize={(...[, size]) => {
+          settings.set(({draft}) => {
+            draft.layout.size = size
           })
-        }}
-        {...size}>
-        {children}
-      </ResizableBox>
+        }}>
+        <ResizableBox
+          maxConstraints={[maxConstraints.width, maxConstraints.height]}
+          minConstraints={[
+            useSettings.initial.layout.size.width,
+            useSettings.initial.layout.size.height
+          ]}
+          {...size}
+          {...props}
+        />
+      </Slot.Root>
     )
   }),
-  Split: component(({children}) => {
+  Split: component(({children, ...props}) => {
     const ref = useRef()
 
     const isReverse = useSettings().useSelectValue(
@@ -84,16 +87,19 @@ export default {
     }, [isReverse])
 
     return (
-      <SplitLayout
-        initialHandlePosition={isReverse ? '73%' : '27%'}
+      <Slot.Root
         ref={ref}
         showSizeHint
         style={{
           ...omit(THEME.CARD_STYLE, ['padding']),
           height: `calc(var(--HEIGHT) - ${THEME.CARD_STYLE.borderWidth} * 2)`
         }}>
-        {(isReverse ? reverse : identity)(React.Children.toArray(children))}
-      </SplitLayout>
+        <SplitLayout
+          initialHandlePosition={isReverse ? '73%' : '27%'}
+          {...props}>
+          {(isReverse ? reverse : identity)(React.Children.toArray(children))}
+        </SplitLayout>
+      </Slot.Root>
     )
   })
 }

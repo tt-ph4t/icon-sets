@@ -1,27 +1,18 @@
-import {LRUCache} from 'lru-cache'
 import mime from 'mime/lite' // ?
 import {render} from 'takumi-js'
 
-import {ICON_CACHE} from '../../../misc/constants'
-
-const cache = new LRUCache({
-  max: ICON_CACHE.max
-})
+import {cache} from '../../../misc/cache'
 
 export default Object.assign(
-  async (element, {id, options}) => {
-    if (cache.has(id)) return cache.get(id)
-
-    const image = await render(element, {
-      devicePixelRatio: 1,
-      lossless: true,
-      ...options
-    })
-
-    cache.set(id, image)
-
-    return image
-  },
+  cache(
+    async (element, options) =>
+      await render(element, {
+        devicePixelRatio: 1,
+        lossless: true,
+        quality: 100,
+        ...options
+      })
+  ),
   {
     formats: [
       'png',

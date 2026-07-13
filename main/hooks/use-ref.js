@@ -1,21 +1,27 @@
-import {useMergedRefs} from '@base-ui/utils/useMergedRefs'
 import {useFullscreen, useSize, useUnmount} from 'ahooks'
-import {noop, spread} from 'es-toolkit'
 import React from 'react'
 
-import {useState} from './use-state'
-
 const bodyElement = document.querySelector('body')
-const defaultGetValue = noop
-const internalUseMergedRefs = spread(useMergedRefs)
+
+const defaults = {
+  ref: {
+    getValue: () => defaults.ref.value,
+    // eslint-disable-next-line unicorn/no-null
+    value: null
+  }
+}
 
 export const useRef = Object.assign(
-  (getValue = defaultGetValue) => {
-    const // https://github.com/Shopify/quilt/blob/d98672060fc724f3fe7af9a25a0845b8d7c0774a/packages/react-hooks/src/hooks/lazy-ref.ts
-      ref = React.useRef(useState(() => getValue())[0])
+  (getValue = defaults.ref.getValue) => {
+    const ref =
+      // https://github.com/Shopify/quilt/blob/d98672060fc724f3fe7af9a25a0845b8d7c0774a/packages/react-hooks/src/hooks/lazy-ref.ts
+      // https://github.com/SukkaW/foxact/blob/e9438f0980a2094f0d4b8065c339a3e72ba477d8/packages/foxact/src/use-singleton/index.ts
+      React.useRef(defaults.ref.value)
+
+    if (ref.current === defaults.ref.value) ref.current = getValue()
 
     useUnmount(() => {
-      ref.current = defaultGetValue()
+      ref.current = defaults.ref.value
     })
 
     return ref

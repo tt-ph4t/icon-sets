@@ -7,8 +7,9 @@ import {
 import React from 'react'
 
 import {component} from '../hocs'
-import {isReactKey, trigger} from '../misc'
+import {isReactKey} from '../misc'
 import {EMPTY} from '../misc/constants'
+import {trigger} from '../misc/trigger'
 
 const renderItems = (data = EMPTY.ARRAY) =>
   data.map(({id, ...props}) => {

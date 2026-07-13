@@ -1,6 +1,7 @@
 import {useEventListener} from 'ahooks'
 import Cycled from 'cycled'
 import {asyncNoop} from 'es-toolkit'
+import {Slot} from 'radix-ui'
 
 import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
@@ -83,5 +84,9 @@ export const VscodeDevToolbar = component(props => {
     }
   )
 
-  return <vscode-dev-toolbar ref={ref} {...props} />
+  return (
+    <Slot.Root ref={ref}>
+      <vscode-dev-toolbar {...props} />
+    </Slot.Root>
+  )
 })

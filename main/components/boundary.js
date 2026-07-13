@@ -7,9 +7,9 @@ import {ErrorBoundary} from 'react-error-boundary'
 import {Fallback} from '../components/fallback'
 import {component} from '../hocs'
 import {useMemo} from '../hooks/use-memo'
-import {trigger} from '../misc'
 import {DEFAULT_QUERY_OPTIONS} from '../misc/constants'
 import {renderSlot} from '../misc/render-slot'
+import {trigger} from '../misc/trigger'
 import {Progress} from './progress'
 
 const defaults = {

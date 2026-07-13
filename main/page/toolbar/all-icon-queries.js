@@ -8,12 +8,13 @@ import {Menu} from '../../components/menu'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
-import {getId, hasValues} from '../../misc'
+import {hasValues} from '../../misc'
 import {
   DATABASE_URL,
   DEFAULT_QUERY_OPTIONS,
   QUERY_CLIENT
 } from '../../misc/constants'
+import {getId} from '../../misc/get-id'
 import {getQueryOptions} from '../../misc/get-query-options'
 import {pluralize} from '../../misc/pluralize'
 import dataVersion from './data-version'

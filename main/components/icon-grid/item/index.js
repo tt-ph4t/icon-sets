@@ -26,7 +26,6 @@ import {
   copy,
   fileSaver,
   getIconFilePaths,
-  getId,
   hasValues,
   openObjectURL
 } from '../../../misc'
@@ -110,43 +109,35 @@ export default withQueryBoundary(
       [iconQuery.data.data, iconCustomisations.scale]
     )
 
-    const getTakumiBlob = useCallback(async format => {
-      const options = {
-        format,
-        ...iconSize
-      }
-
-      return await progress.with(
-        async () =>
-          new Blob(
-            [
-              await takumi(
-                (format === 'jpeg' && !iconQuery.data.palette
-                  ? React.cloneElement
-                  : identity)(
-                  iconQuery.data.internal.to.reactElement,
-                  mergeProps(iconQuery.data.internal.to.reactElement.props, {
-                    style: {
-                      backgroundColor: 'white'
-                    }
-                  })
-                ),
-                {
-                  id: getId(`[${iconQuery.data.id}]`, {
-                    iconCustomisations,
-                    iconOptions,
-                    options
-                  }),
-                  options
-                }
-              )
-            ],
-            {
-              type: mime.getType(format)
-            }
-          )
-      )
-    })
+    const getTakumiBlob = useCallback(
+      async format =>
+        await progress.with(
+          async () =>
+            new Blob(
+              [
+                await takumi(
+                  (format === 'jpeg' && !iconQuery.data.palette
+                    ? React.cloneElement
+                    : identity)(
+                    iconQuery.data.internal.to.reactElement,
+                    mergeProps(iconQuery.data.internal.to.reactElement.props, {
+                      style: {
+                        backgroundColor: 'white'
+                      }
+                    })
+                  ),
+                  {
+                    format,
+                    ...iconSize
+                  }
+                )
+              ],
+              {
+                type: mime.getType(format)
+              }
+            )
+        )
+    )
 
     const iconAliases = useMemo(
       () =>

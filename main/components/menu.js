@@ -13,9 +13,10 @@ import React from 'react'
 import {component} from '../hocs'
 import {useMemo} from '../hooks/use-memo'
 import {useState} from '../hooks/use-state'
-import {getId, hasValues} from '../misc'
+import {hasValues} from '../misc'
 import {buildContext} from '../misc/build-context'
 import {EMPTY, THEME} from '../misc/constants'
+import {getId} from '../misc/get-id'
 
 const isGroupLabel = isString
 

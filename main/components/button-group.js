@@ -4,7 +4,7 @@ import {VscodeButton, VscodeButtonGroup} from '@vscode-elements/react-elements'
 import {castArray} from 'es-toolkit/compat'
 
 import {component} from '../hocs'
-import {getId} from '../misc'
+import {getId} from '../misc/get-id'
 import {Menu} from './menu'
 
 export const ButtonGroup = component(({data, secondary = true, ...props}) => (

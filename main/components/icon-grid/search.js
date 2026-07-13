@@ -7,6 +7,7 @@ import {
   VscodeToolbarContainer
 } from '@vscode-elements/react-elements'
 import {last} from 'es-toolkit'
+import {Slot} from 'radix-ui'
 import randomColor from 'randomcolor'
 import React from 'react'
 
@@ -152,31 +153,33 @@ const Search = component(({children}) => {
   }, EMPTY.ARRAY)
 
   return (
-    <VscodeTextfield
-      invalid={
-        !(store.searchTerm.isDefault(searchTerm) || isWordCharacter(searchTerm))
-      }
-      onInput={event => {
-        store.searchTerm.set(event.target.value)
-      }}
-      ref={ref}
-      value={searchTerm}>
-      <React.Activity>
-        <Menu
-          data={[
-            'Hotkeys',
-            ...hotkeys.map(hotkey => ({
-              disabled: true,
-              label: formatForDisplay(hotkey)
-            }))
-          ]}
-          render={<VscodeIcon name='search' slot='content-before' />}
-        />
-        {React.Children.map(children, children => (
-          <div slot='content-after'>{children}</div>
-        ))}
-      </React.Activity>
-    </VscodeTextfield>
+    <Slot.Root ref={ref}>
+      <VscodeTextfield
+        invalid={
+          !store.searchTerm.isDefault(searchTerm) &&
+          !isWordCharacter(searchTerm)
+        }
+        onInput={event => {
+          store.searchTerm.set(event.target.value)
+        }}
+        value={searchTerm}>
+        <React.Activity>
+          <Menu
+            data={[
+              'Hotkeys',
+              ...hotkeys.map(hotkey => ({
+                disabled: true,
+                label: formatForDisplay(hotkey)
+              }))
+            ]}
+            render={<VscodeIcon name='search' slot='content-before' />}
+          />
+          {React.Children.map(children, children => (
+            <div slot='content-after'>{children}</div>
+          ))}
+        </React.Activity>
+      </VscodeTextfield>
+    </Slot.Root>
   )
 })
 
