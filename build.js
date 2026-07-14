@@ -7,11 +7,14 @@ import {
 import msgpack from "@msgpack/msgpack";
 import { sentenceCase } from "change-case";
 import { isEqual, isPlainObject, mapValues, pick, uniqWith } from "es-toolkit";
+import { size } from "es-toolkit/compat";
 import { sort } from "fast-sort";
 import has from "has-values";
 import mapObject, { mapObjectSkip } from "map-obj";
 import fs from "node:fs";
+import ProgressBar from "progress";
 import spdxLicenseList from "spdx-license-list";
+import pkg from "./package.json" with { type: "json" };
 
 const dataDir = "data";
 
@@ -50,6 +53,15 @@ const collections = Object.fromEntries(
   ),
 );
 
+const progressBar = new ProgressBar(
+  ":current/:total icon sets :percent :etas | :iconSetName (:iconCount icons)",
+  {
+    total: size(collections),
+  },
+);
+
+progressBar.interrupt(`v${pkg.devDependencies["@iconify/json"]}`);
+
 writeFileSync(
   `${dataDir}/index`,
   sortKeys(
@@ -62,13 +74,15 @@ writeFileSync(
 
           delete collection.samples;
 
-          fs.mkdirSync(iconSetPath, { recursive: true });
+          fs.mkdirSync(iconSetPath, {
+            recursive: true,
+          });
 
           await parseIconSetAsync(iconSet, (iconName, iconData) => {
             writeFileSync(`${iconSetPath}/${iconName}`, iconData);
           });
 
-          return [
+          const value = [
             iconSet.prefix,
             {
               ...collection,
@@ -109,6 +123,13 @@ writeFileSync(
               icons: sort(Object.keys(iconSet.icons)).asc(),
             },
           ];
+
+          progressBar.tick({
+            iconSetName: value[1].name,
+            iconCount: size(value[1].icons),
+          });
+
+          return value;
         }),
       ),
     ),
