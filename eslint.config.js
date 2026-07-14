@@ -144,7 +144,6 @@ export default defineConfig([
 
         'unicorn/prevent-abbreviations',
         'unicorn/no-array-reduce',
-        'unicorn/prefer-set-has',
         'unicorn/no-array-callback-reference',
         'unicorn/no-anonymous-default-export',
         'unicorn/no-await-expression-member',

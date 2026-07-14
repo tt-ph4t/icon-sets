@@ -1,51 +1,42 @@
-import {useThrottler} from '@tanstack/react-pacer'
+import {useThrottledCallback} from '@tanstack/react-pacer'
 import {union, uniq, without} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
-import ms from 'ms'
 
 import {validateIconId} from '../misc'
 import {EMPTY} from '../misc/constants'
 import {useCallback} from './use-callback'
 import {useState} from './use-state'
 
-const defaults = {
-  key: 'useFavoritedIcons',
-  throttlerOptions: {
-    wait: ms('1s')
-  },
-  value: EMPTY.ARRAY
-}
+const defaultValue = EMPTY.ARRAY
 
 export const useFavoritedIcons = Object.assign(
-  (key = defaults.key, throttlerOptions = defaults.throttlerOptions) => {
+  (key = 'useFavoritedIcons') => {
     const [state, setState] = useState.localStorage(key, {
-      defaultValue: defaults.value
+      defaultValue
     })
 
-    const throttler = useThrottler(setState, throttlerOptions)
-
-    const set = useCallback(fn => {
-      throttler.maybeExecute(state => fn(state).filter(validateIconId))
+    const throttledSetState = useThrottledCallback(fn => {
+      setState((...args) => fn(...args).filter(validateIconId))
     })
 
-    const current = castArray(state).filter(validateIconId)
+    const set = new Set(castArray(state).filter(validateIconId))
 
     return {
       add: useCallback((...iconIds) => {
-        set(state => union(iconIds, state))
+        throttledSetState(state => union(iconIds, state))
       }),
       delete: useCallback((...iconIds) => {
-        set(state => without(state, ...iconIds))
+        throttledSetState(state => without(state, ...iconIds))
       }),
-      get: useCallback(() => current),
-      has: useCallback((...iconIds) => {
-        return iconIds.every(iconId => current.includes(iconId))
-      }),
+      get: useCallback(() => [...set]),
+      has: useCallback((...iconIds) =>
+        iconIds.every(iconId => set.has(iconId))
+      ),
       reset: useCallback(() => {
-        set(() => defaults.value)
+        throttledSetState(() => defaultValue)
       }),
       toggle: useCallback((...iconIds) => {
-        set(state => {
+        throttledSetState(state => {
           const a = new Set()
           const b = new Set(castArray(state))
 

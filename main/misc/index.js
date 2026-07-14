@@ -18,6 +18,24 @@ import {ICON_CACHE, ID_SEPARATOR} from '../misc/constants'
 import {cache} from './cache'
 import {parseIconName} from './parse-icon-name'
 
+export const open = Object.assign(
+  (...args) => {
+    const value = window.open(...args)
+
+    if (isNull(value)) prompt(undefined, args[0])
+
+    return value
+  },
+  {
+    objectURL: (...args) => {
+      const url = URL.createObjectURL(...args)
+
+      open(url)
+      URL.revokeObjectURL(url)
+    }
+  }
+)
+
 export const isWordCharacter = value =>
   isString(value) && internalIsWordCharacter(value)
 
@@ -57,13 +75,6 @@ export const validateIconId = iconId =>
   isWordCharacter(iconId) &&
   iconId.includes(ID_SEPARATOR) &&
   validateIconName(parseIconName(iconId).icon)
-
-export const openObjectURL = (...args) => {
-  const url = URL.createObjectURL(...args)
-
-  open(url)
-  URL.revokeObjectURL(url)
-}
 
 export const copy = async (value, options) => ({
   isCopied: await internalCopy(value, {

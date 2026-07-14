@@ -23,13 +23,7 @@ import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
 import {useFavoritedIcons} from '../../../hooks/use-favorited-icons'
 import {useIconQueries} from '../../../hooks/use-icon-queries'
 import {useMemo} from '../../../hooks/use-memo'
-import {
-  copy,
-  fileSaver,
-  getIconFilePaths,
-  hasValues,
-  openObjectURL
-} from '../../../misc'
+import {copy, fileSaver, getIconFilePaths, hasValues, open} from '../../../misc'
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
   DEFAULT_QUERY_OPTIONS,
@@ -171,7 +165,7 @@ export default withQueryBoundary(
                           {
                             label: 'View',
                             onClick: () => {
-                              openObjectURL(icon.blob)
+                              open.objectURL(icon.blob)
                             }
                           },
                           {
@@ -197,7 +191,7 @@ export default withQueryBoundary(
                       {
                         label: 'View',
                         onClick: async () => {
-                          openObjectURL(await getTakumiBlob(format))
+                          open.objectURL(await getTakumiBlob(format))
                         }
                       },
                       ClipboardItem.supports(type) && {
@@ -370,10 +364,7 @@ export default withQueryBoundary(
                 ]
               },
               ...menu
-            ],
-            onClick: () => {
-              favoritedIcons.toggle(iconQuery.data.id)
-            }
+            ]
           },
           {
             separator: true
