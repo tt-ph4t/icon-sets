@@ -20,9 +20,10 @@ import {parseIconName} from './parse-icon-name'
 
 export const open = Object.assign(
   (...args) => {
+    const url = new URL(args[0])
     const value = window.open(...args)
 
-    if (isNull(value)) prompt(undefined, args[0])
+    if (isNull(value)) prompt(url.hostname, url)
 
     return value
   },
