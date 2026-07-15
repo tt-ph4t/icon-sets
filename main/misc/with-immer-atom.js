@@ -46,6 +46,7 @@ export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
     const isSelector = isFunction(selector)
 
     return useAtomValueWithDelay(
+      // eslint-disable-next-line react-doctor/jotai-select-atom-in-render-body
       selectAtom(
         atom,
         // https://jotai.org/docs/utilities/select#hold-stable-references

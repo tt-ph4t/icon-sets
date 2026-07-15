@@ -15,7 +15,7 @@ const defaults = {
   timeout: ms('1m')
 }
 
-const internalOfetch = ofetch.create({
+const fetch = ofetch.create({
   retry: false
 })
 
@@ -57,12 +57,12 @@ export const getQueryOptions =
 
           return url.pathname.endsWith('.msgpack')
             ? decode(
-                await internalOfetch(url, {
+                await fetch(url, {
                   responseType: 'arrayBuffer',
                   ...ofetchOptions
                 })
               )
-            : await internalOfetch(url, {
+            : await fetch(url, {
                 parseResponse,
                 ...ofetchOptions
               })

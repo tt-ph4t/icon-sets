@@ -7,11 +7,11 @@ import {
   isUndefined
 } from '@sindresorhus/is'
 import {downloadZip} from 'client-zip'
-import internalCopy from 'copy-to-clipboard'
+import copyToClipboard from 'copy-to-clipboard'
 import {omit} from 'es-toolkit'
 import FileSaver from 'file-saver'
 import has from 'has-values'
-import {isWordCharacter as internalIsWordCharacter} from 'is-word-character'
+import {isWordCharacter} from 'is-word-character'
 import jszip from 'jszip'
 
 import {ICON_CACHE, ID_SEPARATOR} from '../misc/constants'
@@ -36,8 +36,7 @@ export const open = Object.assign(
   }
 )
 
-export const isWordCharacter = value =>
-  isString(value) && internalIsWordCharacter(value)
+export const isWordChar = value => isString(value) && isWordCharacter(value)
 
 export const fileSaver = async (data, fileName) => {
   // jszip
@@ -72,12 +71,12 @@ export const isOdd =
   value => value % 2 !== 0
 
 export const validateIconId = iconId =>
-  isWordCharacter(iconId) &&
+  isWordChar(iconId) &&
   iconId.includes(ID_SEPARATOR) &&
   validateIconName(parseIconName(iconId).icon)
 
 export const copy = async (value, options) => ({
-  isCopied: await internalCopy(value, {
+  isCopied: await copyToClipboard(value, {
     fallbackToPrompt: true,
     ...options
   })

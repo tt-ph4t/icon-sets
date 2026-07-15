@@ -16,7 +16,7 @@ import {useCallback} from '../../hooks/use-callback'
 import {useCustomizedIcons} from '../../hooks/use-customized-icons'
 import {useEffect} from '../../hooks/use-effect'
 import {useRef} from '../../hooks/use-ref'
-import {isWordCharacter} from '../../misc'
+import {isWordChar} from '../../misc'
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
   EMPTY,
@@ -156,8 +156,7 @@ const Search = component(({children}) => {
     <Slot.Root ref={ref}>
       <VscodeTextfield
         invalid={
-          !store.searchTerm.isDefault(searchTerm) &&
-          !isWordCharacter(searchTerm)
+          !store.searchTerm.isDefault(searchTerm) && !isWordChar(searchTerm)
         }
         onInput={event => {
           store.searchTerm.set(event.target.value)

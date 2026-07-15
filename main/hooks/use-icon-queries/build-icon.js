@@ -59,7 +59,7 @@ export default cache(
     }
   ) => ({
     ...icon,
-    internal: {
+    more: {
       as(fileType) {
         const data = {
           css: this.to.css,

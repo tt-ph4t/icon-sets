@@ -3,7 +3,7 @@ import React from 'react'
 import {useDeepCompareMemoize} from './use-deep-compare-memoize'
 import {useRef} from './use-ref'
 
-const internalUseMemo = useDeepCompareMemoize.with(React.useMemo)
+const reactUseMemo = useDeepCompareMemoize.with(React.useMemo)
 
 export const useMemo = Object.assign(
   (fn, deps = useMemo.deps.default) => {
@@ -15,7 +15,7 @@ export const useMemo = Object.assign(
           // If you need a reference to an object or array that doesn't require recalculation,
           // useRef could be a better choice
           useRef
-        : internalUseMemo
+        : reactUseMemo
     )(fn, deps === useMemo.deps.empty ? undefined : deps)
 
     return isDefaultDeps ? value.current : value

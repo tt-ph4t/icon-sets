@@ -1,12 +1,12 @@
 import {VscodeProgressRing} from '@vscode-elements/react-elements'
 
 import {component} from '../hocs'
-import {isWordCharacter} from '../misc'
+import {isWordChar} from '../misc'
 
 export const ProgressRing = component(({children, ...props}) => {
   const progressRing = <VscodeProgressRing {...props} />
 
-  return isWordCharacter(children) ? (
+  return isWordChar(children) ? (
     <div
       style={{
         alignItems: 'center',

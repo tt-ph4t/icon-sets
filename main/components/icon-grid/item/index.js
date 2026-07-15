@@ -116,8 +116,8 @@ export default withQueryBoundary(
                   (format === 'jpeg' && !iconQuery.data.palette
                     ? React.cloneElement
                     : identity)(
-                    iconQuery.data.internal.to.reactElement,
-                    mergeProps(iconQuery.data.internal.to.reactElement.props, {
+                    iconQuery.data.more.to.reactElement,
+                    mergeProps(iconQuery.data.more.to.reactElement.props, {
                       style: {
                         backgroundColor: 'white'
                       }
@@ -154,36 +154,34 @@ export default withQueryBoundary(
               {
                 label: 'To',
                 menu: [
-                  ...Object.entries(iconQuery.data.internal.paths).map(
-                    ([a, b]) => {
-                      const icon = iconQuery.data.internal.as(a)
+                  ...Object.entries(iconQuery.data.more.paths).map(([a, b]) => {
+                    const icon = iconQuery.data.more.as(a)
 
-                      return {
-                        description: prettyBytes(icon.blob),
-                        label: a.toUpperCase(),
-                        menu: hasValues(icon) && [
-                          {
-                            label: 'View',
-                            onClick: () => {
-                              open.objectURL(icon.blob)
-                            }
-                          },
-                          {
-                            label: 'Copy',
-                            onClick: async () => {
-                              await copy(icon.data)
-                            }
-                          },
-                          {
-                            label: 'Download',
-                            onClick: async () => {
-                              await fileSaver(icon.blob, b.labeled)
-                            }
+                    return {
+                      description: prettyBytes(icon.blob),
+                      label: a.toUpperCase(),
+                      menu: hasValues(icon) && [
+                        {
+                          label: 'View',
+                          onClick: () => {
+                            open.objectURL(icon.blob)
                           }
-                        ]
-                      }
+                        },
+                        {
+                          label: 'Copy',
+                          onClick: async () => {
+                            await copy(icon.data)
+                          }
+                        },
+                        {
+                          label: 'Download',
+                          onClick: async () => {
+                            await fileSaver(icon.blob, b.labeled)
+                          }
+                        }
+                      ]
                     }
-                  ),
+                  }),
                   'Takumi WASM',
                   ...Object.entries(takumi.formats).map(([format, type]) => ({
                     label: format.toUpperCase(),
@@ -447,9 +445,9 @@ export default withQueryBoundary(
             }))
           },
           {
-            description: size(iconQuery.data.internal.idCases),
+            description: size(iconQuery.data.more.idCases),
             label: 'ID cases',
-            menu: Object.entries(iconQuery.data.internal.idCases).map(
+            menu: Object.entries(iconQuery.data.more.idCases).map(
               ([label, id]) => {
                 label = sentenceCase(label)
 
@@ -525,7 +523,7 @@ export default withQueryBoundary(
               </React.Activity>
             </div>
             <AccessibleIcon.Root label={iconQuery.data.id}>
-              {React.cloneElement(iconQuery.data.internal.to.reactElement, {
+              {React.cloneElement(iconQuery.data.more.to.reactElement, {
                 height: iconOptions.square ? width : '100%',
                 width
               })}

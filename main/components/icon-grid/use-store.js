@@ -3,7 +3,7 @@ import {useBatchedCallback} from '@tanstack/react-pacer'
 import {last} from 'es-toolkit'
 import ms from 'ms'
 
-import {isWordCharacter} from '../../misc'
+import {isWordChar} from '../../misc'
 import {withImmerAtom} from '../../misc/with-immer-atom'
 
 const searchTerm = {
@@ -14,7 +14,7 @@ const searchTerm = {
   isDefault: value => value === searchTerm.default,
   parse: value =>
     isString(value)
-      ? searchTerm.isDefault(value) || isWordCharacter(value)
+      ? searchTerm.isDefault(value) || isWordChar(value)
         ? value
         : searchTerm.parse(value.slice(1))
       : searchTerm.default

@@ -1,4 +1,4 @@
-import {Menu as InternalMenu} from '@base-ui/react'
+import {Menu as MenuPrimitive} from '@base-ui/react'
 import {isFalsy, isPlainObject, isString} from '@sindresorhus/is'
 import {
   VscodeContextMenuItem,
@@ -44,10 +44,10 @@ const Popup = component(({menu}) => {
   const context = usePopupContext(identity)
 
   return (
-    <InternalMenu.Popup
+    <MenuPrimitive.Popup
       render={
         <VscodeFormContainer style={THEME.CARD_STYLE}>
-          <InternalMenu.Group
+          <MenuPrimitive.Group
             render={
               <VscodeFormGroup
                 style={{
@@ -60,7 +60,7 @@ const Popup = component(({menu}) => {
                 {menu.map((data, index) => {
                   if (isGroupLabel(data))
                     return (
-                      <InternalMenu.GroupLabel
+                      <MenuPrimitive.GroupLabel
                         key={getId(index, data)}
                         render={
                           <VscodeContextMenuItem
@@ -91,7 +91,7 @@ const Popup = component(({menu}) => {
                       ) : separator ? (
                         Item.Separator
                       ) : (
-                        <InternalMenu.Item
+                        <MenuPrimitive.Item
                           {...context.ItemProps}
                           render={item}
                         />
@@ -135,23 +135,23 @@ const Item = Object.assign(
   }),
   {
     Separator: (
-      <InternalMenu.Separator render={<VscodeContextMenuItem separator />} />
+      <MenuPrimitive.Separator render={<VscodeContextMenuItem separator />} />
     ),
     Submenu: component(({children, onOpenChange = asyncNoop, ...props}) => {
       const [state, setState] = useState(false)
 
       return (
-        <InternalMenu.SubmenuRoot
+        <MenuPrimitive.SubmenuRoot
           onOpenChange={async (...args) => {
             setState(args[0])
 
             await onOpenChange(...args)
           }}>
-          <InternalMenu.SubmenuTrigger {...props} selected={state} />
-          <InternalMenu.Portal>
-            <InternalMenu.Positioner>{children}</InternalMenu.Positioner>
-          </InternalMenu.Portal>
-        </InternalMenu.SubmenuRoot>
+          <MenuPrimitive.SubmenuTrigger {...props} selected={state} />
+          <MenuPrimitive.Portal>
+            <MenuPrimitive.Positioner>{children}</MenuPrimitive.Positioner>
+          </MenuPrimitive.Portal>
+        </MenuPrimitive.SubmenuRoot>
       )
     })
   }
@@ -179,17 +179,17 @@ export const Menu = component(
     }
 
     return (
-      <InternalMenu.Root disabled={disabled}>
-        <InternalMenu.Trigger
+      <MenuPrimitive.Root disabled={disabled}>
+        <MenuPrimitive.Trigger
           {...TriggerProps}
           nativeButton={false}
           render={render}>
           {children}
-        </InternalMenu.Trigger>
+        </MenuPrimitive.Trigger>
         <React.Activity>
           {hasValues(menu) && (
-            <InternalMenu.Portal>
-              <InternalMenu.Positioner align={align} side={side}>
+            <MenuPrimitive.Portal>
+              <MenuPrimitive.Positioner align={align} side={side}>
                 <PopupProvider
                   ItemProps={{
                     closeOnClick
@@ -197,11 +197,11 @@ export const Menu = component(
                   TriggerProps={TriggerProps}>
                   <Popup menu={menu} />
                 </PopupProvider>
-              </InternalMenu.Positioner>
-            </InternalMenu.Portal>
+              </MenuPrimitive.Positioner>
+            </MenuPrimitive.Portal>
           )}
         </React.Activity>
-      </InternalMenu.Root>
+      </MenuPrimitive.Root>
     )
   }
 )

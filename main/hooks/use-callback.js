@@ -4,7 +4,7 @@ import React from 'react'
 
 import {useDeepCompareMemoize} from './use-deep-compare-memoize'
 
-const internalUseCallback = useDeepCompareMemoize.with(React.useCallback)
+const reactUseCallback = useDeepCompareMemoize.with(React.useCallback)
 
 export const useCallback = (fn, deps) =>
-  (isUndefined(deps) ? useMemoizedFn : internalUseCallback)(fn, deps)
+  (isUndefined(deps) ? useMemoizedFn : reactUseCallback)(fn, deps)

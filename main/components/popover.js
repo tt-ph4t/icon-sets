@@ -1,4 +1,4 @@
-import {Popover as InternalPopover} from '@base-ui/react'
+import {Popover as PopoverPrimitive} from '@base-ui/react'
 import {
   VscodeFormContainer,
   VscodeFormGroup
@@ -49,11 +49,11 @@ export const Popover = Object.assign(
         const [state, setState] = useState(open)
 
         const portal = (
-          <InternalPopover.Portal keepMounted={keepMounted}>
-            <InternalPopover.Positioner
+          <PopoverPrimitive.Portal keepMounted={keepMounted}>
+            <PopoverPrimitive.Positioner
               align={align}
               render={(props, state) => (
-                <InternalPopover.Popup
+                <PopoverPrimitive.Popup
                   render={
                     <div {...props}>
                       {renderSlot({
@@ -71,25 +71,25 @@ export const Popover = Object.assign(
               )}
               side={side}
             />
-          </InternalPopover.Portal>
+          </PopoverPrimitive.Portal>
         )
 
         return (
-          <InternalPopover.Root
+          <PopoverPrimitive.Root
             onOpenChange={async (...args) => {
               setState(args[0])
 
               await onOpenChange(...args)
             }}
             open={state}>
-            <InternalPopover.Trigger
+            <PopoverPrimitive.Trigger
               closeDelay={closeDelay}
               delay={delay}
               nativeButton={false}
               openOnHover={openOnHover}
               render={render}>
               {children}
-            </InternalPopover.Trigger>
+            </PopoverPrimitive.Trigger>
             {keepMounted ? (
               <React.Activity mode={state ? 'visible' : 'hidden'}>
                 {portal}
@@ -97,7 +97,7 @@ export const Popover = Object.assign(
             ) : (
               portal
             )}
-          </InternalPopover.Root>
+          </PopoverPrimitive.Root>
         )
       }
     )
