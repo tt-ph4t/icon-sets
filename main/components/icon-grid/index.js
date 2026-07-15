@@ -88,7 +88,7 @@ const noIcons = (
 
 export const IconGrid = Object.assign(
   useRemount.with(
-    component(({children, iconIds, REMOUNT}) => {
+    component(({children, iconIds, [useRemount.key]: remount}) => {
       iconIds = useMemo(
         () => castArray(iconIds).filter(validateIconId),
         [iconIds]
@@ -196,8 +196,8 @@ export const IconGrid = Object.assign(
                           ]
                         },
                         {
-                          icon: REMOUNT.icon,
-                          onClick: REMOUNT,
+                          icon: remount.icon,
+                          onClick: remount,
                           secondary: !batcherState.isPending
                         }
                       ]}

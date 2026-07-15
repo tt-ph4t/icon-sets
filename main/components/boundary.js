@@ -33,7 +33,8 @@ export const Boundary = Object.assign(
         fallback = defaults.fallback,
         query,
         queryOptions = DEFAULT_QUERY_OPTIONS,
-        render
+        render,
+        renderError
       }) => {
         trigger.error(!isFunction(render))
 
@@ -54,21 +55,26 @@ export const Boundary = Object.assign(
         if (query.isLoading) return fallback
 
         if (query.isError)
-          return (
-            <Fallback.Error
-              message={query.error.message}
-              retryFn={async () => {
-                await queryClient.resetQueries(queryClientFilters)
-              }}
-            />
-          )
+          return renderSlot({
+            bespoke:
+              renderError ??
+              (() => (
+                <Fallback.Error
+                  message={query.error.message}
+                  retryFn={async () => {
+                    await queryClient.resetQueries(queryClientFilters)
+                  }}
+                />
+              )),
+            context: query.error
+          })
 
         return renderSlot(render)
       }
     ),
-    with: Component =>
+    with: (Component, fallback) =>
       component(props => (
-        <Boundary>
+        <Boundary fallback={fallback}>
           <Component {...props} />
         </Boundary>
       ))

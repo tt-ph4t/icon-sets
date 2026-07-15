@@ -42,8 +42,8 @@ const remountHotkey = 'f5'
 export default withProviders(
   withQueryBoundary(
     useRemount.with(
-      component(({REMOUNT}) => {
-        useHotkey(remountHotkey, REMOUNT)
+      component(({[useRemount.key]: remount}) => {
+        useHotkey(remountHotkey, remount)
 
         return (
           <Layout.Fullscreen
@@ -77,7 +77,7 @@ export default withProviders(
               <VscodeFormGroup variant='settings-group'>
                 <VscodeFormHelper>
                   {toolbar({
-                    ...REMOUNT.menu,
+                    ...remount.menu,
                     description: formatForDisplay(remountHotkey)
                   })}
                 </VscodeFormHelper>

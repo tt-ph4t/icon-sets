@@ -1,5 +1,7 @@
+import {Button} from '@base-ui/react'
 import {useQueryClient} from '@tanstack/react-query'
 import {useUnmount} from 'ahooks'
+import {Slot} from 'radix-ui'
 
 import {component} from '../../../hocs'
 import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
@@ -10,20 +12,19 @@ import {QUERY_CLIENT, THEME} from '../../../misc/constants'
 import {parseIconName} from '../../../misc/parse-icon-name'
 import {Menu} from '../../menu'
 
-const Fallback = component(({children, style, ...props}) => (
-  <span
+const Fallback = component(({children, ...props}) => (
+  <Slot.Root
+    nativeButton={false}
     style={{
-      userSelect: 'none',
-      ...style
-    }}
-    {...props}>
-    {children.slice(0, 3)}
-  </span>
+      userSelect: 'none'
+    }}>
+    <Button render={<span>{children.slice(0, 3)}</span>} {...props} />
+  </Slot.Root>
 ))
 
 export default Component =>
   useRemount.with(
-    component(({iconId, REMOUNT, ...props}) => {
+    component(({iconId, [useRemount.key]: remount, ...props}) => {
       const {icon} = parseIconName(iconId)
       const queryClient = useQueryClient()
       const {iconCustomisations} = useCustomizedIcons.useSelect(iconId)
@@ -53,8 +54,8 @@ export default Component =>
       )
 
       const fallbackMenu = useMemo(
-        () => [REMOUNT.menu, 'Query', ...menu],
-        [REMOUNT.menu, menu]
+        () => [remount.menu, 'Query', ...menu],
+        [remount.menu, menu]
       )
 
       useUnmount(async () => {
@@ -95,7 +96,7 @@ export default Component =>
             {
               separator: true
             },
-            REMOUNT.menu
+            remount.menu
           ]}
           {...props}
         />

@@ -10,6 +10,8 @@ const context = {
   label: 'Reload'
 }
 
+const key = Symbol()
+
 export const useRemount = Object.assign(
   () => {
     const [state, setState] = useState(0)
@@ -31,13 +33,19 @@ export const useRemount = Object.assign(
     })
   },
   {
+    key,
     with: Component =>
       component(props => {
         const remount = useRemount()
 
         return (
           <React.Fragment key={remount.state}>
-            <Component {...props} REMOUNT={remount} />
+            <Component
+              {...props}
+              {...{
+                [key]: remount
+              }}
+            />
           </React.Fragment>
         )
       })

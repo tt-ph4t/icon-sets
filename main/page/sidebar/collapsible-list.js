@@ -48,7 +48,7 @@ export default () => {
 
   return Object.assign(
     useRemount.with(
-      component(({ids, menu, REMOUNT, ...props}) => {
+      component(({ids, menu, [useRemount.key]: remount, ...props}) => {
         const store = useStore()
 
         const openMap = store.useSelectValue(({draft}) =>
@@ -76,7 +76,7 @@ export default () => {
             </ContentLayout>
             <Menu
               data={[
-                REMOUNT.menu,
+                remount.menu,
                 {
                   label: `${hasOpenedIds ? 'Collapse' : 'Expand'} ${pluralize(
                     (hasOpenedIds ? openedIds : closedIds).length,
