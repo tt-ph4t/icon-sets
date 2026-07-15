@@ -28,17 +28,18 @@ export const ICON_CACHE = new LRUCache({
 
 export const QUERY_CLIENT = {
   GLOBAL: new QueryClient(),
-  METHODS: deepFreeze({
-    Refetch: 'refetchQueries',
-    // eslint-disable-next-line perfectionist/sort-objects
-    Invalidate: 'invalidateQueries',
-    Reset: 'resetQueries',
-    // eslint-disable-next-line perfectionist/sort-objects
-    Cancel: 'cancelQueries',
-    Remove: 'removeQueries'
-  }),
   MISC: new QueryClient()
 }
+
+export const QUERY_CLIENT_MENU = deepFreeze({
+  Refetch: 'refetchQueries',
+  // eslint-disable-next-line perfectionist/sort-objects
+  Invalidate: 'invalidateQueries',
+  Reset: 'resetQueries',
+  // eslint-disable-next-line perfectionist/sort-objects
+  Cancel: 'cancelQueries',
+  Remove: 'removeQueries'
+})
 
 export const EMPTY = deepFreeze({
   ARRAY: [],

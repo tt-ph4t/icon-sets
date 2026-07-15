@@ -12,16 +12,16 @@ import {hasValues} from '../../misc'
 import {
   DATABASE_URL,
   DEFAULT_QUERY_OPTIONS,
-  QUERY_CLIENT
+  QUERY_CLIENT_MENU
 } from '../../misc/constants'
 import {getId} from '../../misc/get-id'
 import {getQueryOptions} from '../../misc/get-query-options'
 import {pluralize} from '../../misc/pluralize'
 import dataVersion from './data-version'
 
-const queryClientMethods = {
+const queryClientMenu = {
   Prefetch: 'prefetchQuery',
-  ...QUERY_CLIENT.METHODS
+  ...QUERY_CLIENT_MENU
 }
 
 export default component(() => {
@@ -36,24 +36,27 @@ export default component(() => {
     if (confirm()) await last(items)()
   })
 
-  const internalQueryClient = useCallback(async (method, iconSet) => {
+  const _queryClient = useCallback(async (method, iconSet) => {
     if (hasValues(iconSet))
-      for (const icon of iconSet.icons)
-        await queryClient[method](
-          getQueryOptions({
-            exact: true,
-            gcTime: 0,
-            queryKey: getId(iconSet.prefix, icon),
-            url: `${DATABASE_URL}/${iconSet.prefix}/${icon}.msgpack`
-          })
-        )
+      await Promise.all(
+        iconSet.icons.map(async icon => {
+          await queryClient[method](
+            getQueryOptions({
+              exact: true,
+              gcTime: 0,
+              queryKey: getId(iconSet.prefix, icon),
+              retry: false,
+              url: `${DATABASE_URL}/${iconSet.prefix}/${icon}.msgpack`
+            })
+          )
+        })
+      )
   })
 
   useQuery({
     ...DEFAULT_QUERY_OPTIONS,
     select: async ({[state.iconSetPrefix]: iconSet}) => {
-      if (hasValues(state))
-        await internalQueryClient(state.queryClientMethod, iconSet)
+      if (hasValues(state)) await _queryClient(state.queryClientMethod, iconSet)
     }
   })
 
@@ -76,12 +79,12 @@ export default component(() => {
                 label: 'Download'
               },
               'Query',
-              ...Object.entries(queryClientMethods).map(([a, b]) => ({
+              ...Object.entries(queryClientMenu).map(([a, b]) => ({
                 label: a,
                 onClick: () => {
                   asyncBatcher.addItem(() => {
                     mapValues(iconSets, async iconSet => {
-                      await internalQueryClient(b, iconSet)
+                      await _queryClient(b, iconSet)
                     })
                   })
                 }
@@ -103,7 +106,7 @@ export default component(() => {
                     label: 'Download'
                   },
                   'Query',
-                  ...Object.entries(queryClientMethods).map(([a, b]) => ({
+                  ...Object.entries(queryClientMenu).map(([a, b]) => ({
                     label: a,
                     onClick: () => {
                       asyncBatcher.addItem(() => {

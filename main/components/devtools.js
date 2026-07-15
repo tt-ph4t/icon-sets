@@ -2,7 +2,6 @@ import {TanStackDevtools} from '@tanstack/react-devtools'
 import {hotkeysDevtoolsPlugin} from '@tanstack/react-hotkeys-devtools'
 import {pacerDevtoolsPlugin} from '@tanstack/react-pacer-devtools'
 import {ReactQueryDevtoolsPanel} from '@tanstack/react-query-devtools/build/modern/production.js'
-import {omit} from 'es-toolkit'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -12,12 +11,10 @@ import {VscodeDevToolbar} from './theme'
 
 const TanStackDevtoolsProps = {
   plugins: [
-    ...Object.entries(omit(QUERY_CLIENT, ['METHODS'])).map(
-      ([name, client]) => ({
-        name: `TanStack Query (${name})`,
-        render: <ReactQueryDevtoolsPanel client={client} />
-      })
-    ),
+    ...Object.entries(QUERY_CLIENT).map(([name, client]) => ({
+      name: `TanStack Query (${name})`,
+      render: <ReactQueryDevtoolsPanel client={client} />
+    })),
     pacerDevtoolsPlugin(),
     hotkeysDevtoolsPlugin()
   ]
