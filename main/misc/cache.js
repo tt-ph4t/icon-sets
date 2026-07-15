@@ -9,12 +9,12 @@ const memoize =
   // https://github.com/toss/es-toolkit/blob/171d8a8a5941671d3b8e99ba617bfb27cf2c71b3/src/function/memoize.ts
   // https://github.com/toss/es-toolkit/issues/1739
   (fn = noop, {cache = new Map(), getCacheKey = noop} = EMPTY.OBJECT) => {
-    const memoizedFn = (...args) => {
+    function memoizedFn(...args) {
       const key = getCacheKey(...args)
 
       if (cache.has(key)) return cache.get(key)
 
-      const result = fn.call(this, ...args)
+      const result = Reflect.apply(fn, this, args)
 
       cache.set(key, result)
 
