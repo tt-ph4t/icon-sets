@@ -58,7 +58,7 @@ export default {
 
     return (
       <Slot.Root
-        onResize={(...[, size]) => {
+        onResize={(...[, {size}]) => {
           settings.set(({draft}) => {
             draft.layout.size = size
           })
