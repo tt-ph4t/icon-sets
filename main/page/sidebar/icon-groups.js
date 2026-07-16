@@ -84,11 +84,11 @@ export default component(() => {
                 ...sort(Object.keys(query.data.groupedIconIds))
                   .asc()
                   .map(a => ({
+                    checked: a === state,
                     label: a,
                     onClick: () => {
                       setState(a)
-                    },
-                    selected: a === state
+                    }
                   }))
               ]}
               renderItem={(...[, {context}]) => {

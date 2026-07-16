@@ -2,6 +2,7 @@ import {formatForDisplay, useHotkey} from '@tanstack/react-hotkeys'
 import {useIsFetching, useQueryClient} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
+import {pick} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import React from 'react'
 
@@ -23,6 +24,11 @@ const themeHotkey = 't'
 const Settings = component(({menu}) => {
   const settings = useSettings()
   const theme = useTheme()
+  const {isDev} = settings.useSelectValue('isDev')
+
+  const layout = settings.useSelectValue(({draft}) =>
+    pick(draft.layout, ['isReverse', 'isFullscreen'])
+  )
 
   const font = useFont()
   const fontValue = font.useValue()
@@ -40,41 +46,42 @@ const Settings = component(({menu}) => {
           description: formatForDisplay(themeHotkey),
           label: 'Theme',
           menu: theme.ids.map(themeId => ({
+            checked: themeId.value === theme.id,
             label: themeId.label,
             onClick: () => {
               theme.set(themeId.value)
-            },
-            selected: themeId.value === theme.id
+            }
           }))
         },
         {
           label: 'Font',
           menu: [
             {
+              checked: isEqual(fontValue.current, fontValue.default),
               label: 'Default',
               onClick: () => {
                 font.set(({draft}) => {
                   draft.current = draft.default
                 })
-              },
-              selected: isEqual(fontValue.current, fontValue.default)
+              }
             },
             {
               separator: true
             },
             ...Object.keys(useFont.families).map(a => ({
+              checked: isEqual(fontValue.current, useFont.families[a]),
               label: a,
               onClick: () => {
                 font.set(({draft}) => {
                   draft.current = useFont.families[a]
                 })
-              },
-              selected: isEqual(fontValue.current, useFont.families[a])
+              }
             }))
           ]
         },
         'Layout',
         {
+          checked: layout.isReverse,
           label: 'Reverse',
           onClick: () => {
             settings.set(({draft}) => {
@@ -83,6 +90,7 @@ const Settings = component(({menu}) => {
           }
         },
         {
+          checked: layout.isFullscreen,
           label: 'Fullscreen',
           onClick: () => {
             settings.set(({draft}) => {
@@ -92,6 +100,7 @@ const Settings = component(({menu}) => {
         },
         'Misc',
         {
+          checked: isDev,
           label: 'Devtools',
           onClick: () => {
             settings.set(({draft}) => {

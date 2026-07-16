@@ -309,40 +309,42 @@ export default withQueryBoundary(
                   {
                     label: 'Size',
                     menu: scales.map(scale => ({
+                      checked: scale === iconCustomisations.scale,
                       label: sizeLabel(iconQuery.data.data, scale),
                       onClick: () => {
                         customizedIcons.set(iconQuery.data.id, () => ({
                           scale
                         }))
-                      },
-                      selected: scale === iconCustomisations.scale
+                      }
                     }))
                   },
                   {
                     label: 'Rotate',
                     menu: rotate.values.map(value => ({
+                      checked: value === iconCustomisations.rotate,
                       label: `${value * rotate.step}deg`,
                       onClick: () => {
                         customizedIcons.set(iconQuery.data.id, () => ({
                           rotate: value
                         }))
-                      },
-                      selected: value === iconCustomisations.rotate
+                      }
                     }))
                   },
                   'Flip',
                   ...Object.entries(flipDirections).map(
-                    ([flipDirection, label]) => ({
-                      label,
-                      onClick: () => {
-                        customizedIcons.set(
-                          iconQuery.data.id,
-                          ({iconCustomisations}) => ({
-                            [flipDirection]: !iconCustomisations[flipDirection]
-                          })
-                        )
+                    ([flipDirection, label]) => {
+                      const checked = iconCustomisations[flipDirection]
+
+                      return {
+                        checked,
+                        label,
+                        onClick: () => {
+                          customizedIcons.set(iconQuery.data.id, () => ({
+                            [flipDirection]: !checked
+                          }))
+                        }
                       }
-                    })
+                    }
                   ),
                   'More',
                   {

@@ -60,11 +60,11 @@ export default component(() => {
               menu={[
                 pluralize(query.data.iconSet.category.names.length, 'category'),
                 ...query.data.iconSet.category.names.map(category => ({
+                  checked: category === state,
                   label: category,
                   onClick: () => {
                     setState(state => state === category || category)
-                  },
-                  selected: category === state
+                  }
                 }))
               ]}
               renderItem={(...[, props]) => <Item {...props} />}

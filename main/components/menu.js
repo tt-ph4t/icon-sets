@@ -3,10 +3,11 @@ import {isFalsy, isPlainObject, isString} from '@sindresorhus/is'
 import {
   VscodeContextMenuItem,
   VscodeFormContainer,
-  VscodeFormGroup
+  VscodeFormGroup,
+  VscodeIcon
 } from '@vscode-elements/react-elements'
 import {useControllableValue} from 'ahooks'
-import {asyncNoop, identity, omit} from 'es-toolkit'
+import {identity, omit} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import {Slot} from 'radix-ui'
 import React from 'react'
@@ -52,7 +53,7 @@ const Popup = component(({menu}) => {
               <VscodeFormGroup
                 style={{
                   maxHeight: 'calc(var(--SPACING) * 120)',
-                  maxWidth: 'calc(var(--SPACING) * 75)', // Virtualizer ?
+                  maxWidth: 'calc(var(--SPACING) * 75)', // virtua ?
                   overflow: 'auto',
                   padding: 'unset'
                 }}
@@ -64,12 +65,9 @@ const Popup = component(({menu}) => {
                         key={getId(index, data)}
                         render={
                           <VscodeContextMenuItem
+                            disabled
                             label={data}
                             selected={false}
-                            style={{
-                              opacity: 0.5,
-                              pointerEvents: 'none'
-                            }}
                           />
                         }
                       />
@@ -109,49 +107,70 @@ const Popup = component(({menu}) => {
 })
 
 const Item = Object.assign(
-  component(({description, keybinding = description, ...props}) => {
-    const [selected, setSelected] = useControllableValue(props, {
-      defaultValue: false,
-      defaultValuePropName: 'defaultSelected',
-      trigger: 'onSelectedChange',
-      valuePropName: 'selected'
-    })
+  component(
+    ({checked, description, disabled, keybinding = description, ...props}) => {
+      const [selected, setSelected] = useControllableValue(props, {
+        defaultValue: false,
+        defaultValuePropName: 'defaultSelected',
+        trigger: 'onSelectedChange',
+        valuePropName: 'selected'
+      })
 
-    return (
-      <Slot.Root
-        onMouseEnter={() => {
-          setSelected(true)
-        }}
-        onMouseLeave={() => {
-          setSelected(false)
-        }}>
-        <VscodeContextMenuItem
-          keybinding={keybinding}
-          selected={selected}
-          {...props}
-        />
-      </Slot.Root>
-    )
-  }),
+      return (
+        <div
+          style={{
+            position: 'relative'
+          }}>
+          <Slot.Root
+            onMouseEnter={() => {
+              setSelected(true)
+            }}
+            onMouseLeave={() => {
+              setSelected(false)
+            }}>
+            <VscodeContextMenuItem
+              disabled={disabled}
+              keybinding={keybinding}
+              selected={selected}
+              {...props}
+            />
+          </Slot.Root>
+          {checked && (
+            <VscodeIcon
+              disabled={disabled}
+              name='check'
+              size={14}
+              style={{
+                '--top': '50%',
+
+                left: 8,
+                pointerEvents: 'none',
+                position: 'absolute',
+                top: 'var(--top)',
+                transform: 'translateY(calc(var(--top) * -1))'
+              }}
+            />
+          )}
+        </div>
+      )
+    }
+  ),
   {
     Separator: (
       <MenuPrimitive.Separator render={<VscodeContextMenuItem separator />} />
     ),
-    Submenu: component(({children, onOpenChange = asyncNoop, ...props}) => {
+    Submenu: component(({children, ...props}) => {
       const [state, setState] = useState(false)
 
       return (
-        <MenuPrimitive.SubmenuRoot
-          onOpenChange={async (...args) => {
-            setState(args[0])
-
-            await onOpenChange(...args)
-          }}>
-          <MenuPrimitive.SubmenuTrigger {...props} selected={state} />
-          <MenuPrimitive.Portal>
-            <MenuPrimitive.Positioner>{children}</MenuPrimitive.Positioner>
-          </MenuPrimitive.Portal>
-        </MenuPrimitive.SubmenuRoot>
+        <Slot.Root onOpenChange={setState}>
+          <MenuPrimitive.SubmenuRoot>
+            <MenuPrimitive.SubmenuTrigger {...props} selected={state} />
+            <MenuPrimitive.Portal>
+              <MenuPrimitive.Positioner>{children}</MenuPrimitive.Positioner>
+            </MenuPrimitive.Portal>
+          </MenuPrimitive.SubmenuRoot>
+        </Slot.Root>
       )
     })
   }

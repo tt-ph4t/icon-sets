@@ -113,19 +113,19 @@ export default component(({context}) => {
             {
               label: pluralize(size(query.data.categories), 'category'),
               menu: Object.keys(query.data.categories).map(category => {
-                const selected = category === state.category
+                const checked = category === state.category
 
                 return {
+                  checked,
                   label: category,
                   onClick: () => {
                     store.set(({draft}) => {
                       draft[context.id] = {
                         ...(draft[context.id] ?? initialState),
-                        category: selected ? initialState.category : category
+                        category: checked ? initialState.category : category
                       }
                     })
-                  },
-                  selected
+                  }
                 }
               })
             },
@@ -136,9 +136,10 @@ export default component(({context}) => {
             ].map(([a, b]) => ({
               label: pluralize(size(b), a),
               menu: Object.entries(b).map(([c, d]) => {
-                const selected = c === state.theme[a]
+                const checked = c === state.theme[a]
 
                 return {
+                  checked,
                   label: d,
                   onClick: () => {
                     store.set(({draft}) => {
@@ -148,12 +149,11 @@ export default component(({context}) => {
                         ...state,
                         theme: {
                           ...state.theme,
-                          [a]: selected ? initialState.theme[a] : c
+                          [a]: checked ? initialState.theme[a] : c
                         }
                       }
                     })
-                  },
-                  selected
+                  }
                 }
               })
             }))
