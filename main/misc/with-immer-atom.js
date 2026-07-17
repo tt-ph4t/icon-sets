@@ -36,6 +36,7 @@ const useAtomValueWithDelay =
     return state
   }
 
+// https://immerjs.github.io/immer/update-patterns
 export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
   const atom = create((initialValue = deepFreeze(initialValue)))
   const useValue = () => useSelectValue(selectDraft)

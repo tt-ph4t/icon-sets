@@ -8,6 +8,7 @@ import {Menu} from '../../components/menu'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
+import {useIconSetMenuQuery} from '../../hooks/use-icon-set-menu-query'
 import {hasValues} from '../../misc'
 import {
   DATABASE_URL,
@@ -60,6 +61,26 @@ export default component(() => {
     }
   })
 
+  const iconSetMenuQuery = useIconSetMenuQuery(iconSet => ({
+    menu: [
+      {
+        label: 'Download'
+      },
+      'Query',
+      ...Object.entries(queryClientMenu).map(([a, b]) => ({
+        label: a,
+        onClick: () => {
+          asyncBatcher.addItem(() => {
+            setState({
+              iconSetPrefix: iconSet.prefix,
+              queryClientMethod: b
+            })
+          })
+        }
+      }))
+    ]
+  }))
+
   const query = useQuery({
     ...DEFAULT_QUERY_OPTIONS,
     select: useCallback(iconSets => {
@@ -97,31 +118,7 @@ export default component(() => {
           {
             separator: true
           },
-          ...Object.entries(
-            Object.groupBy(
-              Object.values(iconSets).map(iconSet => ({
-                label: `${iconSet.name} (${iconSet.icons.length})`,
-                menu: [
-                  {
-                    label: 'Download'
-                  },
-                  'Query',
-                  ...Object.entries(queryClientMenu).map(([a, b]) => ({
-                    label: a,
-                    onClick: () => {
-                      asyncBatcher.addItem(() => {
-                        setState({
-                          iconSetPrefix: iconSet.prefix,
-                          queryClientMethod: b
-                        })
-                      })
-                    }
-                  }))
-                ]
-              })),
-              ({label}) => label[0].toUpperCase()
-            )
-          ).flatMap(([a, b]) => [a, ...b])
+          ...iconSetMenuQuery.data
         ]
       }
     })

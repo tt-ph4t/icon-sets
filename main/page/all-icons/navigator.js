@@ -5,6 +5,7 @@ import Cycled from 'cycled'
 import {ButtonGroup} from '../../components/button-group'
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
+import {useIconSetMenuQuery} from '../../hooks/use-icon-set-menu-query'
 import {DEFAULT_QUERY_OPTIONS, EMPTY} from '../../misc/constants'
 import {useStore} from './misc'
 
@@ -24,11 +25,12 @@ export default component(() => {
     'selectedIconSetPrefixes'
   )
 
+  const hasSingleSelectedIconSet = selectedIconSetPrefixes.length === 1
+
   const step = useCallback((steps = 0) => {
-    cycled.index =
-      selectedIconSetPrefixes.length === 1
-        ? cycled.indexOf(selectedIconSetPrefixes[0]) + steps
-        : 0
+    cycled.index = hasSingleSelectedIconSet
+      ? cycled.indexOf(selectedIconSetPrefixes[0]) + steps
+      : 0
 
     store.set(({draft}) => {
       draft.selectedIconSetPrefixes = [cycled.current()]
@@ -48,6 +50,16 @@ export default component(() => {
 
   useQuery(queryOptions)
 
+  const iconSetMenuQuery = useIconSetMenuQuery(iconSet => ({
+    checked:
+      hasSingleSelectedIconSet && iconSet.prefix === selectedIconSetPrefixes[0],
+    onClick: () => {
+      store.set(({draft}) => {
+        draft.selectedIconSetPrefixes = [iconSet.prefix]
+      })
+    }
+  }))
+
   return (
     <ButtonGroup
       data={[
@@ -58,6 +70,10 @@ export default component(() => {
         {
           icon: 'chevron-right',
           onClick: next
+        },
+        {
+          icon: 'list-selection',
+          menu: iconSetMenuQuery.data
         }
       ]}
     />

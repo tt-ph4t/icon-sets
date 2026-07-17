@@ -40,7 +40,7 @@ const Label = component(() => {
           children: query.data.label
         },
         {
-          icon: 'filter',
+          icon: 'tag',
           secondary: !query.data.isFiltered
         }
       ]}
