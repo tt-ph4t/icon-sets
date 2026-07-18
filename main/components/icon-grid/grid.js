@@ -1,32 +1,38 @@
+import {useMergedRefs} from '@base-ui/utils/useMergedRefs'
 import {experimental_VGrid as VGrid} from 'virtua'
 
 import {component} from '../../hocs'
 import {useRef} from '../../hooks/use-ref'
 import {renderSlot} from '../../misc/render-slot'
 
+const defaultCellSize = Number.MIN_SAFE_INTEGER
+
 export default component(
   ({
-    bufferSize,
-    cellHeight = Number.MIN_SAFE_INTEGER,
-    cellWidth = Number.MIN_SAFE_INTEGER,
+    cellWidth = defaultCellSize,
     col,
     count = 0,
+    domRef,
     renderItem,
-    row
+    row,
+    ...props
   }) => {
     const size = useRef.size()
+
+    domRef = useMergedRefs(domRef, size.ref)
 
     col ??= Math.max(1, Math.floor(size.width / cellWidth))
     row ??= Math.ceil(count / col)
 
     return (
       <VGrid
-        bufferSize={bufferSize ?? size.height * 0.1}
-        cellHeight={cellHeight}
+        bufferSize={size.height * 0.1}
+        cellHeight={defaultCellSize}
         cellWidth={cellWidth}
         col={col}
-        domRef={size.ref}
-        row={row}>
+        domRef={domRef}
+        row={row}
+        {...props}>
         {context =>
           renderSlot({
             bespoke: renderItem,

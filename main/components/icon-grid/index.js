@@ -1,4 +1,3 @@
-import uFuzzy from '@leeoniya/ufuzzy'
 import {useBatcher} from '@tanstack/react-pacer'
 import {
   VscodeFormContainer,
@@ -32,14 +31,14 @@ import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {hasValues, validateIconId} from '../../misc'
-import {EMPTY, SORT_ORDER_LABELS} from '../../misc/constants'
+import {SORT_ORDER_LABELS} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {prettyBytes} from '../../misc/pretty-bytes'
 import {ButtonGroup} from '../button-group'
 import Grid from './grid'
 import Item from './item'
 import Search from './search'
-import useStore from './use-store'
+import useFilteredIconIds from './use-filtered-icon-ids'
 
 const actions = mapValues(
   {
@@ -54,22 +53,6 @@ const actions = mapValues(
   value =>
     flow(clone, value, castArray, iconIds => iconIds.filter(validateIconId))
 )
-
-const uf = new uFuzzy()
-
-const useFilteredIconIds = iconIds => {
-  const store = useStore()
-  const {searchTerm} = store.useSelectValue('searchTerm')
-
-  return useMemo(() => {
-    if (store.searchTerm.isDefault(searchTerm)) return iconIds
-
-    return (
-      uf.search(iconIds, searchTerm)[0]?.map(index => iconIds[index]) ??
-      EMPTY.ARRAY
-    )
-  }, [searchTerm, iconIds])
-}
 
 const noIcons = (
   <VscodeFormContainer

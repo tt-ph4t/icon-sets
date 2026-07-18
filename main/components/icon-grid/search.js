@@ -31,7 +31,7 @@ import useStore from './use-store'
 
 const ColorPicker =
   // https://github.com/colorjs/color-name
-  component(() => {
+  component(props => {
     const customizedIconsStore = useCustomizedIcons.useStore()
 
     const batcher = useBatcher(items => {
@@ -47,9 +47,7 @@ const ColorPicker =
       <Popover.Primitive
         popupRender={
           <>
-            <Sketch
-              color={iconOptions.color}
-              editableDisable={false}
+            <Slot.Root
               onChange={colorResult => {
                 batcher.addItem(() => {
                   customizedIconsStore.set(({draft}) => {
@@ -57,10 +55,15 @@ const ColorPicker =
                   })
                 })
               }}
-              presetColors={false}
-              style={THEME.CARD_STYLE}
-              width={300}
-            />
+              style={THEME.CARD_STYLE}>
+              <Sketch
+                color={iconOptions.color}
+                editableDisable={false}
+                presetColors={false}
+                width={300}
+                {...props}
+              />
+            </Slot.Root>
             <div
               style={{
                 display: 'flex',
@@ -105,7 +108,7 @@ const ColorPicker =
     )
   })
 
-const SquareToggle = component(() => {
+const SquareToggle = component(props => {
   const customizedIconsStore = useCustomizedIcons.useStore()
 
   const ToolbarButtonProps = customizedIconsStore.useSelectValue(({draft}) => ({
@@ -113,22 +116,33 @@ const SquareToggle = component(() => {
   }))
 
   return (
-    <ToolbarButton
-      icon='symbol-ruler'
+    <Slot.Root
       onChange={event => {
         customizedIconsStore.set(({draft}) => {
           draft.global.square = event.target.checked
         })
-      }}
-      toggleable
-      {...ToolbarButtonProps}
-    />
+      }}>
+      <ToolbarButton
+        icon='symbol-ruler'
+        toggleable
+        {...ToolbarButtonProps}
+        {...props}
+      />
+    </Slot.Root>
   )
 })
 
 const hotkeys = ['/', 'ctrl + f', 'ctrl + k', 'ctrl + e']
 
-const Search = component(({children}) => {
+const hotkeysMenu = [
+  'Hotkeys',
+  ...hotkeys.map(hotkey => ({
+    disabled: true,
+    label: formatForDisplay(hotkey)
+  }))
+]
+
+const Search = component(({children, ...props}) => {
   const ref = useRef()
   const store = useStore()
   const {searchTerm} = store.useSelectValue('searchTerm')
@@ -153,24 +167,20 @@ const Search = component(({children}) => {
   }, EMPTY.ARRAY)
 
   return (
-    <Slot.Root ref={ref}>
+    <Slot.Root
+      onInput={event => {
+        store.searchTerm.set(event.target.value)
+      }}
+      ref={ref}>
       <VscodeTextfield
         invalid={
           !store.searchTerm.isDefault(searchTerm) && !isWordChar(searchTerm)
         }
-        onInput={event => {
-          store.searchTerm.set(event.target.value)
-        }}
-        value={searchTerm}>
+        value={searchTerm}
+        {...props}>
         <React.Activity>
           <Menu
-            data={[
-              'Hotkeys',
-              ...hotkeys.map(hotkey => ({
-                disabled: true,
-                label: formatForDisplay(hotkey)
-              }))
-            ]}
+            data={hotkeysMenu}
             render={<VscodeIcon name='search' slot='content-before' />}
           />
           {React.Children.map(children, children => (
@@ -182,8 +192,8 @@ const Search = component(({children}) => {
   )
 })
 
-export default component(({children}) => (
-  <Search>
+export default component(({children, ...props}) => (
+  <Search {...props}>
     <SquareToggle />
     <ColorPicker />
     {children}
