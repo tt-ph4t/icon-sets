@@ -18,9 +18,9 @@ import pkg from "./package.json" with { type: "json" };
 
 const dataDir = "data";
 
-const sortKeys = (object, options = {}) => {
-  const { order = "asc", deep = false } = options;
-  const a = sort(Object.entries(object))[order](([a]) => a);
+const sortKeys = (value, options = {}) => {
+  const { order = "asc", deep = false, by } = options;
+  const a = sort(Object.entries(value))[order](by);
 
   return Object.fromEntries(
     deep
@@ -135,6 +135,7 @@ writeFileSync(
     ),
     {
       deep: true,
+      by: ([, iconSet]) => iconSet.name,
     },
   ),
 );
