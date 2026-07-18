@@ -3,7 +3,7 @@ import {experimental_VGrid as VGrid} from 'virtua'
 
 import {component} from '../../hocs'
 import {useRef} from '../../hooks/use-ref'
-import {renderSlot} from '../../misc/render-slot'
+import {Slot} from '../slot'
 
 const defaultCellSize = Number.MIN_SAFE_INTEGER
 
@@ -34,7 +34,7 @@ export default component(
         row={row}
         {...props}>
         {context =>
-          renderSlot({
+          Slot.render({
             bespoke: renderItem,
             context: {
               ...context,

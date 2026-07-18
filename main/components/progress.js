@@ -1,12 +1,12 @@
 import {VscodeProgressBar} from '@vscode-elements/react-elements'
 import {asyncNoop} from 'es-toolkit'
-import {Slot} from 'radix-ui'
 import React from 'react'
 
 import {component} from '../hocs'
 import {useCallback} from '../hooks/use-callback'
 import {THEME} from '../misc/constants'
 import {withImmerAtom} from '../misc/with-immer-atom'
+import {Slot} from './slot'
 
 const useStore = withImmerAtom({
   isPending: false
@@ -54,12 +54,12 @@ export const Progress = Object.assign(
   }),
   {
     Bar: component(props => (
-      <Slot.Root
+      <Slot
         style={{
           '--vscode-progressBar-background': `color-mix(var(${THEME.COLORS.FOREGROUND}) 30%, transparent)`
         }}>
         <VscodeProgressBar {...props} />
-      </Slot.Root>
+      </Slot>
     ))
   }
 )

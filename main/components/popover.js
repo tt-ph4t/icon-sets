@@ -9,7 +9,7 @@ import React from 'react'
 import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
 import {THEME} from '../misc/constants'
-import {renderSlot} from '../misc/render-slot'
+import {Slot} from './slot'
 
 export const Popover = Object.assign(
   component(props => (
@@ -56,7 +56,7 @@ export const Popover = Object.assign(
                 <PopoverPrimitive.Popup
                   render={
                     <div {...props}>
-                      {renderSlot({
+                      {Slot.render({
                         bespoke: popupRender,
                         context: {
                           props,

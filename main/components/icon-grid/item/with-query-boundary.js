@@ -1,7 +1,6 @@
 import {Button} from '@base-ui/react'
 import {useQueryClient} from '@tanstack/react-query'
 import {useUnmount} from 'ahooks'
-import {Slot} from 'radix-ui'
 
 import {component} from '../../../hocs'
 import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
@@ -11,15 +10,19 @@ import {useRemount} from '../../../hooks/use-remount'
 import {QUERY_CLIENT_MENU, THEME} from '../../../misc/constants'
 import {parseIconName} from '../../../misc/parse-icon-name'
 import {Menu} from '../../menu'
+import {Slot} from '../../slot'
 
 const Fallback = component(({children, ...props}) => (
-  <Slot.Root
-    nativeButton={false}
+  <Slot
     style={{
       userSelect: 'none'
     }}>
-    <Button render={<span>{children.slice(0, 3)}</span>} {...props} />
-  </Slot.Root>
+    <Button
+      nativeButton={false}
+      render={<span>{children.slice(0, 3)}</span>}
+      {...props}
+    />
+  </Slot>
 ))
 
 export default Component =>

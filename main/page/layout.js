@@ -1,9 +1,9 @@
 import {identity, omit} from 'es-toolkit'
 import {reverse} from 'es-toolkit/compat'
-import {Slot} from 'radix-ui'
 import React from 'react'
 import {ResizableBox} from 'react-resizable'
 
+import {Slot} from '../components/slot'
 import {SplitLayout} from '../components/split-layout'
 import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
@@ -33,9 +33,9 @@ export default {
     }, [isFullscreen, fullscreen, settings])
 
     return (
-      <Slot.Root ref={fullscreen.ref}>
+      <Slot ref={fullscreen.ref}>
         <div {...props} />
-      </Slot.Root>
+      </Slot>
     )
   }),
   Resizable: component(props => {
@@ -57,7 +57,7 @@ export default {
     }, [maxConstraints, settings])
 
     return (
-      <Slot.Root
+      <Slot
         onResize={(...[, {size}]) => {
           settings.set(({draft}) => {
             draft.layout.size = size
@@ -72,7 +72,7 @@ export default {
           {...size}
           {...props}
         />
-      </Slot.Root>
+      </Slot>
     )
   }),
   Split: component(({children, ...props}) => {
@@ -87,19 +87,19 @@ export default {
     }, [isReverse])
 
     return (
-      <Slot.Root
+      <Slot
         ref={ref}
-        showSizeHint
         style={{
           ...omit(THEME.CARD_STYLE, ['padding']),
           height: `calc(var(--HEIGHT) - ${THEME.CARD_STYLE.borderWidth} * 2)`
         }}>
         <SplitLayout
           initialHandlePosition={isReverse ? '73%' : '27%'}
+          showSizeHint
           {...props}>
           {(isReverse ? reverse : identity)(React.Children.toArray(children))}
         </SplitLayout>
-      </Slot.Root>
+      </Slot>
     )
   })
 }

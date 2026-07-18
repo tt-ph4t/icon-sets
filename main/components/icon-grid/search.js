@@ -7,7 +7,6 @@ import {
   VscodeToolbarContainer
 } from '@vscode-elements/react-elements'
 import {last} from 'es-toolkit'
-import {Slot} from 'radix-ui'
 import randomColor from 'randomcolor'
 import React from 'react'
 
@@ -26,6 +25,7 @@ import {
 import {Clipboard} from '../clipboard'
 import {Menu} from '../menu'
 import {Popover} from '../popover'
+import {Slot} from '../slot'
 import {ToolbarButton} from '../toolbar-button'
 import useStore from './use-store'
 
@@ -47,7 +47,7 @@ const ColorPicker =
       <Popover.Primitive
         popupRender={
           <>
-            <Slot.Root
+            <Slot
               onChange={colorResult => {
                 batcher.addItem(() => {
                   customizedIconsStore.set(({draft}) => {
@@ -63,7 +63,7 @@ const ColorPicker =
                 width={300}
                 {...props}
               />
-            </Slot.Root>
+            </Slot>
             <div
               style={{
                 display: 'flex',
@@ -116,7 +116,7 @@ const SquareToggle = component(props => {
   }))
 
   return (
-    <Slot.Root
+    <Slot
       onChange={event => {
         customizedIconsStore.set(({draft}) => {
           draft.global.square = event.target.checked
@@ -128,7 +128,7 @@ const SquareToggle = component(props => {
         {...ToolbarButtonProps}
         {...props}
       />
-    </Slot.Root>
+    </Slot>
   )
 })
 
@@ -167,7 +167,7 @@ const Search = component(({children, ...props}) => {
   }, EMPTY.ARRAY)
 
   return (
-    <Slot.Root
+    <Slot
       onInput={event => {
         store.searchTerm.set(event.target.value)
       }}
@@ -188,7 +188,7 @@ const Search = component(({children, ...props}) => {
           ))}
         </React.Activity>
       </VscodeTextfield>
-    </Slot.Root>
+    </Slot>
   )
 })
 

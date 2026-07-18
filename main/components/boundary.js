@@ -8,9 +8,9 @@ import {Fallback} from '../components/fallback'
 import {component} from '../hocs'
 import {useMemo} from '../hooks/use-memo'
 import {DEFAULT_QUERY_OPTIONS} from '../misc/constants'
-import {renderSlot} from '../misc/render-slot'
 import {trigger} from '../misc/trigger'
 import {Progress} from './progress'
+import {Slot} from './slot'
 
 const defaults = {
   ErrorBoundaryProps: {
@@ -55,7 +55,7 @@ export const Boundary = Object.assign(
         if (query.isLoading) return fallback
 
         if (query.isError)
-          return renderSlot({
+          return Slot.render({
             bespoke:
               renderError ??
               (() => (
@@ -69,7 +69,7 @@ export const Boundary = Object.assign(
             context: query.error
           })
 
-        return renderSlot(render)
+        return Slot.render(render)
       }
     ),
     with: (Component, fallback) =>

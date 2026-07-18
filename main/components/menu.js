@@ -9,7 +9,6 @@ import {
 import {useControllableValue} from 'ahooks'
 import {identity, omit} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
-import {Slot} from 'radix-ui'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -19,6 +18,7 @@ import {hasValues} from '../misc'
 import {buildContext} from '../misc/build-context'
 import {EMPTY, THEME} from '../misc/constants'
 import {getId} from '../misc/get-id'
+import {Slot} from './slot'
 
 const isGroupLabel = isString
 
@@ -121,7 +121,7 @@ const Item = Object.assign(
           style={{
             position: 'relative'
           }}>
-          <Slot.Root
+          <Slot
             onMouseEnter={() => {
               setSelected(true)
             }}
@@ -134,7 +134,7 @@ const Item = Object.assign(
               selected={selected}
               {...props}
             />
-          </Slot.Root>
+          </Slot>
           {checked && (
             <VscodeIcon
               disabled={disabled}
@@ -163,14 +163,14 @@ const Item = Object.assign(
       const [state, setState] = useState(false)
 
       return (
-        <Slot.Root onOpenChange={setState}>
+        <Slot onOpenChange={setState}>
           <MenuPrimitive.SubmenuRoot>
             <MenuPrimitive.SubmenuTrigger {...props} selected={state} />
             <MenuPrimitive.Portal>
               <MenuPrimitive.Positioner>{children}</MenuPrimitive.Positioner>
             </MenuPrimitive.Portal>
           </MenuPrimitive.SubmenuRoot>
-        </Slot.Root>
+        </Slot>
       )
     })
   }

@@ -1,7 +1,6 @@
 import {useEventListener} from 'ahooks'
 import Cycled from 'cycled'
 import {asyncNoop} from 'es-toolkit'
-import {Slot} from 'radix-ui'
 
 import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
@@ -9,6 +8,7 @@ import {useRef} from '../hooks/use-ref'
 import {EMPTY} from '../misc/constants'
 import {withImmerAtom} from '../misc/with-immer-atom'
 import {useProgress} from './progress'
+import {Slot} from './slot'
 
 const defaultIds = EMPTY.ARRAY
 const cycled = new Cycled(defaultIds)
@@ -85,8 +85,8 @@ export const VscodeDevToolbar = component(props => {
   )
 
   return (
-    <Slot.Root ref={ref}>
+    <Slot ref={ref}>
       <vscode-dev-toolbar {...props} />
-    </Slot.Root>
+    </Slot>
   )
 })

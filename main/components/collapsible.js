@@ -1,11 +1,11 @@
 import {VscodeCollapsible} from '@vscode-elements/react-elements'
 import {useControllableValue, useEventListener} from 'ahooks'
 import {asyncNoop} from 'es-toolkit'
-import {Slot} from 'radix-ui'
 import React from 'react'
 
 import {component} from '../hocs'
 import {useRef} from '../hooks/use-ref'
+import {Slot} from './slot'
 
 export const Collapsible = component(
   ({children, onToggle = asyncNoop, ...props}) => {
@@ -33,11 +33,11 @@ export const Collapsible = component(
     )
 
     return (
-      <Slot.Root alwaysShowHeaderActions ref={ref}>
-        <VscodeCollapsible open={open} {...props}>
+      <Slot ref={ref}>
+        <VscodeCollapsible alwaysShowHeaderActions open={open} {...props}>
           {open && children}
         </VscodeCollapsible>
-      </Slot.Root>
+      </Slot>
     )
   }
 )

@@ -2,13 +2,13 @@ import {mapValues, partition} from 'es-toolkit'
 import {VList} from 'virtua'
 
 import {Menu} from '../../components/menu'
+import {Slot} from '../../components/slot'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
 import {hasValues} from '../../misc'
 import {pluralize} from '../../misc/pluralize'
-import {renderSlot} from '../../misc/render-slot'
 import {withImmerAtom} from '../../misc/with-immer-atom'
 import ContentLayout from './content-layout'
 
@@ -36,7 +36,7 @@ export default () => {
       }
     )
 
-    return renderSlot({
+    return Slot.render({
       bespoke: renderItem,
       context: {
         CollapsibleProps,
