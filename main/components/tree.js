@@ -4,12 +4,14 @@ import {
   VscodeTree,
   VscodeTreeItem
 } from '@vscode-elements/react-elements'
+import {play} from 'cuelume'
 import React from 'react'
 
 import {component} from '../hocs'
 import {isReactKey} from '../misc'
 import {EMPTY} from '../misc/constants'
 import {trigger} from '../misc/trigger'
+import {Slot} from './slot'
 
 const renderItems = (data = EMPTY.ARRAY) =>
   data.map(({id, ...props}) => {
@@ -19,52 +21,45 @@ const renderItems = (data = EMPTY.ARRAY) =>
   })
 
 const Item = component(({checked, children, label, ...props}) => (
-  <VscodeTreeItem {...props}>
-    {label}
-    <React.Activity mode={isBoolean(checked) ? 'visible' : 'hidden'}>
-      <VscodeIcon
-        name={checked ? 'check' : 'blank'}
-        size={14}
-        slot='icon-leaf'
-      />
-    </React.Activity>
-    {renderItems(children)}
-  </VscodeTreeItem>
+  <Slot
+    onMouseEnter={() => {
+      play('tick')
+    }}>
+    <VscodeTreeItem {...props}>
+      {label}
+      <React.Activity mode={isBoolean(checked) ? 'visible' : 'hidden'}>
+        <VscodeIcon
+          name={checked ? 'check' : 'blank'}
+          size={14}
+          slot='icon-leaf'
+        />
+      </React.Activity>
+      {renderItems(children)}
+    </VscodeTreeItem>
+  </Slot>
 ))
 
 export const Tree = Object.assign(
-  component(
-    ({
-      data = EMPTY.ARRAY,
-      hideArrows = true,
-      indentGuides = 'always',
-      onVscTreeSelect,
-      ...props
-    }) => (
-      <VscodeTree
-        hideArrows={hideArrows}
-        indentGuides={indentGuides}
-        onVscTreeSelect={
-          onVscTreeSelect ??
-          (async (...args) => {
-            const [
-              {
-                detail: [item]
-              }
-            ] = args
+  component(({data = EMPTY.ARRAY, ...props}) => (
+    <Slot
+      onVscTreeSelect={async (...args) => {
+        const [
+          {
+            detail: [item]
+          }
+        ] = args
 
-            await item._path
-              .reduce((a, b) => (a.children ?? a)[b], data)
-              .onClick?.(...args)
+        await item._path
+          .reduce((a, b) => (a.children ?? a)[b], data)
+          .onClick?.(...args)
 
-            if (item.branch) item.open // ? useStore
-          })
-        }
-        {...props}>
+        if (item.branch) item.open // ? useStore
+      }}>
+      <VscodeTree hideArrows indentGuides='always' {...props}>
         {renderItems(data)}
       </VscodeTree>
-    )
-  ),
+    </Slot>
+  )),
   {
     icon: {
       branch: (

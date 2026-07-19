@@ -21,7 +21,7 @@ export const Collapsible = component(
     useEventListener(
       'vsc-collapsible-toggle',
       async (...args) => {
-        play('toggle')
+        play('release')
         setOpen(args[0].detail.open) // ?
 
         await onToggle(...args)

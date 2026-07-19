@@ -200,34 +200,29 @@ export const Menu = component(
     }
 
     return (
-      <Slot
-        onOpenChange={() => {
-          play('tick')
-        }}>
-        <MenuPrimitive.Root {...props}>
-          <MenuPrimitive.Trigger
-            {...TriggerProps}
-            nativeButton={false}
-            render={render}>
-            {children}
-          </MenuPrimitive.Trigger>
-          <React.Activity>
-            {hasValues(menu) && (
-              <MenuPrimitive.Portal>
-                <MenuPrimitive.Positioner align={align} side={side}>
-                  <PopupProvider
-                    ItemProps={{
-                      closeOnClick
-                    }}
-                    TriggerProps={TriggerProps}>
-                    <Popup menu={menu} />
-                  </PopupProvider>
-                </MenuPrimitive.Positioner>
-              </MenuPrimitive.Portal>
-            )}
-          </React.Activity>
-        </MenuPrimitive.Root>
-      </Slot>
+      <MenuPrimitive.Root {...props}>
+        <MenuPrimitive.Trigger
+          {...TriggerProps}
+          nativeButton={false}
+          render={render}>
+          {children}
+        </MenuPrimitive.Trigger>
+        <React.Activity>
+          {hasValues(menu) && (
+            <MenuPrimitive.Portal>
+              <MenuPrimitive.Positioner align={align} side={side}>
+                <PopupProvider
+                  ItemProps={{
+                    closeOnClick
+                  }}
+                  TriggerProps={TriggerProps}>
+                  <Popup menu={menu} />
+                </PopupProvider>
+              </MenuPrimitive.Positioner>
+            </MenuPrimitive.Portal>
+          )}
+        </React.Activity>
+      </MenuPrimitive.Root>
     )
   }
 )

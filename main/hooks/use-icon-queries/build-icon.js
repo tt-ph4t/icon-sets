@@ -1,5 +1,4 @@
 import {
-  defaultIconProps,
   getIconCSS,
   iconToHTML,
   iconToSVG,
@@ -87,8 +86,7 @@ export default cache(
         return a
       }, {}),
       get to() {
-        const iconData = mergeIconData(defaultIconProps, {
-          ...icon.data,
+        const iconData = mergeIconData(icon.data, {
           body: wrapSVGContent(
             icon.data.body,
             wrapSvgContentStart,

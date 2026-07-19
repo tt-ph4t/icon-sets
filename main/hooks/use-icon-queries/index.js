@@ -1,3 +1,4 @@
+import {defaultIconProps, mergeIconData} from '@iconify/utils'
 import {useQueries, useQuery} from '@tanstack/react-query'
 import {mapValues, pick} from 'es-toolkit'
 import ms from 'ms'
@@ -44,7 +45,7 @@ export const useIconQueries = (...icons) => {
             queryOptions.select(
               buildIcon(
                 {
-                  data,
+                  data: mergeIconData(defaultIconProps, data),
                   id: iconId,
                   ...icon,
                   ...contextQuery.data[icon.prefix]

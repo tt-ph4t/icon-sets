@@ -8,6 +8,7 @@ import {
 } from '@sindresorhus/is'
 import {downloadZip} from 'client-zip'
 import copyToClipboard from 'copy-to-clipboard'
+import {play} from 'cuelume'
 import {omit} from 'es-toolkit'
 import FileSaver from 'file-saver'
 import has from 'has-values'
@@ -75,12 +76,18 @@ export const validateIconId = iconId =>
   iconId.includes(ID_SEPARATOR) &&
   validateIconName(parseIconName(iconId).icon)
 
-export const copy = async (value, options) => ({
-  isCopied: await copyToClipboard(value, {
+export const copy = async (value, options) => {
+  const isCopied = await copyToClipboard(value, {
     fallbackToPrompt: true,
     ...options
   })
-})
+
+  if (isCopied) play('success')
+
+  return {
+    isCopied
+  }
+}
 
 export const getIconFilePaths = cache(
   (icon, extension) => {

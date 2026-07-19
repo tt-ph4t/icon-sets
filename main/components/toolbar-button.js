@@ -11,7 +11,7 @@ export const ToolbarButton = component(
         if (preventToggle) event.target.checked = checked
       }}
       onClick={() => {
-        play('toggle')
+        play('release')
       }}>
       <VscodeToolbarButton
         checked={checked}

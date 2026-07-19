@@ -1,4 +1,5 @@
 import {useAsyncBatchedCallback} from '@tanstack/react-pacer'
+import {play} from 'cuelume'
 import React from 'react'
 
 import {useProgress} from '../components/progress'
@@ -18,6 +19,8 @@ export const useRemount = Object.assign(
     const progress = useProgress()
 
     const remount = useAsyncBatchedCallback(async () => {
+      play('bloom')
+
       await progress.with(() => {
         setState(state => ++state)
       })

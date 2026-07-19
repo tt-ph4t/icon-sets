@@ -3,7 +3,6 @@ import {
   VscodeFormContainer,
   VscodeFormGroup
 } from '@vscode-elements/react-elements'
-import {play} from 'cuelume'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -75,11 +74,7 @@ export const Popover = Object.assign(
         )
 
         return (
-          <Slot
-            onOpenChange={value => {
-              play('tick')
-              setState(value)
-            }}>
+          <Slot onOpenChange={setState}>
             <PopoverPrimitive.Root open={state} {...props}>
               <PopoverPrimitive.Trigger
                 closeDelay={closeDelay}
