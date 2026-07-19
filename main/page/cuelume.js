@@ -42,7 +42,7 @@ export default component(props => {
           <ToolbarButton
             checked={state}
             icon={state ? 'unmute' : 'mute'}
-            preventToggle
+            toggleable
             {...props}
           />
         </Slot>

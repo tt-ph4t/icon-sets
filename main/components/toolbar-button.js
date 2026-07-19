@@ -8,9 +8,10 @@ export const ToolbarButton = component(
   ({checked, preventToggle, toggleable, ...props}) => (
     <Slot
       onChange={event => {
-        play('toggle')
-
         if (preventToggle) event.target.checked = checked
+      }}
+      onClick={() => {
+        play('toggle')
       }}>
       <VscodeToolbarButton
         checked={checked}
