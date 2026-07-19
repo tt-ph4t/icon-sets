@@ -1,8 +1,8 @@
 import {identity, omit} from 'es-toolkit'
 import {reverse} from 'es-toolkit/compat'
 import React from 'react'
-import {ResizableBox} from 'react-resizable'
 
+import {Resizable} from '../components/resizable'
 import {Slot} from '../components/slot'
 import {SplitLayout} from '../components/split-layout'
 import {component} from '../hocs'
@@ -63,7 +63,7 @@ export default {
             draft.layout.size = size
           })
         }}>
-        <ResizableBox
+        <Resizable.Box
           maxConstraints={[maxConstraints.width, maxConstraints.height]}
           minConstraints={[
             useSettings.initial.layout.size.width,

@@ -10,7 +10,7 @@ import {Fallback} from './components/fallback'
 import {ProgressRing} from './components/progress-ring'
 import {DATABASE_URL} from './misc/constants'
 import Layout from './page/layout'
-import './styles/index.css'
+import './styles.css'
 
 const Page = React.lazy(() => import('./page'))
 const Devtools = React.lazy(() => import('./components/devtools'))

@@ -3,7 +3,7 @@ import {
   VscodeFormContainer,
   VscodeFormGroup
 } from '@vscode-elements/react-elements'
-import {asyncNoop} from 'es-toolkit'
+import {play} from 'cuelume'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -38,13 +38,13 @@ export const Popover = Object.assign(
         closeDelay = 0,
         delay = 0,
         keepMounted = false,
-        onOpenChange = asyncNoop,
         open = false,
         openOnHover = true,
         popupRender,
         popupWrapper,
         render,
-        side = 'bottom'
+        side = 'bottom',
+        ...props
       }) => {
         const [state, setState] = useState(open)
 
@@ -75,29 +75,29 @@ export const Popover = Object.assign(
         )
 
         return (
-          <PopoverPrimitive.Root
-            onOpenChange={async (...args) => {
-              setState(args[0])
-
-              await onOpenChange(...args)
-            }}
-            open={state}>
-            <PopoverPrimitive.Trigger
-              closeDelay={closeDelay}
-              delay={delay}
-              nativeButton={false}
-              openOnHover={openOnHover}
-              render={render}>
-              {children}
-            </PopoverPrimitive.Trigger>
-            {keepMounted ? (
-              <React.Activity mode={state ? 'visible' : 'hidden'}>
-                {portal}
-              </React.Activity>
-            ) : (
-              portal
-            )}
-          </PopoverPrimitive.Root>
+          <Slot
+            onOpenChange={value => {
+              play('tick')
+              setState(value)
+            }}>
+            <PopoverPrimitive.Root open={state} {...props}>
+              <PopoverPrimitive.Trigger
+                closeDelay={closeDelay}
+                delay={delay}
+                nativeButton={false}
+                openOnHover={openOnHover}
+                render={render}>
+                {children}
+              </PopoverPrimitive.Trigger>
+              {keepMounted ? (
+                <React.Activity mode={state ? 'visible' : 'hidden'}>
+                  {portal}
+                </React.Activity>
+              ) : (
+                portal
+              )}
+            </PopoverPrimitive.Root>
+          </Slot>
         )
       }
     )

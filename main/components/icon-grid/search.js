@@ -3,9 +3,9 @@ import {useBatcher} from '@tanstack/react-pacer'
 import {Sketch} from '@uiw/react-color'
 import {
   VscodeIcon,
-  VscodeTextfield,
   VscodeToolbarContainer
 } from '@vscode-elements/react-elements'
+import {play} from 'cuelume'
 import {last} from 'es-toolkit'
 import randomColor from 'randomcolor'
 import React from 'react'
@@ -26,6 +26,7 @@ import {Clipboard} from '../clipboard'
 import {Menu} from '../menu'
 import {Popover} from '../popover'
 import {Slot} from '../slot'
+import {Textfield} from '../textfield'
 import {ToolbarButton} from '../toolbar-button'
 import useStore from './use-store'
 
@@ -49,6 +50,8 @@ const ColorPicker =
           <>
             <Slot
               onChange={colorResult => {
+                play('tick')
+
                 batcher.addItem(() => {
                   customizedIconsStore.set(({draft}) => {
                     draft.global.color = colorResult.hexa
@@ -172,7 +175,7 @@ const Search = component(({children, ...props}) => {
         store.searchTerm.set(event.target.value)
       }}
       ref={ref}>
-      <VscodeTextfield
+      <Textfield
         invalid={
           !store.searchTerm.isDefault(searchTerm) && !isWordChar(searchTerm)
         }
@@ -187,7 +190,7 @@ const Search = component(({children, ...props}) => {
             <div slot='content-after'>{children}</div>
           ))}
         </React.Activity>
-      </VscodeTextfield>
+      </Textfield>
     </Slot>
   )
 })

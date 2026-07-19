@@ -1,7 +1,7 @@
 import {VscodeCollapsible} from '@vscode-elements/react-elements'
 import {useControllableValue, useEventListener} from 'ahooks'
+import {play} from 'cuelume'
 import {asyncNoop} from 'es-toolkit'
-import React from 'react'
 
 import {component} from '../hocs'
 import {useRef} from '../hooks/use-ref'
@@ -21,11 +21,10 @@ export const Collapsible = component(
     useEventListener(
       'vsc-collapsible-toggle',
       async (...args) => {
-        await onToggle(...args)
+        play('toggle')
+        setOpen(args[0].detail.open) // ?
 
-        React.startTransition(() => {
-          setOpen(args[0].detail.open) // ?
-        })
+        await onToggle(...args)
       },
       {
         target: ref

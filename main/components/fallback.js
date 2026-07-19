@@ -6,7 +6,7 @@ import {
   VscodeFormHelper,
   VscodeLabel
 } from '@vscode-elements/react-elements'
-import {delay, negate} from 'es-toolkit'
+import {asyncNoop, delay, negate} from 'es-toolkit'
 import ms from 'ms'
 import React from 'react'
 
@@ -14,28 +14,34 @@ import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
 import {THEME} from '../misc/constants'
 import {Progress} from './progress'
+import {Slot} from './slot'
 
-const Retry = component(({onClick}) => {
+const Retry = component(({onClick = asyncNoop, ...props}) => {
   const [state, setState] = useState(false)
 
   return (
-    <VscodeButton
-      block
-      disabled={state}
-      icon={state ? 'loading' : 'debug-rerun'}
-      iconSpin={state}
-      onClick={async (...args) => {
-        React.startTransition(() => {
-          setState(negate)
-        })
+    <Slot
+      style={{
+        width: 'fit-content'
+      }}>
+      <VscodeButton
+        block
+        disabled={state}
+        icon={state ? 'loading' : 'debug-rerun'}
+        iconSpin={state}
+        onClick={async (...args) => {
+          React.startTransition(() => {
+            setState(negate)
+          })
 
-        await delay(ms('1s'))
-        await onClick(...args)
-      }}
-      style={{width: 'fit-content'}}
-      type='reset'>
-      Retry
-    </VscodeButton>
+          await delay(ms('.6s'))
+          await onClick(...args) // ?
+        }}
+        type='reset'
+        {...props}>
+        Retry
+      </VscodeButton>
+    </Slot>
   )
 })
 

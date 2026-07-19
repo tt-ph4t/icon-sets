@@ -1,19 +1,22 @@
 import {VscodeToolbarButton} from '@vscode-elements/react-elements'
-import {asyncNoop} from 'es-toolkit'
+import {play} from 'cuelume'
 
 import {component} from '../hocs'
+import {Slot} from './slot'
 
 export const ToolbarButton = component(
-  ({checked, onChange = asyncNoop, preventToggle, toggleable, ...props}) => (
-    <VscodeToolbarButton
-      checked={checked}
-      onChange={async event => {
-        if (preventToggle) event.target.checked = checked
+  ({checked, preventToggle, toggleable, ...props}) => (
+    <Slot
+      onChange={event => {
+        play('toggle')
 
-        await onChange(event)
-      }}
-      toggleable={toggleable ?? preventToggle}
-      {...props}
-    />
+        if (preventToggle) event.target.checked = checked
+      }}>
+      <VscodeToolbarButton
+        checked={checked}
+        toggleable={toggleable ?? preventToggle}
+        {...props}
+      />
+    </Slot>
   )
 )

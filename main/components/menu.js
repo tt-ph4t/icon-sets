@@ -7,6 +7,7 @@ import {
   VscodeIcon
 } from '@vscode-elements/react-elements'
 import {useControllableValue} from 'ahooks'
+import {play} from 'cuelume'
 import {identity, omit} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import React from 'react'
@@ -123,6 +124,7 @@ const Item = Object.assign(
           }}>
           <Slot
             onMouseEnter={() => {
+              play('tick')
               setSelected(true)
             }}
             onMouseLeave={() => {
@@ -184,10 +186,10 @@ export const Menu = component(
     closeOnClick = false,
     data = EMPTY.ARRAY,
     delay = 0,
-    disabled = false,
     openOnHover = true,
     render,
-    side = 'bottom'
+    side = 'bottom',
+    ...props
   }) => {
     const menu = useMemo(() => normalizeData(data), [data])
 
@@ -198,29 +200,34 @@ export const Menu = component(
     }
 
     return (
-      <MenuPrimitive.Root disabled={disabled}>
-        <MenuPrimitive.Trigger
-          {...TriggerProps}
-          nativeButton={false}
-          render={render}>
-          {children}
-        </MenuPrimitive.Trigger>
-        <React.Activity>
-          {hasValues(menu) && (
-            <MenuPrimitive.Portal>
-              <MenuPrimitive.Positioner align={align} side={side}>
-                <PopupProvider
-                  ItemProps={{
-                    closeOnClick
-                  }}
-                  TriggerProps={TriggerProps}>
-                  <Popup menu={menu} />
-                </PopupProvider>
-              </MenuPrimitive.Positioner>
-            </MenuPrimitive.Portal>
-          )}
-        </React.Activity>
-      </MenuPrimitive.Root>
+      <Slot
+        onOpenChange={() => {
+          play('tick')
+        }}>
+        <MenuPrimitive.Root {...props}>
+          <MenuPrimitive.Trigger
+            {...TriggerProps}
+            nativeButton={false}
+            render={render}>
+            {children}
+          </MenuPrimitive.Trigger>
+          <React.Activity>
+            {hasValues(menu) && (
+              <MenuPrimitive.Portal>
+                <MenuPrimitive.Positioner align={align} side={side}>
+                  <PopupProvider
+                    ItemProps={{
+                      closeOnClick
+                    }}
+                    TriggerProps={TriggerProps}>
+                    <Popup menu={menu} />
+                  </PopupProvider>
+                </MenuPrimitive.Positioner>
+              </MenuPrimitive.Portal>
+            )}
+          </React.Activity>
+        </MenuPrimitive.Root>
+      </Slot>
     )
   }
 )

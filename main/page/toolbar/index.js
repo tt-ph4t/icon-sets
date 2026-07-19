@@ -15,6 +15,7 @@ import {useSettings} from '../../hooks/use-settings'
 import {open} from '../../misc'
 import {GITHUB_REPO} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
+import Cuelume from '../cuelume'
 import AllIconQueries from './all-icon-queries'
 import FailedQueries from './failed-queries'
 import useFont from './use-font'
@@ -150,6 +151,7 @@ export default menu => (
     <FailedQueries />
     <VscodeToolbarContainer>
       <Settings menu={castArray(menu)} />
+      <Cuelume />
       <IconGrid.Search>
         <AllIconQueries />
       </IconGrid.Search>

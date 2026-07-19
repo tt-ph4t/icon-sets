@@ -6,6 +6,7 @@ import {
   VscodeSplitLayout
 } from '@vscode-elements/react-elements'
 import {useSetState} from 'ahooks'
+import {play} from 'cuelume'
 import {asyncNoop, delay, omit} from 'es-toolkit'
 import ms from 'ms'
 import React from 'react'
@@ -16,6 +17,7 @@ import {useRef} from '../hooks/use-ref'
 import {useState} from '../hooks/use-state'
 import {hasValues, isOdd} from '../misc'
 import {THEME} from '../misc/constants'
+import {Slot} from './slot'
 
 const defaultStyle = {
   ...omit(THEME.CARD_STYLE, ['padding']),
@@ -46,7 +48,7 @@ const useIdleEffect = (fn = asyncNoop, {before = asyncNoop, deps, options}) => {
   }, deps)
 }
 
-const Slot = component(
+const Item = component(
   ({children, index, positionInPercentage, showSizeHint}) => {
     const isEnd = isOdd(index)
     const size = useRef.size()
@@ -116,14 +118,7 @@ const Slot = component(
 )
 
 export const SplitLayout = component(
-  ({
-    children,
-    onVscSplitLayoutChange = asyncNoop,
-    resetOnDblClick = true,
-    showSizeHint = false,
-    style,
-    ...props
-  }) => {
+  ({children, showSizeHint = false, style, ...props}) => {
     const [state, setState] = useSetState({
       position: undefined,
       positionInPercentage: undefined
@@ -132,33 +127,34 @@ export const SplitLayout = component(
     const updateState = useThrottledCallback(setState)
 
     return (
-      <VscodeSplitLayout
-        onVscSplitLayoutChange={async (...args) => {
-          await onVscSplitLayoutChange(...args)
-
-          updateState(args[0].detail)
-        }}
-        resetOnDblClick={resetOnDblClick}
-        style={
-          hasValues(style)
-            ? {
-                border: 'unset',
-                ...style
-              }
-            : defaultStyle
-        }
-        {...props}>
-        {React.Children.map(children, (children, index) => (
-          <React.Activity mode={index <= 1 ? 'visible' : 'hidden'}>
-            <Slot
-              index={index}
-              positionInPercentage={state.positionInPercentage}
-              showSizeHint={showSizeHint}>
-              {children}
-            </Slot>
-          </React.Activity>
-        ))}
-      </VscodeSplitLayout>
+      <Slot
+        onVscSplitLayoutChange={event => {
+          play('release')
+          updateState(event.detail)
+        }}>
+        <VscodeSplitLayout
+          resetOnDblClick
+          style={
+            hasValues(style)
+              ? {
+                  border: 'unset',
+                  ...style
+                }
+              : defaultStyle
+          }
+          {...props}>
+          {React.Children.map(children, (children, index) => (
+            <React.Activity mode={index <= 1 ? 'visible' : 'hidden'}>
+              <Item
+                index={index}
+                positionInPercentage={state.positionInPercentage}
+                showSizeHint={showSizeHint}>
+                {children}
+              </Item>
+            </React.Activity>
+          ))}
+        </VscodeSplitLayout>
+      </Slot>
     )
   }
 )
