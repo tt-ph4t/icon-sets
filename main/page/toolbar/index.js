@@ -1,10 +1,16 @@
-import {formatForDisplay, useHotkey} from '@tanstack/react-hotkeys'
+import {
+  formatForDisplay,
+  useHeldKeys,
+  useHotkey,
+  useHotkeyRegistrations
+} from '@tanstack/react-hotkeys'
 import {useIsFetching, useQueryClient} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {play} from 'cuelume'
-import {pick} from 'es-toolkit'
+import {mapValues, pick, sumBy} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
+import React from 'react'
 
 import {IconGrid} from '../../components/icon-grid'
 import {Menu} from '../../components/menu'
@@ -13,7 +19,7 @@ import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useEffect} from '../../hooks/use-effect'
 import {useSettings} from '../../hooks/use-settings'
-import {open} from '../../misc'
+import {hasValues, open} from '../../misc'
 import {GITHUB_REPO} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import Cuelume from '../cuelume'
@@ -132,10 +138,6 @@ const FetchingQueries = component(() => {
       predicate: query => query.state.fetchStatus === 'fetching'
     })
 
-  useEffect.update(() => {
-    play('tick')
-  }, [queries.length])
-
   return (
     isFetching && (
       <ToolbarButton>
@@ -145,15 +147,37 @@ const FetchingQueries = component(() => {
   )
 })
 
+const HeldKeys = component(() => {
+  const heldKeys = useHeldKeys()
+
+  const triggerCounts = mapValues(useHotkeyRegistrations(), a =>
+    sumBy(a, hotkeyRegistrationView => hotkeyRegistrationView.triggerCount)
+  )
+
+  useEffect(() => {
+    play('release')
+  }, [triggerCounts])
+
+  return (
+    hasValues(heldKeys) && (
+      <ToolbarButton>{formatForDisplay(heldKeys.join('+'))}</ToolbarButton>
+    )
+  )
+})
+
 export default menu => (
   <div
     style={{
       alignItems: 'flex-end',
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      gap: 'var(--SPACING)'
     }}>
-    <FetchingQueries />
-    <FailedQueries />
+    <React.Activity>
+      <HeldKeys />
+      <FetchingQueries />
+      <FailedQueries />
+    </React.Activity>
     <VscodeToolbarContainer>
       <Settings menu={castArray(menu)} />
       <Cuelume />
