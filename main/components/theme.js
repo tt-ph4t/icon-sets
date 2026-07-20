@@ -68,8 +68,8 @@ export const VscodeDevToolbar = component(props => {
 
   useEventListener(
     'change',
-    async () => {
-      await progress.with(() => {
+    () => {
+      progress.with(() => {
         cycled.index = state.ids.findIndex(
           id => id.value === selectorElementRef.current.value
         )

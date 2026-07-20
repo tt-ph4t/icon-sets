@@ -1,4 +1,4 @@
-import {useAsyncBatchedCallback} from '@tanstack/react-pacer'
+import {useBatchedCallback} from '@tanstack/react-pacer'
 import {play} from 'cuelume'
 import React from 'react'
 
@@ -18,10 +18,10 @@ export const useRemount = Object.assign(
     const [state, setState] = useState(0)
     const progress = useProgress()
 
-    const remount = useAsyncBatchedCallback(async () => {
+    const remount = useBatchedCallback(() => {
       play('bloom')
 
-      await progress.with(() => {
+      progress.with(() => {
         setState(state => ++state)
       })
     })

@@ -14,6 +14,7 @@ import React from 'react'
 
 import {IconGrid} from '../../components/icon-grid'
 import {Menu} from '../../components/menu'
+import {useProgress} from '../../components/progress'
 import {useTheme} from '../../components/theme'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
@@ -22,8 +23,8 @@ import {useSettings} from '../../hooks/use-settings'
 import {hasValues, open} from '../../misc'
 import {GITHUB_REPO} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
-import Cuelume from '../cuelume'
 import AllIconQueries from './all-icon-queries'
+import Cuelume from './cuelume'
 import FailedQueries from './failed-queries'
 import useFont from './use-font'
 
@@ -149,13 +150,16 @@ const FetchingQueries = component(() => {
 
 const HeldKeys = component(() => {
   const heldKeys = useHeldKeys()
+  const progress = useProgress()
 
   const triggerCounts = mapValues(useHotkeyRegistrations(), a =>
     sumBy(a, hotkeyRegistrationView => hotkeyRegistrationView.triggerCount)
   )
 
   useEffect(() => {
-    play('release')
+    progress.with(() => {
+      play('release')
+    })
   }, [triggerCounts])
 
   return (

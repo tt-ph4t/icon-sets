@@ -2,12 +2,12 @@ import {capitalCase} from 'change-case'
 import {play, setEnabled, sounds} from 'cuelume'
 import {sort} from 'fast-sort'
 
-import {Menu} from '../components/menu'
-import {Slot} from '../components/slot'
-import {ToolbarButton} from '../components/toolbar-button'
-import {component} from '../hocs'
-import {useState} from '../hooks/use-state'
-import {pluralize} from '../misc/pluralize'
+import {Menu} from '../../components/menu'
+import {Slot} from '../../components/slot'
+import {ToolbarButton} from '../../components/toolbar-button'
+import {component} from '../../hocs'
+import {useState} from '../../hooks/use-state'
+import {pluralize} from '../../misc/pluralize'
 
 const defaultValue = false
 

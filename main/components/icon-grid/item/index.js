@@ -36,6 +36,7 @@ import {prettyBytes} from '../../../misc/pretty-bytes'
 import {timeAgo} from '../../../misc/time-ago'
 import {Menu} from '../../menu'
 import {useProgress} from '../../progress'
+import {Slot} from '../../slot'
 import useStore from '../use-store'
 import takumi from './takumi'
 import withQueryBoundary from './with-query-boundary'
@@ -63,7 +64,7 @@ const sizeLabel = (
 const width = 'calc(var(--SPACING) * 12)'
 
 export default withQueryBoundary(
-  component(({iconId, index, menu}) => {
+  component(({iconId, index, menu, ...props}) => {
     const {icon} = parseIconName(iconId)
     const customizedIcons = useCustomizedIcons()
     const favoritedIcons = useFavoritedIcons()
@@ -348,7 +349,7 @@ export default withQueryBoundary(
                   ),
                   'More',
                   {
-                    label: 'Restart animations',
+                    label: 'Restart animations', // ?
                     onClick: () => {
                       customizedIcons.set(iconQuery.data.id, () => ({
                         wrapSvgContentStart: `<!-- ${crypto.randomUUID()} -->`
@@ -479,58 +480,60 @@ export default withQueryBoundary(
           }
         ]}
         render={
-          <div
+          <Slot.Interactive
             style={{
               position: 'relative'
             }}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                position: 'absolute',
-                right: 0,
-                top: 0
-              }}>
-              <React.Activity
-                mode={
-                  favoritedIcons.has(iconQuery.data.id) ? 'visible' : 'hidden'
-                }>
-                <VscodeIcon
-                  name='circle-filled'
-                  onClick={() => {
-                    favoritedIcons.delete(iconQuery.data.id)
-                  }}
-                  size={13}
-                  style={{
-                    '--vscode-icon-foreground': `var(${THEME.COLORS.WARNING})`
-                  }}
-                />
-              </React.Activity>
-              <React.Activity
-                mode={
-                  isEqual(DEFAULT_ICON_CUSTOMISATIONS, iconCustomisations)
-                    ? 'hidden'
-                    : 'visible'
-                }>
-                <VscodeIcon
-                  name='circle-filled'
-                  onClick={() => {
-                    customizedIcons.delete(iconQuery.data.id)
-                  }}
-                  size={13}
-                  style={{
-                    '--vscode-icon-foreground': `var(${THEME.COLORS.PRIMARY})`
-                  }}
-                />
-              </React.Activity>
+            <div {...props}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  position: 'absolute',
+                  right: 0,
+                  top: 0
+                }}>
+                <React.Activity
+                  mode={
+                    favoritedIcons.has(iconQuery.data.id) ? 'visible' : 'hidden'
+                  }>
+                  <VscodeIcon
+                    name='circle-filled'
+                    onClick={() => {
+                      favoritedIcons.delete(iconQuery.data.id)
+                    }}
+                    size={13}
+                    style={{
+                      '--vscode-icon-foreground': `var(${THEME.COLORS.WARNING})`
+                    }}
+                  />
+                </React.Activity>
+                <React.Activity
+                  mode={
+                    isEqual(DEFAULT_ICON_CUSTOMISATIONS, iconCustomisations)
+                      ? 'hidden'
+                      : 'visible'
+                  }>
+                  <VscodeIcon
+                    name='circle-filled'
+                    onClick={() => {
+                      customizedIcons.delete(iconQuery.data.id)
+                    }}
+                    size={13}
+                    style={{
+                      '--vscode-icon-foreground': `var(${THEME.COLORS.PRIMARY})`
+                    }}
+                  />
+                </React.Activity>
+              </div>
+              <AccessibleIcon.Root label={iconQuery.data.id}>
+                {React.cloneElement(iconQuery.data.more.to.reactElement, {
+                  height: iconOptions.square ? width : '100%',
+                  width
+                })}
+              </AccessibleIcon.Root>
             </div>
-            <AccessibleIcon.Root label={iconQuery.data.id}>
-              {React.cloneElement(iconQuery.data.more.to.reactElement, {
-                height: iconOptions.square ? width : '100%',
-                width
-              })}
-            </AccessibleIcon.Root>
-          </div>
+          </Slot.Interactive>
         }
       />
     )

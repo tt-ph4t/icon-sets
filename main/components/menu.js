@@ -7,7 +7,6 @@ import {
   VscodeIcon
 } from '@vscode-elements/react-elements'
 import {useControllableValue} from 'ahooks'
-import {play} from 'cuelume'
 import {identity, omit} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import React from 'react'
@@ -122,9 +121,8 @@ const Item = Object.assign(
           style={{
             position: 'relative'
           }}>
-          <Slot
+          <Slot.Interactive
             onMouseEnter={() => {
-              play('tick')
               setSelected(true)
             }}
             onMouseLeave={() => {
@@ -136,7 +134,7 @@ const Item = Object.assign(
               selected={selected}
               {...props}
             />
-          </Slot>
+          </Slot.Interactive>
           {checked && (
             <VscodeIcon
               disabled={disabled}

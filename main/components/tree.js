@@ -4,7 +4,6 @@ import {
   VscodeTree,
   VscodeTreeItem
 } from '@vscode-elements/react-elements'
-import {play} from 'cuelume'
 
 import {component} from '../hocs'
 import {isReactKey} from '../misc'
@@ -20,10 +19,7 @@ const renderItems = (data = EMPTY.ARRAY) =>
   })
 
 const Item = component(({checked, children, label, ...props}) => (
-  <Slot
-    onMouseEnter={() => {
-      play('tick')
-    }}>
+  <Slot.Interactive>
     <VscodeTreeItem {...props}>
       {label}
       {isBoolean(checked) && (
@@ -35,7 +31,7 @@ const Item = component(({checked, children, label, ...props}) => (
       )}
       {renderItems(children)}
     </VscodeTreeItem>
-  </Slot>
+  </Slot.Interactive>
 ))
 
 export const Tree = Object.assign(
