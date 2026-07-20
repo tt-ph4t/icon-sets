@@ -36,7 +36,6 @@ export const Popover = Object.assign(
         children,
         closeDelay = 0,
         delay = 0,
-        keepMounted = false,
         open = false,
         openOnHover = true,
         popupRender,
@@ -46,32 +45,6 @@ export const Popover = Object.assign(
         ...props
       }) => {
         const [state, setState] = useState(open)
-
-        const portal = (
-          <PopoverPrimitive.Portal keepMounted={keepMounted}>
-            <PopoverPrimitive.Positioner
-              align={align}
-              render={(props, state) => (
-                <PopoverPrimitive.Popup
-                  render={
-                    <div {...props}>
-                      {Slot.render({
-                        bespoke: popupRender,
-                        context: {
-                          props,
-                          setOpen: setState,
-                          state
-                        },
-                        wrapper: popupWrapper
-                      })}
-                    </div>
-                  }
-                />
-              )}
-              side={side}
-            />
-          </PopoverPrimitive.Portal>
-        )
 
         return (
           <Slot onOpenChange={setState}>
@@ -84,13 +57,31 @@ export const Popover = Object.assign(
                 render={render}>
                 {children}
               </PopoverPrimitive.Trigger>
-              {keepMounted ? (
-                <React.Activity mode={state ? 'visible' : 'hidden'}>
-                  {portal}
-                </React.Activity>
-              ) : (
-                portal
-              )}
+              <React.Activity>
+                <PopoverPrimitive.Portal>
+                  <PopoverPrimitive.Positioner
+                    align={align}
+                    render={(props, state) => (
+                      <PopoverPrimitive.Popup
+                        render={
+                          <div {...props}>
+                            {Slot.render({
+                              bespoke: popupRender,
+                              context: {
+                                props,
+                                setOpen: setState,
+                                state
+                              },
+                              wrapper: popupWrapper
+                            })}
+                          </div>
+                        }
+                      />
+                    )}
+                    side={side}
+                  />
+                </PopoverPrimitive.Portal>
+              </React.Activity>
             </PopoverPrimitive.Root>
           </Slot>
         )

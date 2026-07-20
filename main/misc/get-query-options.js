@@ -10,7 +10,7 @@ import {ofetch} from 'ofetch'
 import {DELAY_MS} from './constants'
 
 const defaults = {
-  gcTime: ms('50m'),
+  gcTime: ms('1m'),
   structuralSharing: (a, b) => (isEqual(a, b) ? a : b),
   timeout: ms('1m')
 }

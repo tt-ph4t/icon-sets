@@ -1,5 +1,4 @@
 import {useQueryClient} from '@tanstack/react-query'
-import React from 'react'
 
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
@@ -18,7 +17,7 @@ export default component(() => {
   useIsQueryBusy()
 
   return (
-    <React.Activity mode={hasValues(queries) ? 'visible' : 'hidden'}>
+    hasValues(queries) && (
       <ToolbarButton
         icon='error'
         onClick={async () => {
@@ -26,6 +25,6 @@ export default component(() => {
         }}>
         {pluralize(queries.length, 'failed query')}. Retry?
       </ToolbarButton>
-    </React.Activity>
+    )
   )
 })

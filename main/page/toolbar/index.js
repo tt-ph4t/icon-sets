@@ -2,15 +2,16 @@ import {formatForDisplay, useHotkey} from '@tanstack/react-hotkeys'
 import {useIsFetching, useQueryClient} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
+import {play} from 'cuelume'
 import {pick} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
-import React from 'react'
 
 import {IconGrid} from '../../components/icon-grid'
 import {Menu} from '../../components/menu'
 import {useTheme} from '../../components/theme'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
+import {useEffect} from '../../hooks/use-effect'
 import {useSettings} from '../../hooks/use-settings'
 import {open} from '../../misc'
 import {GITHUB_REPO} from '../../misc/constants'
@@ -123,7 +124,7 @@ const Settings = component(({menu}) => {
 })
 
 const FetchingQueries = component(() => {
-  const isFetching = useIsFetching()
+  const isFetching = Boolean(useIsFetching())
 
   const queries = useQueryClient()
     .getQueryCache()
@@ -131,12 +132,16 @@ const FetchingQueries = component(() => {
       predicate: query => query.state.fetchStatus === 'fetching'
     })
 
+  useEffect.update(() => {
+    play('tick')
+  }, [queries.length])
+
   return (
-    <React.Activity mode={isFetching ? 'visible' : 'hidden'}>
+    isFetching && (
       <ToolbarButton>
         Fetching {pluralize(queries.length, 'query')}
       </ToolbarButton>
-    </React.Activity>
+    )
   )
 })
 

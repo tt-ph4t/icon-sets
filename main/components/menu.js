@@ -168,9 +168,11 @@ const Item = Object.assign(
         <Slot onOpenChange={setState}>
           <MenuPrimitive.SubmenuRoot>
             <MenuPrimitive.SubmenuTrigger {...props} selected={state} />
-            <MenuPrimitive.Portal>
-              <MenuPrimitive.Positioner>{children}</MenuPrimitive.Positioner>
-            </MenuPrimitive.Portal>
+            <React.Activity>
+              <MenuPrimitive.Portal>
+                <MenuPrimitive.Positioner>{children}</MenuPrimitive.Positioner>
+              </MenuPrimitive.Portal>
+            </React.Activity>
           </MenuPrimitive.SubmenuRoot>
         </Slot>
       )

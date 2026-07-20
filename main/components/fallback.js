@@ -73,9 +73,7 @@ export const Fallback = {
           <VscodeLabel required>Error</VscodeLabel>
           <VscodeFormHelper>
             {message}
-            <React.Activity mode={isFunction(retryFn) ? 'visible' : 'hidden'}>
-              <Retry onClick={retryFn} />
-            </React.Activity>
+            {isFunction(retryFn) && <Retry onClick={retryFn} />}
           </VscodeFormHelper>
         </VscodeFormGroup>
       </VscodeFormContainer>

@@ -49,13 +49,11 @@ createRoot(document.querySelector('#root')).render(
         </React.Suspense>
       </ErrorBoundary>
     </div>
-    <React.Activity>
-      <link
-        href={codiconUrl}
-        id='vscode-codicon-stylesheet' // https://vscode-elements.github.io/components/icon/
-        rel='stylesheet'
-      />
-      <Devtools />
-    </React.Activity>
+    <link
+      href={codiconUrl}
+      id='vscode-codicon-stylesheet' // https://vscode-elements.github.io/components/icon/
+      rel='stylesheet'
+    />
+    <Devtools />
   </>
 )

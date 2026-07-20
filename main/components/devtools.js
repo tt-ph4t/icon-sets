@@ -2,7 +2,6 @@ import {TanStackDevtools} from '@tanstack/react-devtools'
 import {hotkeysDevtoolsPlugin} from '@tanstack/react-hotkeys-devtools'
 import {pacerDevtoolsPlugin} from '@tanstack/react-pacer-devtools'
 import {ReactQueryDevtoolsPanel} from '@tanstack/react-query-devtools/build/modern/production.js'
-import React from 'react'
 
 import {component} from '../hocs'
 import {useSettings} from '../hooks/use-settings'
@@ -32,14 +31,14 @@ export default component(() => {
           right: 'calc(var(--SPACING) * 4)'
         }}
       />
-      <React.Activity mode={isDev ? 'visible' : 'hidden'}>
+      {isDev && (
         <TanStackDevtools
           config={{
             theme: THEME.DEFAULT_COLOR_SCHEME
           }}
           {...TanStackDevtoolsProps}
         />
-      </React.Activity>
+      )}
     </>
   )
 })

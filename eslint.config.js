@@ -155,9 +155,7 @@ export default defineConfig([
         '@eslint-react/no-children-map',
         '@eslint-react/no-clone-element',
         '@eslint-react/no-children-to-array',
-        '@eslint-react/no-context-provider',
-
-        'react-doctor/exhaustive-deps'
+        '@eslint-react/no-context-provider'
       )
     }
   }

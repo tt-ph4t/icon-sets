@@ -5,7 +5,6 @@ import {
   VscodeTreeItem
 } from '@vscode-elements/react-elements'
 import {play} from 'cuelume'
-import React from 'react'
 
 import {component} from '../hocs'
 import {isReactKey} from '../misc'
@@ -27,13 +26,13 @@ const Item = component(({checked, children, label, ...props}) => (
     }}>
     <VscodeTreeItem {...props}>
       {label}
-      <React.Activity mode={isBoolean(checked) ? 'visible' : 'hidden'}>
+      {isBoolean(checked) && (
         <VscodeIcon
           name={checked ? 'check' : 'blank'}
           size={14}
           slot='icon-leaf'
         />
-      </React.Activity>
+      )}
       {renderItems(children)}
     </VscodeTreeItem>
   </Slot>

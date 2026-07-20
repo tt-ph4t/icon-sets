@@ -35,9 +35,9 @@ export const useIconQueries = (...icons) => {
         const {icon} = parseIconName(iconId)
 
         return getQueryOptions({
-          delayMs: ms('.3s'),
+          delayMs: ms('.27s'),
           enabled: contextQuery.isSuccess,
-          gcTime: ms('1m'),
+          gcTime: ms('6s'),
           queryKey: iconId,
           url: `${DATABASE_URL}/${icon.prefix}/${icon.name}.msgpack`,
           ...queryOptions,

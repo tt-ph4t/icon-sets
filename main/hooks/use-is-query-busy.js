@@ -9,5 +9,5 @@ export const useIsQueryBusy = (filters, queryClient) => {
   const isMutating = useIsMutating(filters, queryClient)
   const isRestoring = useIsRestoring()
 
-  return isFetching || isMutating || isRestoring
+  return Boolean(isFetching || isMutating || isRestoring)
 }
