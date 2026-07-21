@@ -63,6 +63,17 @@ const sizeLabel = (
 
 const width = 'calc(var(--SPACING) * 12)'
 
+const Badge = component(({color, ...props}) => (
+  <Slot.Interactive
+    style={
+      hasValues(color) && {
+        '--vscode-icon-foreground': color
+      }
+    }>
+    <VscodeIcon name='circle-filled' size={13} {...props} />
+  </Slot.Interactive>
+))
+
 export default withQueryBoundary(
   component(({iconId, index, menu, ...props}) => {
     const {icon} = parseIconName(iconId)
@@ -497,14 +508,10 @@ export default withQueryBoundary(
                   mode={
                     favoritedIcons.has(iconQuery.data.id) ? 'visible' : 'hidden'
                   }>
-                  <VscodeIcon
-                    name='circle-filled'
+                  <Badge
+                    color={`var(${THEME.COLORS.WARNING})`}
                     onClick={() => {
                       favoritedIcons.delete(iconQuery.data.id)
-                    }}
-                    size={13}
-                    style={{
-                      '--vscode-icon-foreground': `var(${THEME.COLORS.WARNING})`
                     }}
                   />
                 </React.Activity>
@@ -514,14 +521,10 @@ export default withQueryBoundary(
                       ? 'hidden'
                       : 'visible'
                   }>
-                  <VscodeIcon
-                    name='circle-filled'
+                  <Badge
+                    color={`var(${THEME.COLORS.PRIMARY})`}
                     onClick={() => {
                       customizedIcons.delete(iconQuery.data.id)
-                    }}
-                    size={13}
-                    style={{
-                      '--vscode-icon-foreground': `var(${THEME.COLORS.PRIMARY})`
                     }}
                   />
                 </React.Activity>

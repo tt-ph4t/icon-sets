@@ -1,4 +1,4 @@
-import {formatForDisplay, useHotkey} from '@tanstack/react-hotkeys'
+import {useHotkey} from '@tanstack/react-hotkeys'
 import {
   VscodeFormContainer,
   VscodeFormGroup,
@@ -8,6 +8,7 @@ import {useNetwork} from 'ahooks'
 import React from 'react'
 
 import {Boundary} from '../components/boundary'
+import {Kbd} from '../components/kbd'
 import {Progress} from '../components/progress'
 import {component} from '../hocs'
 import {useIsQueryBusy} from '../hooks/use-is-query-busy'
@@ -78,7 +79,7 @@ export default withProviders(
                 <VscodeFormHelper>
                   {toolbar({
                     ...remount.menu,
-                    description: formatForDisplay(remountHotkey)
+                    description: Kbd.text(remountHotkey)
                   })}
                 </VscodeFormHelper>
               </VscodeFormGroup>

@@ -1,5 +1,4 @@
 import {
-  formatForDisplay,
   useHeldKeys,
   useHotkey,
   useHotkeyRegistrations
@@ -13,6 +12,7 @@ import {castArray} from 'es-toolkit/compat'
 import React from 'react'
 
 import {IconGrid} from '../../components/icon-grid'
+import {Kbd} from '../../components/kbd'
 import {Menu} from '../../components/menu'
 import {useProgress} from '../../components/progress'
 import {useTheme} from '../../components/theme'
@@ -52,7 +52,7 @@ const Settings = component(({menu}) => {
     <Menu
       data={[
         {
-          description: formatForDisplay(themeHotkey),
+          description: Kbd.text(themeHotkey),
           label: 'Theme',
           menu: theme.ids.map(themeId => ({
             checked: themeId.value === theme.id,
@@ -162,11 +162,7 @@ const HeldKeys = component(() => {
     })
   }, [triggerCounts])
 
-  return (
-    hasValues(heldKeys) && (
-      <ToolbarButton>{formatForDisplay(heldKeys.join('+'))}</ToolbarButton>
-    )
-  )
+  return hasValues(heldKeys) && <Kbd keys={heldKeys} />
 })
 
 export default menu => (

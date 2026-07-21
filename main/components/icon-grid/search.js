@@ -1,4 +1,4 @@
-import {formatForDisplay, useHotkey, useHotkeys} from '@tanstack/react-hotkeys'
+import {useHotkey, useHotkeys} from '@tanstack/react-hotkeys'
 import {VscodeIcon} from '@vscode-elements/react-elements'
 import React from 'react'
 
@@ -8,6 +8,7 @@ import {useEffect} from '../../hooks/use-effect'
 import {useRef} from '../../hooks/use-ref'
 import {isWordChar} from '../../misc'
 import {EMPTY} from '../../misc/constants'
+import {Kbd} from '../kbd'
 import {Menu} from '../menu'
 import {Slot} from '../slot'
 import {Textfield} from '../textfield'
@@ -20,7 +21,7 @@ const hotkeysMenu = [
   'Hotkeys',
   ...hotkeys.map(hotkey => ({
     disabled: true,
-    label: formatForDisplay(hotkey)
+    label: Kbd.text(hotkey)
   }))
 ]
 

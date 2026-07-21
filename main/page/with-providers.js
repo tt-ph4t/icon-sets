@@ -3,6 +3,7 @@ import {HotkeysProvider} from '@tanstack/react-hotkeys'
 import {PacerProvider} from '@tanstack/react-pacer'
 import {QueryClientProvider} from '@tanstack/react-query'
 import {mapValues} from 'es-toolkit'
+import {Direction} from 'radix-ui'
 
 import {component} from '../hocs'
 import {DELAY_MS, EMPTY, QUERY_CLIENT} from '../misc/constants'
@@ -30,13 +31,15 @@ const PacerProviderProps = {
 
 export default Component =>
   component(props => (
-    <DirectionProvider>
-      <QueryClientProvider client={QUERY_CLIENT.GLOBAL}>
-        <PacerProvider {...PacerProviderProps}>
-          <HotkeysProvider>
-            <Component {...props} />
-          </HotkeysProvider>
-        </PacerProvider>
-      </QueryClientProvider>
-    </DirectionProvider>
+    <Direction.Provider>
+      <DirectionProvider>
+        <QueryClientProvider client={QUERY_CLIENT.GLOBAL}>
+          <PacerProvider {...PacerProviderProps}>
+            <HotkeysProvider>
+              <Component {...props} />
+            </HotkeysProvider>
+          </PacerProvider>
+        </QueryClientProvider>
+      </DirectionProvider>
+    </Direction.Provider>
   ))
