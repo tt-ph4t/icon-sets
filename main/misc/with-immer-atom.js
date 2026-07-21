@@ -1,4 +1,3 @@
-import {isFunction} from '@sindresorhus/is'
 import {useThrottledState} from '@tanstack/react-pacer'
 import {isEqual} from '@ver0/deep-equal'
 import deepFreeze from 'deep-freeze-es6'
@@ -9,7 +8,7 @@ import {freezeAtom, selectAtom} from 'jotai/utils'
 
 import {useCallback} from '../hooks/use-callback'
 import {useEffect} from '../hooks/use-effect'
-import {hasValues} from './'
+import {hasValues, isSyncFunction} from './'
 import {DELAY_MS, EMPTY} from './constants'
 
 const create = flow(atomWithImmer, freezeAtom)
@@ -44,7 +43,7 @@ export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
   const useSelectValue = (...args) => {
     const [, {deps = EMPTY.ARRAY, ...options} = EMPTY.OBJECT] = args
     const [selector] = args
-    const isSelector = isFunction(selector)
+    const isSelector = isSyncFunction(selector)
 
     return useAtomValueWithDelay(
       // eslint-disable-next-line react-doctor/jotai-select-atom-in-render-body

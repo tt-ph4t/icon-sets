@@ -1,6 +1,10 @@
 import {validateIconName} from '@iconify/utils'
 import {
+  isAsyncFunction,
+  isAsyncGeneratorFunction,
   isBigint,
+  isFunction,
+  isGeneratorFunction,
   isNull,
   isSafeInteger,
   isString,
@@ -18,6 +22,12 @@ import jszip from 'jszip'
 import {ICON_CACHE, ID_SEPARATOR} from '../misc/constants'
 import {cache} from './cache'
 import {parseIconName} from './parse-icon-name'
+
+export const isSyncFunction = value =>
+  isFunction(value) &&
+  !isAsyncFunction(value) &&
+  !isGeneratorFunction(value) &&
+  !isAsyncGeneratorFunction(value)
 
 export const open = Object.assign(
   (...args) => {

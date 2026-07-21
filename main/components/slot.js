@@ -5,6 +5,7 @@ import {Slot as SlotPrimitive} from 'radix-ui'
 import {renderSlot} from 'render-slot'
 
 import {component} from '../hocs'
+import {isSyncFunction} from '../misc'
 
 const InteractiveProps = {
   onClick: () => {
@@ -21,9 +22,9 @@ export const Slot = Object.assign(component(SlotPrimitive.Root), {
       <Slot {...props} />
     </Slot>
   )),
-  render: options => {
-    if (isPlainObject(options)) {
-      const {context, wrapper = identity, ...props} = options
+  render: value => {
+    if (isPlainObject(value)) {
+      const {context, wrapper = identity, ...props} = value
 
       return renderSlot({
         context: {
@@ -35,7 +36,7 @@ export const Slot = Object.assign(component(SlotPrimitive.Root), {
       })
     }
 
-    return renderSlot(options)
+    if (isSyncFunction(value)) return renderSlot(value)
   },
   Slottable: component(SlotPrimitive.Slottable)
 })
