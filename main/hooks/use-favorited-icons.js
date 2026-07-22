@@ -1,5 +1,5 @@
-import {useThrottledCallback} from '@tanstack/react-pacer'
-import {union, uniq, without} from 'es-toolkit'
+import {useBatchedCallback} from '@tanstack/react-pacer'
+import {last, union, uniq, without} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 
 import {validateIconId} from '../misc'
@@ -15,28 +15,28 @@ export const useFavoritedIcons = Object.assign(
       defaultValue
     })
 
-    const throttledSetState = useThrottledCallback(fn => {
-      setState((...args) => fn(...args).filter(validateIconId))
+    const batchedSetState = useBatchedCallback(items => {
+      setState((...args) => last(items)(...args).filter(validateIconId))
     })
 
     const set = new Set(castArray(state).filter(validateIconId))
 
     return {
       add: useCallback((...iconIds) => {
-        throttledSetState(state => union(iconIds, state))
+        batchedSetState(state => union(iconIds, state))
       }),
       delete: useCallback((...iconIds) => {
-        throttledSetState(state => without(state, ...iconIds))
+        batchedSetState(state => without(state, ...iconIds))
       }),
       get: useCallback(() => [...set]),
       has: useCallback((...iconIds) =>
         iconIds.every(iconId => set.has(iconId))
       ),
       reset: useCallback(() => {
-        throttledSetState(() => defaultValue)
+        batchedSetState(() => defaultValue)
       }),
       toggle: useCallback((...iconIds) => {
-        throttledSetState(state => {
+        batchedSetState(state => {
           const a = new Set()
           const b = new Set(castArray(state))
 

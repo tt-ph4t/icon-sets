@@ -1,39 +1,17 @@
-import {useThrottledState} from '@tanstack/react-pacer'
 import {isEqual} from '@ver0/deep-equal'
 import deepFreeze from 'deep-freeze-es6'
 import {flow, noop, pick} from 'es-toolkit'
-import {useSetAtom, useStore} from 'jotai'
+import {useAtomValue, useSetAtom} from 'jotai'
 import {atomWithImmer} from 'jotai-immer'
 import {freezeAtom, selectAtom} from 'jotai/utils'
 
 import {useCallback} from '../hooks/use-callback'
-import {useEffect} from '../hooks/use-effect'
 import {hasValues, isSyncFunction} from './'
-import {DELAY_MS, EMPTY} from './constants'
+import {EMPTY} from './constants'
 
 const create = flow(atomWithImmer, freezeAtom)
 const draftKey = 'draft'
 const selectDraft = ({[draftKey]: draft}) => draft
-
-const useAtomValueWithDelay =
-  // https://github.com/pmndrs/jotai/pull/3264
-  (atom, {delay = DELAY_MS, ...options} = EMPTY.OBJECT) => {
-    const store = useStore(options)
-
-    const [state, setState] = useThrottledState(() => store.get(atom), {
-      wait: delay
-    })
-
-    useEffect(
-      () =>
-        store.sub(atom, () => {
-          setState(store.get(atom))
-        }),
-      [store, atom]
-    )
-
-    return state
-  }
 
 // https://immerjs.github.io/immer/update-patterns
 export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
@@ -45,7 +23,7 @@ export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
     const [selector] = args
     const isSelector = isSyncFunction(selector)
 
-    return useAtomValueWithDelay(
+    return useAtomValue(
       // eslint-disable-next-line react-doctor/jotai-select-atom-in-render-body
       selectAtom(
         atom,

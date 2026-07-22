@@ -46,63 +46,53 @@ const Popup = component(({menu}) => {
 
   return (
     <MenuPrimitive.Popup
-      render={
-        <VscodeFormContainer style={THEME.CARD_STYLE}>
-          <MenuPrimitive.Group
-            render={
-              <VscodeFormGroup
-                style={{
-                  maxHeight: 'calc(var(--SPACING) * 120)',
-                  maxWidth: 'calc(var(--SPACING) * 75)', // virtua ?
-                  overflow: 'auto',
-                  padding: 'unset'
-                }}
-                variant='settings-group'>
-                {menu.map((data, index) => {
-                  if (isGroupLabel(data))
-                    return (
-                      <MenuPrimitive.GroupLabel
-                        key={getId(index, data)}
-                        render={
-                          <VscodeContextMenuItem
-                            disabled
-                            label={data}
-                            selected={false}
-                          />
-                        }
-                      />
-                    )
-
-                  const {menu, separator, ...ItemProps} = data
-                  const item = <Item {...ItemProps} />
-
-                  return (
-                    <React.Fragment
-                      key={getId(
-                        index,
-                        omit(data, ['menu']) // ?
-                      )}>
-                      {hasValues(menu) ? (
-                        <Item.Submenu {...context.TriggerProps} render={item}>
-                          <Popup menu={menu} />
-                        </Item.Submenu>
-                      ) : separator ? (
-                        Item.Separator
-                      ) : (
-                        <MenuPrimitive.Item
-                          {...context.ItemProps}
-                          render={item}
-                        />
-                      )}
-                    </React.Fragment>
-                  )
-                })}
-              </VscodeFormGroup>
-            }
+      render={<VscodeFormContainer style={THEME.CARD_STYLE} />}>
+      <MenuPrimitive.Group
+        render={
+          <VscodeFormGroup
+            style={{
+              maxHeight: 'calc(var(--SPACING) * 120)',
+              maxWidth: 'calc(var(--SPACING) * 75)', // virtua ?
+              overflow: 'auto',
+              padding: 'unset'
+            }}
+            variant='settings-group'
           />
-        </VscodeFormContainer>
-      }
-    />
+        }>
+        {menu.map((a, b) => {
+          if (isGroupLabel(a))
+            return (
+              <MenuPrimitive.GroupLabel
+                key={getId(b, a)}
+                render={
+                  <VscodeContextMenuItem disabled label={a} selected={false} />
+                }
+              />
+            )
+
+          const {menu, separator, ...ItemProps} = a
+          const item = <Item {...ItemProps} />
+
+          return (
+            <React.Fragment
+              key={getId(
+                b,
+                omit(a, ['menu']) // ?
+              )}>
+              {hasValues(menu) ? (
+                <Item.Submenu {...context.TriggerProps} render={item}>
+                  <Popup menu={menu} />
+                </Item.Submenu>
+              ) : separator ? (
+                Item.Separator
+              ) : (
+                <MenuPrimitive.Item {...context.ItemProps} render={item} />
+              )}
+            </React.Fragment>
+          )
+        })}
+      </MenuPrimitive.Group>
+    </MenuPrimitive.Popup>
   )
 })
 

@@ -38,13 +38,11 @@ const Loading = component(() => {
   )
 })
 
-const remountHotkey = 'f5'
-
 export default withProviders(
   withQueryBoundary(
     useRemount.with(
       component(({[useRemount.key]: remount}) => {
-        useHotkey(remountHotkey, remount)
+        useHotkey(remount.hotkey, remount)
 
         return (
           <Layout.Fullscreen
@@ -79,7 +77,7 @@ export default withProviders(
                 <VscodeFormHelper>
                   {toolbar({
                     ...remount.menu,
-                    description: Kbd.text(remountHotkey)
+                    description: Kbd.text(remount.hotkey)
                   })}
                 </VscodeFormHelper>
               </VscodeFormGroup>

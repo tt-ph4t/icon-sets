@@ -494,51 +494,51 @@ export default withQueryBoundary(
           <Slot.Interactive
             style={{
               position: 'relative'
+            }}
+          />
+        }>
+        <div {...props}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'absolute',
+              right: 0,
+              top: 0
             }}>
-            <div {...props}>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'absolute',
-                  right: 0,
-                  top: 0
-                }}>
-                <React.Activity
-                  mode={
-                    favoritedIcons.has(iconQuery.data.id) ? 'visible' : 'hidden'
-                  }>
-                  <Badge
-                    color={`var(${THEME.COLORS.WARNING})`}
-                    onClick={() => {
-                      favoritedIcons.delete(iconQuery.data.id)
-                    }}
-                  />
-                </React.Activity>
-                <React.Activity
-                  mode={
-                    isEqual(DEFAULT_ICON_CUSTOMISATIONS, iconCustomisations)
-                      ? 'hidden'
-                      : 'visible'
-                  }>
-                  <Badge
-                    color={`var(${THEME.COLORS.PRIMARY})`}
-                    onClick={() => {
-                      customizedIcons.delete(iconQuery.data.id)
-                    }}
-                  />
-                </React.Activity>
-              </div>
-              <AccessibleIcon.Root label={iconQuery.data.id}>
-                {React.cloneElement(iconQuery.data.more.to.reactElement, {
-                  height: iconOptions.square ? width : '100%',
-                  width
-                })}
-              </AccessibleIcon.Root>
-            </div>
-          </Slot.Interactive>
-        }
-      />
+            <React.Activity
+              mode={
+                favoritedIcons.has(iconQuery.data.id) ? 'visible' : 'hidden'
+              }>
+              <Badge
+                color={`var(${THEME.COLORS.WARNING})`}
+                onClick={() => {
+                  favoritedIcons.delete(iconQuery.data.id)
+                }}
+              />
+            </React.Activity>
+            <React.Activity
+              mode={
+                isEqual(DEFAULT_ICON_CUSTOMISATIONS, iconCustomisations)
+                  ? 'hidden'
+                  : 'visible'
+              }>
+              <Badge
+                color={`var(${THEME.COLORS.PRIMARY})`}
+                onClick={() => {
+                  customizedIcons.delete(iconQuery.data.id)
+                }}
+              />
+            </React.Activity>
+          </div>
+          <AccessibleIcon.Root label={iconQuery.data.id}>
+            {React.cloneElement(iconQuery.data.more.to.reactElement, {
+              height: iconOptions.square ? width : '100%',
+              width
+            })}
+          </AccessibleIcon.Root>
+        </div>
+      </Menu>
     )
   })
 )

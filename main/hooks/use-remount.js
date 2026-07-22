@@ -1,12 +1,13 @@
-import {useBatchedCallback} from '@tanstack/react-pacer'
 import {play} from 'cuelume'
 import React from 'react'
 
 import {useProgress} from '../components/progress'
 import {component} from '../hocs'
+import {useCallback} from './use-callback'
 import {useState} from './use-state'
 
 const context = {
+  hotkey: 'f5',
   icon: 'refresh',
   label: 'Reload'
 }
@@ -14,15 +15,16 @@ const context = {
 const key = Symbol()
 
 export const useRemount = Object.assign(
+  // https://github.com/react-hookz/web/blob/6066c932461c2cd5a88a5f0be658a4d2585d77fc/src/useRerender/index.ts
   () => {
     const [state, setState] = useState(0)
     const progress = useProgress()
 
-    const remount = useBatchedCallback(() => {
+    const remount = useCallback(() => {
       play('bloom')
 
       progress.with(() => {
-        setState(state => ++state)
+        setState(state => ++state % Number.MAX_SAFE_INTEGER)
       })
     })
 

@@ -1,5 +1,5 @@
 import {useHotkey, useHotkeys} from '@tanstack/react-hotkeys'
-import {VscodeIcon} from '@vscode-elements/react-elements'
+import {VscodeIcon, VscodeTextfield} from '@vscode-elements/react-elements'
 import React from 'react'
 
 import {component} from '../../hocs'
@@ -8,10 +8,10 @@ import {useEffect} from '../../hooks/use-effect'
 import {useRef} from '../../hooks/use-ref'
 import {isWordChar} from '../../misc'
 import {EMPTY} from '../../misc/constants'
+import {Input} from '../input'
 import {Kbd} from '../kbd'
 import {Menu} from '../menu'
 import {Slot} from '../slot'
-import {Textfield} from '../textfield'
 import {ColorPicker, SquareToggle} from './misc'
 import useStore from './use-store'
 
@@ -55,7 +55,8 @@ const Search = component(({children, ...props}) => {
         store.searchTerm.set(event.target.value)
       }}
       ref={ref}>
-      <Textfield
+      <Input
+        as={VscodeTextfield}
         invalid={
           !store.searchTerm.isDefault(searchTerm) && !isWordChar(searchTerm)
         }
@@ -70,7 +71,7 @@ const Search = component(({children, ...props}) => {
             <div slot='content-after'>{children}</div>
           ))}
         </React.Activity>
-      </Textfield>
+      </Input>
     </Slot>
   )
 })

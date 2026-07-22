@@ -1,11 +1,11 @@
 import {mergeCustomisations} from '@iconify/utils'
-import {useThrottledCallback} from '@tanstack/react-pacer'
 import {isEqual} from '@ver0/deep-equal'
 import {noop, pick} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 
 import {DEFAULT_ICON_CUSTOMISATIONS, EMPTY, ICON_CACHE} from '../misc/constants'
 import {withImmerAtom} from '../misc/with-immer-atom'
+import {useCallback} from './use-callback'
 
 mergeCustomisations // ?
 
@@ -25,17 +25,17 @@ export const useCustomizedIcons = Object.assign(
     const store = useStore()
 
     return {
-      delete: useThrottledCallback((...iconIds) => {
+      delete: useCallback((...iconIds) => {
         withInvalidatedIconCache(() => {
           store.set(({draft}) => {
             for (const iconId of iconIds) delete draft.current[iconId]
           })
         }, iconIds)
       }),
-      reset: useThrottledCallback(() => {
+      reset: useCallback(() => {
         store.reset('current')
       }),
-      set: useThrottledCallback((iconId, fn) => {
+      set: useCallback((iconId, fn) => {
         withInvalidatedIconCache(() => {
           store.set(({draft}) => {
             const a = draft.current[iconId] ?? DEFAULT_ICON_CUSTOMISATIONS

@@ -69,8 +69,8 @@ export default component(() => {
       'Query',
       ...Object.entries(queryClientMenu).map(([a, b]) => ({
         label: a,
-        onClick: () => {
-          asyncBatcher.addItem(() => {
+        onClick: async () => {
+          await asyncBatcher.addItem(() => {
             setState({
               iconSetPrefix: iconSet.prefix,
               queryClientMethod: b
@@ -102,8 +102,8 @@ export default component(() => {
               'Query',
               ...Object.entries(queryClientMenu).map(([a, b]) => ({
                 label: a,
-                onClick: () => {
-                  asyncBatcher.addItem(() => {
+                onClick: async () => {
+                  await asyncBatcher.addItem(() => {
                     mapValues(iconSets, async iconSet => {
                       await _queryClient(b, iconSet)
                     })

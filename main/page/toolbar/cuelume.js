@@ -38,15 +38,15 @@ export default component(props => {
 
             setEnabled(checked)
             setState(checked)
-          }}>
-          <ToolbarButton
-            checked={state}
-            icon={state ? 'unmute' : 'mute'}
-            toggleable
-            {...props}
-          />
-        </Slot>
-      }
-    />
+          }}
+        />
+      }>
+      <ToolbarButton
+        checked={state}
+        icon={state ? 'unmute' : 'mute'}
+        toggleable
+        {...props}
+      />
+    </Menu>
   )
 })

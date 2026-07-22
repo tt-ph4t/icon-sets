@@ -3,6 +3,7 @@ import {
   isAsyncFunction,
   isAsyncGeneratorFunction,
   isBigint,
+  isClass,
   isFunction,
   isGeneratorFunction,
   isNull,
@@ -27,7 +28,8 @@ export const isSyncFunction = value =>
   isFunction(value) &&
   !isAsyncFunction(value) &&
   !isGeneratorFunction(value) &&
-  !isAsyncGeneratorFunction(value)
+  !isAsyncGeneratorFunction(value) &&
+  !isClass(value) // ?
 
 export const open = Object.assign(
   (...args) => {

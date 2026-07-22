@@ -64,10 +64,7 @@ export default (
         <Tree />
       </>
     }
-    render={
-      <VscodeToolbarContainer>
-        <Label />
-      </VscodeToolbarContainer>
-    }
-  />
+    render={<VscodeToolbarContainer />}>
+    <Label />
+  </Popover>
 )

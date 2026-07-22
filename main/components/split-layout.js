@@ -1,5 +1,4 @@
 import {isFunction} from '@sindresorhus/is'
-import {useThrottledCallback} from '@tanstack/react-pacer'
 import {
   VscodeBadge,
   VscodeFormHelper,
@@ -124,13 +123,11 @@ export const SplitLayout = component(
       positionInPercentage: undefined
     })
 
-    const updateState = useThrottledCallback(setState)
-
     return (
       <Slot
         onVscSplitLayoutChange={event => {
           play('release')
-          updateState(event.detail)
+          setState(event.detail)
         }}>
         <VscodeSplitLayout
           resetOnDblClick
