@@ -1,5 +1,5 @@
 import {VscodeProgressBar} from '@vscode-elements/react-elements'
-import {asyncNoop} from 'es-toolkit'
+import {asyncNoop, attemptAsync} from 'es-toolkit'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -33,11 +33,11 @@ export const useProgress = () => {
     with: useCallback(async (fn = asyncNoop) => {
       start()
 
-      try {
-        return await fn()
-      } finally {
-        stop()
-      }
+      const [, data] = await attemptAsync(fn)
+
+      stop()
+
+      return data
     })
   }
 }

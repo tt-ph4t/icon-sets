@@ -1,9 +1,9 @@
-import {mapValues, noop} from 'es-toolkit'
+import {invariant, mapValues, noop} from 'es-toolkit'
 
 export const trigger = mapValues(
   {
     error: () => {
-      throw new Error(String(new Date()))
+      invariant(false, String(new Date()))
     },
     suspense: () => {
       throw new Promise(noop)
