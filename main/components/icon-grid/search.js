@@ -12,7 +12,8 @@ import {Input} from '../input'
 import {Kbd} from '../kbd'
 import {Menu} from '../menu'
 import {Slot} from '../slot'
-import {ColorPicker, SquareToggle} from './misc'
+import ColorPicker from './color-picker'
+import {SquareToggle} from './misc'
 import useStore from './use-store'
 
 const hotkeys = ['/', 'ctrl + f', 'ctrl + k', 'ctrl + e']

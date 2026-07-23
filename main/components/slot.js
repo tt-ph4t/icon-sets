@@ -24,11 +24,15 @@ export const Slot = Object.assign(component(SlotPrimitive.Root), {
   )),
   render: value => {
     if (isPlainObject(value)) {
-      const {context, wrapper = identity, ...props} = value
+      const {context, options, wrapper = identity, ...props} = value
 
       return renderSlot({
         context: {
           context
+        },
+        options: {
+          // passContextToDefault: true,
+          ...options
         },
         wrapper,
         ...props,

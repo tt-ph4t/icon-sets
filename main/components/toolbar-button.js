@@ -4,15 +4,19 @@ import {play} from 'cuelume'
 import {component} from '../hocs'
 import {Slot} from './slot'
 
+const SlotProps = {
+  onClick: () => {
+    play('release')
+  }
+}
+
 export const ToolbarButton = component(
   ({checked, preventToggle, toggleable, ...props}) => (
     <Slot
       onChange={event => {
         if (preventToggle) event.target.checked = checked
       }}
-      onClick={() => {
-        play('release')
-      }}>
+      {...SlotProps}>
       <VscodeToolbarButton
         checked={checked}
         toggleable={toggleable ?? preventToggle}
