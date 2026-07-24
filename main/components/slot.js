@@ -8,11 +8,8 @@ import {component} from '../hocs'
 import {isSyncFunction} from '../misc'
 
 const InteractiveProps = {
-  onClick: () => {
+  onClickCapture: () => {
     play('release')
-  },
-  onMouseEnter: () => {
-    play('tick')
   }
 }
 

@@ -1,4 +1,3 @@
-import {play} from 'cuelume'
 import React from 'react'
 
 import {useProgress} from '../components/progress'
@@ -21,8 +20,6 @@ export const useRemount = Object.assign(
     const progress = useProgress()
 
     const remount = useCallback(() => {
-      play('bloom')
-
       progress.with(() => {
         setState(state => ++state % Number.MAX_SAFE_INTEGER)
       })

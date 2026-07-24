@@ -7,6 +7,7 @@ import {
   VscodeIcon
 } from '@vscode-elements/react-elements'
 import {useControllableValue} from 'ahooks'
+import {play} from 'cuelume'
 import {identity, omit} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import React from 'react'
@@ -113,6 +114,7 @@ const Item = Object.assign(
           }}>
           <Slot.Interactive
             onMouseEnter={() => {
+              play('tick')
               setSelected(true)
             }}
             onMouseLeave={() => {

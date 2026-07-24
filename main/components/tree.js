@@ -19,19 +19,17 @@ const renderItems = (data = EMPTY.ARRAY) =>
   })
 
 const Item = component(({checked, children, label, ...props}) => (
-  <Slot.Interactive>
-    <VscodeTreeItem {...props}>
-      {label}
-      {isBoolean(checked) && (
-        <VscodeIcon
-          name={checked ? 'check' : 'blank'}
-          size={14}
-          slot='icon-leaf'
-        />
-      )}
-      {renderItems(children)}
-    </VscodeTreeItem>
-  </Slot.Interactive>
+  <VscodeTreeItem {...props}>
+    {label}
+    {isBoolean(checked) && (
+      <VscodeIcon
+        name={checked ? 'check' : 'blank'}
+        size={14}
+        slot='icon-leaf'
+      />
+    )}
+    {renderItems(children)}
+  </VscodeTreeItem>
 ))
 
 export const Tree = Object.assign(

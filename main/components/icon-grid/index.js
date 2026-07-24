@@ -34,7 +34,7 @@ import {hasValues, validateIconId} from '../../misc'
 import {SORT_ORDER_LABELS} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {prettyBytes} from '../../misc/pretty-bytes'
-import {ButtonGroup} from '../button-group'
+import {Button} from '../button'
 import Grid from './grid'
 import Item from './item'
 import Search from './search'
@@ -128,7 +128,7 @@ export const IconGrid = Object.assign(
                 <batcher.Subscribe
                   selector={batcherState => pick(batcherState, ['isPending'])}>
                   {batcherState => (
-                    <ButtonGroup
+                    <Button.Group
                       data={[
                         {
                           children: pluralize(state.iconIds.length, 'icon'),

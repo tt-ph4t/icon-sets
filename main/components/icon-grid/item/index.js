@@ -3,6 +3,7 @@ import {useQuery} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeIcon} from '@vscode-elements/react-elements'
 import {capitalCase, sentenceCase} from 'change-case'
+import {play} from 'cuelume'
 import {
   compact,
   findKey,
@@ -492,6 +493,9 @@ export default withQueryBoundary(
         ]}
         render={
           <Slot.Interactive
+            onMouseEnter={() => {
+              play('tick')
+            }}
             style={{
               position: 'relative'
             }}

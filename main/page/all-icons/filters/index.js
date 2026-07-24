@@ -4,7 +4,7 @@ import {
   VscodeToolbarContainer
 } from '@vscode-elements/react-elements'
 
-import {ButtonGroup} from '../../../components/button-group'
+import {Button} from '../../../components/button'
 import {Popover} from '../../../components/popover'
 import {component} from '../../../hocs'
 import {DEFAULT_QUERY_OPTIONS} from '../../../misc/constants'
@@ -34,7 +34,7 @@ const Label = component(() => {
   })
 
   return (
-    <ButtonGroup
+    <Button.Group
       data={[
         {
           children: query.data.label

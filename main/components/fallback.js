@@ -1,6 +1,5 @@
 import {isFunction} from '@sindresorhus/is'
 import {
-  VscodeButton,
   VscodeFormContainer,
   VscodeFormGroup,
   VscodeFormHelper,
@@ -13,6 +12,7 @@ import React from 'react'
 import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
 import {THEME} from '../misc/constants'
+import {Button} from './button'
 import {Progress} from './progress'
 import {Slot} from './slot'
 
@@ -24,7 +24,7 @@ const Retry = component(({onClick = asyncNoop, ...props}) => {
       style={{
         width: 'fit-content'
       }}>
-      <VscodeButton
+      <Button
         block
         disabled={state}
         icon={state ? 'loading' : 'debug-rerun'}
@@ -40,7 +40,7 @@ const Retry = component(({onClick = asyncNoop, ...props}) => {
         type='reset'
         {...props}>
         Retry
-      </VscodeButton>
+      </Button>
     </Slot>
   )
 })

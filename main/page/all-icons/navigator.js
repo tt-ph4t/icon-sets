@@ -2,7 +2,7 @@ import {useHotkey} from '@tanstack/react-hotkeys'
 import {useQuery} from '@tanstack/react-query'
 import Cycled from 'cycled'
 
-import {ButtonGroup} from '../../components/button-group'
+import {Button} from '../../components/button'
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
 import {useIconSetMenuQuery} from '../../hooks/use-icon-set-menu-query'
@@ -61,7 +61,7 @@ export default component(() => {
   }))
 
   return (
-    <ButtonGroup
+    <Button.Group
       data={[
         {
           icon: 'chevron-left',

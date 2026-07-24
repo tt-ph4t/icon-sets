@@ -1,6 +1,7 @@
 import {Button} from '@base-ui/react'
 import {useQueryClient} from '@tanstack/react-query'
 import {useUnmount} from 'ahooks'
+import {play} from 'cuelume'
 
 import {component} from '../../../hocs'
 import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
@@ -14,6 +15,9 @@ import {Slot} from '../../slot'
 
 const Fallback = component(({children, ...props}) => (
   <Slot
+    onMouseEnter={() => {
+      play('tick')
+    }}
     style={{
       userSelect: 'none'
     }}>
