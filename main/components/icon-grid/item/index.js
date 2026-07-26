@@ -35,12 +35,12 @@ import {
 } from '../../../misc/constants'
 import {parseIconName} from '../../../misc/parse-icon-name'
 import {prettyBytes} from '../../../misc/pretty-bytes'
+import {takumi} from '../../../misc/takumi'
 import {timeAgo} from '../../../misc/time-ago'
 import {Menu} from '../../menu'
 import {useProgress} from '../../progress'
 import {Slot} from '../../slot'
 import useStore from '../use-store'
-import takumi from './takumi'
 import withQueryBoundary from './with-query-boundary'
 
 const flipDirections = {
@@ -84,6 +84,7 @@ export default withQueryBoundary(
     const {iconCustomisations} = useCustomizedIcons.useSelect(iconId)
     const store = useStore()
     const progress = useProgress()
+    const takumiOptions = takumi.useStore().useValue()
 
     const {global: iconOptions} = useCustomizedIcons
       .useStore()
@@ -131,8 +132,9 @@ export default withQueryBoundary(
                 })
               ),
               {
-                format,
-                ...iconSize
+                ...takumiOptions,
+                ...iconSize,
+                format
               }
             )
           ],
@@ -188,7 +190,7 @@ export default withQueryBoundary(
                       ]
                     }
                   }),
-                  'Takumi WASM',
+                  takumi.label,
                   ...Object.entries(takumi.formats).map(([a, b]) => ({
                     label: a.toUpperCase(),
                     menu:

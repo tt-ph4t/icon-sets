@@ -23,6 +23,7 @@ import {useSettings} from '../../hooks/use-settings'
 import {hasValues, open} from '../../misc'
 import {GITHUB_REPO} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
+import {takumi} from '../../misc/takumi'
 import AllIconQueries from './all-icon-queries'
 import Cuelume from './cuelume'
 import FailedQueries from './failed-queries'
@@ -34,6 +35,8 @@ const Settings = component(({menu}) => {
   const settings = useSettings()
   const theme = useTheme()
   const {isDev} = settings.useSelectValue('isDev')
+  const takumiStore = takumi.useStore()
+  const takumiOptions = takumiStore.useValue()
 
   const layout = settings.useSelectValue(({draft}) =>
     pick(draft.layout, ['isReverse', 'isFullscreen'])
@@ -108,6 +111,30 @@ const Settings = component(({menu}) => {
           }
         },
         'Misc',
+        {
+          label: takumi.label,
+          menu: [
+            {
+              checked: takumiOptions.drawDebugBorder,
+              label: 'drawDebugBorder',
+              onClick: () => {
+                takumiStore.set(({draft}) => {
+                  draft.drawDebugBorder = !draft.drawDebugBorder
+                })
+              }
+            },
+            'dithering',
+            ...takumi.ditheringValues.map(dithering => ({
+              checked: dithering === takumiOptions.dithering,
+              label: dithering,
+              onClick: () => {
+                takumiStore.set(({draft}) => {
+                  draft.dithering = dithering
+                })
+              }
+            }))
+          ]
+        },
         {
           checked: isDev,
           label: 'Devtools',

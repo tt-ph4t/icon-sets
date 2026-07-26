@@ -12,7 +12,7 @@ import {VitePWA} from 'vite-plugin-pwa'
 import webfontDownload from 'vite-plugin-webfont-dl'
 
 const nodeModulesPath = 'node_modules/'
-const excludedPackages = ['@takumi-rs']
+const excludedPackages = []
 
 export default defineConfig({
   build: {
