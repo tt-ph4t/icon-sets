@@ -1,4 +1,4 @@
-import {DirectionProvider} from '@base-ui/react/direction-provider'
+import {DirectionProvider} from '@base-ui/react'
 import {HotkeysProvider} from '@tanstack/react-hotkeys'
 import {PacerProvider} from '@tanstack/react-pacer'
 import {QueryClientProvider} from '@tanstack/react-query'

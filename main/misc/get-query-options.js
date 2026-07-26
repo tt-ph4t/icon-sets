@@ -25,27 +25,18 @@ export const getQueryOptions =
   // https://www.npmjs.com/package/memoize-one
   ({
     delayMs = DELAY_MS,
-    gcTime = defaults.gcTime,
-    networkMode = 'offlineFirst',
     parseResponse = safeDestr,
     queryFn,
     queryKey,
-    refetchOnReconnect = false,
-    refetchOnWindowFocus = false,
-    retry = false,
-    select = noop,
-    staleTime = Infinity,
-    structuralSharing = defaults.structuralSharing,
     timeout = defaults.timeout,
     url,
-    ...rest
+    ...options
   }) => {
-    queryKey = castArray(queryKey ?? url)
     url = new URL(url)
 
     return queryOptions({
-      gcTime,
-      networkMode,
+      gcTime: defaults.gcTime,
+      networkMode: 'offlineFirst',
       queryFn:
         queryFn ??
         (async () => {
@@ -67,13 +58,13 @@ export const getQueryOptions =
                 ...ofetchOptions
               })
         }),
-      queryKey,
-      refetchOnReconnect,
-      refetchOnWindowFocus,
-      retry,
-      select,
-      staleTime,
-      structuralSharing,
-      ...rest
+      queryKey: castArray(queryKey ?? url.href),
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+      retry: false,
+      select: noop,
+      staleTime: Infinity,
+      structuralSharing: defaults.structuralSharing,
+      ...options
     })
   }

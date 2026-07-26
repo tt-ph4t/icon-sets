@@ -19,10 +19,10 @@ export const Button = Object.assign(
       <VscodeButtonGroup>
         {Iterator.from(castArray(data))
           .filter(isPlainObject)
-          .map(({menu, ...props}, index) => (
+          .map(({menu, ...props}) => (
             <Menu
               data={menu}
-              key={getId(index, menu, props)}
+              key={getId(menu, props)}
               render={<Button secondary {...mergeProps(sharedProps, props)} />}
             />
           ))

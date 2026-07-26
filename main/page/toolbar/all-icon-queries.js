@@ -124,24 +124,19 @@ export default component(() => {
     })
   })
 
-  if (query.isSuccess)
-    return (
-      <asyncBatcher.Subscribe
-        selector={asyncBatcherState => pick(asyncBatcherState, ['isPending'])}>
-        {asyncBatcherState => (
-          <Menu
-            data={query.data.menu}
-            render={
-              <ToolbarButton
-                checked={asyncBatcherState.isPending}
-                preventToggle>
-                {dataVersion}
-              </ToolbarButton>
-            }
-          />
-        )}
-      </asyncBatcher.Subscribe>
-    )
-
-  return <ToolbarButton>{dataVersion}</ToolbarButton>
+  return (
+    <asyncBatcher.Subscribe
+      selector={asyncBatcherState => pick(asyncBatcherState, ['isPending'])}>
+      {asyncBatcherState => (
+        <Menu
+          data={query.data.menu}
+          render={
+            <ToolbarButton checked={asyncBatcherState.isPending} preventToggle>
+              {dataVersion}
+            </ToolbarButton>
+          }
+        />
+      )}
+    </asyncBatcher.Subscribe>
+  )
 })

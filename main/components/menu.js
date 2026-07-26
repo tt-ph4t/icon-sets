@@ -60,11 +60,11 @@ const Popup = component(({menu}) => {
             variant='settings-group'
           />
         }>
-        {menu.map((a, b) => {
+        {menu.map(a => {
           if (isGroupLabel(a))
             return (
               <MenuPrimitive.GroupLabel
-                key={getId(b, a)}
+                key={a}
                 render={
                   <VscodeContextMenuItem disabled label={a} selected={false} />
                 }
@@ -77,7 +77,6 @@ const Popup = component(({menu}) => {
           return (
             <React.Fragment
               key={getId(
-                b,
                 omit(a, ['menu']) // ?
               )}>
               {hasValues(menu) ? (

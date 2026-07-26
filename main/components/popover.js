@@ -62,21 +62,17 @@ export const Popover = Object.assign(
                   <PopoverPrimitive.Positioner
                     align={align}
                     render={(props, state) => (
-                      <PopoverPrimitive.Popup
-                        render={
-                          <div {...props}>
-                            {Slot.render({
-                              bespoke: popupRender,
-                              context: {
-                                props,
-                                setOpen: setState,
-                                state
-                              },
-                              wrapper: popupWrapper
-                            })}
-                          </div>
-                        }
-                      />
+                      <PopoverPrimitive.Popup render={<div {...props} />}>
+                        {Slot.render({
+                          bespoke: popupRender,
+                          context: {
+                            props,
+                            setOpen: setState,
+                            state
+                          },
+                          wrapper: popupWrapper
+                        })}
+                      </PopoverPrimitive.Popup>
                     )}
                     side={side}
                   />
