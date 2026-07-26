@@ -18,6 +18,6 @@ export const Resizable = Object.assign(
     </Slot>
   )),
   {
-    Box: component(ResizableBox)
+    Box: component(props => <Resizable as={ResizableBox} {...props} />)
   }
 )

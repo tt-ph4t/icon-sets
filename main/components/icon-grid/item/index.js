@@ -9,6 +9,7 @@ import {
   findKey,
   identity,
   mapValues,
+  omit,
   pick,
   range,
   uniq
@@ -100,12 +101,7 @@ export default withQueryBoundary(
       ...DEFAULT_QUERY_OPTIONS,
       enabled: iconQuery.isSuccess,
       select: useCallback(
-        iconSets => {
-          // eslint-disable-next-line no-unused-vars
-          const {icons, ...iconSet} = iconSets[icon.prefix]
-
-          return iconSet
-        },
+        ({[icon.prefix]: iconSet}) => omit(iconSet, ['icons']),
         [icon.prefix]
       )
     })
@@ -121,31 +117,28 @@ export default withQueryBoundary(
 
     const getTakumiBlob = useCallback(
       async format =>
-        await progress.with(
-          async () =>
-            new Blob(
-              [
-                await takumi(
-                  (format === 'jpeg' && !iconQuery.data.palette
-                    ? React.cloneElement
-                    : identity)(
-                    iconQuery.data.more.to.reactElement,
-                    mergeProps(iconQuery.data.more.to.reactElement.props, {
-                      style: {
-                        backgroundColor: 'white'
-                      }
-                    })
-                  ),
-                  {
-                    format,
-                    ...iconSize
+        new Blob(
+          [
+            await takumi(
+              (format === 'jpeg' && !iconQuery.data.palette
+                ? React.cloneElement
+                : identity)(
+                iconQuery.data.more.to.reactElement,
+                mergeProps(iconQuery.data.more.to.reactElement.props, {
+                  style: {
+                    backgroundColor: 'white'
                   }
-                )
-              ],
+                })
+              ),
               {
-                type: mime.getType(format)
+                format,
+                ...iconSize
               }
             )
+          ],
+          {
+            type: mime.getType(format)
+          }
         )
     )
 
@@ -196,33 +189,40 @@ export default withQueryBoundary(
                     }
                   }),
                   'Takumi WASM',
-                  ...Object.entries(takumi.formats).map(([format, type]) => ({
-                    label: format.toUpperCase(),
-                    menu: type && [
-                      {
-                        label: 'View',
-                        onClick: async () => {
-                          open.objectURL(await getTakumiBlob(format))
+                  ...Object.entries(takumi.formats).map(([a, b]) => ({
+                    label: a.toUpperCase(),
+                    menu:
+                      b &&
+                      compact([
+                        {
+                          label: 'View',
+                          onClick: open.objectURL
+                        },
+                        ClipboardItem.supports(b) && {
+                          label: 'Copy',
+                          onClick: async value => {
+                            await copy(value, {
+                              format: b
+                            })
+                          }
+                        },
+                        {
+                          label: 'Download',
+                          onClick: async data => {
+                            await fileSaver(
+                              data,
+                              getIconFilePaths(iconQuery.data, a).labeled
+                            )
+                          }
                         }
-                      },
-                      ClipboardItem.supports(type) && {
-                        label: 'Copy',
-                        onClick: async () => {
-                          await copy(await getTakumiBlob(format), {
-                            format: type
+                      ]).map(({onClick, ...rest}) => ({
+                        onClick: () => {
+                          progress.with(async () => {
+                            await onClick(await getTakumiBlob(a))
                           })
-                        }
-                      },
-                      {
-                        label: 'Download',
-                        onClick: async () => {
-                          await fileSaver(
-                            await getTakumiBlob(format),
-                            getIconFilePaths(iconQuery.data, format).labeled
-                          )
-                        }
-                      }
-                    ]
+                        },
+                        ...rest
+                      }))
                   })),
                   'Iconify API', // https://iconify.design/docs/api/
                   ...[

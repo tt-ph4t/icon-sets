@@ -13,31 +13,35 @@ const InteractiveProps = {
   }
 }
 
-export const Slot = Object.assign(component(SlotPrimitive.Root), {
-  Interactive: component(props => (
-    <Slot {...InteractiveProps}>
-      <Slot {...props} />
-    </Slot>
-  )),
-  render: value => {
-    if (isPlainObject(value)) {
-      const {context, options, wrapper = identity, ...props} = value
+export const Slot = Object.assign(
+  // on*, style, className, ref, aria-describedby
+  component(SlotPrimitive.Root),
+  {
+    Interactive: component(props => (
+      <Slot {...InteractiveProps}>
+        <Slot {...props} />
+      </Slot>
+    )),
+    render: value => {
+      if (isPlainObject(value)) {
+        const {context, options, wrapper = identity, ...props} = value
 
-      return renderSlot({
-        context: {
-          context
-        },
-        options: {
-          // passContextToDefault: true,
-          ...options
-        },
-        wrapper,
-        ...props,
-        default: props.default ?? noop
-      })
-    }
+        return renderSlot({
+          context: {
+            context
+          },
+          options: {
+            // passContextToDefault: true,
+            ...options
+          },
+          wrapper,
+          ...props,
+          default: props.default ?? noop
+        })
+      }
 
-    if (isSyncFunction(value)) return renderSlot(value)
-  },
-  Slottable: component(SlotPrimitive.Slottable)
-})
+      if (isSyncFunction(value)) return renderSlot(value)
+    },
+    Slottable: component(SlotPrimitive.Slottable)
+  }
+)

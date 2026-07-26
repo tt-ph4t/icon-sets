@@ -63,8 +63,7 @@ export default {
             draft.layout.size = size
           })
         }}>
-        <Resizable
-          as={Resizable.Box}
+        <Resizable.Box
           maxConstraints={[maxConstraints.width, maxConstraints.height]}
           minConstraints={[
             useSettings.initial.layout.size.width,
