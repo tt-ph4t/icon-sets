@@ -15,7 +15,7 @@ import {
   uniq
 } from 'es-toolkit'
 import {size} from 'es-toolkit/compat'
-import mime from 'mime/lite'
+import mime from 'mime'
 import {AccessibleIcon} from 'radix-ui'
 import React from 'react'
 

@@ -9,7 +9,7 @@ import {
 } from '@iconify/utils'
 import {mapValues} from 'es-toolkit'
 import parse from 'html-react-parser'
-import mime from 'mime/lite'
+import mime from 'mime'
 
 import {getIconFilePaths, hasValues} from '../../misc'
 import {cache} from '../../misc/cache'

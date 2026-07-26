@@ -42,7 +42,7 @@ export const getQueryOptions =
         (async () => {
           await delay(delayMs)
 
-          const ofetchOptions = {
+          const fetchOptions = {
             timeout
           }
 
@@ -50,12 +50,12 @@ export const getQueryOptions =
             ? decode(
                 await fetch(url, {
                   responseType: 'arrayBuffer',
-                  ...ofetchOptions
+                  ...fetchOptions
                 })
               )
             : await fetch(url, {
                 parseResponse,
-                ...ofetchOptions
+                ...fetchOptions
               })
         }),
       queryKey: castArray(queryKey ?? url.href),
