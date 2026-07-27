@@ -1,15 +1,18 @@
 import {capitalCase} from 'change-case'
 import {play, setEnabled, sounds} from 'cuelume'
 import {sort} from 'fast-sort'
+import {useEffect} from 'react'
 
 import {Menu} from '../../components/menu'
 import {Slot} from '../../components/slot'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
-import {useState} from '../../hooks/use-state'
 import {pluralize} from '../../misc/pluralize'
+import {withImmerAtom} from '../../misc/with-immer-atom'
 
-const defaultValue = false
+const useStore = withImmerAtom({
+  enabled: false
+})
 
 const menu = [
   pluralize(sounds.length, 'sound'),
@@ -23,10 +26,13 @@ const menu = [
     }))
 ]
 
-setEnabled(defaultValue)
-
 export default component(props => {
-  const [state, setState] = useState(defaultValue)
+  const store = useStore()
+  const state = store.useValue()
+
+  useEffect(() => {
+    setEnabled(state.enabled)
+  }, [state.enabled])
 
   return (
     <Menu
@@ -34,16 +40,15 @@ export default component(props => {
       render={
         <Slot
           onChange={event => {
-            const {checked} = event.target
-
-            setEnabled(checked)
-            setState(checked)
+            store.set(({draft}) => {
+              draft.enabled = event.target.checked
+            })
           }}
         />
       }>
       <ToolbarButton
-        checked={state}
-        icon={state ? 'unmute' : 'mute'}
+        checked={state.enabled}
+        icon={state.enabled ? 'unmute' : 'mute'}
         toggleable
         {...props}
       />
