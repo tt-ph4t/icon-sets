@@ -20,7 +20,7 @@ import {
   tail,
   uniq
 } from 'es-toolkit'
-import {castArray, reverse} from 'es-toolkit/compat'
+import {reverse} from 'es-toolkit/compat'
 import {sort} from 'fast-sort'
 import ms from 'ms'
 import React from 'react'
@@ -30,7 +30,7 @@ import {useEffect} from '../../hooks/use-effect'
 import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
 import {useMemo} from '../../hooks/use-memo'
 import {useRemount} from '../../hooks/use-remount'
-import {hasValues, validateIconId} from '../../misc'
+import {filterValidIconIds, hasValues, validateIconId} from '../../misc'
 import {SORT_ORDER_LABELS} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {prettyBytes} from '../../misc/pretty-bytes'
@@ -50,8 +50,7 @@ const actions = mapValues(
     tail,
     uniq
   },
-  value =>
-    flow(clone, value, castArray, iconIds => iconIds.filter(validateIconId))
+  fn => flow(clone, fn, filterValidIconIds)
 )
 
 const noIcons = (
@@ -71,11 +70,8 @@ const noIcons = (
 
 export const IconGrid = Object.assign(
   useRemount.with(
-    component(({children, iconIds, [useRemount.key]: remount}) => {
-      iconIds = useMemo(
-        () => castArray(iconIds).filter(validateIconId),
-        [iconIds]
-      )
+    component(({children, iconIds, [useRemount.key]: remount, ...props}) => {
+      iconIds = useMemo(() => filterValidIconIds(iconIds), [iconIds])
 
       const favoritedIcons = useFavoritedIcons()
       const filteredIconIds = useFilteredIconIds(iconIds)
@@ -212,6 +208,7 @@ export const IconGrid = Object.assign(
                       </div>
                     )
                 }}
+                {...props}
               />
             ) : (
               noIcons

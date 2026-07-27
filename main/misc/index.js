@@ -16,6 +16,7 @@ import {downloadZip} from 'client-zip'
 import copyToClipboard from 'copy-to-clipboard'
 import {play} from 'cuelume'
 import {attemptAsync, omit} from 'es-toolkit'
+import {castArray} from 'es-toolkit/compat'
 import FileSaver from 'file-saver'
 import has from 'has-values'
 import {isWordCharacter} from 'is-word-character'
@@ -85,6 +86,9 @@ export const validateIconId = iconId =>
   isWordChar(iconId) &&
   iconId.includes(ID_SEPARATOR) &&
   validateIconName(parseIconName(iconId).icon)
+
+export const filterValidIconIds = iconIds =>
+  castArray(iconIds).filter(validateIconId)
 
 export const copy = async (value, options) => {
   const isCopied = await copyToClipboard(value, {

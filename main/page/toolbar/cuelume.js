@@ -1,12 +1,12 @@
 import {capitalCase} from 'change-case'
 import {play, setEnabled, sounds} from 'cuelume'
 import {sort} from 'fast-sort'
-import {useEffect} from 'react'
 
 import {Menu} from '../../components/menu'
 import {Slot} from '../../components/slot'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
+import {useEffect} from '../../hooks/use-effect'
 import {pluralize} from '../../misc/pluralize'
 import {withImmerAtom} from '../../misc/with-immer-atom'
 
@@ -49,7 +49,7 @@ export default component(props => {
       <ToolbarButton
         checked={state.enabled}
         icon={state.enabled ? 'unmute' : 'mute'}
-        toggleable
+        preventToggle
         {...props}
       />
     </Menu>

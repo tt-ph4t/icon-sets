@@ -105,7 +105,7 @@ export default component(() => {
           onChange={() => {
             toggleIconSetPrefixes(!filtered, query.data.iconSet.prefixes)
           }}
-          toggleable
+          preventToggle
         />
       </VscodeToolbarContainer>
       <React.Activity>

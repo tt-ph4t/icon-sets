@@ -2,7 +2,7 @@ import {useBatchedCallback} from '@tanstack/react-pacer'
 import {last, union, uniq, without} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 
-import {validateIconId} from '../misc'
+import {filterValidIconIds} from '../misc'
 import {EMPTY} from '../misc/constants'
 import {useCallback} from './use-callback'
 import {useState} from './use-state'
@@ -16,10 +16,10 @@ export const useFavoritedIcons = Object.assign(
     })
 
     const batchedSetState = useBatchedCallback(items => {
-      setState((...args) => last(items)(...args).filter(validateIconId))
+      setState((...args) => filterValidIconIds(last(items)(...args)))
     })
 
-    const set = new Set(castArray(state).filter(validateIconId))
+    const set = new Set(filterValidIconIds(state))
 
     return {
       add: useCallback((...iconIds) => {

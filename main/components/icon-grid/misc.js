@@ -20,7 +20,7 @@ export const SquareToggle = component(props => {
       <ToolbarButton
         {...defaultProps}
         icon='symbol-ruler'
-        toggleable
+        preventToggle
         {...props}
       />
     </Slot>
