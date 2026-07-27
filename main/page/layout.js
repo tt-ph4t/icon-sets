@@ -8,17 +8,23 @@ import {SplitLayout} from '../components/split-layout'
 import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
-import {useSettings} from '../hooks/use-settings'
 import {THEME} from '../misc/constants'
+import {withImmerAtom} from '../misc/with-immer-atom'
+
+const useStore = withImmerAtom({
+  isFullscreen: false,
+  isReverse: true,
+  size: {
+    height: 0,
+    width: 0
+  }
+})
 
 export default {
   Fullscreen: component(props => {
-    const settings = useSettings()
+    const store = useStore()
     const fullscreen = useRef.fullscreen()
-
-    const isFullscreen = settings.useSelectValue(
-      ({draft}) => draft.layout.isFullscreen
-    )
+    const {isFullscreen} = store.useSelectValue('isFullscreen')
 
     useEffect(() => {
       if (fullscreen.isEnabled) {
@@ -26,11 +32,11 @@ export default {
 
         fullscreen[isFullscreen ? 'enterFullscreen' : 'exitFullscreen']()
 
-        settings.set(({draft}) => {
-          draft.layout.isFullscreen = fullscreen.isFullscreen
+        store.set(({draft}) => {
+          draft.isFullscreen = fullscreen.isFullscreen
         })
       }
-    }, [isFullscreen, fullscreen, settings])
+    }, [isFullscreen, fullscreen])
 
     return (
       <Slot ref={fullscreen.ref}>
@@ -39,13 +45,13 @@ export default {
     )
   }),
   Resizable: component(props => {
-    const settings = useSettings()
+    const store = useStore()
     const maxConstraints = useRef.size()
-    const size = settings.useSelectValue(({draft}) => draft.layout.size)
+    const {size} = store.useSelectValue('size')
 
     useEffect(() => {
-      settings.set(({draft}) => {
-        draft.layout.size = {
+      store.set(({draft}) => {
+        draft.size = {
           height:
             maxConstraints.height *
             (maxConstraints.width >= THEME.BREAKPOINTS['2XL'] ? 0.86 : 0.96),
@@ -54,20 +60,20 @@ export default {
             (maxConstraints.width >= THEME.BREAKPOINTS['2XL'] ? 0.8 : 0.95)
         }
       })
-    }, [maxConstraints, settings])
+    }, [maxConstraints])
 
     return (
       <Slot
         onResize={(...[, {size}]) => {
-          settings.set(({draft}) => {
-            draft.layout.size = size
+          store.set(({draft}) => {
+            draft.size = size
           })
         }}>
         <Resizable.Box
           maxConstraints={[maxConstraints.width, maxConstraints.height]}
           minConstraints={[
-            useSettings.initial.layout.size.width,
-            useSettings.initial.layout.size.height
+            useStore.initial.size.width,
+            useStore.initial.size.height
           ]}
           {...size}
           {...props}
@@ -77,10 +83,7 @@ export default {
   }),
   Split: component(({children, ...props}) => {
     const ref = useRef()
-
-    const isReverse = useSettings().useSelectValue(
-      ({draft}) => draft.layout.isReverse
-    )
+    const {isReverse} = useStore().useSelectValue('isReverse')
 
     useEffect.update(() => {
       ref.current.resetHandlePosition()
@@ -101,5 +104,6 @@ export default {
         </SplitLayout>
       </Slot>
     )
-  })
+  }),
+  useStore
 }

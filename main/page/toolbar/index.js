@@ -7,7 +7,7 @@ import {useIsFetching, useQueryClient} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {play} from 'cuelume'
-import {mapValues, pick, sumBy} from 'es-toolkit'
+import {mapValues, sumBy} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import React from 'react'
 
@@ -24,6 +24,7 @@ import {hasValues, open} from '../../misc'
 import {GITHUB_REPO} from '../../misc/constants'
 import {pluralize} from '../../misc/pluralize'
 import {takumi} from '../../misc/takumi'
+import Layout from '../layout'
 import AllIconQueries from './all-icon-queries'
 import Cuelume from './cuelume'
 import FailedQueries from './failed-queries'
@@ -35,12 +36,12 @@ const Settings = component(({menu}) => {
   const settings = useSettings()
   const theme = useTheme()
   const {isDev} = settings.useSelectValue('isDev')
+
   const takumiStore = takumi.useStore()
   const takumiOptions = takumiStore.useValue()
 
-  const layout = settings.useSelectValue(({draft}) =>
-    pick(draft.layout, ['isReverse', 'isFullscreen'])
-  )
+  const layoutStore = Layout.useStore()
+  const layout = layoutStore.useSelectValue('isReverse', 'isFullscreen')
 
   const font = useFont()
   const fontValue = font.useValue()
@@ -96,8 +97,8 @@ const Settings = component(({menu}) => {
           checked: layout.isReverse,
           label: 'Reverse',
           onClick: () => {
-            settings.set(({draft}) => {
-              draft.layout.isReverse = !draft.layout.isReverse
+            layoutStore.set(({draft}) => {
+              draft.isReverse = !draft.isReverse
             })
           }
         },
@@ -105,8 +106,8 @@ const Settings = component(({menu}) => {
           checked: layout.isFullscreen,
           label: 'Fullscreen',
           onClick: () => {
-            settings.set(({draft}) => {
-              draft.layout.isFullscreen = !draft.layout.isFullscreen
+            layoutStore.set(({draft}) => {
+              draft.isFullscreen = !draft.isFullscreen
             })
           }
         },
