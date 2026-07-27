@@ -19,7 +19,10 @@ const separator = '+'
 export const Kbd = Object.assign(
   component(({keys, ...props}) => {
     const hotkey = useMemo(
-      () => castArray(keys).filter(isString).join(separator),
+      () =>
+        castArray(keys)
+          .filter(value => isString(value) && value !== 'Unidentified')
+          .join(separator),
       [keys]
     )
 
