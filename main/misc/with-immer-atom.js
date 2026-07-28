@@ -10,13 +10,12 @@ import {hasValues, isSyncFunction} from './'
 import {EMPTY} from './constants'
 
 const create = flow(atomWithImmer, freezeAtom)
-const draftKey = 'draft'
-const selectDraft = ({[draftKey]: draft}) => draft
+const selectValue = ({draft}) => draft
 
 // https://immerjs.github.io/immer/update-patterns
 export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
   const atom = create((initialValue = deepFreeze(initialValue)))
-  const useValue = () => useSelectValue(selectDraft)
+  const useValue = () => useSelectValue(selectValue)
 
   const useSelectValue = (...args) => {
     const [, {deps = EMPTY.ARRAY, ...options} = EMPTY.OBJECT] = args
@@ -29,8 +28,13 @@ export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
         atom,
         // https://jotai.org/docs/utilities/select#hold-stable-references
         useCallback(
-          draft =>
-            isSelector ? selector({[draftKey]: draft}) : pick(draft, args),
+          (draft, prevSlice) =>
+            isSelector
+              ? selector({
+                  draft,
+                  prevSlice
+                })
+              : pick(draft, args),
           deps
         ),
         isEqual
@@ -56,7 +60,9 @@ export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
         }),
         set: useCallback((fn = noop) => {
           setAtom(draft => {
-            fn({[draftKey]: draft})
+            fn({
+              draft
+            })
           })
         }),
         useSelectValue,

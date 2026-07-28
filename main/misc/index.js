@@ -4,7 +4,6 @@ import {
   isAsyncGeneratorFunction,
   isBigint,
   isClass,
-  isError,
   isFunction,
   isGeneratorFunction,
   isNull,
@@ -15,7 +14,7 @@ import {
 import {downloadZip} from 'client-zip'
 import copyToClipboard from 'copy-to-clipboard'
 import {play} from 'cuelume'
-import {attemptAsync, omit} from 'es-toolkit'
+import {omit} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import FileSaver from 'file-saver'
 import has from 'has-values'
@@ -65,13 +64,13 @@ export const fileSaver = async (data, fileName) => {
 
 export const Zip = Object.assign(jszip, {
   download: async (files, fileName) => {
-    const [error] = await attemptAsync(async () => {
+    await Promise.try(async () => {
       const response = downloadZip(files)
 
       if (response.ok) await fileSaver(response, `${fileName}.zip`)
+    }).catch(error => {
+      prompt('Error', error.message)
     })
-
-    if (isError(error)) prompt('Error', error.message)
   },
   support: omit(jszip.support, ['nodebuffer', 'nodestream'])
 })

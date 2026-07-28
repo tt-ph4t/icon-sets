@@ -15,7 +15,7 @@ import {Menu} from '../menu'
 import {Slot} from '../slot'
 import {ToolbarButton} from '../toolbar-button'
 import ColorPicker from './color-picker'
-import useStore from './use-store'
+import useSearchTerm from './use-search-term'
 
 const SquareToggle = component(props => {
   const customizedIconsStore = useCustomizedIcons.useStore()
@@ -58,8 +58,8 @@ const hotkeysMenu = (
 
 const Search = component(({children, ...props}) => {
   const ref = useRef()
-  const store = useStore()
-  const {searchTerm} = store.useSelectValue('searchTerm')
+  const searchTerm = useSearchTerm()
+  const searchTermValue = searchTerm.useValue()
 
   const focusFn = useCallback(() => {
     ref.current.focus()
@@ -83,15 +83,15 @@ const Search = component(({children, ...props}) => {
   return (
     <Slot
       onInput={event => {
-        store.searchTerm.set(event.target.value)
+        searchTerm.set(event.target.value)
       }}
       ref={ref}>
       <Input
         as={VscodeTextfield}
         invalid={
-          !store.searchTerm.isDefault(searchTerm) && !isWordChar(searchTerm)
+          !searchTerm.isDefault(searchTermValue) && !isWordChar(searchTermValue)
         }
-        value={searchTerm}
+        value={searchTermValue}
         {...props}>
         <React.Activity>
           {hotkeysMenu}

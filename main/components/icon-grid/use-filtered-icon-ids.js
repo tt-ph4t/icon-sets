@@ -2,20 +2,20 @@ import uFuzzy from '@leeoniya/ufuzzy'
 
 import {useMemo} from '../../hooks/use-memo'
 import {EMPTY} from '../../misc/constants'
-import useStore from './use-store'
+import useSearchTerm from './use-search-term'
 
 const uf = new uFuzzy()
 
 export default iconIds => {
-  const store = useStore()
-  const {searchTerm} = store.useSelectValue('searchTerm')
+  const searchTerm = useSearchTerm()
+  const searchTermValue = searchTerm.useValue()
 
   return useMemo(() => {
-    if (store.searchTerm.isDefault(searchTerm)) return iconIds
+    if (searchTerm.isDefault(searchTermValue)) return iconIds
 
     return (
-      uf.search(iconIds, searchTerm)[0]?.map(index => iconIds[index]) ??
+      uf.search(iconIds, searchTermValue)[0]?.map(index => iconIds[index]) ??
       EMPTY.ARRAY
     )
-  }, [searchTerm, iconIds])
+  }, [searchTermValue, iconIds])
 }

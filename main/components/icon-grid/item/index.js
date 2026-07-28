@@ -40,7 +40,7 @@ import {timeAgo} from '../../../misc/time-ago'
 import {Menu} from '../../menu'
 import {useProgress} from '../../progress'
 import {Slot} from '../../slot'
-import useStore from '../use-store'
+import useSearchTerm from '../use-search-term'
 import withQueryBoundary from './with-query-boundary'
 
 const flipDirections = {
@@ -82,7 +82,7 @@ export default withQueryBoundary(
     const customizedIcons = useCustomizedIcons()
     const favoritedIcons = useFavoritedIcons()
     const {iconCustomisations} = useCustomizedIcons.useSelect(iconId)
-    const store = useStore()
+    const searchTerm = useSearchTerm()
     const progress = useProgress()
     const takumiOptions = takumi.useStore().useValue()
 
@@ -455,7 +455,7 @@ export default withQueryBoundary(
                 {
                   label: 'Search',
                   onClick: () => {
-                    store.searchTerm.set(iconAlias)
+                    searchTerm.set(iconAlias)
                   }
                 }
               ]
