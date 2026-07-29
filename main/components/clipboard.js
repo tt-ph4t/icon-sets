@@ -1,6 +1,5 @@
 import {useBatchedCallback} from '@tanstack/react-pacer'
 import ms from 'ms'
-import React from 'react'
 
 import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
@@ -27,10 +26,8 @@ export const Clipboard = component(({children, value, ...props}) => {
       onClick={async () => {
         const {isCopied} = await copy(value)
 
-        React.startTransition(() => {
-          setState(isCopied)
-          resetState()
-        })
+        setState(isCopied)
+        resetState()
       }}>
       <ToolbarButton icon={state ? 'check' : 'copy'} {...props}>
         {hasValues(children) && (state ? 'Copied' : children)}
