@@ -20,6 +20,7 @@ import FileSaver from 'file-saver'
 import has from 'has-values'
 import {isWordCharacter} from 'is-word-character'
 import jszip from 'jszip'
+import {getErrorMessage} from 'react-error-boundary'
 
 import {ICON_CACHE, ID_SEPARATOR} from '../misc/constants'
 import {cache} from './cache'
@@ -69,7 +70,7 @@ export const Zip = Object.assign(jszip, {
 
       if (response.ok) await fileSaver(response, `${fileName}.zip`)
     }).catch(error => {
-      prompt('Error', error.message)
+      prompt('Error', getErrorMessage(error))
     })
   },
   support: omit(jszip.support, ['nodebuffer', 'nodestream'])

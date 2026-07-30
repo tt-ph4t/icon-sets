@@ -1,9 +1,10 @@
+import dayjs from 'dayjs'
 import {invariant, mapValues, noop} from 'es-toolkit'
 
 export const trigger = mapValues(
   {
     error: () => {
-      invariant(false, String(new Date()))
+      invariant(false, dayjs().format('ddd MMM DD YYYY HH:mm:ss'))
     },
     suspense: () => {
       throw new Promise(noop)

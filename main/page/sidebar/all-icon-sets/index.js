@@ -2,7 +2,6 @@ import {useQuery} from '@tanstack/react-query'
 import {mapValues} from 'es-toolkit'
 import {sort} from 'fast-sort'
 
-import {Boundary} from '../../../components/boundary'
 import {Collapsible} from '../../../components/collapsible'
 import {component} from '../../../hocs'
 import {useState} from '../../../hooks/use-state'
@@ -38,40 +37,31 @@ const queryOptions = {
 
 export default component(() => {
   const query = useQuery(queryOptions)
+  const [state, setState] = useState()
+
+  const iconSetPrefixes =
+    query.data.iconSet.category.list[state]?.map(iconSet => iconSet.prefix) ??
+    query.data.iconSet.prefixes
 
   return (
-    <Boundary.Query
-      query={query}
-      render={() => {
-        const [state, setState] = useState()
-
-        const iconSetPrefixes =
-          query.data.iconSet.category.list[state]?.map(
-            iconSet => iconSet.prefix
-          ) ?? query.data.iconSet.prefixes
-
-        return (
-          <Collapsible
-            defaultOpen
-            description={iconSetPrefixes.length}
-            heading='icon sets'>
-            <CollapsibleList
-              ids={iconSetPrefixes}
-              menu={[
-                pluralize(query.data.iconSet.category.names.length, 'category'),
-                ...query.data.iconSet.category.names.map(category => ({
-                  checked: category === state,
-                  label: category,
-                  onClick: () => {
-                    setState(state => state === category || category)
-                  }
-                }))
-              ]}
-              renderItem={(...[, props]) => <Item {...props} />}
-            />
-          </Collapsible>
-        )
-      }}
-    />
+    <Collapsible
+      defaultOpen
+      description={iconSetPrefixes.length}
+      heading='icon sets'>
+      <CollapsibleList
+        ids={iconSetPrefixes}
+        menu={[
+          pluralize(query.data.iconSet.category.names.length, 'category'),
+          ...query.data.iconSet.category.names.map(category => ({
+            checked: category === state,
+            label: category,
+            onClick: () => {
+              setState(state => state === category || category)
+            }
+          }))
+        ]}
+        renderItem={(...[, props]) => <Item {...props} />}
+      />
+    </Collapsible>
   )
 })

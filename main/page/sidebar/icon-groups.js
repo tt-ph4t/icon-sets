@@ -4,7 +4,6 @@ import {mapValues} from 'es-toolkit'
 import {castArray, size} from 'es-toolkit/compat'
 import {sort} from 'fast-sort'
 
-import {Boundary} from '../../components/boundary'
 import {Collapsible} from '../../components/collapsible'
 import {IconGrid} from '../../components/icon-grid'
 import {component} from '../../hocs'
@@ -64,55 +63,47 @@ const queryOptions = {
 
 export default component(() => {
   const query = useQuery(queryOptions)
+  const [state, setState] = useState('Category')
 
   return (
-    <Boundary.Query
-      query={query}
-      render={() => {
-        const [state, setState] = useState('Category')
+    <Collapsible
+      description={size(query.data.groupedIconIds[state])}
+      heading='icon groups'>
+      <CollapsibleList
+        ids={query.data.CollapsibleListIdsMap[state]}
+        menu={[
+          {
+            separator: true
+          },
+          ...sort(Object.keys(query.data.groupedIconIds))
+            .asc()
+            .map(a => ({
+              checked: a === state,
+              label: a,
+              onClick: () => {
+                setState(a)
+              }
+            }))
+        ]}
+        renderItem={(...[, {context}]) => {
+          const [, heading] = context.id.split(ID_SEPARATOR)
+          const iconIds = query.data.groupedIconIds[state][heading]
 
-        return (
-          <Collapsible
-            description={size(query.data.groupedIconIds[state])}
-            heading='icon groups'>
-            <CollapsibleList
-              ids={query.data.CollapsibleListIdsMap[state]}
-              menu={[
-                {
-                  separator: true
-                },
-                ...sort(Object.keys(query.data.groupedIconIds))
-                  .asc()
-                  .map(a => ({
-                    checked: a === state,
-                    label: a,
-                    onClick: () => {
-                      setState(a)
-                    }
-                  }))
-              ]}
-              renderItem={(...[, {context}]) => {
-                const [, heading] = context.id.split(ID_SEPARATOR)
-                const iconIds = query.data.groupedIconIds[state][heading]
-
-                return (
-                  <Collapsible
-                    description={iconIds.length}
-                    heading={heading}
-                    {...context.CollapsibleProps}>
-                    <div
-                      style={{
-                        height: 'var(--SIDEBAR-CONTENT-HEIGHT)'
-                      }}>
-                      <IconGrid iconIds={iconIds} />
-                    </div>
-                  </Collapsible>
-                )
-              }}
-            />
-          </Collapsible>
-        )
-      }}
-    />
+          return (
+            <Collapsible
+              description={iconIds.length}
+              heading={heading}
+              {...context.CollapsibleProps}>
+              <div
+                style={{
+                  height: 'var(--SIDEBAR-CONTENT-HEIGHT)'
+                }}>
+                <IconGrid iconIds={iconIds} />
+              </div>
+            </Collapsible>
+          )
+        }}
+      />
+    </Collapsible>
   )
 })

@@ -1,5 +1,6 @@
 import {useQueryClient} from '@tanstack/react-query'
 import {useUnmount} from 'ahooks'
+import {play} from 'cuelume'
 import React from 'react'
 import {ErrorBoundary} from 'react-error-boundary'
 
@@ -13,26 +14,36 @@ import {Slot} from './slot'
 const defaults = {
   ErrorBoundaryProps: {
     FallbackComponent: component(({error, resetErrorBoundary}) => (
-      <Fallback.Error message={error.message} retryFn={resetErrorBoundary} />
-    ))
+      <Fallback.Error error={error} onRetry={resetErrorBoundary} />
+    )),
+    onError: () => {
+      play('error')
+    }
   },
   fallback: <Progress.Bar />
 }
 
 export const Boundary = Object.assign(
-  component(({children, fallback = defaults.fallback}) => (
-    <ErrorBoundary {...defaults.ErrorBoundaryProps}>
+  component(({children, fallback = defaults.fallback, ...props}) => (
+    <Boundary.Error
+      FallbackComponent={defaults.ErrorBoundaryProps.FallbackComponent}
+      {...props}>
       <React.Suspense fallback={fallback}>{children}</React.Suspense>
-    </ErrorBoundary>
+    </Boundary.Error>
   )),
   {
+    Error: component(props => (
+      <Slot onError={defaults.ErrorBoundaryProps.onError}>
+        <ErrorBoundary {...props} />
+      </Slot>
+    )),
     Query: component(
       ({
         fallback = defaults.fallback,
         query,
         queryOptions = DEFAULT_QUERY_OPTIONS,
         render,
-        renderError
+        renderError = true
       }) => {
         const queryClient = useQueryClient()
 
@@ -48,29 +59,30 @@ export const Boundary = Object.assign(
           await queryClient.cancelQueries(queryClientFilters)
         })
 
-        if (query.isLoading) return fallback
+        if (query.isLoading)
+          return Slot.render({
+            bespoke: fallback
+          })
 
         if (query.isError)
           return Slot.render({
-            bespoke:
-              renderError ??
-              (() => (
-                <Fallback.Error
-                  message={query.error.message}
-                  retryFn={async () => {
-                    await queryClient.resetQueries(queryClientFilters)
-                  }}
-                />
-              )),
-            context: query.error
+            bespoke: renderError,
+            default: props => (
+              <Slot
+                onRetry={async () => {
+                  await queryClient.resetQueries(queryClientFilters)
+                }}>
+                <Fallback.Error error={query.error} {...props} />
+              </Slot>
+            )
           })
 
         return Slot.render(render)
       }
     ),
-    with: (Component, fallback) =>
+    with: (Component, BoundaryProps) =>
       component(props => (
-        <Boundary fallback={fallback}>
+        <Boundary {...BoundaryProps}>
           <Component {...props} />
         </Boundary>
       ))

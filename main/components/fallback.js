@@ -8,6 +8,7 @@ import {
 import {asyncNoop, delay, negate} from 'es-toolkit'
 import ms from 'ms'
 import React from 'react'
+import {getErrorMessage} from 'react-error-boundary'
 
 import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
@@ -46,7 +47,7 @@ const Retry = component(({onClick = asyncNoop, ...props}) => {
 })
 
 export const Fallback = {
-  Error: component(({message, progressBar = true, retryFn}) => (
+  Error: component(({error, onRetry, progressBar = true}) => (
     <div
       style={{
         '--size': '100%',
@@ -72,8 +73,8 @@ export const Fallback = {
         <VscodeFormGroup variant='settings-group'>
           <VscodeLabel required>Error</VscodeLabel>
           <VscodeFormHelper>
-            {message}
-            {isFunction(retryFn) && <Retry onClick={retryFn} />}
+            {getErrorMessage(error)}
+            {isFunction(onRetry) && <Retry onClick={onRetry} />}
           </VscodeFormHelper>
         </VscodeFormGroup>
       </VscodeFormContainer>

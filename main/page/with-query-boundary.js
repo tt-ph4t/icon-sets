@@ -24,6 +24,8 @@ const fallback = (
   </div>
 )
 
+const renderError = Component => <Component progressBar={false} />
+
 export default Component =>
   component(props => {
     const query = useQuery(DEFAULT_QUERY_OPTIONS)
@@ -33,6 +35,7 @@ export default Component =>
         fallback={fallback}
         query={query}
         render={() => <Component {...props} />}
+        renderError={renderError}
       />
     )
   })

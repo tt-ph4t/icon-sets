@@ -2,6 +2,7 @@ import {Button} from '@base-ui/react'
 import {useQueryClient} from '@tanstack/react-query'
 import {useUnmount} from 'ahooks'
 import {play} from 'cuelume'
+import {getErrorMessage} from 'react-error-boundary'
 
 import {component} from '../../../hocs'
 import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
@@ -81,7 +82,7 @@ export default Component =>
             render={
               <Fallback
                 onClick={() => {
-                  prompt('Error', iconQuery.error.message)
+                  prompt('Error', getErrorMessage(iconQuery.error))
                 }}
                 style={{
                   color: `var(${THEME.COLORS.ERROR})`

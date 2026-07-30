@@ -3,10 +3,9 @@ import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
 import React from 'react'
 import {preconnect} from 'react-dom'
 import {createRoot} from 'react-dom/client'
-import {ErrorBoundary} from 'react-error-boundary'
 import root from 'react-shadow'
 
-import {Fallback} from './components/fallback'
+import {Boundary} from './components/boundary'
 import {ProgressRing} from './components/progress-ring'
 import {DATABASE_URL} from './misc/constants'
 import Layout from './page/layout'
@@ -27,27 +26,18 @@ createRoot(document.querySelector('#root')).render(
         justifyContent: 'center',
         width: 'var(--WIDTH)'
       }}>
-      <ErrorBoundary
-        fallbackRender={({error, resetErrorBoundary}) => (
-          <Fallback.Error
-            message={error.message}
-            progressBar={false}
-            retryFn={resetErrorBoundary}
-          />
-        )}>
-        <React.Suspense fallback={<ProgressRing>Loading</ProgressRing>}>
-          <Layout.Resizable>
-            <root.div
-              style={{
-                display: 'flex',
-                height: 'inherit',
-                width: 'inherit'
-              }}>
-              <Page />
-            </root.div>
-          </Layout.Resizable>
-        </React.Suspense>
-      </ErrorBoundary>
+      <Boundary fallback={<ProgressRing>Loading</ProgressRing>}>
+        <Layout.Resizable>
+          <root.div
+            style={{
+              display: 'flex',
+              height: 'inherit',
+              width: 'inherit'
+            }}>
+            <Page />
+          </root.div>
+        </Layout.Resizable>
+      </Boundary>
     </div>
     <link
       href={codiconUrl}

@@ -19,15 +19,18 @@ const useStore = withImmerAtom({
   volume: volumeValues[2]
 })
 
+setEnabled(useStore.initial.enabled)
+setVolume(useStore.initial.volume)
+
 export default component(props => {
   const store = useStore()
   const state = store.useValue()
 
-  useEffect(() => {
+  useEffect.update(() => {
     setEnabled(state.enabled)
   }, [state.enabled])
 
-  useEffect(() => {
+  useEffect.update(() => {
     setVolume(state.volume)
   }, [state.volume])
 
@@ -36,16 +39,21 @@ export default component(props => {
       data={[
         {
           label: 'Volume',
-          menu: volumeValues.map(volume => ({
-            checked: volume === state.volume,
-            label: `${volume * 100}%`,
-            onClick: () => {
-              store.set(({draft}) => {
-                draft.volume = volume
-                draft.enabled = Boolean(volume)
-              })
+          menu: volumeValues.map(volume => {
+            const checked = volume === state.volume
+
+            return {
+              checked,
+              disabled: checked && volume === volumeValues[0],
+              label: `${volume * 100}%`,
+              onClick: () => {
+                store.set(({draft}) => {
+                  draft.volume = volume
+                  draft.enabled = Boolean(volume)
+                })
+              }
             }
-          }))
+          })
         },
         pluralize(soundNames.length, 'sound'),
         ...soundNames.map(sound => ({
