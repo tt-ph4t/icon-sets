@@ -111,7 +111,7 @@ const Item = Object.assign(
           style={{
             position: 'relative'
           }}>
-          <Slot.Interactive
+          <Slot.ClickSound
             onMouseEnter={() => {
               play('tick')
               setSelected(true)
@@ -125,7 +125,7 @@ const Item = Object.assign(
               selected={selected}
               {...props}
             />
-          </Slot.Interactive>
+          </Slot.ClickSound>
           {checked && (
             <VscodeIcon
               disabled={disabled}

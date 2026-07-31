@@ -7,7 +7,7 @@ import {renderSlot} from 'render-slot'
 import {component} from '../hocs'
 import {isSyncFunction} from '../misc'
 
-const InteractiveProps = {
+const ClickSoundProps = {
   onClickCapture: () => {
     play('release')
   }
@@ -17,8 +17,8 @@ export const Slot = Object.assign(
   // on*, style, className, ref, aria-describedby
   component(SlotPrimitive.Root),
   {
-    Interactive: component(props => (
-      <Slot {...InteractiveProps}>
+    ClickSound: component(props => (
+      <Slot {...ClickSoundProps}>
         <Slot {...props} />
       </Slot>
     )),

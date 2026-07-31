@@ -10,9 +10,9 @@ import {Slot} from './slot'
 
 export const Button = Object.assign(
   component(props => (
-    <Slot.Interactive>
+    <Slot.ClickSound>
       <VscodeButton {...props} />
-    </Slot.Interactive>
+    </Slot.ClickSound>
   )),
   {
     Group: component(({data, ...sharedProps}) => (

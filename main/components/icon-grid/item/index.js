@@ -66,14 +66,14 @@ const sizeLabel = (
 const width = 'calc(var(--SPACING) * 12)'
 
 const Badge = component(({color, ...props}) => (
-  <Slot.Interactive
+  <Slot.ClickSound
     style={
       hasValues(color) && {
         '--vscode-icon-foreground': color
       }
     }>
     <VscodeIcon name='circle-filled' size={13} {...props} />
-  </Slot.Interactive>
+  </Slot.ClickSound>
 ))
 
 export default withQueryBoundary(
@@ -494,7 +494,7 @@ export default withQueryBoundary(
           }
         ]}
         render={
-          <Slot.Interactive
+          <Slot.ClickSound
             onMouseEnter={() => {
               play('tick')
             }}

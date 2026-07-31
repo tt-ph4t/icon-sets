@@ -5,7 +5,7 @@ import {Slot} from './slot'
 
 export const ToolbarButton = component(
   ({checked, preventToggle, toggleable, ...props}) => (
-    <Slot.Interactive
+    <Slot.ClickSound
       onChange={event => {
         if (preventToggle) event.target.checked = checked
       }}>
@@ -14,6 +14,6 @@ export const ToolbarButton = component(
         toggleable={toggleable ?? preventToggle}
         {...props}
       />
-    </Slot.Interactive>
+    </Slot.ClickSound>
   )
 )
