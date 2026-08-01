@@ -1,3 +1,4 @@
+import {isBoolean} from '@sindresorhus/is'
 import {isEqual} from '@ver0/deep-equal'
 import deepFreeze from 'deep-freeze-es6'
 import {flow, noop, pick} from 'es-toolkit'
@@ -53,16 +54,27 @@ export const withImmerAtom = (initialValue = EMPTY.OBJECT) => {
           setAtom(
             hasValues(keys)
               ? draft => {
-                  for (const key of keys) draft[key] = initialValue[key]
+                  for (const key of keys)
+                    if (key in initialValue) draft[key] = initialValue[key]
                 }
               : initialValue
           )
         }),
         set: useCallback((fn = noop) => {
-          setAtom(draft => {
-            fn({
-              draft
+          if (isSyncFunction(fn))
+            setAtom(draft => {
+              fn({
+                draft
+              })
             })
+        }),
+        toggle: useCallback((...keys) => {
+          setAtom(draft => {
+            for (const key of keys) {
+              const value = draft[key]
+
+              if (isBoolean(value)) draft[key] = !value
+            }
           })
         }),
         useSelectValue,

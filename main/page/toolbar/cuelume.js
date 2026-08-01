@@ -38,9 +38,7 @@ export default component(props => {
   }, [state.volume])
 
   useHotkey(hotkey, () => {
-    store.set(({draft}) => {
-      draft.enabled = !draft.enabled
-    })
+    store.toggle('enabled')
   })
 
   return (

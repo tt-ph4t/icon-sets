@@ -97,18 +97,14 @@ const Settings = component(({menu}) => {
           checked: layout.isReverse,
           label: 'Reverse',
           onClick: () => {
-            layoutStore.set(({draft}) => {
-              draft.isReverse = !draft.isReverse
-            })
+            layoutStore.toggle('isReverse')
           }
         },
         {
           checked: layout.isFullscreen,
           label: 'Fullscreen',
           onClick: () => {
-            layoutStore.set(({draft}) => {
-              draft.isFullscreen = !draft.isFullscreen
-            })
+            layoutStore.toggle('isFullscreen')
           }
         },
         'Misc',
@@ -119,9 +115,7 @@ const Settings = component(({menu}) => {
               checked: takumiOptions.drawDebugBorder,
               label: 'drawDebugBorder',
               onClick: () => {
-                takumiStore.set(({draft}) => {
-                  draft.drawDebugBorder = !draft.drawDebugBorder
-                })
+                takumiStore.toggle('drawDebugBorder')
               }
             },
             'dithering',
@@ -140,9 +134,7 @@ const Settings = component(({menu}) => {
           checked: isDev,
           label: 'Devtools',
           onClick: () => {
-            settings.set(({draft}) => {
-              draft.isDev = !draft.isDev
-            })
+            settings.toggle('isDev')
           }
         },
         {
