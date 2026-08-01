@@ -5,7 +5,7 @@ import {component} from '../../hocs'
 import {Slot} from '../slot'
 import './index.css'
 
-const SlotProps = {
+const defaultProps = {
   onResize: () => {
     play('tick')
   }
@@ -13,7 +13,7 @@ const SlotProps = {
 
 export const Resizable = Object.assign(
   component(({as: Component = ResizablePrimitive, ...props}) => (
-    <Slot {...SlotProps}>
+    <Slot {...defaultProps}>
       <Component {...props} />
     </Slot>
   )),

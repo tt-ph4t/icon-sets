@@ -147,6 +147,7 @@ export default defineConfig([
         'unicorn/no-array-callback-reference',
         'unicorn/no-anonymous-default-export',
         'unicorn/no-await-expression-member',
+        'unicorn/no-unused-array-method-return',
 
         'react-hooks/exhaustive-deps',
         'react/display-name',

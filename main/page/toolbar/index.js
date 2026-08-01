@@ -184,7 +184,7 @@ const HeldKeys = component(() => {
     sumBy(a, hotkeyRegistrationView => hotkeyRegistrationView.triggerCount)
   )
 
-  useEffect(() => {
+  useEffect.update(() => {
     progress.with(() => {
       play('release')
     })

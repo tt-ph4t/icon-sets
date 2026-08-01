@@ -1,8 +1,10 @@
+import {useHotkey} from '@tanstack/react-hotkeys'
 import {capitalCase} from 'change-case'
 import {play, setEnabled, setVolume, sounds} from 'cuelume'
 import {range} from 'es-toolkit'
 import {sort} from 'fast-sort'
 
+import {Kbd} from '../../components/kbd'
 import {Menu} from '../../components/menu'
 import {Slot} from '../../components/slot'
 import {ToolbarButton} from '../../components/toolbar-button'
@@ -13,6 +15,7 @@ import {withImmerAtom} from '../../misc/with-immer-atom'
 
 const soundNames = sort(sounds).asc()
 const volumeValues = range(0, 11).map(value => value / 10)
+const hotkey = 'm'
 
 const useStore = withImmerAtom({
   enabled: false,
@@ -34,10 +37,17 @@ export default component(props => {
     setVolume(state.volume)
   }, [state.volume])
 
+  useHotkey(hotkey, () => {
+    store.set(({draft}) => {
+      draft.enabled = !draft.enabled
+    })
+  })
+
   return (
     <Menu
       data={[
         {
+          description: Kbd.text(hotkey),
           label: 'Volume',
           menu: volumeValues.map(volume => {
             const checked = volume === state.volume
