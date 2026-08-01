@@ -88,9 +88,11 @@ const Search = component(({children, ...props}) => {
       ref={ref}>
       <Input
         as={VscodeTextfield}
+        autofocus
         invalid={
           !searchTerm.isDefault(searchTermValue) && !isWordChar(searchTermValue)
         }
+        placeholder='Search'
         value={searchTermValue}
         {...props}>
         <React.Activity>
