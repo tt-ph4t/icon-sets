@@ -24,9 +24,7 @@ export const Clipboard = component(({children, value, ...props}) => {
   return (
     <Slot
       onClick={async () => {
-        const {isCopied} = await copy(value)
-
-        setState(isCopied)
+        setState((await copy(value)).isCopied)
         resetState()
       }}>
       <ToolbarButton icon={state ? 'check' : 'copy'} {...props}>

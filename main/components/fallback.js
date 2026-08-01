@@ -31,9 +31,7 @@ const Retry = component(({onClick = asyncNoop, ...props}) => {
         icon={state ? 'loading' : 'debug-rerun'}
         iconSpin={state}
         onClick={async (...args) => {
-          React.startTransition(() => {
-            setState(negate)
-          })
+          setState(negate)
 
           await delay(ms('.6s'))
           await onClick(...args) // ?
@@ -79,5 +77,6 @@ export const Fallback = {
         </VscodeFormGroup>
       </VscodeFormContainer>
     </div>
-  ))
+  )),
+  progressBar: <Progress.Bar />
 }

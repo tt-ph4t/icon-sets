@@ -8,38 +8,34 @@ import {Fallback} from '../components/fallback'
 import {component} from '../hocs'
 import {useMemo} from '../hooks/use-memo'
 import {DEFAULT_QUERY_OPTIONS} from '../misc/constants'
-import {Progress} from './progress'
 import {Slot} from './slot'
 
-const defaults = {
-  ErrorBoundaryProps: {
-    FallbackComponent: component(({error, resetErrorBoundary}) => (
-      <Fallback.Error error={error} onRetry={resetErrorBoundary} />
-    )),
-    onError: () => {
-      play('error')
-    }
-  },
-  fallback: <Progress.Bar />
+const defaultProps = {
+  FallbackComponent: component(({error, resetErrorBoundary}) => (
+    <Fallback.Error error={error} onRetry={resetErrorBoundary} />
+  )),
+  onError: () => {
+    play('error')
+  }
 }
 
 export const Boundary = Object.assign(
-  component(({children, fallback = defaults.fallback, ...props}) => (
+  component(({children, fallback = Fallback.progressBar, ...props}) => (
     <Boundary.Error
-      FallbackComponent={defaults.ErrorBoundaryProps.FallbackComponent}
+      FallbackComponent={defaultProps.FallbackComponent}
       {...props}>
       <React.Suspense fallback={fallback}>{children}</React.Suspense>
     </Boundary.Error>
   )),
   {
     Error: component(props => (
-      <Slot onError={defaults.ErrorBoundaryProps.onError}>
+      <Slot onError={defaultProps.onError}>
         <ErrorBoundary {...props} />
       </Slot>
     )),
     Query: component(
       ({
-        fallback = defaults.fallback,
+        fallback = Fallback.progressBar,
         query,
         queryOptions = DEFAULT_QUERY_OPTIONS,
         render,

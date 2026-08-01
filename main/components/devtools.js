@@ -10,9 +10,9 @@ import {VscodeDevToolbar} from './theme'
 
 const TanStackDevtoolsProps = {
   plugins: [
-    ...Object.entries(QUERY_CLIENT).map(([name, client]) => ({
-      name: `TanStack Query (${name})`,
-      render: <ReactQueryDevtoolsPanel client={client} />
+    ...Object.entries(QUERY_CLIENT).map(([a, b]) => ({
+      name: `TanStack Query (${a})`,
+      render: <ReactQueryDevtoolsPanel client={b} />
     })),
     pacerDevtoolsPlugin(),
     hotkeysDevtoolsPlugin()
@@ -27,7 +27,7 @@ export default component(() => {
       <VscodeDevToolbar
         style={{
           bottom: 'calc(var(--SPACING) * 18)',
-          display: isDev ? 'block' : 'none', // ?
+          display: isDev ? 'block' : 'none',
           right: 'calc(var(--SPACING) * 4)'
         }}
       />

@@ -1,4 +1,3 @@
-import {mergeProps} from '@base-ui/react'
 import {isPlainObject} from '@sindresorhus/is'
 import {VscodeButton, VscodeButtonGroup} from '@vscode-elements/react-elements'
 import {castArray} from 'es-toolkit/compat'
@@ -23,7 +22,11 @@ export const Button = Object.assign(
             <Menu
               data={menu}
               key={getId(menu, props)}
-              render={<Button secondary {...mergeProps(sharedProps, props)} />}
+              render={
+                <Slot {...sharedProps}>
+                  <Button secondary {...props} />
+                </Slot>
+              }
             />
           ))
           .toArray()}

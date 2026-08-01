@@ -512,29 +512,23 @@ export default withQueryBoundary(
               right: 0,
               top: 0
             }}>
-            <React.Activity
-              mode={
-                favoritedIcons.has(iconQuery.data.id) ? 'visible' : 'hidden'
-              }>
-              <Badge
-                color={`var(${THEME.COLORS.WARNING})`}
-                onClick={() => {
-                  favoritedIcons.delete(iconQuery.data.id)
-                }}
-              />
-            </React.Activity>
-            <React.Activity
-              mode={
-                isEqual(DEFAULT_ICON_CUSTOMISATIONS, iconCustomisations)
-                  ? 'hidden'
-                  : 'visible'
-              }>
-              <Badge
-                color={`var(${THEME.COLORS.PRIMARY})`}
-                onClick={() => {
-                  customizedIcons.delete(iconQuery.data.id)
-                }}
-              />
+            <React.Activity>
+              {favoritedIcons.has(iconQuery.data.id) && (
+                <Badge
+                  color={`var(${THEME.COLORS.WARNING})`}
+                  onClick={() => {
+                    favoritedIcons.delete(iconQuery.data.id)
+                  }}
+                />
+              )}
+              {isEqual(DEFAULT_ICON_CUSTOMISATIONS, iconCustomisations) || (
+                <Badge
+                  color={`var(${THEME.COLORS.PRIMARY})`}
+                  onClick={() => {
+                    customizedIcons.delete(iconQuery.data.id)
+                  }}
+                />
+              )}
             </React.Activity>
           </div>
           <AccessibleIcon.Root label={iconQuery.data.id}>

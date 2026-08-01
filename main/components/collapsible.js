@@ -1,6 +1,5 @@
 import {VscodeCollapsible} from '@vscode-elements/react-elements'
 import {useControllableValue, useEventListener} from 'ahooks'
-import {play} from 'cuelume'
 import {asyncNoop} from 'es-toolkit'
 
 import {component} from '../hocs'
@@ -21,8 +20,7 @@ export const Collapsible = component(
     useEventListener(
       'vsc-collapsible-toggle',
       async (...args) => {
-        play('release')
-        setOpen(args[0].detail.open) // ?
+        setOpen(args[0].detail.open)
 
         await onToggle(...args)
       },
@@ -32,11 +30,11 @@ export const Collapsible = component(
     )
 
     return (
-      <Slot ref={ref}>
+      <Slot.ClickSound ref={ref}>
         <VscodeCollapsible alwaysShowHeaderActions open={open} {...props}>
           {open && children}
         </VscodeCollapsible>
-      </Slot>
+      </Slot.ClickSound>
     )
   }
 )
