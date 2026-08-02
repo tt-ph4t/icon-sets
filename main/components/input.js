@@ -6,9 +6,6 @@ import {useState} from '../hooks/use-state'
 import {Slot} from './slot'
 
 const defaultProps = {
-  onFocusCapture: () => {
-    play('release')
-  },
   onInputCapture: () => {
     play('press')
   }

@@ -7,8 +7,9 @@ import {useIsFetching, useQueryClient} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {play} from 'cuelume'
-import {mapValues, sumBy} from 'es-toolkit'
+import {delay, mapValues, sumBy} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
+import ms from 'ms'
 import React from 'react'
 
 import {IconGrid} from '../../components/icon-grid'
@@ -28,6 +29,7 @@ import Layout from '../layout'
 import AllIconQueries from './all-icon-queries'
 import Cuelume from './cuelume'
 import FailedQueries from './failed-queries'
+import Fps from './fps'
 import useFont from './use-font'
 
 const themeHotkey = 't'
@@ -177,8 +179,10 @@ const HeldKeys = component(() => {
   )
 
   useEffect.update(() => {
-    progress.with(() => {
+    progress.with(async () => {
       play('release')
+
+      await delay(ms('.1s'))
     })
   }, [triggerCounts])
 
@@ -197,6 +201,7 @@ export default menu => (
       <HeldKeys />
       <FetchingQueries />
       <FailedQueries />
+      <Fps />
     </React.Activity>
     <VscodeToolbarContainer>
       <Settings menu={castArray(menu)} />

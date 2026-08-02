@@ -27,7 +27,7 @@ const EyeDropper = component(({set, ...props}) => {
       onClick={async () => {
         set((await open()).sRGBHex)
       }}>
-      <ToolbarButton disabled={!supported} icon='go-to-search' {...props} />
+      <ToolbarButton disabled={!supported} icon='wand' {...props} />
     </Slot>
   )
 })
