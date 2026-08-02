@@ -1,3 +1,4 @@
+import {useEyeDropper} from '@reactuses/core'
 import {useBatchedCallback} from '@tanstack/react-pacer'
 import {Compact, Sketch} from '@uiw/react-color'
 import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
@@ -18,12 +19,28 @@ import {Popover} from '../popover'
 import {Slot} from '../slot'
 import {ToolbarButton} from '../toolbar-button'
 
+const EyeDropper = component(({set, ...props}) => {
+  const [supported, open] = useEyeDropper()
+
+  return (
+    <Slot
+      onClick={async () => {
+        set((await open()).sRGBHex)
+      }}>
+      <ToolbarButton disabled={!supported} icon='go-to-search' {...props} />
+    </Slot>
+  )
+})
+
 // https://github.com/colorjs/color-name
 export default component(props => {
   const customizedIconsStore = useCustomizedIcons.useStore()
 
   const set = useBatchedCallback(items => {
-    customizedIconsStore.set(last(items))
+    customizedIconsStore.set(({draft}) => {
+      draft.global.color = last(items)
+    })
+
     ICON_CACHE.clear()
   })
 
@@ -34,9 +51,7 @@ export default component(props => {
   const isDefaultColor = color === DEFAULT_ICON_CUSTOMISATIONS.color
 
   const onChange = useCallback(color => {
-    set(({draft}) => {
-      draft.global.color = color.hexa
-    })
+    set(color.hexa)
   })
 
   return (
@@ -49,11 +64,10 @@ export default component(props => {
                 disabled={isDefaultColor}
                 icon='eraser'
                 onClick={() => {
-                  set(({draft}) => {
-                    draft.global.color = DEFAULT_ICON_CUSTOMISATIONS.color
-                  })
+                  set(DEFAULT_ICON_CUSTOMISATIONS.color)
                 }}
               />
+              <EyeDropper set={set} />
               <Clipboard value={color}>{color}</Clipboard>
             </VscodeToolbarContainer>
           </React.Activity>

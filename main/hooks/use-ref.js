@@ -1,8 +1,6 @@
 import {useFullscreen, useSize, useUnmount} from 'ahooks'
 import React from 'react'
 
-const bodyElement = document.querySelector('body')
-
 const defaults = {
   ref: {
     getValue: () => defaults.ref.value,
@@ -42,7 +40,7 @@ export const useRef = Object.assign(
 
       return {
         ref,
-        ...React.useDeferredValue(useSize(() => ref.current ?? bodyElement))
+        ...React.useDeferredValue(useSize(() => ref.current ?? document.body))
       }
     }
   }
