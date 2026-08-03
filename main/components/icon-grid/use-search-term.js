@@ -1,7 +1,6 @@
 import {isString} from '@sindresorhus/is'
 import {useBatchedCallback} from '@tanstack/react-pacer'
 import {last} from 'es-toolkit'
-import ms from 'ms'
 
 import {useCallback} from '../../hooks/use-callback'
 import {isWordChar} from '../../misc'
@@ -9,7 +8,7 @@ import {withImmerAtom} from '../../misc/with-immer-atom'
 
 const context = {
   batcherOptions: {
-    wait: ms('.2s')
+    wait: 200
   },
   default: '',
   isDefault: value => value === context.default,

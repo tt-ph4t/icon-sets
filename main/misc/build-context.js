@@ -1,5 +1,9 @@
-import {noop} from 'es-toolkit'
-import {createContext, useContextSelector} from 'use-context-selector'
+import {noop, partial} from 'es-toolkit'
+import {
+  createContext,
+  useContext,
+  useContextSelector
+} from 'use-context-selector'
 
 import {component} from '../hocs'
 import {useMemo} from '../hooks/use-memo'
@@ -14,6 +18,12 @@ export const buildContext = (defaultValues = EMPTY.OBJECT) => {
 
       return <Context.Provider value={value}>{children}</Context.Provider>
     }),
-    useContext: (selector = noop) => useContextSelector(Context, selector)
+    useSelectValue: (selector = noop) =>
+      useContextSelector(Context, context =>
+        selector({
+          context
+        })
+      ),
+    useValue: partial(useContext, Context)
   }
 }

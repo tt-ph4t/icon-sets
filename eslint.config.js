@@ -67,7 +67,7 @@ export default defineConfig([
         'error',
 
         // Possible Problems
-        'array-callback-return',
+        // 'array-callback-return',
         'no-misleading-character-class',
         'no-promise-executor-return',
         'no-prototype-builtins',
@@ -157,6 +157,7 @@ export default defineConfig([
         '@eslint-react/no-clone-element',
         '@eslint-react/no-children-to-array',
         '@eslint-react/no-context-provider',
+        '@eslint-react/no-use-context',
 
         'react-doctor/no-inline-hoc-on-component'
       )

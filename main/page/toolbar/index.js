@@ -7,9 +7,8 @@ import {useIsFetching, useQueryClient} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {play} from 'cuelume'
-import {delay, mapValues, sumBy} from 'es-toolkit'
+import {mapValues, sumBy} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
-import ms from 'ms'
 import React from 'react'
 
 import {IconGrid} from '../../components/icon-grid'
@@ -179,10 +178,8 @@ const HeldKeys = component(() => {
   )
 
   useEffect.update(() => {
-    progress.with(async () => {
+    progress.with(() => {
       play('release')
-
-      await delay(ms('.1s'))
     })
   }, [triggerCounts])
 

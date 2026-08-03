@@ -4,15 +4,14 @@ import {isEqual} from '@ver0/deep-equal'
 import {safeDestr} from 'destr'
 import {delay, noop} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
-import ms from 'ms'
 import {ofetch} from 'ofetch'
 
 import {DELAY_MS} from './constants'
 
 const defaults = {
-  gcTime: ms('1m'),
+  gcTime: 60_000,
   structuralSharing: (a, b) => (isEqual(a, b) ? a : b),
-  timeout: ms('1m')
+  timeout: 60_000
 }
 
 const fetch = ofetch.create({

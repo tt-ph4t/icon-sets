@@ -1,4 +1,3 @@
-import {useUpdate} from 'ahooks'
 import {sentenceCase} from 'change-case'
 
 import {Collapsible} from '../../components/collapsible'
@@ -8,6 +7,7 @@ import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useCustomizedIcons} from '../../hooks/use-customized-icons'
 import {useFavoritedIcons} from '../../hooks/use-favorited-icons'
+import {useUpdate} from '../../hooks/use-update'
 import {hasValues} from '../../misc'
 import {ICON_CACHE} from '../../misc/constants'
 import AllIconSets from './all-icon-sets'

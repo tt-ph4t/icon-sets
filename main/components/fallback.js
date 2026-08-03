@@ -5,8 +5,7 @@ import {
   VscodeFormHelper,
   VscodeLabel
 } from '@vscode-elements/react-elements'
-import {asyncNoop, delay, negate} from 'es-toolkit'
-import ms from 'ms'
+import {negate} from 'es-toolkit'
 import React from 'react'
 import {getErrorMessage} from 'react-error-boundary'
 
@@ -17,11 +16,14 @@ import {Button} from './button'
 import {Progress} from './progress'
 import {Slot} from './slot'
 
-const Retry = component(({onClick = asyncNoop, ...props}) => {
+const Retry = component(props => {
   const [state, setState] = useState(false)
 
   return (
     <Slot
+      onClick={() => {
+        setState(negate)
+      }}
       style={{
         width: 'fit-content'
       }}>
@@ -30,12 +32,6 @@ const Retry = component(({onClick = asyncNoop, ...props}) => {
         disabled={state}
         icon={state ? 'loading' : 'debug-rerun'}
         iconSpin={state}
-        onClick={async (...args) => {
-          setState(negate)
-
-          await delay(ms('.6s'))
-          await onClick(...args) // ?
-        }}
         type='reset'
         {...props}>
         Retry
@@ -78,5 +74,5 @@ export const Fallback = {
       </VscodeFormContainer>
     </div>
   )),
-  progressBar: <Progress.Bar />
+  ProgressBar: <Progress.Bar />
 }

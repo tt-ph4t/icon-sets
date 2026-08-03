@@ -1,7 +1,6 @@
 import {defaultIconProps, mergeIconData} from '@iconify/utils'
 import {useQueries, useQuery} from '@tanstack/react-query'
 import {mapValues, pick} from 'es-toolkit'
-import ms from 'ms'
 
 import {DATABASE_URL, DEFAULT_QUERY_OPTIONS} from '../../misc/constants'
 import {getQueryOptions} from '../../misc/get-query-options'
@@ -35,9 +34,9 @@ export const useIconQueries = (...icons) => {
         const {icon} = parseIconName(iconId)
 
         return getQueryOptions({
-          delayMs: ms('.27s'),
+          delayMs: 250,
           enabled: contextQuery.isSuccess,
-          gcTime: ms('6s'),
+          gcTime: 6000,
           queryKey: iconId,
           url: `${DATABASE_URL}/${icon.prefix}/${icon.name}.msgpack`,
           ...queryOptions,

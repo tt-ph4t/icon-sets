@@ -3,7 +3,6 @@ import {QueryClient} from '@tanstack/react-query'
 import deepFreeze from 'deep-freeze-es6'
 import {omit} from 'es-toolkit'
 import {LRUCache} from 'lru-cache'
-import ms from 'ms'
 
 import {getQueryOptions} from './get-query-options'
 
@@ -18,7 +17,7 @@ export const ICONIFY_API_URLS = deepFreeze([
 export const // https://raw.githubusercontent.com/${GITHUB_REPO}/refs/heads/data/data
   DATABASE_URL = `https://cdn.jsdelivr.net/gh/${GITHUB_REPO}@refs/heads/data/data`
 
-export const DELAY_MS = ms('.15s')
+export const DELAY_MS = 150
 
 export const ID_SEPARATOR = ':'
 

@@ -3,6 +3,7 @@ import {useAsyncEffect, useUpdateEffect} from 'ahooks'
 import {mapValues, noop} from 'es-toolkit'
 import React from 'react'
 
+import {EMPTY} from '../misc/constants'
 import {useDeepCompareMemoize} from './use-deep-compare-memoize'
 import {useRef} from './use-ref'
 
@@ -25,12 +26,13 @@ export const useEffect = Object.assign(
         useEffect(() => {
           if (when && ref.current) cleanupRef.current = fn()
 
-          return () => {
+          return async () => {
             ref.current = false
 
-            if (isFunction(cleanupRef.current)) cleanupRef.current()
+            if (isFunction(cleanupRef.current))
+              await Promise.try(cleanupRef.current)
           }
-        }, [fn, when])
+        }, EMPTY.ARRAY)
       }
   }
 )

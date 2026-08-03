@@ -1,5 +1,4 @@
 import {useBatchedCallback} from '@tanstack/react-pacer'
-import ms from 'ms'
 
 import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
@@ -17,7 +16,7 @@ export const Clipboard = component(({children, value, ...props}) => {
       if (state) setState(initialState)
     },
     {
-      wait: ms('1s')
+      wait: 1000
     }
   )
 

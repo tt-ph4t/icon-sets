@@ -7,7 +7,6 @@ import {
 import {useSetState} from 'ahooks'
 import {play} from 'cuelume'
 import {asyncNoop, delay, omit} from 'es-toolkit'
-import ms from 'ms'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -33,16 +32,16 @@ const useIdleEffect = (fn = asyncNoop, {before = asyncNoop, deps, options}) => {
   useEffect.async(async () => {
     cancelIdleCallback(ref.current)
 
-    await before()
+    await Promise.try(before)
 
     ref.current = requestIdleCallback(async (...args) => {
-      cleanupRef.current = await fn(...args)
+      cleanupRef.current = await Promise.try(async () => await fn(...args))
     }, options)
 
-    return () => {
+    return async () => {
       cancelIdleCallback(ref.current)
 
-      if (isFunction(cleanupRef.current)) cleanupRef.current()
+      if (isFunction(cleanupRef.current)) await Promise.try(cleanupRef.current)
     }
   }, deps)
 }
@@ -56,7 +55,7 @@ const Item = component(
     useIdleEffect(
       async () => {
         if (showSizeHint) {
-          await delay(ms('1s'))
+          await delay(1000)
 
           setState(false)
         }

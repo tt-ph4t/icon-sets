@@ -22,7 +22,6 @@ import {
 } from 'es-toolkit'
 import {reverse} from 'es-toolkit/compat'
 import {sort} from 'fast-sort'
-import ms from 'ms'
 import React from 'react'
 
 import {component} from '../../hocs'
@@ -87,7 +86,7 @@ export const IconGrid = Object.assign(
           }))
         },
         {
-          wait: ms('.3s')
+          wait: 300
         }
       )
 

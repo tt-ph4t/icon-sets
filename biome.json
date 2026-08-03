@@ -15,7 +15,8 @@
         "noParameterAssign": "off"
       },
       "suspicious": {
-        "noAssignInExpressions": "off"
+        "noAssignInExpressions": "off",
+        "useIterableCallbackReturn": "off"
       }
     }
   }

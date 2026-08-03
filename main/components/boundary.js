@@ -20,7 +20,7 @@ const defaultProps = {
 }
 
 export const Boundary = Object.assign(
-  component(({children, fallback = Fallback.progressBar, ...props}) => (
+  component(({children, fallback = Fallback.ProgressBar, ...props}) => (
     <Boundary.Error
       FallbackComponent={defaultProps.FallbackComponent}
       {...props}>
@@ -35,7 +35,7 @@ export const Boundary = Object.assign(
     )),
     Query: component(
       ({
-        fallback = Fallback.progressBar,
+        fallback = Fallback.ProgressBar,
         query,
         queryOptions = DEFAULT_QUERY_OPTIONS,
         render,
