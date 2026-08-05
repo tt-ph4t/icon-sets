@@ -22,7 +22,7 @@ import {isWordCharacter} from 'is-word-character'
 import jszip from 'jszip'
 import {getErrorMessage} from 'react-error-boundary'
 
-import {ICON_CACHE, ID_SEPARATOR} from '../misc/constants'
+import {EMPTY, ICON_CACHE, ID_SEPARATOR} from '../misc/constants'
 import {cache} from './cache'
 import {parseIconName} from './parse-icon-name'
 
@@ -123,3 +123,13 @@ export const isReactKey = (value, allowNullish = true) =>
   isString(value) ||
   isSafeInteger(value) ||
   isBigint(value)
+
+export const parseNumbers = (
+  value,
+  {limit = Infinity, separator} = EMPTY.OBJECT
+) =>
+  Iterator.from(String(value).split(separator))
+    .filter(a => a.trim())
+    .map(Number)
+    .take(limit)
+    .toArray()

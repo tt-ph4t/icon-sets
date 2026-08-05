@@ -1,4 +1,4 @@
-import {noop, partial} from 'es-toolkit'
+import {noop} from 'es-toolkit'
 import {
   createContext,
   useContext,
@@ -24,6 +24,6 @@ export const buildContext = (defaultValues = EMPTY.OBJECT) => {
           context
         })
       ),
-    useValue: partial(useContext, Context)
+    useValue: (context = Context) => useContext(context)
   }
 }

@@ -49,10 +49,11 @@ export default cache(
     icon,
     {
       color,
+      height,
       hFlip,
       rotate,
-      scale,
       vFlip,
+      width,
       wrapSvgContentEnd = defaults.wrapSvgContentEnd,
       wrapSvgContentStart = defaults.wrapSvgContentStart
     }
@@ -99,8 +100,8 @@ export default cache(
         })
 
         const svg = iconToSVG(iconData, {
-          height: iconData.height * scale,
-          width: iconData.width * scale
+          height: height ?? iconData.height,
+          width: width ?? iconData.width
         })
 
         const html = iconToHTML(replaceIDs(svg.body), {

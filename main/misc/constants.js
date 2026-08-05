@@ -55,7 +55,6 @@ export const DEFAULT_ICON_CUSTOMISATIONS = deepFreeze(
     {
       ...defaultIconCustomisations,
       color: 'unset',
-      scale: 1,
       square: true
     },
     ['height', 'width']

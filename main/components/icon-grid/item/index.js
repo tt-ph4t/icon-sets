@@ -25,7 +25,14 @@ import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
 import {useFavoritedIcons} from '../../../hooks/use-favorited-icons'
 import {useIconQueries} from '../../../hooks/use-icon-queries'
 import {useMemo} from '../../../hooks/use-memo'
-import {copy, fileSaver, getIconFilePaths, hasValues, open} from '../../../misc'
+import {
+  copy,
+  fileSaver,
+  getIconFilePaths,
+  hasValues,
+  open,
+  parseNumbers
+} from '../../../misc'
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
   DEFAULT_QUERY_OPTIONS,
@@ -53,17 +60,8 @@ const rotate = {
   values: range(DEFAULT_ICON_CUSTOMISATIONS.rotate, 4)
 }
 
-const scales = range(
-  DEFAULT_ICON_CUSTOMISATIONS.scale,
-  DEFAULT_ICON_CUSTOMISATIONS.scale + 1e3
-)
-
-const sizeLabel = (
-  {height = 0, width = 0},
-  scale = DEFAULT_ICON_CUSTOMISATIONS.scale
-) => `${width * scale} x ${height * scale}`
-
 const width = 'calc(var(--SPACING) * 12)'
+const sizeLabel = ({height = 0, width = 0}) => `${width} x ${height}`
 
 const Badge = component(({color, ...props}) => (
   <Slot.ClickSound
@@ -107,14 +105,10 @@ export default withQueryBoundary(
       )
     })
 
-    const iconSize = useMemo(
-      () =>
-        mapValues(
-          pick(iconQuery.data.data, ['height', 'width']),
-          a => a * iconCustomisations.scale
-        ),
-      [iconQuery.data.data, iconCustomisations.scale]
-    )
+    const iconSize = {
+      height: iconCustomisations.height ?? iconQuery.data.data.height,
+      width: iconCustomisations.width ?? iconQuery.data.data.width
+    }
 
     const getTakumiBlob = useCallback(
       async format =>
@@ -310,41 +304,18 @@ export default withQueryBoundary(
                 ]
               },
               {
-                label: 'Favorite',
-                menu: useFavoritedIcons.actions.map(a => ({
-                  label: sentenceCase(a),
-                  onClick: () => {
-                    favoritedIcons[a](iconQuery.data.id)
-                  }
-                }))
-              },
-              {
                 label: 'Customisation',
                 menu: [
-                  {
-                    label: 'Size',
-                    menu: scales.map(scale => ({
-                      checked: scale === iconCustomisations.scale,
-                      label: sizeLabel(iconQuery.data.data, scale),
-                      onClick: () => {
-                        customizedIcons.set(iconQuery.data.id, () => ({
-                          scale
-                        }))
-                      }
-                    }))
-                  },
-                  {
-                    label: 'Rotate',
-                    menu: rotate.values.map(value => ({
-                      checked: value === iconCustomisations.rotate,
-                      label: `${value * rotate.step}deg`,
-                      onClick: () => {
-                        customizedIcons.set(iconQuery.data.id, () => ({
-                          rotate: value
-                        }))
-                      }
-                    }))
-                  },
+                  'Rotate',
+                  ...rotate.values.map(value => ({
+                    checked: value === iconCustomisations.rotate,
+                    label: `${value * rotate.step}deg`,
+                    onClick: () => {
+                      customizedIcons.set(iconQuery.data.id, () => ({
+                        rotate: value
+                      }))
+                    }
+                  })),
                   'Flip',
                   ...Object.entries(flipDirections).map(
                     ([flipDirection, label]) => {
@@ -378,6 +349,13 @@ export default withQueryBoundary(
                   }
                 ]
               },
+              'Favorite',
+              ...useFavoritedIcons.actions.map(a => ({
+                label: sentenceCase(a),
+                onClick: () => {
+                  favoritedIcons[a](iconQuery.data.id)
+                }
+              })),
               ...menu
             ]
           },
@@ -424,8 +402,34 @@ export default withQueryBoundary(
             label: 'Grid'
           },
           {
-            description: sizeLabel(iconSize, 1),
-            label: 'Size'
+            description: sizeLabel(iconSize),
+            label: 'Size',
+            onClick: () => {
+              const value = Iterator.from(
+                // eslint-disable-next-line react-doctor/js-combine-iterations
+                parseNumbers(
+                  prompt('Custom size (width height)', sizeLabel(iconSize)),
+                  {
+                    limit: 2,
+                    separator: /[,\sx]+/u
+                  }
+                )
+                  .filter(Number.isFinite)
+                  .filter(Number.isSafeInteger)
+                  .filter(Boolean)
+                  .map(Math.abs)
+              ).toArray()
+
+              if (hasValues(value))
+                customizedIcons.set(iconQuery.data.id, () => {
+                  const [width, height] = value
+
+                  return {
+                    height: height ?? iconSize.height,
+                    width: width ?? iconSize.width
+                  }
+                })
+            }
           },
           {
             description: findKey(
@@ -464,17 +468,16 @@ export default withQueryBoundary(
           {
             description: size(iconQuery.data.more.idCases),
             label: 'ID cases',
-            menu: Object.entries(iconQuery.data.more.idCases).map(
-              ([label, id]) => {
-                label = sentenceCase(label)
-
-                return {
-                  label,
+            menu: Object.entries(iconQuery.data.more.idCases).flatMap(
+              ([a, b]) => [
+                sentenceCase(a),
+                {
+                  label: b,
                   onClick: () => {
-                    prompt(label, id)
+                    copy(b)
                   }
                 }
-              }
+              ]
             )
           },
           {

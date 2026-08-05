@@ -97,10 +97,8 @@ export default Component =>
         <Component
           iconId={iconId}
           menu={[
-            {
-              label: 'Query',
-              menu
-            },
+            'Query',
+            ...menu,
             {
               separator: true
             },
