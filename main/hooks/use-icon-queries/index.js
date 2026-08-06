@@ -22,7 +22,7 @@ const defaultQueryOptions = pick(DEFAULT_QUERY_OPTIONS, ['select'])
 export const useIconQueries = (...icons) => {
   const contextQuery = useQuery(contextQueryOptions)
 
-  const iconOptions = useCustomizedIcons
+  const globalIconCustomisations = useCustomizedIcons
     .useStore()
     .useSelectValue(({draft}) => ({
       color: draft.global.color
@@ -51,7 +51,7 @@ export const useIconQueries = (...icons) => {
                 },
                 {
                   ...iconCustomisations,
-                  ...iconOptions
+                  ...globalIconCustomisations
                 }
               )
             )

@@ -26,7 +26,7 @@ const queryOptions = {
   select: iconSets => {
     const data = {}
 
-    const dataSet = (a, b, iconIds) => {
+    const set = (a, b, iconIds) => {
       ;((data[a] ??= {})[b] ??= []).push(...castArray(iconIds))
     }
 
@@ -34,20 +34,20 @@ const queryOptions = {
       const iconIds = iconSet.icons.map(icon => getId(iconSet.prefix, icon))
 
       mapValues(groupSelectors, (a, b) => {
-        dataSet(b, a(iconSet), iconIds)
+        set(b, a(iconSet), iconIds)
       })
 
-      for (const tag of iconSet.tags) dataSet('Tag', tag, iconIds)
+      for (const tag of iconSet.tags) set('Tag', tag, iconIds)
 
       for (const [character, icon] of Object.entries(iconSet.chars))
-        dataSet('Character', character, getId(iconSet.prefix, icon))
+        set('Character', character, getId(iconSet.prefix, icon))
 
       for (const icon of iconSet.icons)
-        dataSet('Icon', capitalCase(icon), getId(iconSet.prefix, icon))
+        set('Icon', capitalCase(icon), getId(iconSet.prefix, icon))
 
       for (const [alias, icons] of Object.entries(iconSet.aliases))
         for (const icon of icons)
-          dataSet('Alias', capitalCase(alias), getId(iconSet.prefix, icon))
+          set('Alias', capitalCase(alias), getId(iconSet.prefix, icon))
     }
 
     return {

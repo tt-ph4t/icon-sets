@@ -3,11 +3,12 @@ import {isEqual} from '@ver0/deep-equal'
 import {noop, pick} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 
+import {hasValues} from '../misc'
 import {DEFAULT_ICON_CUSTOMISATIONS, EMPTY, ICON_CACHE} from '../misc/constants'
 import {withImmerAtom} from '../misc/with-immer-atom'
 import {useCallback} from './use-callback'
 
-mergeCustomisations // ?
+mergeCustomisations
 
 const useStore = withImmerAtom({
   current: EMPTY.OBJECT,
@@ -17,7 +18,9 @@ const useStore = withImmerAtom({
 const withInvalidatedIconCache = (fn = noop, iconIds) => {
   fn()
 
-  for (const iconId of castArray(iconIds)) ICON_CACHE.delete(iconId)
+  if (hasValues(iconIds))
+    for (const iconId of castArray(iconIds)) ICON_CACHE.delete(iconId)
+  else ICON_CACHE.clear()
 }
 
 export const useCustomizedIcons = Object.assign(
@@ -33,7 +36,9 @@ export const useCustomizedIcons = Object.assign(
         }, iconIds)
       }),
       reset: useCallback(() => {
-        store.reset('current')
+        withInvalidatedIconCache(() => {
+          store.reset('current')
+        })
       }),
       set: useCallback((iconId, fn) => {
         withInvalidatedIconCache(() => {

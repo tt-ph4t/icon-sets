@@ -14,7 +14,7 @@ import {
   range,
   uniq
 } from 'es-toolkit'
-import {size} from 'es-toolkit/compat'
+import {castArray, size} from 'es-toolkit/compat'
 import mime from 'mime'
 import {AccessibleIcon} from 'radix-ui'
 import React from 'react'
@@ -35,6 +35,7 @@ import {
 } from '../../../misc'
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
+  DEFAULT_ICON_SIZE_CUSTOMISATIONS,
   DEFAULT_QUERY_OPTIONS,
   EMPTY,
   ICONIFY_API_URLS,
@@ -63,6 +64,13 @@ const rotate = {
 const width = 'calc(var(--SPACING) * 12)'
 const sizeLabel = ({height = 0, width = 0}) => `${width} x ${height}`
 
+const aaaaaaaaaaaaaaaaaaaaaaaaa = value =>
+  Iterator.from(castArray(value))
+    .filter(Number.isSafeInteger)
+    .filter(Boolean)
+    .map(Math.abs)
+    .toArray()
+
 const Badge = component(({color, ...props}) => (
   <Slot.ClickSound
     style={
@@ -84,7 +92,7 @@ export default withQueryBoundary(
     const progress = useProgress()
     const takumiOptions = takumi.useStore().useValue()
 
-    const {global: iconOptions} = useCustomizedIcons
+    const {global: globalIconCustomisations} = useCustomizedIcons
       .useStore()
       .useSelectValue('global')
 
@@ -105,10 +113,15 @@ export default withQueryBoundary(
       )
     })
 
-    const iconSize = {
-      height: iconCustomisations.height ?? iconQuery.data.data.height,
-      width: iconCustomisations.width ?? iconQuery.data.data.width
-    }
+    const iconSize = mapValues(
+      DEFAULT_ICON_SIZE_CUSTOMISATIONS,
+      (...[, a]) => iconCustomisations[a] ?? iconQuery.data.data[a]
+    )
+
+    const isDefaultIconSizeCustomisations = isEqual(
+      pick(iconCustomisations, Object.keys(DEFAULT_ICON_SIZE_CUSTOMISATIONS)),
+      DEFAULT_ICON_SIZE_CUSTOMISATIONS
+    )
 
     const getTakumiBlob = useCallback(
       async format =>
@@ -229,7 +242,10 @@ export default withQueryBoundary(
                           `${ICONIFY_API_URLS[0]}/${iconSetQuery.data.prefix}/${iconQuery.data.name}.svg`
                         )
 
-                        url.searchParams.set('color', iconOptions.color)
+                        url.searchParams.set(
+                          'color',
+                          globalIconCustomisations.color
+                        )
 
                         mapValues(iconSize, (a, b) => {
                           url.searchParams.set(b, a)
@@ -266,7 +282,10 @@ export default withQueryBoundary(
                           `${ICONIFY_API_URLS[0]}/${iconSetQuery.data.prefix}.css?icons=${iconQuery.data.name}`
                         )
 
-                        url.searchParams.set('color', iconOptions.color)
+                        url.searchParams.set(
+                          'color',
+                          globalIconCustomisations.color
+                        )
 
                         return url
                       }
@@ -404,32 +423,58 @@ export default withQueryBoundary(
           {
             description: sizeLabel(iconSize),
             label: 'Size',
-            onClick: () => {
-              const value = Iterator.from(
-                // eslint-disable-next-line react-doctor/js-combine-iterations
-                parseNumbers(
-                  prompt('Custom size (width height)', sizeLabel(iconSize)),
-                  {
-                    limit: 2,
-                    separator: /[,\sx]+/u
-                  }
-                )
-                  .filter(Number.isFinite)
-                  .filter(Number.isSafeInteger)
-                  .filter(Boolean)
-                  .map(Math.abs)
-              ).toArray()
+            menu: [
+              {
+                checked: isDefaultIconSizeCustomisations,
+                disabled: isDefaultIconSizeCustomisations,
+                label: 'Default',
+                onClick: () => {
+                  customizedIcons.set(
+                    iconQuery.data.id,
+                    () => DEFAULT_ICON_SIZE_CUSTOMISATIONS
+                  )
+                }
+              },
+              {
+                label: 'Set',
+                onClick: () => {
+                  const value = aaaaaaaaaaaaaaaaaaaaaaaaa(
+                    parseNumbers(prompt(undefined, sizeLabel(iconSize)), {
+                      limit: 2,
+                      separator: /[,\sx]+/u
+                    })
+                  )
 
-              if (hasValues(value))
-                customizedIcons.set(iconQuery.data.id, () => {
-                  const [width, height] = value
+                  if (hasValues(value)) {
+                    const size = {
+                      height: value[1] ?? iconSize.height,
+                      width: value[0] ?? iconSize.width
+                    }
 
-                  return {
-                    height: height ?? iconSize.height,
-                    width: width ?? iconSize.width
+                    if (!isEqual(size, iconSize))
+                      customizedIcons.set(iconQuery.data.id, () => size)
                   }
-                })
-            }
+                }
+              },
+              {
+                label: 'Scale',
+                onClick: () => {
+                  const [scale] = aaaaaaaaaaaaaaaaaaaaaaaaa(
+                    parseNumbers(prompt(undefined, 1), {
+                      limit: 1,
+                      separator: ' '
+                    })
+                  )
+
+                  if (hasValues(scale))
+                    customizedIcons.set(iconQuery.data.id, () => {
+                      const a = mapValues(iconSize, a => a * scale)
+
+                      if (Object.values(a).every(Number.isSafeInteger)) return a
+                    })
+                }
+              }
+            ]
           },
           {
             description: findKey(
@@ -447,23 +492,21 @@ export default withQueryBoundary(
           {
             description: iconAliases.length,
             label: 'Alias',
-            menu: iconAliases.map(iconAlias => ({
-              label: capitalCase(iconAlias),
-              menu: [
-                {
-                  label: 'View',
-                  onClick: () => {
-                    prompt(undefined, iconAlias)
-                  }
-                },
-                {
-                  label: 'Search',
-                  onClick: () => {
-                    searchTerm.set(iconAlias)
-                  }
+            menu: iconAliases.flatMap(iconAlias => [
+              capitalCase(iconAlias),
+              {
+                label: 'View',
+                onClick: () => {
+                  prompt(undefined, iconAlias)
                 }
-              ]
-            }))
+              },
+              {
+                label: 'Search',
+                onClick: () => {
+                  searchTerm.set(iconAlias)
+                }
+              }
+            ])
           },
           {
             description: size(iconQuery.data.more.idCases),
@@ -536,7 +579,7 @@ export default withQueryBoundary(
           </div>
           <AccessibleIcon.Root label={iconQuery.data.id}>
             {React.cloneElement(iconQuery.data.more.to.reactElement, {
-              height: iconOptions.square ? width : '100%',
+              height: globalIconCustomisations.square ? width : '100%',
               width
             })}
           </AccessibleIcon.Root>

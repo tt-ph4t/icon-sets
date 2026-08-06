@@ -1,7 +1,6 @@
 import {defaultIconCustomisations} from '@iconify/utils'
 import {QueryClient} from '@tanstack/react-query'
 import deepFreeze from 'deep-freeze-es6'
-import {omit} from 'es-toolkit'
 import {LRUCache} from 'lru-cache'
 
 import {getQueryOptions} from './get-query-options'
@@ -50,16 +49,17 @@ export const SORT_ORDER_LABELS = deepFreeze({
   desc: 'Descending'
 })
 
-export const DEFAULT_ICON_CUSTOMISATIONS = deepFreeze(
-  omit(
-    {
-      ...defaultIconCustomisations,
-      color: 'unset',
-      square: true
-    },
-    ['height', 'width']
-  )
-)
+export const DEFAULT_ICON_SIZE_CUSTOMISATIONS = deepFreeze({
+  height: undefined,
+  width: undefined
+})
+
+export const DEFAULT_ICON_CUSTOMISATIONS = deepFreeze({
+  ...defaultIconCustomisations,
+  ...DEFAULT_ICON_SIZE_CUSTOMISATIONS,
+  color: 'unset',
+  square: true
+})
 
 export const DEFAULT_QUERY_OPTIONS = deepFreeze(
   getQueryOptions({
