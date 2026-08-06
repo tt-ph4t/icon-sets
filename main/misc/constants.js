@@ -49,14 +49,8 @@ export const SORT_ORDER_LABELS = deepFreeze({
   desc: 'Descending'
 })
 
-export const DEFAULT_ICON_SIZE_CUSTOMISATIONS = deepFreeze({
-  height: undefined,
-  width: undefined
-})
-
 export const DEFAULT_ICON_CUSTOMISATIONS = deepFreeze({
   ...defaultIconCustomisations,
-  ...DEFAULT_ICON_SIZE_CUSTOMISATIONS,
   color: 'unset',
   square: true
 })

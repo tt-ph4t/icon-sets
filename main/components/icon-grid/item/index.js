@@ -1,4 +1,5 @@
 import {mergeProps} from '@base-ui/react'
+import {defaultIconSizeCustomisations} from '@iconify/utils'
 import {useQuery} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeIcon} from '@vscode-elements/react-elements'
@@ -35,7 +36,6 @@ import {
 } from '../../../misc'
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
-  DEFAULT_ICON_SIZE_CUSTOMISATIONS,
   DEFAULT_QUERY_OPTIONS,
   EMPTY,
   ICONIFY_API_URLS,
@@ -114,13 +114,13 @@ export default withQueryBoundary(
     })
 
     const iconSize = mapValues(
-      DEFAULT_ICON_SIZE_CUSTOMISATIONS,
+      defaultIconSizeCustomisations,
       (...[, a]) => iconCustomisations[a] ?? iconQuery.data.data[a]
     )
 
     const isDefaultIconSizeCustomisations = isEqual(
-      pick(iconCustomisations, Object.keys(DEFAULT_ICON_SIZE_CUSTOMISATIONS)),
-      DEFAULT_ICON_SIZE_CUSTOMISATIONS
+      pick(iconCustomisations, Object.keys(defaultIconSizeCustomisations)),
+      defaultIconSizeCustomisations
     )
 
     const getTakumiBlob = useCallback(
@@ -431,7 +431,7 @@ export default withQueryBoundary(
                 onClick: () => {
                   customizedIcons.set(
                     iconQuery.data.id,
-                    () => DEFAULT_ICON_SIZE_CUSTOMISATIONS
+                    () => defaultIconSizeCustomisations
                   )
                 }
               },
