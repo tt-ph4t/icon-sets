@@ -126,9 +126,9 @@ export const isReactKey = (value, allowNullish = true) =>
 
 export const parseNumbers = (
   value,
-  {limit = Infinity, separator} = EMPTY.OBJECT
+  {limit = Infinity, splitter} = EMPTY.OBJECT
 ) =>
-  Iterator.from(String(value).split(separator))
+  Iterator.from(String(value).split(splitter))
     .filter(a => a.trim())
     .map(Number)
     .take(limit)

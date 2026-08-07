@@ -1,5 +1,6 @@
 import {mergeProps} from '@base-ui/react'
 import {defaultIconSizeCustomisations} from '@iconify/utils'
+import {isSafeInteger} from '@sindresorhus/is'
 import {useQuery} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeIcon} from '@vscode-elements/react-elements'
@@ -65,10 +66,12 @@ const width = 'calc(var(--SPACING) * 12)'
 const sizeLabel = ({height = 0, width = 0}) => `${width} x ${height}`
 
 const aaaaaaaaaaaaaaaaaaaaaaaaa = value =>
+  // eslint-disable-next-line react-doctor/js-flatmap-filter
   Iterator.from(castArray(value))
-    .filter(Number.isSafeInteger)
-    .filter(Boolean)
+    .map(Math.round)
+    .filter(isSafeInteger)
     .map(Math.abs)
+    .filter(Boolean)
     .toArray()
 
 const Badge = component(({color, ...props}) => (
@@ -440,8 +443,7 @@ export default withQueryBoundary(
                 onClick: () => {
                   const value = aaaaaaaaaaaaaaaaaaaaaaaaa(
                     parseNumbers(prompt(undefined, sizeLabel(iconSize)), {
-                      limit: 2,
-                      separator: /[,\sx]+/u
+                      splitter: /[,\sx]+/u
                     })
                   )
 
@@ -461,8 +463,7 @@ export default withQueryBoundary(
                 onClick: () => {
                   const [scale] = aaaaaaaaaaaaaaaaaaaaaaaaa(
                     parseNumbers(prompt(undefined, 1), {
-                      limit: 1,
-                      separator: ' '
+                      splitter: ' '
                     })
                   )
 
@@ -470,7 +471,7 @@ export default withQueryBoundary(
                     customizedIcons.set(iconQuery.data.id, () => {
                       const a = mapValues(iconSize, a => a * scale)
 
-                      if (Object.values(a).every(Number.isSafeInteger)) return a
+                      if (Object.values(a).every(isSafeInteger)) return a
                     })
                 }
               }
