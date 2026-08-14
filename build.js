@@ -1,0 +1,141 @@
+import { lookupCollection, lookupCollections } from "@iconify/json";
+import {
+  getIconsTree,
+  parseIconSetAsync,
+  validateIconSet,
+} from "@iconify/utils";
+import msgpack from "@msgpack/msgpack";
+import { sentenceCase } from "change-case";
+import { isEqual, isPlainObject, mapValues, pick, uniqWith } from "es-toolkit";
+import { size } from "es-toolkit/compat";
+import { sort } from "fast-sort";
+import has from "has-values";
+import mapObject, { mapObjectSkip } from "map-obj";
+import fs from "node:fs";
+import ProgressBar from "progress";
+import spdxLicenseList from "spdx-license-list";
+import pkg from "./package.json" with { type: "json" };
+
+const dataDir = "data";
+
+const sortKeys = (value, options = {}) => {
+  const { order = "asc", deep = false, by } = options;
+  const a = sort(Object.entries(value))[order](by);
+
+  return Object.fromEntries(
+    deep
+      ? a.map(([a, b]) => [a, isPlainObject(b) ? sortKeys(b, options) : b])
+      : a,
+  );
+};
+
+const writeFileSync = (file, data) => {
+  fs.writeFileSync(`${file}.msgpack`, msgpack.encode(data));
+};
+
+fs.copyFileSync("node_modules/@iconify/json/collections.md", "readme.md");
+
+fs.rmSync(dataDir, {
+  recursive: true,
+  force: true,
+});
+
+fs.mkdirSync(dataDir);
+
+const collections = Object.fromEntries(
+  uniqWith(
+    Object.entries(await lookupCollections()),
+    ([, a], [, b]) =>
+      ["name", "total", "version", "author", "license"].every((key) =>
+        isEqual(a[key], b[key]),
+      ) &&
+      (a.hidden || b.hidden),
+  ),
+);
+
+const progressBar = new ProgressBar(
+  ":current/:total icon sets :percent :etas | :iconSetName (:iconCount icons)",
+  {
+    total: size(collections),
+  },
+);
+
+progressBar.interrupt(`v${pkg.devDependencies["@iconify/json"]}`);
+
+writeFileSync(
+  `${dataDir}/index`,
+  sortKeys(
+    Object.fromEntries(
+      await Promise.all(
+        Object.keys(collections).map(async (name) => {
+          const collection = collections[name];
+          const iconSet = validateIconSet(await lookupCollection(name));
+          const iconSetPath = `${dataDir}/${iconSet.prefix}`;
+
+          delete collection.samples;
+
+          fs.mkdirSync(iconSetPath, {
+            recursive: true,
+          });
+
+          await parseIconSetAsync(iconSet, (iconName, iconData) => {
+            writeFileSync(`${iconSetPath}/${iconName}`, iconData);
+          });
+
+          const value = [
+            iconSet.prefix,
+            {
+              ...collection,
+              chars: iconSet.chars ?? {},
+              aliases: mapObject(getIconsTree(iconSet), (a, b) =>
+                has(b) ? [a, b] : mapObjectSkip,
+              ),
+              categories: iconSet.categories ?? {},
+              category: iconSet.info.category ?? "Uncategorised",
+              grid: iconSet.info.height ?? "No grid / mixed grid",
+              hasAnimations: Boolean(
+                iconSet.info.tags?.includes("Contains Animations"),
+              ),
+              get license() {
+                const license = iconSet.info.license;
+                const defaultLicense = spdxLicenseList[license.spdx];
+
+                return {
+                  ...defaultLicense,
+                  spdx: license.spdx,
+                  url: license.url ?? defaultLicense.url,
+                };
+              },
+              suffixes: mapValues(iconSet.suffixes ?? {}, (a) =>
+                sentenceCase(a ?? ""),
+              ),
+              tags: sort(iconSet.info.tags ?? []).asc(),
+              version: iconSet.info.version ?? "None",
+              prefixes: iconSet.prefixes ?? {},
+              ...pick(iconSet, [
+                "lastModified",
+                "prefix",
+                "left",
+                "provider",
+                "top",
+                "width",
+              ]),
+              icons: sort(Object.keys(iconSet.icons)).asc(),
+            },
+          ];
+
+          progressBar.tick({
+            iconSetName: value[1].name,
+            iconCount: size(value[1].icons),
+          });
+
+          return value;
+        }),
+      ),
+    ),
+    {
+      deep: true,
+      by: ([, iconSet]) => iconSet.name,
+    },
+  ),
+);
