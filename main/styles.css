@@ -1,0 +1,23 @@
+:root {
+  --HEIGHT: 100dvh;
+  --WIDTH: 100dvw;
+  --SPACING: 0.25rem;
+  --SIDEBAR-CONTENT-HEIGHT: calc(var(--HEIGHT) / 2);
+}
+
+:root {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  height: var(--HEIGHT);
+  width: var(--WIDTH);
+
+  body {
+    padding: 0;
+    position: relative;
+  }
+
+  #root {
+    isolation: isolate;
+  }
+}

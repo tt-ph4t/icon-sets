@@ -1,0 +1,137 @@
+import {validateIconName} from '@iconify/utils'
+import {
+  isAsyncFunction,
+  isAsyncGeneratorFunction,
+  isBigint,
+  isClass,
+  isFunction,
+  isGeneratorFunction,
+  isNull,
+  isSafeInteger,
+  isString,
+  isUndefined
+} from '@sindresorhus/is'
+import {downloadZip} from 'client-zip'
+import copyToClipboard from 'copy-to-clipboard'
+import {play} from 'cuelume'
+import {omit} from 'es-toolkit'
+import {castArray} from 'es-toolkit/compat'
+import FileSaver from 'file-saver'
+import has from 'has-values'
+import {isWordCharacter} from 'is-word-character'
+import jszip from 'jszip'
+import {getErrorMessage} from 'react-error-boundary'
+
+import {EMPTY, ICON_CACHE, ID_SEPARATOR} from '../misc/constants'
+import {cache} from './cache'
+import {parseIconName} from './parse-icon-name'
+
+export const isSyncFunction = value =>
+  isFunction(value) &&
+  !isAsyncFunction(value) &&
+  !isGeneratorFunction(value) &&
+  !isAsyncGeneratorFunction(value) &&
+  !isClass(value) // ?
+
+export const open = Object.assign(
+  (...args) => {
+    const value = window.open(...args)
+
+    if (isNull(value)) prompt(undefined, args[0])
+
+    return value
+  },
+  {
+    objectURL: (...args) => {
+      const url = URL.createObjectURL(...args)
+
+      open(url)
+      URL.revokeObjectURL(url)
+    }
+  }
+)
+
+export const isWordChar = value => isString(value) && isWordCharacter(value)
+
+export const fileSaver = async (data, fileName) => {
+  // jszip
+  if ('generateAsync' in data) data = await data.generateAsync({type: 'blob'})
+
+  // client-zip
+  if ('blob' in data) data = await data.blob()
+
+  FileSaver(data, fileName)
+}
+
+export const Zip = Object.assign(jszip, {
+  download: async (files, fileName) => {
+    await Promise.try(async () => {
+      const response = downloadZip(files)
+
+      if (response.ok) await fileSaver(response, `${fileName}.zip`)
+    }).catch(error => {
+      prompt('Error', getErrorMessage(error))
+    })
+  },
+  support: omit(jszip.support, ['nodebuffer', 'nodestream'])
+})
+
+export const hasValues = (...values) => has(values)
+
+export const isOdd =
+  // https://coreui.io/answers/how-to-check-if-a-number-is-odd-in-javascript/
+  value => value % 2 !== 0
+
+export const validateIconId = iconId =>
+  isWordChar(iconId) &&
+  iconId.includes(ID_SEPARATOR) &&
+  validateIconName(parseIconName(iconId).icon)
+
+export const filterValidIconIds = iconIds =>
+  castArray(iconIds).filter(validateIconId)
+
+export const copy = async (value, options) => {
+  const isCopied = await copyToClipboard(value, {
+    fallbackToPrompt: true,
+    ...options
+  })
+
+  if (isCopied) play('success')
+
+  return {
+    isCopied
+  }
+}
+
+export const getIconFilePaths = cache(
+  (icon, extension) => {
+    const fileName = `${icon.name}.${extension}`
+
+    return {
+      default: fileName,
+      fullPath: `${icon.setName}/${fileName}`,
+      labeled: `[${icon.setName}] ${fileName}`
+    }
+  },
+  {
+    max: ICON_CACHE.max
+  }
+)
+
+export const isReactKey = (value, allowNullish = true) =>
+  (allowNullish && (isNull(value) || isUndefined(value))) ||
+  isString(value) ||
+  isSafeInteger(value) ||
+  isBigint(value)
+
+export const parseNumbers = (
+  value,
+  {limit = Infinity, splitter} = EMPTY.OBJECT
+) =>
+  Iterator.from(String(value).split(splitter))
+    .filter(a => a.trim())
+    .map(Number)
+    .take(limit)
+    .toArray()
+
+export const sizeLabel = ({height = 0, width = 0}) => `${width} x ${height}`

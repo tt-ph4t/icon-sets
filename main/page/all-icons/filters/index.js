@@ -1,0 +1,71 @@
+import {useQuery} from '@tanstack/react-query'
+import {
+  VscodeDivider,
+  VscodeToolbarContainer
+} from '@vscode-elements/react-elements'
+
+import {Button} from '../../../components/button'
+import {Popover} from '../../../components/popover'
+import {component} from '../../../hocs'
+import {DEFAULT_QUERY_OPTIONS} from '../../../misc/constants'
+import {pluralize} from '../../../misc/pluralize'
+import {isFiltered, useStore} from '../misc'
+import MultiSelect from './multi-select'
+import Tree from './tree'
+
+const Label = component(props => {
+  const {selectedIconSetPrefixes} = useStore().useSelectValue(
+    'selectedIconSetPrefixes'
+  )
+
+  const query = useQuery({
+    ...DEFAULT_QUERY_OPTIONS,
+    select: iconSets => {
+      const iconSetPrefixes = Object.keys(iconSets)
+
+      return {
+        isFiltered: isFiltered(iconSetPrefixes, selectedIconSetPrefixes),
+        label:
+          selectedIconSetPrefixes.length === 1
+            ? `${iconSetPrefixes.indexOf(selectedIconSetPrefixes[0]) + 1}. ${iconSets[selectedIconSetPrefixes[0]].name}`
+            : pluralize(selectedIconSetPrefixes, 'icon set')
+      }
+    }
+  })
+
+  return (
+    <Button.Group
+      data={[
+        {
+          children: query.data.label
+        },
+        {
+          icon: 'filter',
+          secondary: !query.data.isFiltered
+        }
+      ]}
+      {...props}
+    />
+  )
+})
+
+export default (
+  <Popover
+    popupRender={
+      <>
+        <div
+          style={{
+            inset: 0,
+            position: 'sticky',
+            zIndex: 1
+          }}>
+          <MultiSelect />
+          <VscodeDivider />
+        </div>
+        <Tree />
+      </>
+    }
+    render={<VscodeToolbarContainer />}>
+    <Label />
+  </Popover>
+)

@@ -1,0 +1,56 @@
+import {useScrollLock} from '@reactuses/core'
+import '@vscode-elements/webview-playground'
+import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
+import React from 'react'
+import {preconnect} from 'react-dom'
+import {createRoot} from 'react-dom/client'
+import root from 'react-shadow'
+
+import {Boundary} from './components/boundary'
+import {ProgressRing} from './components/progress-ring'
+import {component} from './hocs'
+import {DATABASE_URL} from './misc/constants'
+import Layout from './page/layout'
+import './styles.css'
+
+const Page = React.lazy(() => import('./page'))
+const Devtools = React.lazy(() => import('./components/devtools'))
+
+const ScrollLock = component(() => {
+  useScrollLock(document.body, true)
+})
+
+preconnect(new URL(DATABASE_URL).origin)
+
+createRoot(document.querySelector('#root')).render(
+  <>
+    <div
+      style={{
+        alignItems: 'center',
+        display: 'flex',
+        height: 'var(--HEIGHT)',
+        justifyContent: 'center',
+        width: 'var(--WIDTH)'
+      }}>
+      <Boundary fallback={<ProgressRing>Loading</ProgressRing>}>
+        <Layout.Resizable>
+          <root.div
+            style={{
+              display: 'flex',
+              height: 'inherit',
+              width: 'inherit'
+            }}>
+            <Page />
+          </root.div>
+        </Layout.Resizable>
+      </Boundary>
+    </div>
+    <link
+      href={codiconUrl}
+      id='vscode-codicon-stylesheet' // https://vscode-elements.github.io/components/icon/
+      rel='stylesheet'
+    />
+    <ScrollLock />
+    <Devtools />
+  </>
+)

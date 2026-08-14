@@ -1,0 +1,67 @@
+import {useQuery} from '@tanstack/react-query'
+import {mapValues} from 'es-toolkit'
+import {sort} from 'fast-sort'
+
+import {Collapsible} from '../../../components/collapsible'
+import {component} from '../../../hocs'
+import {useState} from '../../../hooks/use-state'
+import {DEFAULT_QUERY_OPTIONS} from '../../../misc/constants'
+import {pluralize} from '../../../misc/pluralize'
+import collapsibleList from '../collapsible-list'
+import Item from './item'
+
+const CollapsibleList = collapsibleList()
+
+const queryOptions = {
+  ...DEFAULT_QUERY_OPTIONS,
+  select: iconSets => {
+    const categoryList = mapValues(
+      Object.groupBy(Object.values(iconSets), iconSet => iconSet.category),
+      iconSets =>
+        iconSets.map(iconSet => ({
+          prefix: iconSet.prefix
+        }))
+    )
+
+    return {
+      iconSet: {
+        category: {
+          list: categoryList,
+          names: sort(Object.keys(categoryList)).asc()
+        },
+        prefixes: Object.keys(iconSets)
+      }
+    }
+  }
+}
+
+export default component(() => {
+  const query = useQuery(queryOptions)
+  const [state, setState] = useState()
+
+  const iconSetPrefixes =
+    query.data.iconSet.category.list[state]?.map(iconSet => iconSet.prefix) ??
+    query.data.iconSet.prefixes
+
+  return (
+    <Collapsible
+      defaultOpen
+      description={iconSetPrefixes.length}
+      heading='icon sets'>
+      <CollapsibleList
+        ids={iconSetPrefixes}
+        menu={[
+          pluralize(query.data.iconSet.category.names, 'category'),
+          ...query.data.iconSet.category.names.map(category => ({
+            checked: category === state,
+            label: category,
+            onClick: () => {
+              setState(state => state === category || category)
+            }
+          }))
+        ]}
+        renderItem={(...[, props]) => <Item {...props} />}
+      />
+    </Collapsible>
+  )
+})

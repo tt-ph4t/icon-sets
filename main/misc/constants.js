@@ -1,0 +1,109 @@
+import {defaultIconCustomisations} from '@iconify/utils'
+import {QueryClient} from '@tanstack/react-query'
+import deepFreeze from 'deep-freeze-es6'
+import {LRUCache} from 'lru-cache'
+
+import {getQueryOptions} from './get-query-options'
+
+export const GITHUB_REPO = 'tt-ph4t/icon-sets'
+
+export const ICONIFY_API_URLS = deepFreeze([
+  'https://api.iconify.design',
+  'https://api.simplesvg.com',
+  'https://api.unisvg.com'
+])
+
+export const // https://raw.githubusercontent.com/${GITHUB_REPO}/refs/heads/data/data
+  DATABASE_URL = `https://cdn.jsdelivr.net/gh/${GITHUB_REPO}@refs/heads/data/data`
+
+export const DELAY_MS = 150
+
+export const ID_SEPARATOR = ':'
+
+export const ICON_CACHE = new LRUCache({
+  max: 1e3
+})
+
+export const QUERY_CLIENT = {
+  GLOBAL: new QueryClient(),
+  MISC: new QueryClient()
+}
+
+export const QUERY_CLIENT_MENU = deepFreeze({
+  Refetch: 'refetchQueries',
+  // eslint-disable-next-line perfectionist/sort-objects
+  Invalidate: 'invalidateQueries',
+  Reset: 'resetQueries',
+  // eslint-disable-next-line perfectionist/sort-objects
+  Cancel: 'cancelQueries',
+  Remove: 'removeQueries'
+})
+
+export const EMPTY = deepFreeze({
+  ARRAY: [],
+  OBJECT: {}
+})
+
+export const SORT_DIRECTIONS = deepFreeze({
+  asc: {
+    icon: 'arrow-up',
+    label: 'Ascending'
+  },
+  desc: {
+    icon: 'arrow-down',
+    label: 'Descending'
+  }
+})
+
+export const DEFAULT_ICON_CUSTOMISATIONS = deepFreeze({
+  ...defaultIconCustomisations,
+  color: 'unset',
+  square: true
+})
+
+export const DEFAULT_QUERY_OPTIONS = deepFreeze(
+  getQueryOptions({
+    url: `${DATABASE_URL}/index.msgpack`
+  })
+)
+
+export const THEME = deepFreeze({
+  BREAKPOINTS: {
+    '2XL': 1536,
+    LG: 1024,
+    MD: 768,
+    SM: 640,
+    XL: 1280
+  },
+  CARD_STYLE:
+    // https://github.com/vscode-elements/elements/blob/e71099a40fdbcbeaa50fd2d61ba2734f4e42f8d1/src/vscode-context-menu/vscode-context-menu.styles.ts
+    {
+      outline: 'unset',
+
+      // eslint-disable-next-line unicorn/no-useless-spread
+      ...{
+        backgroundColor: 'var(--vscode-menu-background, #1f1f1f)',
+        borderColor: 'var(--vscode-menu-border, #454545)',
+        borderRadius: '5px',
+        borderStyle: 'solid',
+        borderWidth: '1px',
+        boxShadow: '0 2px 8px var(--vscode-widget-shadow, rgba(0, 0, 0, 0.36))',
+        color: 'var(--vscode-menu-foreground, #cccccc)',
+        fontFamily: 'var(--vscode-font-family, sans-serif)',
+        fontSize: 'var(--vscode-font-size, 13px)',
+        fontWeight: 'var(--vscode-font-weight, normal)',
+        lineHeight: '1.4em',
+        padding: '4px 0',
+        whiteSpace: 'nowrap'
+      }
+    },
+  COLORS:
+    // fallback?
+    {
+      ERROR: 'var(--vscode-activityErrorBadge-background)',
+      FOREGROUND: 'var(--vscode-foreground)',
+      PRIMARY: 'var(--vscode-inputOption-activeBorder)',
+      WARNING: 'var(--vscode-activityWarningBadge-background)'
+    },
+  DEFAULT_COLOR_SCHEME: 'light'
+})
