@@ -1,12 +1,10 @@
 import {useQueryClient} from '@tanstack/react-query'
-import {useUnmount} from 'ahooks'
 import {play} from 'cuelume'
 import React from 'react'
 import {ErrorBoundary} from 'react-error-boundary'
 
 import {Fallback} from '../components/fallback'
 import {component} from '../hocs'
-import {useMemo} from '../hooks/use-memo'
 import {DEFAULT_QUERY_OPTIONS} from '../misc/constants'
 import {Slot} from './slot'
 
@@ -43,18 +41,6 @@ export const Boundary = Object.assign(
       }) => {
         const queryClient = useQueryClient()
 
-        const queryClientFilters = useMemo(
-          () => ({
-            exact: true,
-            queryKey: queryOptions.queryKey
-          }),
-          [queryOptions.queryKey]
-        )
-
-        useUnmount(async () => {
-          await queryClient.cancelQueries(queryClientFilters)
-        })
-
         if (query.isLoading)
           return Slot.render({
             bespoke: fallback
@@ -66,7 +52,10 @@ export const Boundary = Object.assign(
             default: props => (
               <Slot
                 onRetry={async () => {
-                  await queryClient.resetQueries(queryClientFilters)
+                  await queryClient.resetQueries({
+                    exact: true,
+                    queryKey: queryOptions.queryKey
+                  })
                 }}>
                 <Fallback.Error error={query.error} {...props} />
               </Slot>

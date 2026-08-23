@@ -12,7 +12,12 @@ const TanStackDevtoolsProps = {
   plugins: [
     ...Object.entries(QUERY_CLIENT).map(([a, b]) => ({
       name: `TanStack Query (${a})`,
-      render: <ReactQueryDevtoolsPanel client={b} />
+      render: (
+        <ReactQueryDevtoolsPanel
+          client={b}
+          theme={THEME.DEFAULT_COLOR_SCHEME}
+        />
+      )
     })),
     pacerDevtoolsPlugin(),
     hotkeysDevtoolsPlugin()
@@ -34,7 +39,8 @@ export default component(() => {
       {isDev && (
         <TanStackDevtools
           config={{
-            theme: THEME.DEFAULT_COLOR_SCHEME
+            theme: THEME.DEFAULT_COLOR_SCHEME,
+            triggerMode: 'fixed'
           }}
           {...TanStackDevtoolsProps}
         />

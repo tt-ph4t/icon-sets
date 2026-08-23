@@ -148,6 +148,7 @@ export default defineConfig([
         'unicorn/no-anonymous-default-export',
         'unicorn/no-await-expression-member',
         'unicorn/no-unused-array-method-return',
+        'unicorn/relative-url-style',
 
         'react-hooks/exhaustive-deps',
         'react/display-name',

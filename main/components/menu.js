@@ -7,7 +7,6 @@ import {
   VscodeIcon
 } from '@vscode-elements/react-elements'
 import {useControllableValue} from 'ahooks'
-import {play} from 'cuelume'
 import {omit} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
 import React from 'react'
@@ -135,26 +134,27 @@ const Item = Object.assign(
           style={{
             position: 'relative'
           }}>
-          <Slot.ClickSound
-            onMouseEnter={() => {
-              play('tick')
+          <Slot.Cuelume.Hover
+            onPointerEnter={() => {
               setSelected(true)
             }}
-            onMouseLeave={() => {
+            onPointerLeave={() => {
               setSelected(false)
             }}>
-            <VscodeContextMenuItem
-              disabled={disabled}
-              keybinding={keybinding}
-              selected={selected}
-              {...props}
-            />
-          </Slot.ClickSound>
+            <Slot.Cuelume.Press>
+              <VscodeContextMenuItem
+                disabled={disabled}
+                keybinding={keybinding}
+                selected={selected}
+                {...props}
+              />
+            </Slot.Cuelume.Press>
+          </Slot.Cuelume.Hover>
           <React.Activity>
-            {checked && <Item.Icon disabled={disabled} name='check' />}
+            {checked && <Menu.Icon disabled={disabled} name='check' />}
             {checked ||
               (hasValues(icon) && (
-                <Item.Icon disabled={disabled} name={icon} />
+                <Menu.Icon disabled={disabled} name={icon} />
               ))}
           </React.Activity>
         </div>
@@ -162,20 +162,6 @@ const Item = Object.assign(
     }
   ),
   {
-    Icon: component(props => (
-      <Slot
-        style={{
-          '--top': '50%',
-
-          left: 8,
-          pointerEvents: 'none',
-          position: 'absolute',
-          top: 'var(--top)',
-          transform: 'translateY(calc(var(--top) * -1))'
-        }}>
-        <VscodeIcon size={14} {...props} />
-      </Slot>
-    )),
     Separator: (
       <MenuPrimitive.Separator render={<VscodeContextMenuItem separator />} />
     ),
@@ -207,57 +193,75 @@ const Item = Object.assign(
   }
 )
 
-export const Menu = component(
-  ({
-    align = 'start',
-    children,
-    closeDelay = 0,
-    closeOnClick = false,
-    closeParentOnEsc = true,
-    data = EMPTY.ARRAY,
-    delay = 0,
-    openOnHover = true,
-    render,
-    side = 'bottom',
-    ...props
-  }) => {
-    const menu = useMemo(() => normalizeData(data), [data])
+export const Menu = Object.assign(
+  component(
+    ({
+      align = 'start',
+      children,
+      closeDelay = 0,
+      closeOnClick = false,
+      closeParentOnEsc = true,
+      data = EMPTY.ARRAY,
+      delay = 0,
+      openOnHover = true,
+      render,
+      side = 'bottom',
+      ...props
+    }) => {
+      const menu = useMemo(() => normalizeData(data), [data])
 
-    return (
-      <Context.Provider
-        ItemProps={{
-          closeOnClick
-        }}
-        RootProps={{
-          closeParentOnEsc
-        }}
-        TriggerProps={{
-          closeDelay,
-          delay,
-          openOnHover
-        }}>
-        <ContextSlot
-          as={MenuPrimitive.Root}
-          selector={ContextSlot.selectors.RootProps}
-          {...props}>
+      return (
+        <Context.Provider
+          ItemProps={{
+            closeOnClick
+          }}
+          RootProps={{
+            closeParentOnEsc
+          }}
+          TriggerProps={{
+            closeDelay,
+            delay,
+            openOnHover
+          }}>
           <ContextSlot
-            as={MenuPrimitive.Trigger}
-            nativeButton={false}
-            render={render}
-            selector={ContextSlot.selectors.TriggerProps}>
-            {children}
+            as={MenuPrimitive.Root}
+            selector={ContextSlot.selectors.RootProps}
+            {...props}>
+            <ContextSlot
+              as={MenuPrimitive.Trigger}
+              nativeButton={false}
+              render={render}
+              selector={ContextSlot.selectors.TriggerProps}>
+              {children}
+            </ContextSlot>
+            <React.Activity>
+              {hasValues(menu) && (
+                <MenuPrimitive.Portal>
+                  <MenuPrimitive.Positioner align={align} side={side}>
+                    {popup(menu)}
+                  </MenuPrimitive.Positioner>
+                </MenuPrimitive.Portal>
+              )}
+            </React.Activity>
           </ContextSlot>
-          <React.Activity>
-            {hasValues(menu) && (
-              <MenuPrimitive.Portal>
-                <MenuPrimitive.Positioner align={align} side={side}>
-                  {popup(menu)}
-                </MenuPrimitive.Positioner>
-              </MenuPrimitive.Portal>
-            )}
-          </React.Activity>
-        </ContextSlot>
-      </Context.Provider>
-    )
+        </Context.Provider>
+      )
+    }
+  ),
+  {
+    Icon: component(props => (
+      <Slot
+        style={{
+          '--top': '50%',
+
+          left: 8,
+          pointerEvents: 'none',
+          position: 'absolute',
+          top: 'var(--top)',
+          transform: 'translateY(calc(var(--top) * -1))'
+        }}>
+        <VscodeIcon size={14} {...props} />
+      </Slot>
+    ))
   }
 )

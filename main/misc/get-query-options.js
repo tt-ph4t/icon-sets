@@ -41,10 +41,11 @@ export const getQueryOptions = Object.assign(
       networkMode: 'offlineFirst',
       queryFn:
         queryFn ??
-        (async () => {
+        (async ({signal}) => {
           await delay(delayMs)
 
           const fetchOptions = {
+            signal,
             timeout
           }
 

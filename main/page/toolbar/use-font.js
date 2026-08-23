@@ -14,13 +14,6 @@ const fallbackMap = {
 
 const families = mapValues(
   {
-    Fira: {
-      monospace: 'Fira Mono',
-      sansSerif: 'Fira Sans'
-    },
-    'Fjalla One': {
-      sansSerif: 'Fjalla One'
-    },
     Geist: {
       monospace: 'Geist Mono',
       sansSerif: 'Geist'
@@ -36,20 +29,9 @@ const families = mapValues(
       monospace: 'Noto Sans Mono',
       sansSerif: 'Noto Sans'
     },
-    Oswald: {
-      sansSerif: 'Oswald'
-    },
-    PT: {
-      monospace: 'PT Mono',
-      sansSerif: 'PT Sans'
-    },
     Roboto: {
       monospace: 'Roboto Mono',
       sansSerif: 'Roboto'
-    },
-    Source: {
-      monospace: 'Source Code Pro',
-      sansSerif: 'Source Sans 3'
     }
   },
   a => mapValues(a, (a, b) => `"${a}", ${fallbackMap[b]}`)

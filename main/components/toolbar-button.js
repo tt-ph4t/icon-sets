@@ -5,7 +5,7 @@ import {Slot} from './slot'
 
 export const ToolbarButton = component(
   ({checked, controlled, toggleable, ...props}) => (
-    <Slot.ClickSound
+    <Slot.Cuelume.Press
       onChange={event => {
         if (controlled) event.target.checked = checked
       }}>
@@ -14,6 +14,6 @@ export const ToolbarButton = component(
         toggleable={toggleable ?? controlled}
         {...props}
       />
-    </Slot.ClickSound>
+    </Slot.Cuelume.Press>
   )
 )

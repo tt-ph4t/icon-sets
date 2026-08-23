@@ -15,7 +15,7 @@ import {pluralize} from '../../misc/pluralize'
 import dataVersion from './data-version'
 
 const queryClientMenu = {
-  Prefetch: 'prefetchQuery',
+  Prefetch: 'query',
   ...QUERY_CLIENT_MENU
 }
 

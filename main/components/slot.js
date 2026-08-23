@@ -1,28 +1,40 @@
 import {isPlainObject} from '@sindresorhus/is'
 import {play} from 'cuelume'
-import {identity, noop} from 'es-toolkit'
+import {identity, mapValues, noop} from 'es-toolkit'
 import {Slot as SlotPrimitive} from 'radix-ui'
 import {renderSlot} from 'render-slot'
 
 import {component} from '../hocs'
 import {isSyncFunction} from '../misc'
 
-const ClickSoundProps = {
-  onClickCapture: () => {
-    play('release')
-  }
-}
-
 export const Slot = Object.assign(
   // mergeProps
   // on*, style, className, ref, aria-describedby
   component(SlotPrimitive.Root),
   {
-    ClickSound: component(props => (
-      <Slot {...ClickSoundProps}>
-        <Slot {...props} />
-      </Slot>
-    )),
+    Cuelume: mapValues(
+      {
+        Hover: {
+          onPointerEnter: () => {
+            play('tick')
+          }
+        },
+        Press: {
+          onPointerDown: () => {
+            play('press')
+          },
+          onPointerUp: () => {
+            play('release')
+          }
+        }
+      },
+      defaultProps =>
+        component(props => (
+          <Slot {...defaultProps}>
+            <Slot {...props} />
+          </Slot>
+        ))
+    ),
     render: value => {
       if (isPlainObject(value)) {
         const {context, options, wrapper = identity, ...props} = value

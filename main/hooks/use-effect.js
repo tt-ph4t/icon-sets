@@ -1,7 +1,8 @@
 import {isFunction} from '@sindresorhus/is'
-import {useAsyncEffect, useUpdateEffect} from 'ahooks'
+import {useUpdateEffect} from 'ahooks'
 import {mapValues, noop} from 'es-toolkit'
 import React from 'react'
+import {useAsyncEffect} from 'react-hookers'
 
 import {EMPTY} from '../misc/constants'
 import {useDeepCompareMemoize} from './use-deep-compare-memoize'

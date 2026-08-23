@@ -1,7 +1,5 @@
 import {Button} from '@base-ui/react'
 import {useQueryClient} from '@tanstack/react-query'
-import {useUnmount} from 'ahooks'
-import {play} from 'cuelume'
 import {getErrorMessage} from 'react-error-boundary'
 
 import {component} from '../../../hocs'
@@ -15,10 +13,7 @@ import {Menu} from '../../menu'
 import {Slot} from '../../slot'
 
 const Fallback = component(({children, ...props}) => (
-  <Slot
-    onMouseEnter={() => {
-      play('tick')
-    }}
+  <Slot.Cuelume.Hover
     style={{
       userSelect: 'none'
     }}>
@@ -27,7 +22,7 @@ const Fallback = component(({children, ...props}) => (
       render={<span>{children.slice(0, 3)}</span>}
       {...props}
     />
-  </Slot>
+  </Slot.Cuelume.Hover>
 ))
 
 export default Component =>
@@ -42,33 +37,24 @@ export default Component =>
         iconId
       })
 
-      const queryClientFilters = useMemo(
-        () => ({
-          exact: true,
-          queryKey: [iconId]
-        }),
-        [iconId]
-      )
-
       const menu = useMemo(
         () =>
           Object.entries(QUERY_CLIENT_MENU).map(([a, b]) => ({
             label: a,
             onClick: async () => {
-              await queryClient[b](queryClientFilters)
+              await queryClient[b]({
+                exact: true,
+                queryKey: [iconId]
+              })
             }
           })),
-        [queryClientFilters]
+        [iconId]
       )
 
       const fallbackMenu = useMemo(
         () => [remount.menu, 'Query', ...menu],
         [remount.menu, menu]
       )
-
-      useUnmount(async () => {
-        await queryClient.cancelQueries(queryClientFilters)
-      })
 
       if (iconQuery.isLoading)
         return (

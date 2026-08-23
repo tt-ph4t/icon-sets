@@ -20,7 +20,7 @@ const hotkey = 'm'
 
 const useStore = withImmerAtom({
   enabled: false,
-  volume: 0.2
+  volume: 0.5
 })
 
 setEnabled(useStore.initial.enabled)

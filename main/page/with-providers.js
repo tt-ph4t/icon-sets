@@ -33,13 +33,13 @@ export default Component =>
   component(props => (
     <Direction.Provider>
       <DirectionProvider>
-        <QueryClientProvider client={QUERY_CLIENT.GLOBAL}>
-          <PacerProvider {...PacerProviderProps}>
+        <PacerProvider {...PacerProviderProps}>
+          <QueryClientProvider client={QUERY_CLIENT.GLOBAL}>
             <HotkeysProvider>
               <Component {...props} />
             </HotkeysProvider>
-          </PacerProvider>
-        </QueryClientProvider>
+          </QueryClientProvider>
+        </PacerProvider>
       </DirectionProvider>
     </Direction.Provider>
   ))

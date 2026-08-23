@@ -30,11 +30,11 @@ export const Collapsible = component(
     )
 
     return (
-      <Slot.ClickSound ref={ref}>
+      <Slot.Cuelume.Press ref={ref}>
         <VscodeCollapsible alwaysShowHeaderActions open={open} {...props}>
           {open && children}
         </VscodeCollapsible>
-      </Slot.ClickSound>
+      </Slot.Cuelume.Press>
     )
   }
 )

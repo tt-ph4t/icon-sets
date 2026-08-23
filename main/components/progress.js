@@ -9,7 +9,7 @@ import {withImmerAtom} from '../misc/with-immer-atom'
 import {Slot} from './slot'
 
 const useStore = withImmerAtom({
-  isPending: false
+  visible: false
 })
 
 export const useProgress = () => {
@@ -17,13 +17,13 @@ export const useProgress = () => {
 
   const start = useCallback(() => {
     store.set(({draft}) => {
-      draft.isPending = true
+      draft.visible = true
     })
   })
 
   const stop = useCallback(() => {
     store.set(({draft}) => {
-      draft.isPending = false
+      draft.visible = false
     })
   })
 
@@ -53,10 +53,10 @@ export const ProgressBar = Object.assign(
   )),
   {
     Global: component(({visible = false, ...props}) => {
-      const {isPending} = useStore().useSelectValue('isPending')
+      const state = useStore().useValue()
 
       return (
-        <React.Activity mode={isPending || visible ? 'visible' : 'hidden'}>
+        <React.Activity mode={state.visible || visible ? 'visible' : 'hidden'}>
           <ProgressBar {...props} />
         </React.Activity>
       )

@@ -70,7 +70,6 @@ const Settings = component(({menu, ...props}) => {
       data={[
         {
           description: Kbd.text(themeHotkey),
-          icon: 'color-mode',
           label: 'Theme',
           menu: theme.ids.map(themeId => ({
             checked: themeId.value === theme.id,

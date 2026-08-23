@@ -110,7 +110,7 @@ export default component(() => {
       </VscodeToolbarContainer>
       <React.Activity>
         <Tree
-          data={Object.entries(query.data.iconSet.groups).map(([a, b], c) => {
+          data={Object.entries(query.data.iconSet.groups).map(([a, b]) => {
             const label = pluralize(b, a)
 
             return {
@@ -134,7 +134,7 @@ export default component(() => {
               }),
               id: label,
               label,
-              open: c <= 2
+              open: true
             }
           })}
         />

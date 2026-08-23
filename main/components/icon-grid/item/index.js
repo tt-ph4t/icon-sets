@@ -5,7 +5,6 @@ import {useQuery} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeIcon} from '@vscode-elements/react-elements'
 import {capitalCase, sentenceCase} from 'change-case'
-import {play} from 'cuelume'
 import {
   compact,
   findKey,
@@ -75,14 +74,14 @@ const aaaaaaaaaaaaaaaaaaaaaaaaa = value =>
     .toArray()
 
 const Badge = component(({color, ...props}) => (
-  <Slot.ClickSound
+  <Slot.Cuelume.Press
     style={
       hasValues(color) && {
         '--vscode-icon-foreground': color
       }
     }>
     <VscodeIcon name='circle-filled' size={13} {...props} />
-  </Slot.ClickSound>
+  </Slot.Cuelume.Press>
 ))
 
 export default withQueryBoundary(
@@ -173,7 +172,6 @@ export default withQueryBoundary(
             label: capitalCase(iconQuery.data.name),
             menu: [
               {
-                icon: 'forward',
                 label: 'To',
                 menu: [
                   ...Object.entries(iconQuery.data.more.paths).map(([a, b]) => {
@@ -405,7 +403,6 @@ export default withQueryBoundary(
           },
           {
             description: iconSetQuery.data.author.name,
-            icon: 'person',
             label: 'Author',
             onClick: () => {
               prompt(
@@ -554,50 +551,49 @@ export default withQueryBoundary(
           }
         ]}
         render={
-          <Slot.ClickSound
-            onMouseEnter={() => {
-              play('tick')
-            }}
+          <Slot.Cuelume.Hover
             style={{
               position: 'relative'
             }}
           />
         }>
-        <div {...props}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              position: 'absolute',
-              right: 0,
-              top: 0
-            }}>
-            <React.Activity>
-              {isFavorited && (
-                <Badge
-                  color={THEME.COLORS.WARNING}
-                  onClick={() => {
-                    favoritedIcons.delete(iconQuery.data.id)
-                  }}
-                />
-              )}
-              {isEqual(DEFAULT_ICON_CUSTOMISATIONS, iconCustomisations) || (
-                <Badge
-                  color={THEME.COLORS.PRIMARY}
-                  onClick={() => {
-                    customizedIcons.delete(iconQuery.data.id)
-                  }}
-                />
-              )}
-            </React.Activity>
+        <Slot.Cuelume.Press>
+          <div {...props}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'absolute',
+                right: 0,
+                top: 0
+              }}>
+              <React.Activity>
+                {isFavorited && (
+                  <Badge
+                    color={THEME.COLORS.WARNING}
+                    onClick={() => {
+                      favoritedIcons.delete(iconQuery.data.id)
+                    }}
+                  />
+                )}
+                {isEqual(DEFAULT_ICON_CUSTOMISATIONS, iconCustomisations) || (
+                  <Badge
+                    color={THEME.COLORS.PRIMARY}
+                    onClick={() => {
+                      customizedIcons.delete(iconQuery.data.id)
+                    }}
+                  />
+                )}
+              </React.Activity>
+            </div>
+            <AccessibleIcon.Root label={iconQuery.data.id}>
+              {React.cloneElement(iconQuery.data.more.to.reactElement, {
+                height: globalIconCustomisations.square ? width : '100%',
+                width
+              })}
+            </AccessibleIcon.Root>
           </div>
-          <AccessibleIcon.Root label={iconQuery.data.id}>
-            {React.cloneElement(iconQuery.data.more.to.reactElement, {
-              height: globalIconCustomisations.square ? width : '100%',
-              width
-            })}
-          </AccessibleIcon.Root>
-        </div>
+        </Slot.Cuelume.Press>
       </Menu>
     )
   })

@@ -37,7 +37,7 @@ const PrefetchQueries = component(({enabled}) => {
 
           if (hasValues(icon)) {
             // no-await
-            queryClient.prefetchQuery(
+            queryClient.query(
               getQueryOptions.icon(iconSet.prefix, icon, {
                 gcTime: 0
               })
