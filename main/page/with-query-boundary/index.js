@@ -27,11 +27,11 @@ const fallback = (
 
 const renderError = Component => <Component progressBar={false} />
 
-const queryFnWorker = new ComlinkWorker(
-  new URL('./query-fn.worker', import.meta.url)
+const queryWorker = new ComlinkWorker(
+  new URL('./query.worker', import.meta.url)
 )
 
-const queryOptions = getQueryOptions.worker(queryFnWorker, {
+const queryOptions = getQueryOptions.worker(queryWorker, {
   url: `${DATABASE_URL}/index.msgpack`
 })
 

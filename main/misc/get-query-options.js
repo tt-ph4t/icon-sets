@@ -2,11 +2,11 @@ import {queryOptions} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {noop, toMerged} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
-import {endpointSymbol} from 'vite-plugin-comlink/symbol'
 
 import {DATABASE_URL} from './constants'
 import {fetch} from './fetch'
 import {getId} from './get-id'
+import {terminateWorker} from './terminate-worker'
 
 const structuralSharing = (a, b) => (isEqual(a, b) ? a : b)
 
@@ -49,26 +49,19 @@ export const getQueryOptions = Object.assign(
         ...options
       }),
     worker: (worker, options) => {
-      const terminate = () => {
-        worker[endpointSymbol].terminate()
-      }
+      options = toMerged(
+        {
+          select: () => {
+            terminateWorker(worker)
+          }
+        },
+        options
+      )
 
       return {
         ...getQueryOptions(options),
-        queryFn: async query => {
-          if (query.signal.aborted) terminate() // ?
-
-          query.signal.addEventListener('abort', terminate, {
-            once: true
-          })
-
-          try {
-            return await worker.default(options.url)
-          } finally {
-            terminate()
-            query.signal.removeEventListener('abort', terminate)
-          }
-        }
+        queryFn: async () =>
+          await Promise.try(async () => await worker.queryFn(options.url))
       }
     }
   }
