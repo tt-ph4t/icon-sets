@@ -1,6 +1,6 @@
 import {defaultIconCustomisations} from '@iconify/utils'
 import {QueryClient} from '@tanstack/react-query'
-import deepFreeze from 'deep-freeze-es6'
+import {deepFreeze} from 'es-toolkit'
 import {LRUCache} from 'lru-cache'
 
 import {getQueryOptions} from './get-query-options'

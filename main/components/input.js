@@ -7,7 +7,7 @@ import {Slot} from './slot'
 
 const defaultProps = {
   onInputCapture: () => {
-    play('press')
+    play('tick')
   }
 }
 

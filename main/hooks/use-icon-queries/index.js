@@ -34,7 +34,7 @@ export const useIconQueries = (...icons) => {
         const {icon} = parseIconName(iconId)
 
         return getQueryOptions.icon(icon.prefix, icon.name, {
-          delayMs: 250,
+          delay: 250,
           enabled: contextQuery.isSuccess,
           gcTime: 6000,
           ...queryOptions,

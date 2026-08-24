@@ -1,7 +1,6 @@
 import {isBoolean} from '@sindresorhus/is'
 import {isEqual} from '@ver0/deep-equal'
-import deepFreeze from 'deep-freeze-es6'
-import {flow, noop, pick} from 'es-toolkit'
+import {deepFreeze, flow, noop, pick} from 'es-toolkit'
 import {useAtomValue, useSetAtom} from 'jotai'
 import {atomWithImmer} from 'jotai-immer'
 import {freezeAtom, selectAtom} from 'jotai/utils'
