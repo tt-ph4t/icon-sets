@@ -2,6 +2,7 @@ import {isNumber, isSafeInteger} from '@sindresorhus/is'
 import {useHotkey} from '@tanstack/react-hotkeys'
 import {capitalCase} from 'change-case'
 import {play, setEnabled, setVolume, sounds} from 'cuelume'
+import {find, map, pipe} from 'es-toolkit/fp'
 import {sort} from 'fast-sort'
 
 import {Kbd} from '../../components/kbd'
@@ -56,13 +57,13 @@ export default component(props => {
               Math.min(
                 100,
                 Math.abs(
-                  Iterator.from(
+                  pipe(
                     parseNumbers(prompt(undefined, volumePercent), {
                       splitter: ' '
-                    })
+                    }),
+                    map(Math.round),
+                    find(isSafeInteger)
                   )
-                    .map(Math.round)
-                    .find(isSafeInteger)
                 )
               ) / 100
 

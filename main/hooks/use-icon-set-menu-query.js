@@ -1,5 +1,6 @@
 import {useQuery} from '@tanstack/react-query'
 import {noop} from 'es-toolkit'
+import {flatMap, pipe} from 'es-toolkit/fp'
 
 import {DEFAULT_QUERY_OPTIONS} from '../misc/constants'
 import {useCallback} from './use-callback'
@@ -25,9 +26,10 @@ export const useIconSetMenuQuery = (getItemProps = noop) =>
           group ? group.push(item) : map.set(key, [item])
         }
 
-        return Iterator.from(map)
-          .flatMap(([a, b]) => [a, ...b])
-          .toArray()
+        return pipe(
+          map,
+          flatMap(([a, b]) => [a, ...b])
+        )
       },
       [getItemProps]
     )

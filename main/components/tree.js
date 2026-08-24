@@ -5,6 +5,7 @@ import {
   VscodeTreeItem
 } from '@vscode-elements/react-elements'
 import {castArray} from 'es-toolkit/compat'
+import {filter, map, pipe} from 'es-toolkit/fp'
 
 import {component} from '../hocs'
 import {useMemo} from '../hooks/use-memo'
@@ -20,13 +21,14 @@ const renderItems = data =>
   })
 
 const normalizeData = data =>
-  Iterator.from(castArray(data))
-    .filter(isPlainObject)
-    .map(({children, ...rest}) => ({
+  pipe(
+    castArray(data),
+    filter(isPlainObject),
+    map(({children, ...rest}) => ({
       children: normalizeData(children),
       ...rest
     }))
-    .toArray()
+  )
 
 const Item = component(({checked, children, label, ...props}) => (
   <VscodeTreeItem {...props}>

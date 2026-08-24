@@ -1,6 +1,7 @@
 import {useEventListener} from 'ahooks'
 import Cycled from 'cycled'
 import {asyncNoop, isEqual} from 'es-toolkit'
+import {map, pipe} from 'es-toolkit/fp'
 
 import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
@@ -45,12 +46,13 @@ export const VscodeDevToolbar = component(props => {
 
       selectorElementRef.current = selectorElement
 
-      const ids = Iterator.from(selectorElement.options)
-        .map(option => ({
+      const ids = pipe(
+        selectorElement.options,
+        map(option => ({
           label: option.textContent,
           value: option.value
         }))
-        .toArray()
+      )
 
       cycled.push(...ids)
       cycled.index = ids.findIndex(id => id.value === selectorElement.value)

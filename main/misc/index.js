@@ -16,6 +16,7 @@ import copyToClipboard from 'copy-to-clipboard'
 import {play} from 'cuelume'
 import {omit} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
+import {filter, map, pipe, take} from 'es-toolkit/fp'
 import FileSaver from 'file-saver'
 import has from 'has-values'
 import {isWordCharacter} from 'is-word-character'
@@ -128,10 +129,11 @@ export const parseNumbers = (
   value,
   {limit = Infinity, splitter} = EMPTY.OBJECT
 ) =>
-  Iterator.from(String(value).split(splitter))
-    .filter(a => a.trim())
-    .map(Number)
-    .take(limit)
-    .toArray()
+  pipe(
+    String(value).split(splitter),
+    filter(a => a.trim()),
+    map(Number),
+    take(limit)
+  )
 
 export const sizeLabel = ({height = 0, width = 0}) => `${width} x ${height}`

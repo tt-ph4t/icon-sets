@@ -16,6 +16,7 @@ import {
   uniq
 } from 'es-toolkit'
 import {castArray, size} from 'es-toolkit/compat'
+import {filter, map, pipe} from 'es-toolkit/fp'
 import mime from 'mime'
 import {AccessibleIcon} from 'radix-ui'
 import React from 'react'
@@ -65,13 +66,13 @@ const rotate = {
 const width = 'calc(var(--SPACING) * 12)'
 
 const aaaaaaaaaaaaaaaaaaaaaaaaa = value =>
-  // eslint-disable-next-line react-doctor/js-flatmap-filter
-  Iterator.from(castArray(value))
-    .map(Math.round)
-    .filter(isSafeInteger)
-    .map(Math.abs)
-    .filter(Boolean)
-    .toArray()
+  pipe(
+    castArray(value),
+    map(Math.round),
+    filter(isSafeInteger),
+    map(Math.abs),
+    filter(Boolean)
+  )
 
 const Badge = component(({color, ...props}) => (
   <Slot.Cuelume.Press

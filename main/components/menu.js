@@ -9,6 +9,7 @@ import {
 import {useControllableValue} from 'ahooks'
 import {omit} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
+import {filter, map, pipe} from 'es-toolkit/fp'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -44,9 +45,10 @@ const ContextSlot = Object.assign(
 )
 
 const normalizeData = data =>
-  Iterator.from(castArray(data))
-    .filter(value => isItem(value) || isGroupLabel(value))
-    .map(value => {
+  pipe(
+    castArray(data),
+    filter(value => isItem(value) || isGroupLabel(value)),
+    map(value => {
       if (isGroupLabel(value)) return value
 
       const {menu, ...data} = value
@@ -58,7 +60,7 @@ const normalizeData = data =>
         ...data
       }
     })
-    .toArray()
+  )
 
 const popup = menu => (
   <MenuPrimitive.Popup

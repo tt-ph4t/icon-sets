@@ -1,6 +1,7 @@
 import {isPlainObject} from '@sindresorhus/is'
 import {VscodeButton, VscodeButtonGroup} from '@vscode-elements/react-elements'
 import {castArray} from 'es-toolkit/compat'
+import {filter, map, pipe} from 'es-toolkit/fp'
 
 import {component} from '../hocs'
 import {getId} from '../misc/get-id'
@@ -16,9 +17,10 @@ export const Button = Object.assign(
   {
     Group: component(({data, ...sharedProps}) => (
       <VscodeButtonGroup>
-        {Iterator.from(castArray(data))
-          .filter(isPlainObject)
-          .map(({menu, ...props}) => (
+        {pipe(
+          castArray(data),
+          filter(isPlainObject),
+          map(({menu, ...props}) => (
             <Menu
               data={menu}
               key={getId(menu, props)}
@@ -29,7 +31,7 @@ export const Button = Object.assign(
               }
             />
           ))
-          .toArray()}
+        )}
       </VscodeButtonGroup>
     ))
   }
