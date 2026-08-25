@@ -522,17 +522,18 @@ export default withQueryBoundary(
           {
             description: size(iconQuery.data.more.idCases),
             label: 'ID cases',
-            menu: Object.entries(iconQuery.data.more.idCases).flatMap(
-              ([a, b]) => [
-                sentenceCase(a),
+            menu: Object.entries(iconQuery.data.more.idCases).map(([a, b]) => ({
+              label: sentenceCase(a),
+              menu: [
+                b,
                 {
-                  label: b,
+                  label: 'Copy',
                   onClick: () => {
                     copy(b)
                   }
                 }
               ]
-            )
+            }))
           },
           {
             description: iconSetQuery.data.version,

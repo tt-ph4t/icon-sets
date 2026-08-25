@@ -1,6 +1,7 @@
+import {isEqual} from '@ver0/deep-equal'
 import {useEventListener} from 'ahooks'
 import Cycled from 'cycled'
-import {asyncNoop, isEqual} from 'es-toolkit'
+import {asyncNoop} from 'es-toolkit'
 import {map, pipe} from 'es-toolkit/fp'
 
 import {component} from '../hocs'
