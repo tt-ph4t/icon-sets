@@ -19,6 +19,7 @@ import {castArray} from 'es-toolkit/compat'
 import {filter, map, pipe, take} from 'es-toolkit/fp'
 import FileSaver from 'file-saver'
 import has from 'has-values'
+import is_number from 'is-number'
 import {isWordCharacter} from 'is-word-character'
 import jszip from 'jszip'
 import {getErrorMessage} from 'react-error-boundary'
@@ -125,12 +126,10 @@ export const isReactKey = (value, allowNullish = true) =>
   isSafeInteger(value) ||
   isBigint(value)
 
-export const parseNumbers = (
-  value,
-  {limit = Infinity, splitter} = EMPTY.OBJECT
-) =>
+export const numbers = (value, {limit = Infinity, splitter} = EMPTY.OBJECT) =>
   pipe(
     String(value).split(splitter),
+    filter(is_number),
     filter(a => a.trim()),
     map(Number),
     take(limit)

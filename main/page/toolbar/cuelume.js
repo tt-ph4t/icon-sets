@@ -12,7 +12,7 @@ import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
 import {useEffect} from '../../hooks/use-effect'
-import {parseNumbers} from '../../misc'
+import {numbers} from '../../misc'
 import {pluralize} from '../../misc/pluralize'
 import {withImmerAtom} from '../../misc/with-immer-atom'
 
@@ -58,8 +58,8 @@ export default component(props => {
                 100,
                 Math.abs(
                   pipe(
-                    parseNumbers(prompt(undefined, volumePercent), {
-                      splitter: ' '
+                    numbers(prompt(undefined, `${volumePercent}%`), {
+                      splitter: /[\s%]+/u
                     }),
                     map(Math.round),
                     find(isSafeInteger)

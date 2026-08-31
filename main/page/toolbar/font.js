@@ -2,6 +2,7 @@ import {useBatchedCallback} from '@tanstack/react-pacer'
 import {useMutationObserver} from 'ahooks'
 import {mapValues} from 'es-toolkit'
 
+import {component} from '../../hocs'
 import {useEffect} from '../../hooks/use-effect'
 import {hasValues} from '../../misc'
 import {EMPTY} from '../../misc/constants'
@@ -47,10 +48,10 @@ const cssVariables = {
   sansSerif: '--vscode-font-family'
 }
 
-export default Object.assign(useStore, {
+export default {
   cssVariables,
   families,
-  useInit: () => {
+  Init: component(() => {
     const store = useStore()
     const state = store.useValue()
 
@@ -81,5 +82,6 @@ export default Object.assign(useStore, {
     useMutationObserver(updateCssVariables, document.documentElement, {
       attributeFilter: ['data-font-updated-at', 'style']
     })
-  }
-})
+  }),
+  useStore
+}

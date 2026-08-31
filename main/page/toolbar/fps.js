@@ -9,8 +9,7 @@ import {useUpdate} from '../../hooks/use-update'
 import {copy} from '../../misc'
 
 const Fps = component(props => {
-  const fps = React.useDeferredValue(useFps())
-  const label = `${fps} fps`
+  const label = `${React.useDeferredValue(useFps())} fps`
   const update = useUpdate()
 
   return (
@@ -19,9 +18,7 @@ const Fps = component(props => {
         copy(label)
         update()
       }}>
-      <ToolbarButton icon={fps <= 30 ? 'warning' : undefined} {...props}>
-        {label}
-      </ToolbarButton>
+      <ToolbarButton {...props}>{label}</ToolbarButton>
     </Slot>
   )
 })

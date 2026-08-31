@@ -32,8 +32,8 @@ import {
   fileSaver,
   getIconFilePaths,
   hasValues,
+  numbers,
   open,
-  parseNumbers,
   sizeLabel
 } from '../../../misc'
 import {
@@ -452,7 +452,7 @@ export default withQueryBoundary(
                 label: 'Set',
                 onClick: () => {
                   const value = aaaaaaaaaaaaaaaaaaaaaaaaa(
-                    parseNumbers(prompt(undefined, sizeLabel(iconSize)), {
+                    numbers(prompt(undefined, sizeLabel(iconSize)), {
                       splitter: /[,\sx]+/u
                     })
                   )
@@ -472,7 +472,7 @@ export default withQueryBoundary(
                 label: 'Scale',
                 onClick: () => {
                   const [scale] = aaaaaaaaaaaaaaaaaaaaaaaaa(
-                    parseNumbers(prompt(undefined, 1), {
+                    numbers(prompt(undefined, 1), {
                       splitter: ' '
                     })
                   )

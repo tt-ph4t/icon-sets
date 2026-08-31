@@ -14,43 +14,51 @@ const queryOptions = {
 }
 
 const useStore = withImmerAtom({
+  batchSize: 100,
   done: false,
   enabled: true
 })
 
 const defaultRef = () => 0
 
-const PrefetchQueries = component(({enabled}) => {
+const PrefetchIcons = component(({enabled}) => {
   const ref1 = useRef(defaultRef)
   const ref2 = useRef(defaultRef)
   const store = useStore()
   const queryClient = useQueryClient()
   const query = useQuery(queryOptions)
+  const {batchSize} = store.useValue('batchSize')
 
   useRafInterval(() => {
     const idleCallbackId = requestIdleCallback(() => {
       if (enabled) {
-        const iconSet = query.data[ref1.current]
+        const queries = []
 
-        if (hasValues(iconSet)) {
-          const icon = iconSet.icons[ref2.current]
+        while (queries.length < batchSize) {
+          const iconSet = query.data[ref1.current]
 
-          if (hasValues(icon)) {
-            // no-await
-            queryClient.query(
-              getQueryOptions.icon(iconSet.prefix, icon, {
-                gcTime: 0
-              })
-            )
+          if (hasValues(iconSet)) {
+            const icon = iconSet.icons[ref2.current]
 
-            ref2.current++
-          } else {
-            ref1.current++
-            ref2.current = 0
-          }
-        } else
-          store.set(({draft}) => {
-            draft.done = true
+            if (hasValues(icon)) {
+              queries.push(getQueryOptions.icon(iconSet.prefix, icon))
+
+              ref2.current++
+            } else {
+              ref1.current++
+              ref2.current = 0
+            }
+          } else
+            store.set(({draft}) => {
+              draft.done = true
+            })
+        }
+
+        for (const options of queries)
+          // no-await
+          queryClient.query({
+            ...options,
+            gcTime: 0
           })
       }
     })
@@ -58,25 +66,25 @@ const PrefetchQueries = component(({enabled}) => {
     return () => {
       cancelIdleCallback(idleCallbackId)
     }
-  }, 2e3)
+  }, 2000)
 })
 
 export default Object.assign(
-  component(props => {
+  component(() => {
     const network = useNetwork()
     const documentVisibility = useDocumentVisibility()
     const state = useStore().useValue()
 
     return (
       state.done || (
-        <PrefetchQueries
+        <PrefetchIcons
           enabled={
             state.enabled &&
+            state.batchSize &&
             documentVisibility !== 'hidden' &&
             network.online &&
             !network.saveData
           }
-          {...props}
         />
       )
     )
