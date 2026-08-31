@@ -14,7 +14,7 @@ const queryOptions = {
 }
 
 const useStore = withImmerAtom({
-  batchSize: 100,
+  batchSize: 10,
   done: false,
   enabled: true
 })

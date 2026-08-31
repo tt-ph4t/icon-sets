@@ -71,7 +71,6 @@ export default menu => (
       }}>
       <React.Activity>
         <HeldKeys />
-        <PrefetchIcons />
         <FetchingQueries />
         <FailedQueries />
         <Fps />
@@ -85,7 +84,8 @@ export default menu => (
       </VscodeToolbarContainer>
     </div>
     <React.Activity>
-      <Font.Init />
+      <Font />
+      <PrefetchIcons />
     </React.Activity>
   </>
 )

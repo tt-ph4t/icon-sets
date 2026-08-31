@@ -48,10 +48,8 @@ const cssVariables = {
   sansSerif: '--vscode-font-family'
 }
 
-export default {
-  cssVariables,
-  families,
-  Init: component(() => {
+export default Object.assign(
+  component(() => {
     const store = useStore()
     const state = store.useValue()
 
@@ -83,5 +81,9 @@ export default {
       attributeFilter: ['data-font-updated-at', 'style']
     })
   }),
-  useStore
-}
+  {
+    cssVariables,
+    families,
+    useStore
+  }
+)
