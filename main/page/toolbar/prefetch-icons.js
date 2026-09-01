@@ -64,10 +64,13 @@ const PrefetchIcons = component(({enabled}) => {
               ref1.current++
               ref2.current = 0
             }
-          } else
+          } else {
             store.set(({draft}) => {
               draft.done = true
             })
+
+            break
+          }
         }
 
         for (const options of queries)
