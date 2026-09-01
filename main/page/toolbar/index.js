@@ -77,6 +77,7 @@ export default menu => (
       </React.Activity>
       <VscodeToolbarContainer>
         <Settings menu={castArray(menu)} />
+        <PrefetchIcons.Actions />
         <Cuelume />
         <IconGrid.Search>
           <AllIconQueries />

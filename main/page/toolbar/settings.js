@@ -1,8 +1,6 @@
-import {isSafeInteger} from '@sindresorhus/is'
 import {useHotkey} from '@tanstack/react-hotkeys'
 import {isEqual} from '@ver0/deep-equal'
 import {castArray} from 'es-toolkit/compat'
-import {find, map, pipe} from 'es-toolkit/fp'
 
 import {Kbd} from '../../components/kbd'
 import {Menu} from '../../components/menu'
@@ -10,50 +8,11 @@ import {useTheme} from '../../components/theme'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useSettings} from '../../hooks/use-settings'
-import {numbers, open} from '../../misc'
+import {open} from '../../misc'
 import {GITHUB_REPO} from '../../misc/constants'
-import {pluralize} from '../../misc/pluralize'
 import {takumi} from '../../misc/takumi'
 import Layout from '../layout'
 import Font from './font'
-import PrefetchIcons from './prefetch-icons'
-
-const usePrefetchIconsMenu = () => {
-  const store = PrefetchIcons.useStore()
-  const state = store.useValue()
-  const description = pluralize(state.batchSize, 'icon')
-
-  return {
-    disabled: state.done,
-    label: 'Background prefetching',
-    menu: [
-      {
-        checked: state.enabled,
-        label: 'Enabled',
-        onClick: () => {
-          store.toggle('enabled')
-        }
-      },
-      {
-        description,
-        label: 'Set',
-        onClick: () => {
-          store.set(({draft}) => {
-            draft.batchSize = Math.abs(
-              pipe(
-                numbers(prompt(undefined, description), {
-                  splitter: ' '
-                }),
-                map(Math.round),
-                find(isSafeInteger)
-              ) ?? draft.batchSize
-            )
-          })
-        }
-      }
-    ]
-  }
-}
 
 const useThemeMenu = () => {
   const theme = useTheme()
@@ -77,7 +36,6 @@ const useThemeMenu = () => {
 }
 
 export default component(({menu, ...props}) => {
-  const prefetchIconsMenu = usePrefetchIconsMenu()
   const themeMenu = useThemeMenu()
 
   const settings = useSettings()
@@ -139,7 +97,6 @@ export default component(({menu, ...props}) => {
             }))
           ]
         },
-        prefetchIconsMenu,
         {
           checked: settingsState.isDev,
           label: 'Devtools',

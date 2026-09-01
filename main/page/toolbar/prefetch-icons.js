@@ -1,11 +1,19 @@
+import {isSafeInteger} from '@sindresorhus/is'
 import {useQuery, useQueryClient} from '@tanstack/react-query'
 import {useDocumentVisibility, useNetwork, useRafInterval} from 'ahooks'
+import {castArray} from 'es-toolkit/compat'
+import {find, map, pipe} from 'es-toolkit/fp'
+import ms from 'ms'
 
+import {Menu} from '../../components/menu'
+import {Slot} from '../../components/slot'
+import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useRef} from '../../hooks/use-ref'
-import {hasValues} from '../../misc'
+import {hasValues, numbers} from '../../misc'
 import {DEFAULT_QUERY_OPTIONS} from '../../misc/constants'
 import {getQueryOptions} from '../../misc/get-query-options'
+import {pluralize} from '../../misc/pluralize'
 import {withImmerAtom} from '../../misc/with-immer-atom'
 
 const queryOptions = {
@@ -14,10 +22,18 @@ const queryOptions = {
 }
 
 const useStore = withImmerAtom({
-  batchSize: 10,
+  batchSize: 50,
   done: false,
-  enabled: true
+  enabled: true,
+  interval: 2000
 })
+
+const useCanPrefetch = () => {
+  const network = useNetwork()
+  const documentVisibility = useDocumentVisibility()
+
+  return documentVisibility !== 'hidden' && network.online
+}
 
 const defaultRef = () => 0
 
@@ -27,14 +43,14 @@ const PrefetchIcons = component(({enabled}) => {
   const store = useStore()
   const queryClient = useQueryClient()
   const query = useQuery(queryOptions)
-  const {batchSize} = store.useValue('batchSize')
+  const state = store.useSelectValue('batchSize', 'interval')
 
   useRafInterval(() => {
     const idleCallbackId = requestIdleCallback(() => {
       if (enabled) {
         const queries = []
 
-        while (queries.length < batchSize) {
+        while (queries.length < state.batchSize) {
           const iconSet = query.data[ref1.current]
 
           if (hasValues(iconSet)) {
@@ -66,30 +82,77 @@ const PrefetchIcons = component(({enabled}) => {
     return () => {
       cancelIdleCallback(idleCallbackId)
     }
-  }, 2000)
+  }, state.interval)
 })
 
 export default Object.assign(
   component(() => {
-    const network = useNetwork()
-    const documentVisibility = useDocumentVisibility()
-    const state = useStore().useValue()
+    const state = useStore().useSelectValue('done', 'enabled')
+    const canPrefetch = useCanPrefetch()
 
     return (
-      state.done || (
-        <PrefetchIcons
-          enabled={
-            state.enabled &&
-            state.batchSize &&
-            documentVisibility !== 'hidden' &&
-            network.online &&
-            !network.saveData
-          }
-        />
-      )
+      state.done || <PrefetchIcons enabled={state.enabled && canPrefetch} />
     )
   }),
   {
-    useStore
+    Actions: component(({menu, ...props}) => {
+      const store = useStore()
+      const state = store.useValue()
+      const description = pluralize(state.batchSize, 'icon')
+      const canPrefetch = useCanPrefetch()
+
+      return (
+        <Menu
+          data={[
+            'Background prefetch',
+            {
+              description,
+              onClick: () => {
+                store.set(({draft}) => {
+                  draft.batchSize = Math.abs(
+                    pipe(
+                      numbers(prompt(undefined, description), {
+                        splitter: ' '
+                      }),
+                      map(Math.round),
+                      find(isSafeInteger)
+                    ) ?? draft.batchSize
+                  )
+                })
+              }
+            },
+            {
+              description: ms(state.interval),
+              label: 'Interval',
+              onClick: () => {
+                store.set(({draft}) => {
+                  const defaultInterval = ms(draft.interval)
+
+                  draft.interval = Math.abs(
+                    ms(prompt(undefined, defaultInterval) ?? defaultInterval) ??
+                      draft.interval
+                  )
+                })
+              }
+            },
+            ...castArray(menu)
+          ]}
+          render={
+            <Slot
+              onClick={() => {
+                store.toggle('enabled')
+              }}>
+              <ToolbarButton
+                checked={state.enabled}
+                controlled
+                disabled={state.done || !canPrefetch}
+                icon='cloud-download'
+                {...props}
+              />
+            </Slot>
+          }
+        />
+      )
+    })
   }
 )
