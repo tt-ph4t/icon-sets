@@ -10,7 +10,6 @@ import {
   findKey,
   identity,
   mapValues,
-  omit,
   pick,
   range,
   uniq
@@ -111,7 +110,7 @@ export default withQueryBoundary(
       ...DEFAULT_QUERY_OPTIONS,
       enabled: iconQuery.isSuccess,
       select: useCallback(
-        ({[icon.prefix]: iconSet}) => omit(iconSet, ['icons']),
+        ({[icon.prefix]: {icons, ...iconSet}}) => iconSet,
         [icon.prefix]
       )
     })
