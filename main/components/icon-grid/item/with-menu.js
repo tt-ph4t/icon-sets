@@ -3,7 +3,6 @@ import {defaultIconSizeCustomisations} from '@iconify/utils'
 import {isSafeInteger} from '@sindresorhus/is'
 import {useQuery} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
-import {VscodeIcon} from '@vscode-elements/react-elements'
 import {capitalCase, sentenceCase} from 'change-case'
 import {
   compact,
@@ -38,8 +37,7 @@ import {
   DEFAULT_ICON_CUSTOMISATIONS,
   DEFAULT_QUERY_OPTIONS,
   EMPTY,
-  ICONIFY_API_URLS,
-  THEME
+  ICONIFY_API_URLS
 } from '../../../misc/constants'
 import {parseIconName} from '../../../misc/parse-icon-name'
 import {prettyBytes} from '../../../misc/pretty-bytes'
@@ -49,6 +47,7 @@ import {Menu} from '../../menu'
 import {useProgress} from '../../progress'
 import {Slot} from '../../slot'
 import useSearchTerm from '../use-search-term'
+import Context from './context'
 
 const flipDirections = {
   hFlip: 'Horizontal',
@@ -69,23 +68,13 @@ const aaaaaaaaaaaaaaaaaaaaaaaaa = value =>
     filter(Boolean)
   )
 
-const Badge = component(({color, ...props}) => (
-  <Slot.Cuelume.Press
-    style={
-      hasValues(color) && {
-        '--vscode-icon-foreground': color
-      }
-    }>
-    <VscodeIcon name='circle-filled' size={13} {...props} />
-  </Slot.Cuelume.Press>
-))
-
 export default Component =>
-  component(({iconId, index, menu, ...props}) => {
-    const {icon} = parseIconName(iconId)
+  component(({menu, ...props}) => {
+    const context = Context.useSelectValue('iconId', 'index')
+    const {icon} = parseIconName(context.iconId)
     const customizedIcons = useCustomizedIcons()
     const favoritedIcons = useFavoritedIcons()
-    const {iconCustomisations} = useCustomizedIcons.useSelect(iconId)
+    const {iconCustomisations} = useCustomizedIcons.useSelect(context.iconId)
     const searchTerm = useSearchTerm()
     const progress = useProgress()
     const takumiOptions = takumi.useStore().useValue()
@@ -94,7 +83,7 @@ export default Component =>
       .useStore()
       .useSelectValue('global')
 
-    const iconQuery = useIconQuery(iconId, {
+    const iconQuery = useIconQuery(context.iconId, {
       select: identity
     })
 
@@ -154,13 +143,11 @@ export default Component =>
       [iconQuery.data.name, iconSetQuery.data.aliases]
     )
 
-    const isFavorited = favoritedIcons.has(iconQuery.data.id)
-
     return (
       <Menu
         data={[
           {
-            icon: isFavorited ? 'bookmark' : undefined,
+            icon: favoritedIcons.has(context.iconId) ? 'bookmark' : undefined,
             label: capitalCase(iconQuery.data.name),
             menu: [
               {
@@ -327,7 +314,7 @@ export default Component =>
                     checked: value === iconCustomisations.rotate,
                     label: `${value * rotate.step}deg`,
                     onClick: () => {
-                      customizedIcons.set(iconQuery.data.id, () => ({
+                      customizedIcons.set(context.iconId, () => ({
                         rotate: value
                       }))
                     }
@@ -341,7 +328,7 @@ export default Component =>
                         checked,
                         label,
                         onClick: () => {
-                          customizedIcons.set(iconQuery.data.id, () => ({
+                          customizedIcons.set(context.iconId, () => ({
                             [flipDirection]: !checked
                           }))
                         }
@@ -352,7 +339,7 @@ export default Component =>
                   {
                     label: 'Restart animations', // ?
                     onClick: () => {
-                      customizedIcons.set(iconQuery.data.id, () => ({
+                      customizedIcons.set(context.iconId, () => ({
                         wrapSvgContentStart: `<!-- ${crypto.randomUUID()} -->`
                       }))
                     }
@@ -364,7 +351,7 @@ export default Component =>
                   {
                     label: 'Reset',
                     onClick: () => {
-                      customizedIcons.delete(iconQuery.data.id)
+                      customizedIcons.delete(context.iconId)
                     }
                   }
                 ]
@@ -373,13 +360,13 @@ export default Component =>
               ...useFavoritedIcons.actions.map(a => ({
                 label: sentenceCase(a),
                 onClick: () => {
-                  favoritedIcons[a](iconQuery.data.id)
+                  favoritedIcons[a](context.iconId)
                 }
               })),
               ...menu
             ],
             onClick: () => {
-              favoritedIcons.toggle(iconQuery.data.id)
+              favoritedIcons.toggle(context.iconId)
             }
           },
           {
@@ -434,7 +421,7 @@ export default Component =>
                 label: 'Default',
                 onClick: () => {
                   customizedIcons.set(
-                    iconQuery.data.id,
+                    context.iconId,
                     () => defaultIconSizeCustomisations
                   )
                 }
@@ -455,7 +442,7 @@ export default Component =>
                     }
 
                     if (!isEqual(size, iconSize))
-                      customizedIcons.set(iconQuery.data.id, () => size)
+                      customizedIcons.set(context.iconId, () => size)
                   }
                 }
               },
@@ -469,7 +456,7 @@ export default Component =>
                   )
 
                   if (hasValues(scale))
-                    customizedIcons.set(iconQuery.data.id, () => {
+                    customizedIcons.set(context.iconId, () => {
                       const a = mapValues(iconSize, a => a * scale)
 
                       if (Object.values(a).every(isSafeInteger)) return a
@@ -539,7 +526,7 @@ export default Component =>
             }
           },
           {
-            description: index + 1,
+            description: context.index + 1,
             label: 'Order'
           }
         ]}
@@ -552,34 +539,7 @@ export default Component =>
         }>
         <Slot.Cuelume.Press>
           <div {...props}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                position: 'absolute',
-                right: 0,
-                top: 0
-              }}>
-              <React.Activity>
-                {isFavorited && (
-                  <Badge
-                    color={THEME.COLORS.WARNING}
-                    onClick={() => {
-                      favoritedIcons.delete(iconQuery.data.id)
-                    }}
-                  />
-                )}
-                {isEqual(DEFAULT_ICON_CUSTOMISATIONS, iconCustomisations) || (
-                  <Badge
-                    color={THEME.COLORS.PRIMARY}
-                    onClick={() => {
-                      customizedIcons.delete(iconQuery.data.id)
-                    }}
-                  />
-                )}
-              </React.Activity>
-            </div>
-            <Component iconId={iconId} />
+            <Component />
           </div>
         </Slot.Cuelume.Press>
       </Menu>

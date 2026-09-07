@@ -10,6 +10,7 @@ import {QUERY_CLIENT_MENU, THEME} from '../../../misc/constants'
 import {parseIconName} from '../../../misc/parse-icon-name'
 import {Menu} from '../../menu'
 import {Slot} from '../../slot'
+import Context from './context'
 
 const Fallback = component(({children, ...props}) => (
   <Slot.Cuelume.Hover
@@ -26,7 +27,7 @@ const Fallback = component(({children, ...props}) => (
 
 export default Component =>
   useRemount.with(
-    component(({iconId, [useRemount.key]: remount, ...props}) => {
+    component(({iconId, index, [useRemount.key]: remount}) => {
       const {icon} = parseIconName(iconId)
       const queryClient = useQueryClient()
       const iconQuery = useIconQuery(iconId)
@@ -74,18 +75,18 @@ export default Component =>
         )
 
       return (
-        <Component
-          iconId={iconId}
-          menu={[
-            'Query',
-            ...menu,
-            {
-              separator: true
-            },
-            remount.menu
-          ]}
-          {...props}
-        />
+        <Context.Provider iconId={iconId} index={index}>
+          <Component
+            menu={[
+              'Query',
+              ...menu,
+              {
+                separator: true
+              },
+              remount.menu
+            ]}
+          />
+        </Context.Provider>
       )
     })
   )

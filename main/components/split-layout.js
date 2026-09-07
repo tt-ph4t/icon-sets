@@ -6,7 +6,7 @@ import {
 } from '@vscode-elements/react-elements'
 import {useSetState} from 'ahooks'
 import {play} from 'cuelume'
-import {asyncNoop, delay, omit, pick} from 'es-toolkit'
+import {asyncNoop, delay, omit} from 'es-toolkit'
 import React from 'react'
 
 import {component} from '../hocs'
@@ -56,11 +56,7 @@ const Item = component(
   ({aaaaaaaaaaaaa = 0, children, showSizeHint, ...props}) => {
     const size = useRef.size()
     const [state, setState] = useState()
-
-    const context = Context.useSelectValue(({context}) =>
-      pick(context, ['positionInPercentage', 'index'])
-    )
-
+    const context = Context.useSelectValue('positionInPercentage', 'index')
     const isSlotEnd = isOdd(context.index)
 
     useIdleEffect(
