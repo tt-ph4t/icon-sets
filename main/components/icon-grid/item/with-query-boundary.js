@@ -3,8 +3,7 @@ import {useQueryClient} from '@tanstack/react-query'
 import {getErrorMessage} from 'react-error-boundary'
 
 import {component} from '../../../hocs'
-import {useCustomizedIcons} from '../../../hooks/use-customized-icons'
-import {useIconQueries} from '../../../hooks/use-icon-queries'
+import {useIconQuery} from '../../../hooks/use-icon-query'
 import {useMemo} from '../../../hooks/use-memo'
 import {useRemount} from '../../../hooks/use-remount'
 import {QUERY_CLIENT_MENU, THEME} from '../../../misc/constants'
@@ -30,12 +29,7 @@ export default Component =>
     component(({iconId, [useRemount.key]: remount, ...props}) => {
       const {icon} = parseIconName(iconId)
       const queryClient = useQueryClient()
-      const {iconCustomisations} = useCustomizedIcons.useSelect(iconId)
-
-      const [iconQuery] = useIconQueries({
-        iconCustomisations, // ?
-        iconId
-      })
+      const iconQuery = useIconQuery(iconId)
 
       const menu = useMemo(
         () =>

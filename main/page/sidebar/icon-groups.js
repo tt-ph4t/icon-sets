@@ -10,6 +10,7 @@ import {component} from '../../hocs'
 import {useState} from '../../hooks/use-state'
 import {DEFAULT_QUERY_OPTIONS, ID_SEPARATOR} from '../../misc/constants'
 import {getId} from '../../misc/get-id'
+import {pluralize} from '../../misc/pluralize'
 import collapsibleList from './collapsible-list'
 
 const CollapsibleList = collapsibleList()
@@ -72,9 +73,7 @@ export default component(() => {
       <CollapsibleList
         ids={query.data.CollapsibleListIdsMap[state]}
         menu={[
-          {
-            separator: true
-          },
+          pluralize(query.data.groupedIconIds, 'group'),
           ...sort(Object.keys(query.data.groupedIconIds))
             .asc()
             .map(a => ({

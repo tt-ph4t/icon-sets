@@ -1,4 +1,5 @@
 import {mapValues, partition} from 'es-toolkit'
+import {castArray} from 'es-toolkit/compat'
 import {VList} from 'virtua'
 
 import {Menu} from '../../components/menu'
@@ -78,6 +79,7 @@ export default () => {
               data={[
                 remount.menu,
                 {
+                  icon: hasOpenedIds ? 'fold' : 'unfold',
                   label: `${hasOpenedIds ? 'Collapse' : 'Expand'} ${pluralize(
                     hasOpenedIds ? openedIds : closedIds,
                     'item'
@@ -92,7 +94,7 @@ export default () => {
                     })
                   }
                 },
-                ...menu
+                ...castArray(menu)
               ]}
               render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
             />
