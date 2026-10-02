@@ -213,7 +213,7 @@ export const Menu = Object.assign(
       const menu = useMemo(() => normalizeData(data), [data])
 
       return (
-        <Context.Provider
+        <Context
           ItemProps={{
             closeOnClick
           }}
@@ -246,7 +246,7 @@ export const Menu = Object.assign(
               )}
             </React.Activity>
           </ContextSlot>
-        </Context.Provider>
+        </Context>
       )
     }
   ),

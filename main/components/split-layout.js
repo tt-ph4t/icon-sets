@@ -136,11 +136,11 @@ export const SplitLayout = component(
             children,
             (children, index) =>
               index <= 1 && (
-                <Context.Provider index={index} {...state}>
+                <Context index={index} {...state}>
                   <Item aaaaaaaaaaaaa={5} showSizeHint={showSizeHint}>
                     {children}
                   </Item>
-                </Context.Provider>
+                </Context>
               )
           )}
         </VscodeSplitLayout>

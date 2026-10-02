@@ -4,7 +4,6 @@ import React from 'react'
 
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
-import {useCustomizedIcons} from '../../hooks/use-customized-icons'
 import {useEffect} from '../../hooks/use-effect'
 import {useRef} from '../../hooks/use-ref'
 import {isWordChar} from '../../misc'
@@ -13,33 +12,8 @@ import {Input} from '../input'
 import {Kbd} from '../kbd'
 import {Menu} from '../menu'
 import {Slot} from '../slot'
-import {ToolbarButton} from '../toolbar-button'
 import ColorPicker from './color-picker'
 import useSearchTerm from './use-search-term'
-
-const SquareToggle = component(props => {
-  const customizedIconsStore = useCustomizedIcons.useStore()
-
-  const defaultProps = customizedIconsStore.useSelectValue(({draft}) => ({
-    checked: draft.global.square
-  }))
-
-  return (
-    <Slot
-      onChange={event => {
-        customizedIconsStore.set(({draft}) => {
-          draft.global.square = event.target.checked
-        })
-      }}>
-      <ToolbarButton
-        {...defaultProps}
-        controlled
-        icon='symbol-ruler'
-        {...props}
-      />
-    </Slot>
-  )
-})
 
 const hotkeys = ['/', 'ctrl + f']
 
@@ -101,7 +75,6 @@ const Search = component(({children, ...props}) => {
 
 export default component(({children, ...props}) => (
   <Search {...props}>
-    <SquareToggle />
     <ColorPicker />
     {children}
   </Search>

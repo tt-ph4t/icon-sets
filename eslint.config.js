@@ -149,6 +149,7 @@ export default defineConfig([
         'unicorn/no-await-expression-member',
         'unicorn/no-unused-array-method-return',
         'unicorn/relative-url-style',
+        'unicorn/no-unreadable-array-destructuring',
 
         'react-hooks/exhaustive-deps',
         'react/display-name',

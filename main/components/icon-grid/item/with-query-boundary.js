@@ -75,7 +75,7 @@ export default Component =>
         )
 
       return (
-        <Context.Provider iconId={iconId} index={index}>
+        <Context iconId={iconId} index={index}>
           <Component
             menu={[
               'Query',
@@ -86,7 +86,7 @@ export default Component =>
               remount.menu
             ]}
           />
-        </Context.Provider>
+        </Context>
       )
     })
   )

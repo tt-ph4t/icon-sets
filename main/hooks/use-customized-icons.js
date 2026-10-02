@@ -12,7 +12,7 @@ mergeCustomisations
 
 const useStore = withImmerAtom({
   current: EMPTY.OBJECT,
-  global: pick(DEFAULT_ICON_CUSTOMISATIONS, ['color', 'square'])
+  global: pick(DEFAULT_ICON_CUSTOMISATIONS, ['color'])
 })
 
 const withInvalidatedIconCache = (fn = noop, iconIds) => {

@@ -57,8 +57,7 @@ export const SORT_DIRECTIONS = deepFreeze({
 
 export const DEFAULT_ICON_CUSTOMISATIONS = deepFreeze({
   ...defaultIconCustomisations,
-  color: 'unset',
-  square: true
+  color: 'unset'
 })
 
 export const DEFAULT_QUERY_OPTIONS = deepFreeze(

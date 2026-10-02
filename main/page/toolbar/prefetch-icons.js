@@ -126,7 +126,7 @@ export default Object.assign(
             },
             {
               description: ms(state.interval),
-              label: 'Interval',
+              label: 'Every',
               onClick: () => {
                 store.set(({draft}) => {
                   const defaultInterval = ms(draft.interval)

@@ -8,7 +8,7 @@ import {component} from '../hocs'
 import {DEFAULT_QUERY_OPTIONS} from '../misc/constants'
 import {Slot} from './slot'
 
-const defaultProps = {
+const ErrorBoundaryProps = {
   FallbackComponent: component(({error, resetErrorBoundary}) => (
     <Fallback.Error error={error} onRetry={resetErrorBoundary} />
   )),
@@ -20,14 +20,14 @@ const defaultProps = {
 export const Boundary = Object.assign(
   component(({children, fallback = Fallback.ProgressBar, ...props}) => (
     <Boundary.Error
-      FallbackComponent={defaultProps.FallbackComponent}
+      FallbackComponent={ErrorBoundaryProps.FallbackComponent}
       {...props}>
       <React.Suspense fallback={fallback}>{children}</React.Suspense>
     </Boundary.Error>
   )),
   {
     Error: component(props => (
-      <Slot onError={defaultProps.onError}>
+      <Slot onError={ErrorBoundaryProps.onError}>
         <ErrorBoundary {...props} />
       </Slot>
     )),

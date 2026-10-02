@@ -15,8 +15,6 @@ import Context from './context'
 import withMenu from './with-menu'
 import withQueryBoundary from './with-query-boundary'
 
-const width = 'calc(var(--SPACING) * 12)'
-
 const Badge = Object.assign(
   component(({color, ...props}) => (
     <Slot.Cuelume.Press
@@ -68,10 +66,6 @@ export default withQueryBoundary(
     component(props => {
       const {iconId} = Context.useSelectValue('iconId')
 
-      const {global: globalIconCustomisations} = useCustomizedIcons
-        .useStore()
-        .useSelectValue('global')
-
       const iconQuery = useIconQuery(iconId, {
         select: identity
       })
@@ -80,8 +74,8 @@ export default withQueryBoundary(
         <>
           <AccessibleIcon.Root label={iconId}>
             {React.cloneElement(iconQuery.data.more.to.reactElement, {
-              height: globalIconCustomisations.square ? width : '100%',
-              width,
+              height: 'calc(var(--SPACING) * 12)',
+              width: 'calc(var(--SPACING) * 12)',
               ...props
             })}
           </AccessibleIcon.Root>

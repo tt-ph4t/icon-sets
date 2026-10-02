@@ -6,17 +6,18 @@ import {
 } from '@vscode-elements/react-elements'
 import {useNetwork} from 'ahooks'
 import React from 'react'
+import root from 'react-shadow'
 
 import {Boundary} from '../components/boundary'
-import {Kbd} from '../components/kbd'
 import {ProgressBar} from '../components/progress'
 import {Slot} from '../components/slot'
 import {component} from '../hocs'
 import {useIsQueryBusy} from '../hooks/use-is-query-busy'
 import {useRemount} from '../hooks/use-remount'
 import {THEME} from '../misc/constants'
+import Context from './context'
 import Layout from './layout'
-import toolbar from './toolbar'
+import Toolbar from './toolbar'
 import withProviders from './with-providers'
 import withQueryBoundary from './with-query-boundary'
 
@@ -40,50 +41,58 @@ const Loading = component(props => {
 })
 
 export default withProviders(
-  withQueryBoundary(
-    useRemount.with(
+  useRemount.with(
+    withQueryBoundary(
       component(({[useRemount.key]: remount}) => {
-        useHotkey(remount.hotkey, remount)
+        useHotkey('f5', remount)
 
         return (
-          <Layout.Fullscreen
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              height: 'inherit',
-              position: 'relative',
-              width: 'inherit'
-            }}>
-            <div
-              style={{
-                position: 'absolute',
-                width: '100%',
-                zIndex: 1
-              }}>
-              <Loading />
-            </div>
-            <React.Activity>
-              <Layout.Split>
-                <Sidebar />
-                <AllIcons />
-              </Layout.Split>
-            </React.Activity>
-            <VscodeFormContainer
-              style={{
-                alignSelf: 'center',
-                bottom: 0,
-                position: 'absolute'
-              }}>
-              <VscodeFormGroup variant='settings-group'>
-                <VscodeFormHelper>
-                  {toolbar({
-                    ...remount.menu,
-                    description: Kbd.text(remount.hotkey)
-                  })}
-                </VscodeFormHelper>
-              </VscodeFormGroup>
-            </VscodeFormContainer>
-          </Layout.Fullscreen>
+          <Context remount={remount}>
+            <Layout.Resizable>
+              <root.div
+                style={{
+                  display: 'flex',
+                  height: 'inherit',
+                  width: 'inherit'
+                }}>
+                <Layout.Fullscreen
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 'inherit',
+                    position: 'relative',
+                    width: 'inherit'
+                  }}>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      width: '100%',
+                      zIndex: 1
+                    }}>
+                    <Loading />
+                  </div>
+                  <Layout.Split>
+                    <React.Activity>
+                      <Sidebar />
+                      <AllIcons />
+                    </React.Activity>
+                  </Layout.Split>
+                  <VscodeFormContainer
+                    style={{
+                      alignSelf: 'center',
+                      bottom: 0,
+                      position: 'absolute'
+                    }}>
+                    <VscodeFormGroup variant='settings-group'>
+                      <VscodeFormHelper>
+                        <Toolbar />
+                      </VscodeFormHelper>
+                    </VscodeFormGroup>
+                  </VscodeFormContainer>
+                </Layout.Fullscreen>
+              </root.div>
+            </Layout.Resizable>
+          </Context>
         )
       })
     )

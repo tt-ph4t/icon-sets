@@ -15,6 +15,7 @@ import {component} from '../../hocs'
 import {useEffect} from '../../hooks/use-effect'
 import {hasValues} from '../../misc'
 import {pluralize} from '../../misc/pluralize'
+import Context from '../context'
 import AllIconQueries from './all-icon-queries'
 import Cuelume from './cuelume'
 import FailedQueries from './failed-queries'
@@ -60,7 +61,13 @@ const HeldKeys = component(props => {
   return hasValues(heldKeys) && <Kbd keys={heldKeys} {...props} />
 })
 
-export default menu => (
+const Remount = component(() => {
+  const {remount} = Context.useSelectValue('remount')
+
+  return <ToolbarButton icon={remount.icon} onClick={remount} />
+})
+
+export default component(({menu}) => (
   <>
     <div
       style={{
@@ -77,11 +84,12 @@ export default menu => (
       </React.Activity>
       <VscodeToolbarContainer>
         <Settings menu={castArray(menu)} />
-        <PrefetchIcons.Actions />
         <Cuelume />
         <IconGrid.Search>
+          <PrefetchIcons.Actions />
           <AllIconQueries />
         </IconGrid.Search>
+        <Remount />
       </VscodeToolbarContainer>
     </div>
     <React.Activity>
@@ -89,4 +97,4 @@ export default menu => (
       <PrefetchIcons />
     </React.Activity>
   </>
-)
+))

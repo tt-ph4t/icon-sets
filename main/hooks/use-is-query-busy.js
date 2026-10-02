@@ -4,10 +4,10 @@ import {
   useIsRestoring
 } from '@tanstack/react-query'
 
-export const useIsQueryBusy = (filters, queryClient) => {
-  const isFetching = useIsFetching(filters, queryClient)
-  const isMutating = useIsMutating(filters, queryClient)
-  const isRestoring = useIsRestoring()
+export const useIsQueryBusy = (...args) => {
+  const isFetching = Boolean(useIsFetching(...args))
+  const isMutating = Boolean(useIsMutating(...args))
+  const isRestoring = useIsRestoring(...args)
 
-  return Boolean(isFetching || isMutating || isRestoring)
+  return isFetching || isMutating || isRestoring
 }

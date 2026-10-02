@@ -4,13 +4,11 @@ import codiconUrl from '@vscode/codicons/dist/codicon.css?url'
 import React from 'react'
 import {preconnect} from 'react-dom'
 import {createRoot} from 'react-dom/client'
-import root from 'react-shadow'
 
 import {Boundary} from './components/boundary'
 import {ProgressRing} from './components/progress-ring'
 import {component} from './hocs'
 import {DATABASE_URL} from './misc/constants'
-import Layout from './page/layout'
 import './styles.css'
 
 const Page = React.lazy(() => import('./page'))
@@ -33,21 +31,15 @@ createRoot(document.querySelector('#root')).render(
         width: 'var(--WIDTH)'
       }}>
       <Boundary fallback={<ProgressRing>Loading</ProgressRing>}>
-        <Layout.Resizable>
-          <root.div
-            style={{
-              display: 'flex',
-              height: 'inherit',
-              width: 'inherit'
-            }}>
-            <Page />
-          </root.div>
-        </Layout.Resizable>
+        <Page />
       </Boundary>
     </div>
     <link
       href={codiconUrl}
-      id='vscode-codicon-stylesheet' // https://vscode-elements.github.io/components/icon/
+
+      // https://vscode-elements.github.io/components/icon
+      id='vscode-codicon-stylesheet'
+
       rel='stylesheet'
     />
     <ScrollLock />

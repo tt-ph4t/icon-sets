@@ -6,7 +6,6 @@ import {useCallback} from './use-callback'
 import {useState} from './use-state'
 
 const context = {
-  hotkey: 'f5',
   icon: 'refresh',
   label: 'Reload'
 }

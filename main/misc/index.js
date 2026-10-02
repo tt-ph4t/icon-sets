@@ -56,8 +56,13 @@ export const open = Object.assign(
 export const isWordChar = value => isString(value) && isWordCharacter(value)
 
 export const fileSaver = async (data, fileName) => {
+  jszip.defaults
+
   // jszip
-  if ('generateAsync' in data) data = await data.generateAsync({type: 'blob'})
+  if ('generateAsync' in data)
+    data = await data.generateAsync({
+      type: 'blob'
+    })
 
   // client-zip
   if ('blob' in data) data = await data.blob()
