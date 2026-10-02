@@ -71,12 +71,12 @@ export default withProviders(
                     }}>
                     <Loading />
                   </div>
-                  <Layout.Split>
-                    <React.Activity>
+                  <React.Activity>
+                    <Layout.Split>
                       <Sidebar />
                       <AllIcons />
-                    </React.Activity>
-                  </Layout.Split>
+                    </Layout.Split>
+                  </React.Activity>
                   <VscodeFormContainer
                     style={{
                       alignSelf: 'center',

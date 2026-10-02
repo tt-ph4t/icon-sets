@@ -168,11 +168,7 @@ export default component(props => {
           </div>
         </Context>
       }
-      render={
-        <VscodeToolbarContainer>
-          <ColorButton />
-        </VscodeToolbarContainer>
-      }
+      render={<ColorButton />}
     />
   )
 })
