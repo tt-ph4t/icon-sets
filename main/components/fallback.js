@@ -5,7 +5,6 @@ import {
   VscodeFormHelper,
   VscodeLabel
 } from '@vscode-elements/react-elements'
-import {negate} from 'es-toolkit'
 import React from 'react'
 import {getErrorMessage} from 'react-error-boundary'
 
@@ -22,7 +21,7 @@ const Retry = component(props => {
   return (
     <Slot
       onClick={() => {
-        setState(negate)
+        setState(state => !state)
       }}
       style={{
         width: 'fit-content'
