@@ -3,7 +3,6 @@ import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {intersection, mapValues, union, uniq, without} from 'es-toolkit'
 import {size} from 'es-toolkit/compat'
 import {sort} from 'fast-sort'
-import React from 'react'
 
 import {ToolbarButton} from '../../../components/toolbar-button'
 import {Tree} from '../../../components/tree'
@@ -108,37 +107,35 @@ export default component(() => {
           }}
         />
       </VscodeToolbarContainer>
-      <React.Activity>
-        <Tree
-          data={Object.entries(query.data.iconSet.groups).map(([a, b]) => {
-            const label = pluralize(b, a)
+      <Tree
+        data={Object.entries(query.data.iconSet.groups).map(([a, b]) => {
+          const label = pluralize(b, a)
 
-            return {
-              children: Object.entries(b).map(([label, iconSets]) => {
-                label = `${label} (${iconSets.length})`
+          return {
+            children: Object.entries(b).map(([label, iconSets]) => {
+              label = `${label} (${iconSets.length})`
 
-                const iconSetPrefixes = iconSets.map(iconSet => iconSet.prefix)
+              const iconSetPrefixes = iconSets.map(iconSet => iconSet.prefix)
 
-                const checked = selectedIconSetPrefixes.some(iconSetPrefix =>
-                  iconSetPrefixes.includes(iconSetPrefix)
-                )
+              const checked = selectedIconSetPrefixes.some(iconSetPrefix =>
+                iconSetPrefixes.includes(iconSetPrefix)
+              )
 
-                return {
-                  checked,
-                  id: label,
-                  label,
-                  onClick: () => {
-                    toggleIconSetPrefixes(checked, iconSetPrefixes)
-                  }
+              return {
+                checked,
+                id: label,
+                label,
+                onClick: () => {
+                  toggleIconSetPrefixes(checked, iconSetPrefixes)
                 }
-              }),
-              id: label,
-              label,
-              open: true
-            }
-          })}
-        />
-      </React.Activity>
+              }
+            }),
+            id: label,
+            label,
+            open: true
+          }
+        })}
+      />
     </>
   )
 })

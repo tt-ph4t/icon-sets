@@ -3,7 +3,6 @@ import {useBatchedCallback} from '@tanstack/react-pacer'
 import {Compact, Sketch} from '@uiw/react-color'
 import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {asyncNoop, last} from 'es-toolkit'
-import React from 'react'
 
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
@@ -150,14 +149,12 @@ export default component(props => {
     <Popover.Primitive
       popupRender={
         <Context setColor={setColor}>
-          <React.Activity>
-            <VscodeToolbarContainer>
-              <Reset />
-              <Previous />
-              <EyeDropper />
-              <Copy />
-            </VscodeToolbarContainer>
-          </React.Activity>
+          <VscodeToolbarContainer>
+            <Reset />
+            <Previous />
+            <EyeDropper />
+            <Copy />
+          </VscodeToolbarContainer>
           <div
             style={{
               display: 'flex',

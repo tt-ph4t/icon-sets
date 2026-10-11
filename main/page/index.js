@@ -52,44 +52,35 @@ export default withProviders(
               <root.div
                 style={{
                   display: 'flex',
+                  flexDirection: 'column',
                   height: 'inherit',
+                  position: 'relative',
                   width: 'inherit'
                 }}>
-                <Layout.Fullscreen
+                <div
                   style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 'inherit',
-                    position: 'relative',
-                    width: 'inherit'
+                    position: 'absolute',
+                    width: '100%',
+                    zIndex: 1
                   }}>
-                  <div
-                    style={{
-                      position: 'absolute',
-                      width: '100%',
-                      zIndex: 1
-                    }}>
-                    <Loading />
-                  </div>
-                  <React.Activity>
-                    <Layout.Split>
-                      <Sidebar />
-                      <AllIcons />
-                    </Layout.Split>
-                  </React.Activity>
-                  <VscodeFormContainer
-                    style={{
-                      alignSelf: 'center',
-                      bottom: 0,
-                      position: 'absolute'
-                    }}>
-                    <VscodeFormGroup variant='settings-group'>
-                      <VscodeFormHelper>
-                        <Toolbar />
-                      </VscodeFormHelper>
-                    </VscodeFormGroup>
-                  </VscodeFormContainer>
-                </Layout.Fullscreen>
+                  <Loading />
+                </div>
+                <Layout.Split>
+                  <Sidebar />
+                  <AllIcons />
+                </Layout.Split>
+                <VscodeFormContainer
+                  style={{
+                    alignSelf: 'center',
+                    bottom: 0,
+                    position: 'absolute'
+                  }}>
+                  <VscodeFormGroup variant='settings-group'>
+                    <VscodeFormHelper>
+                      <Toolbar />
+                    </VscodeFormHelper>
+                  </VscodeFormGroup>
+                </VscodeFormContainer>
               </root.div>
             </Layout.Resizable>
           </Context>

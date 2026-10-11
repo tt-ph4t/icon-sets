@@ -12,7 +12,6 @@ import {THEME} from '../misc/constants'
 import {withImmerAtom} from '../misc/with-immer-atom'
 
 const useStore = withImmerAtom({
-  isFullscreen: false,
   isReverse: true,
   size: {
     height: 0,
@@ -21,29 +20,6 @@ const useStore = withImmerAtom({
 })
 
 export default {
-  Fullscreen: component(props => {
-    const store = useStore()
-    const fullscreen = useRef.fullscreen()
-    const {isFullscreen} = store.useSelectValue('isFullscreen')
-
-    useEffect(() => {
-      if (fullscreen.isEnabled) {
-        if (fullscreen.isFullscreen === isFullscreen) return
-
-        fullscreen[isFullscreen ? 'enterFullscreen' : 'exitFullscreen']()
-
-        store.set(({draft}) => {
-          draft.isFullscreen = fullscreen.isFullscreen
-        })
-      }
-    }, [isFullscreen, fullscreen])
-
-    return (
-      <Slot ref={fullscreen.ref}>
-        <div {...props} />
-      </Slot>
-    )
-  }),
   Resizable: component(props => {
     const store = useStore()
     const maxConstraints = useRef.size()

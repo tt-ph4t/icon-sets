@@ -62,12 +62,10 @@ const Search = component(({children, ...props}) => {
         placeholder='Search'
         value={searchTermState}
         {...props}>
-        <React.Activity>
-          {hotkeysMenu}
-          {React.Children.map(children, children => (
-            <div slot='content-after'>{children}</div>
-          ))}
-        </React.Activity>
+        {hotkeysMenu}
+        {React.Children.map(children, children => (
+          <div slot='content-after'>{children}</div>
+        ))}
       </Input>
     </Slot>
   )

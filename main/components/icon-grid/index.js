@@ -22,7 +22,6 @@ import {
 } from 'es-toolkit'
 import {reverse} from 'es-toolkit/compat'
 import {sort} from 'fast-sort'
-import React from 'react'
 
 import {component} from '../../hocs'
 import {useEffect} from '../../hooks/use-effect'
@@ -181,33 +180,31 @@ export const IconGrid = Object.assign(
               </VscodeFormHelper>
             </VscodeFormGroup>
           </VscodeFormContainer>
-          <React.Activity>
-            {hasFilteredIconIds ? (
-              <Grid
-                cellHeight={100}
-                cellWidth={100}
-                count={state.iconIds.length}
-                renderItem={(...[, {context}]) => {
-                  const iconId = state.iconIds[context.index]
+          {hasFilteredIconIds ? (
+            <Grid
+              cellHeight={100}
+              cellWidth={100}
+              count={state.iconIds.length}
+              renderItem={(...[, {context}]) => {
+                const iconId = state.iconIds[context.index]
 
-                  if (validateIconId(iconId))
-                    return (
-                      <div
-                        style={{
-                          alignItems: 'center',
-                          display: 'flex',
-                          justifyContent: 'center'
-                        }}>
-                        <Item iconId={iconId} index={context.index} />
-                      </div>
-                    )
-                }}
-                {...props}
-              />
-            ) : (
-              noIcons
-            )}
-          </React.Activity>
+                if (validateIconId(iconId))
+                  return (
+                    <div
+                      style={{
+                        alignItems: 'center',
+                        display: 'flex',
+                        justifyContent: 'center'
+                      }}>
+                      <Item iconId={iconId} index={context.index} />
+                    </div>
+                  )
+              }}
+              {...props}
+            />
+          ) : (
+            noIcons
+          )}
         </div>
       )
     })

@@ -79,19 +79,17 @@ export default withQueryBoundary(
               ...props
             })}
           </AccessibleIcon.Root>
-          <React.Activity>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                position: 'absolute',
-                right: 0,
-                top: 0
-              }}>
-              <Badge.Favorited />
-              <Badge.Customized />
-            </div>
-          </React.Activity>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'absolute',
+              right: 0,
+              top: 0
+            }}>
+            <Badge.Favorited />
+            <Badge.Customized />
+          </div>
         </>
       )
     })

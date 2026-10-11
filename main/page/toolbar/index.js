@@ -5,7 +5,6 @@ import {useNetwork} from 'ahooks'
 import {play} from 'cuelume'
 import {mapValues, sumBy} from 'es-toolkit'
 import {castArray} from 'es-toolkit/compat'
-import React from 'react'
 
 import {IconGrid} from '../../components/icon-grid'
 import {Kbd} from '../../components/kbd'
@@ -76,12 +75,10 @@ export default component(({menu}) => (
         flexDirection: 'column',
         gap: 'var(--SPACING)'
       }}>
-      <React.Activity>
-        <HeldKeys />
-        <FetchingQueries />
-        <FailedQueries />
-        <Fps />
-      </React.Activity>
+      <HeldKeys />
+      <FetchingQueries />
+      <FailedQueries />
+      <Fps />
       <VscodeToolbarContainer>
         <Settings menu={castArray(menu)} />
         <Cuelume />
@@ -92,9 +89,7 @@ export default component(({menu}) => (
         <Remount />
       </VscodeToolbarContainer>
     </div>
-    <React.Activity>
-      <Font />
-      <PrefetchIcons />
-    </React.Activity>
+    <Font.Sync />
+    <PrefetchIcons />
   </>
 ))

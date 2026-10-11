@@ -152,13 +152,9 @@ const Item = Object.assign(
               />
             </Slot.Cuelume.Press>
           </Slot.Cuelume.Hover>
-          <React.Activity>
-            {checked && <Menu.Icon disabled={disabled} name='check' />}
-            {checked ||
-              (hasValues(icon) && (
-                <Menu.Icon disabled={disabled} name={icon} />
-              ))}
-          </React.Activity>
+          {checked && <Menu.Icon disabled={disabled} name='check' />}
+          {checked ||
+            (hasValues(icon) && <Menu.Icon disabled={disabled} name={icon} />)}
         </div>
       )
     }
@@ -183,11 +179,9 @@ const Item = Object.assign(
               selected={state}
               selector={ContextSlot.selectors.TriggerProps}
             />
-            <React.Activity>
-              <MenuPrimitive.Portal>
-                <MenuPrimitive.Positioner>{children}</MenuPrimitive.Positioner>
-              </MenuPrimitive.Portal>
-            </React.Activity>
+            <MenuPrimitive.Portal>
+              <MenuPrimitive.Positioner>{children}</MenuPrimitive.Positioner>
+            </MenuPrimitive.Portal>
           </ContextSlot>
         </Slot>
       )
@@ -236,15 +230,13 @@ export const Menu = Object.assign(
               selector={ContextSlot.selectors.TriggerProps}>
               {children}
             </ContextSlot>
-            <React.Activity>
-              {hasValues(menu) && (
-                <MenuPrimitive.Portal>
-                  <MenuPrimitive.Positioner align={align} side={side}>
-                    {popup(menu)}
-                  </MenuPrimitive.Positioner>
-                </MenuPrimitive.Portal>
-              )}
-            </React.Activity>
+            {hasValues(menu) && (
+              <MenuPrimitive.Portal>
+                <MenuPrimitive.Positioner align={align} side={side}>
+                  {popup(menu)}
+                </MenuPrimitive.Positioner>
+              </MenuPrimitive.Portal>
+            )}
           </ContextSlot>
         </Context>
       )

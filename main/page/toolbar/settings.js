@@ -45,7 +45,7 @@ export default component(({menu, ...props}) => {
   const takumiState = takumiStore.useValue()
 
   const layoutStore = Layout.useStore()
-  const layoutState = layoutStore.useSelectValue('isReverse', 'isFullscreen')
+  const layoutState = layoutStore.useSelectValue('isReverse')
 
   const fontStore = Font.useStore()
   const fontState = fontStore.useValue()
@@ -110,13 +110,6 @@ export default component(({menu, ...props}) => {
           label: 'Reverse',
           onClick: () => {
             layoutStore.toggle('isReverse')
-          }
-        },
-        {
-          checked: layoutState.isFullscreen,
-          label: 'Fullscreen',
-          onClick: () => {
-            layoutStore.toggle('isFullscreen')
           }
         },
         'Misc',

@@ -1,4 +1,4 @@
-import {useFullscreen, useSize, useUnmount} from 'ahooks'
+import {useSize, useUnmount} from 'ahooks'
 import React from 'react'
 
 const defaults = {
@@ -27,16 +27,6 @@ export const useRef = Object.assign(
     return ref
   },
   {
-    fullscreen: options => {
-      const ref = useRef()
-      const [isFullscreen, rest] = useFullscreen(ref, options)
-
-      return {
-        isFullscreen,
-        ref,
-        ...rest
-      }
-    },
     size: () => {
       const ref = useRef()
 

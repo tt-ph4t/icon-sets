@@ -3,7 +3,6 @@ import {
   VscodeFormContainer,
   VscodeFormGroup
 } from '@vscode-elements/react-elements'
-import React from 'react'
 
 import {component} from '../hocs'
 import {useState} from '../hooks/use-state'
@@ -60,27 +59,25 @@ export const Popover = Object.assign(
                 render={render}>
                 {children}
               </PopoverPrimitive.Trigger>
-              <React.Activity>
-                <PopoverPrimitive.Portal>
-                  <PopoverPrimitive.Positioner
-                    align={align}
-                    render={(props, state) => (
-                      <PopoverPrimitive.Popup render={<div {...props} />}>
-                        {Slot.render({
-                          bespoke: popupRender,
-                          context: {
-                            props,
-                            setOpen: setState,
-                            state
-                          },
-                          wrapper: popupWrapper
-                        })}
-                      </PopoverPrimitive.Popup>
-                    )}
-                    side={side}
-                  />
-                </PopoverPrimitive.Portal>
-              </React.Activity>
+              <PopoverPrimitive.Portal>
+                <PopoverPrimitive.Positioner
+                  align={align}
+                  render={(props, state) => (
+                    <PopoverPrimitive.Popup render={<div {...props} />}>
+                      {Slot.render({
+                        bespoke: popupRender,
+                        context: {
+                          props,
+                          setOpen: setState,
+                          state
+                        },
+                        wrapper: popupWrapper
+                      })}
+                    </PopoverPrimitive.Popup>
+                  )}
+                  side={side}
+                />
+              </PopoverPrimitive.Portal>
             </PopoverPrimitive.Root>
           </Slot>
         )

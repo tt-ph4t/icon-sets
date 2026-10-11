@@ -39,7 +39,7 @@ const families = mapValues(
 )
 
 const useStore = withImmerAtom({
-  current: families.Roboto,
+  current: families.Inter,
   default: EMPTY.OBJECT
 })
 
@@ -48,8 +48,10 @@ const cssVariables = {
   sansSerif: '--vscode-font-family'
 }
 
-export default Object.assign(
-  component(() => {
+export default {
+  cssVariables,
+  families,
+  Sync: component(() => {
     const store = useStore()
     const state = store.useValue()
 
@@ -81,9 +83,5 @@ export default Object.assign(
       attributeFilter: ['data-font-updated-at', 'style']
     })
   }),
-  {
-    cssVariables,
-    families,
-    useStore
-  }
-)
+  useStore
+}

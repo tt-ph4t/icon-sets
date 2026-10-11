@@ -53,7 +53,7 @@ export default defineConfig({
     {
       enforce: 'pre',
       async transform(code, id) {
-        if (['js', 'jsx'].some(a => id.endsWith(a)))
+        if (/\.(?:js|jsx)$/u.test(id) && !id.includes('node_modules'))
           return await transformWithEsbuild(code, id, {
             jsx: 'automatic',
             loader: 'jsx'
