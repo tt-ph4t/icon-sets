@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import {flow, mapValues} from 'es-toolkit'
+import {mapValues} from 'es-toolkit'
+import {flow} from 'es-toolkit/fp'
 
 dayjs.extend(relativeTime)
 

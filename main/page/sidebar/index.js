@@ -11,14 +11,14 @@ import {useUpdate} from '../../hooks/use-update'
 import {hasValues} from '../../misc'
 import {ICON_CACHE} from '../../misc/constants'
 import AllIconSets from './all-icon-sets'
-import ContentLayout from './content-layout'
 import IconGroups from './icon-groups'
+import Layout from './layout'
 
 const iconGrid = (menu, props) => (
   <>
-    <ContentLayout>
+    <Layout>
       <IconGrid {...props} />
-    </ContentLayout>
+    </Layout>
     {hasValues(menu) && (
       <Menu
         data={menu}

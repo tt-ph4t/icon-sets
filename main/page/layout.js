@@ -1,5 +1,5 @@
-import {identity, omit} from 'es-toolkit'
-import {reverse} from 'es-toolkit/compat'
+import {omit} from 'es-toolkit'
+import {pipe, reverse, take} from 'es-toolkit/fp'
 import React from 'react'
 
 import {Resizable} from '../components/resizable'
@@ -18,6 +18,11 @@ const useStore = withImmerAtom({
     width: 0
   }
 })
+
+const style = {
+  ...omit(THEME.CARD_STYLE, ['padding']),
+  height: `calc(var(--HEIGHT) - ${THEME.CARD_STYLE.borderWidth} * 2)`
+}
 
 export default {
   Resizable: component(props => {
@@ -66,17 +71,15 @@ export default {
     }, [isReverse])
 
     return (
-      <Slot
-        ref={ref}
-        style={{
-          ...omit(THEME.CARD_STYLE, ['padding']),
-          height: `calc(var(--HEIGHT) - ${THEME.CARD_STYLE.borderWidth} * 2)`
-        }}>
+      <Slot ref={ref} style={style}>
         <SplitLayout
           initialHandlePosition={isReverse ? '73%' : '27%'}
-          showSizeHint
+          sizeHint
           {...props}>
-          {(isReverse ? reverse : identity)(React.Children.toArray(children))}
+          {pipe(
+            React.Children.toArray(children),
+            (isReverse ? reverse : take)(Infinity)
+          )}
         </SplitLayout>
       </Slot>
     )

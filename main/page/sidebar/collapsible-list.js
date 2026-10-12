@@ -11,7 +11,7 @@ import {useRemount} from '../../hooks/use-remount'
 import {hasValues} from '../../misc'
 import {pluralize} from '../../misc/pluralize'
 import {withImmerAtom} from '../../misc/with-immer-atom'
-import ContentLayout from './content-layout'
+import Layout from './layout'
 
 export default () => {
   const useStore = withImmerAtom()
@@ -65,7 +65,7 @@ export default () => {
 
         return (
           <>
-            <ContentLayout
+            <Layout
               style={{
                 height: 'calc(var(--SIDEBAR-CONTENT-HEIGHT) * 1.5)'
               }}>
@@ -74,7 +74,7 @@ export default () => {
                   <Item id={id} index={index} key={id} {...props} />
                 )}
               </VList>
-            </ContentLayout>
+            </Layout>
             <Menu
               data={[
                 remount.menu,

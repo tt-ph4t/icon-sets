@@ -52,67 +52,65 @@ const useIdleEffect = (fn = asyncNoop, {before = asyncNoop, deps, options}) => {
   }, deps)
 }
 
-const Item = component(
-  ({aaaaaaaaaaaaa = 0, children, showSizeHint, ...props}) => {
-    const size = useRef.size()
-    const [state, setState] = useState()
-    const context = Context.useSelectValue('positionInPercentage', 'index')
-    const isSlotEnd = isOdd(context.index)
+const Item = component(({aaaaaaaaaaaaa = 0, children, sizeHint, ...props}) => {
+  const size = useRef.size()
+  const [state, setState] = useState()
+  const context = Context.useSelectValue('positionInPercentage', 'index')
+  const isSlotEnd = isOdd(context.index)
 
-    useIdleEffect(
-      async () => {
-        if (showSizeHint) {
-          await delay(1000)
+  useIdleEffect(
+    async () => {
+      if (sizeHint) {
+        await delay(1000)
 
-          setState(false)
-        }
-      },
-      {
-        before: () => {
-          if (showSizeHint && hasValues(state)) setState(true)
-        },
-        deps: [showSizeHint, size]
+        setState(false)
       }
-    )
+    },
+    {
+      before: () => {
+        if (sizeHint && hasValues(state)) setState(true)
+      },
+      deps: [sizeHint, size]
+    }
+  )
 
-    return (
-      <Slot
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'auto'
-        }}>
-        <div slot={isSlotEnd ? 'end' : 'start'} {...props}>
-          {showSizeHint && state && (
-            <VscodeFormHelper
-              style={{
-                alignSelf: 'center',
-                position: 'absolute',
-                top: '50%',
-                zIndex: 1
-              }}>
-              <VscodeBadge>{sizeLabel(size)}</VscodeBadge>
-            </VscodeFormHelper>
-          )}
-          <div
-            ref={size.ref}
+  return (
+    <Slot
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'auto'
+      }}>
+      <div slot={isSlotEnd ? 'end' : 'start'} {...props}>
+        {sizeHint && state && (
+          <VscodeFormHelper
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              flexGrow: 1
+              alignSelf: 'center',
+              position: 'absolute',
+              top: '50%',
+              zIndex: 1
             }}>
-            {(isSlotEnd
-              ? context.positionInPercentage >= 100 - aaaaaaaaaaaaa
-              : context.positionInPercentage <= aaaaaaaaaaaaa) || children}
-          </div>
+            <VscodeBadge>{sizeLabel(size)}</VscodeBadge>
+          </VscodeFormHelper>
+        )}
+        <div
+          ref={size.ref}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1
+          }}>
+          {(isSlotEnd
+            ? context.positionInPercentage >= 100 - aaaaaaaaaaaaa
+            : context.positionInPercentage <= aaaaaaaaaaaaa) || children}
         </div>
-      </Slot>
-    )
-  }
-)
+      </div>
+    </Slot>
+  )
+})
 
 export const SplitLayout = component(
-  ({children, showSizeHint = false, style, ...props}) => {
+  ({children, sizeHint = false, style, ...props}) => {
     const [state, setState] = useSetState(Context.initial)
 
     return (
@@ -137,7 +135,7 @@ export const SplitLayout = component(
             (children, index) =>
               index <= 1 && (
                 <Context index={index} {...state}>
-                  <Item aaaaaaaaaaaaa={5} showSizeHint={showSizeHint}>
+                  <Item aaaaaaaaaaaaa={5} sizeHint={sizeHint}>
                     {children}
                   </Item>
                 </Context>
