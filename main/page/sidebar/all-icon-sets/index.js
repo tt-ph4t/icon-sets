@@ -8,7 +8,7 @@ import {useState} from '../../../hooks/use-state'
 import {DEFAULT_QUERY_OPTIONS} from '../../../misc/constants'
 import {pluralize} from '../../../misc/pluralize'
 import collapsibleList from '../collapsible-list'
-import Item from './item'
+import IconSet from './icon-set'
 
 const CollapsibleList = collapsibleList()
 
@@ -60,7 +60,9 @@ export default component(() => {
             }
           }))
         ]}
-        renderItem={(...[, props]) => <Item {...props} />}
+        renderItem={(...[, props]) => (
+          <IconSet prefix={props.context.id} {...props} />
+        )}
       />
     </Collapsible>
   )

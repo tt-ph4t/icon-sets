@@ -1,7 +1,7 @@
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeIcon} from '@vscode-elements/react-elements'
 import {identity} from 'es-toolkit'
-import {AccessibleIcon} from 'radix-ui'
+import {AccessibleIcon as AccessibleIconPrimitive} from 'radix-ui'
 import React from 'react'
 
 import {component} from '../../../hocs'
@@ -72,13 +72,13 @@ export default withQueryBoundary(
 
       return (
         <>
-          <AccessibleIcon.Root label={iconId}>
+          <AccessibleIconPrimitive.Root label={iconId}>
             {React.cloneElement(iconQuery.data.more.to.reactElement, {
               height: 'calc(var(--SPACING) * 12)',
               width: 'calc(var(--SPACING) * 12)',
               ...props
             })}
-          </AccessibleIcon.Root>
+          </AccessibleIconPrimitive.Root>
           <div
             style={{
               display: 'flex',

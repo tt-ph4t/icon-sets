@@ -1,4 +1,5 @@
 import {sentenceCase} from 'change-case'
+import {castArray} from 'es-toolkit/compat'
 
 import {Collapsible} from '../../components/collapsible'
 import {IconGrid} from '../../components/icon-grid'
@@ -14,19 +15,19 @@ import AllIconSets from './all-icon-sets'
 import IconGroups from './icon-groups'
 import Layout from './layout'
 
-const iconGrid = (menu, props) => (
+const IconGrid_ = component(({menu, ...props}) => (
   <>
     <Layout>
       <IconGrid {...props} />
     </Layout>
     {hasValues(menu) && (
       <Menu
-        data={menu}
+        data={castArray(menu)}
         render={<ToolbarButton icon='kebab-vertical' slot='actions' />}
       />
     )}
   </>
-)
+))
 
 const CustomizedIcons = component(() => {
   const customizedIcons = useCustomizedIcons()
@@ -34,15 +35,13 @@ const CustomizedIcons = component(() => {
 
   return (
     <Collapsible description={iconIds.length} heading='customized icons'>
-      {iconGrid(
-        {
+      <IconGrid_
+        iconIds={iconIds}
+        menu={{
           label: 'Reset',
           onClick: customizedIcons.reset
-        },
-        {
-          iconIds
-        }
-      )}
+        }}
+      />
     </Collapsible>
   )
 })
@@ -58,8 +57,9 @@ const CachedIcons = component(() => {
       onToggle={event => {
         if (event.detail.open) update()
       }}>
-      {iconGrid(
-        [
+      <IconGrid_
+        iconIds={iconIds}
+        menu={[
           {
             label: 'Update',
             onClick: update
@@ -74,11 +74,8 @@ const CachedIcons = component(() => {
               update()
             }
           }))
-        ],
-        {
-          iconIds
-        }
-      )}
+        ]}
+      />
     </Collapsible>
   )
 })
@@ -89,15 +86,13 @@ const FavoritedIcons = component(() => {
 
   return (
     <Collapsible description={iconIds.length} heading='favorited icons'>
-      {iconGrid(
-        {
+      <IconGrid_
+        iconIds={iconIds}
+        menu={{
           label: 'Reset',
           onClick: favoritedIcons.reset
-        },
-        {
-          iconIds
-        }
-      )}
+        }}
+      />
     </Collapsible>
   )
 })

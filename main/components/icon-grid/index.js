@@ -182,8 +182,7 @@ export const IconGrid = Object.assign(
           </VscodeFormContainer>
           {hasFilteredIconIds ? (
             <Grid
-              cellHeight={100}
-              cellWidth={100}
+              colWidth={100}
               count={state.iconIds.length}
               renderItem={(...[, {context}]) => {
                 const iconId = state.iconIds[context.index]

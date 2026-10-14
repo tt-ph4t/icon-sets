@@ -1,50 +1,54 @@
-import {useMergedRefs} from '@base-ui/utils/useMergedRefs'
-import {experimental_VGrid as VGrid} from 'virtua'
+import {noop} from 'es-toolkit'
+import {VGrid} from 'virtua'
 
 import {component} from '../../hocs'
 import {useRef} from '../../hooks/use-ref'
 import {Slot} from '../slot'
 
-const defaultCellSize = Number.MIN_SAFE_INTEGER
-
 export default component(
   ({
-    cellWidth = defaultCellSize,
-    col,
+    cols,
+    colWidth = 0,
     count = 0,
-    domRef,
-    renderItem,
-    row,
+    renderItem = noop,
+    rowHeight = colWidth,
+    rows,
     ...props
   }) => {
     const size = useRef.size()
 
-    domRef = useMergedRefs(domRef, size.ref)
-
-    col ??= Math.max(1, Math.floor(size.width / cellWidth))
-    row ??= Math.ceil(count / col)
+    cols ??= Math.max(1, Math.floor(size.width / colWidth))
+    rows ??= Math.ceil(count / cols)
 
     return (
-      <VGrid
-        bufferSize={size.height * 0.1}
-        cellHeight={defaultCellSize}
-        cellWidth={cellWidth}
-        col={col}
-        domRef={domRef}
-        row={row}
-        {...props}>
-        {context =>
-          Slot.render({
-            bespoke: renderItem,
-            context: {
-              ...context,
-              col,
-              index: context.rowIndex * col + context.colIndex,
-              row
-            }
-          })
-        }
-      </VGrid>
+      <div
+        ref={size.ref}
+        style={{
+          '--size': 'inherit',
+
+          height: 'var(--size)',
+          width: 'var(--size)'
+        }}>
+        <VGrid
+          cols={cols}
+          colWidth={colWidth}
+          rowHeight={rowHeight}
+          rows={rows}
+          {...props}>
+          {(row, col, cell) =>
+            Slot.render({
+              bespoke: renderItem,
+              context: {
+                col,
+                cols,
+                index: cell.rowIndex * cols + cell.colIndex,
+                row,
+                rows
+              }
+            })
+          }
+        </VGrid>
+      </div>
     )
   }
 )

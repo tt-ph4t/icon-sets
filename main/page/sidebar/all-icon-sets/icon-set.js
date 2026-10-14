@@ -3,6 +3,7 @@ import {useQuery} from '@tanstack/react-query'
 import {isEqual} from '@ver0/deep-equal'
 import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {compact} from 'es-toolkit'
+import {filter, map, pipe, take} from 'es-toolkit/fp'
 
 import {Collapsible} from '../../../components/collapsible'
 import {IconGrid} from '../../../components/icon-grid'
@@ -46,19 +47,19 @@ const matchesIconTheme = (icon, theme) =>
         }[theme.match]
       )
 
-export default component(({context}) => {
+export default component(({context, prefix}) => {
   const store = useStore()
 
   const state = store.useSelectValue(
-    ({draft}) => draft[context.id] ?? initialState,
+    ({draft}) => draft[prefix] ?? initialState,
     {
-      deps: [context.id]
+      deps: [prefix]
     }
   )
 
   const query = useQuery({
     ...DEFAULT_QUERY_OPTIONS,
-    select: useCallback(iconSets => iconSets[context.id], [context.id])
+    select: useCallback(iconSets => iconSets[prefix], [prefix])
   })
 
   const isInitialState = isEqual(state, initialState)
@@ -73,26 +74,29 @@ export default component(({context}) => {
           height: 'var(--SIDEBAR-CONTENT-HEIGHT)'
         }}>
         <IconGrid
-          iconIds={(isInitialState
-            ? query.data.icons
-            : query.data.icons.filter(
-                icon =>
-                  (isSymbol(state.category) ||
-                    query.data.categories[state.category]?.includes(icon)) &&
-                  (isSymbol(state.theme.prefix) ||
-                    matchesIconTheme(icon, {
-                      current: state.theme.prefix,
-                      list: query.data.prefixes,
-                      match: 'prefix'
-                    })) &&
-                  (isSymbol(state.theme.suffix) ||
-                    matchesIconTheme(icon, {
-                      current: state.theme.suffix,
-                      list: query.data.suffixes,
-                      match: 'suffix'
-                    }))
-              )
-          ).map(icon => getId(query.data.prefix, icon))}
+          iconIds={pipe(
+            query.data.icons,
+            isInitialState
+              ? take(Infinity)
+              : filter(
+                  icon =>
+                    (isSymbol(state.category) ||
+                      query.data.categories[state.category]?.includes(icon)) &&
+                    (isSymbol(state.theme.prefix) ||
+                      matchesIconTheme(icon, {
+                        current: state.theme.prefix,
+                        list: query.data.prefixes,
+                        match: 'prefix'
+                      })) &&
+                    (isSymbol(state.theme.suffix) ||
+                      matchesIconTheme(icon, {
+                        current: state.theme.suffix,
+                        list: query.data.suffixes,
+                        match: 'suffix'
+                      }))
+                ),
+            map(icon => getId(query.data.prefix, icon))
+          )}
         />
       </div>
       <VscodeToolbarContainer slot='actions'>
@@ -102,7 +106,7 @@ export default component(({context}) => {
               label: 'Reset',
               onClick: () => {
                 store.set(({draft}) => {
-                  delete draft[context.id]
+                  delete draft[prefix]
                 })
               }
             },
@@ -119,8 +123,8 @@ export default component(({context}) => {
                   label: category,
                   onClick: () => {
                     store.set(({draft}) => {
-                      draft[context.id] = {
-                        ...(draft[context.id] ?? initialState),
+                      draft[prefix] = {
+                        ...(draft[prefix] ?? initialState),
                         category: checked ? initialState.category : category
                       }
                     })
@@ -142,9 +146,9 @@ export default component(({context}) => {
                   label: d,
                   onClick: () => {
                     store.set(({draft}) => {
-                      const state = draft[context.id] ?? initialState
+                      const state = draft[prefix] ?? initialState
 
-                      draft[context.id] = {
+                      draft[prefix] = {
                         ...state,
                         theme: {
                           ...state.theme,
