@@ -52,10 +52,6 @@ export default {
         }}>
         <Resizable.Box
           maxConstraints={[maxConstraints.width, maxConstraints.height]}
-          minConstraints={[
-            useStore.initial.size.width,
-            useStore.initial.size.height
-          ]}
           {...size}
           {...props}
         />

@@ -6,6 +6,7 @@ import {Slot} from '../slot'
 import './index.css'
 
 const defaultProps = {
+  minConstraints: [0, 0],
   onResize: () => {
     play('tick')
   }

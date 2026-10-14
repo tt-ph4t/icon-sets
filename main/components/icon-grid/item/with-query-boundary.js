@@ -1,4 +1,4 @@
-import {Button} from '@base-ui/react'
+import {Button as ButtonPrimitive} from '@base-ui/react'
 import {useQueryClient} from '@tanstack/react-query'
 import {getErrorMessage} from 'react-error-boundary'
 
@@ -17,7 +17,7 @@ const Fallback = component(({children, ...props}) => (
     style={{
       userSelect: 'none'
     }}>
-    <Button
+    <ButtonPrimitive
       nativeButton={false}
       render={<span>{children.slice(0, 3)}</span>}
       {...props}
