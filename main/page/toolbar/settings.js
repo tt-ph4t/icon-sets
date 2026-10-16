@@ -11,7 +11,6 @@ import {useSettings} from '../../hooks/use-settings'
 import {open} from '../../misc'
 import {GITHUB_REPO} from '../../misc/constants'
 import {takumi} from '../../misc/takumi'
-import Layout from '../layout'
 import Font from './font'
 
 const useThemeMenu = () => {
@@ -43,9 +42,6 @@ export default component(({menu, ...props}) => {
 
   const takumiStore = takumi.useStore()
   const takumiState = takumiStore.useValue()
-
-  const layoutStore = Layout.useStore()
-  const layoutState = layoutStore.useSelectValue('isReverse')
 
   const fontStore = Font.useStore()
   const fontState = fontStore.useValue()
@@ -102,14 +98,6 @@ export default component(({menu, ...props}) => {
           label: 'Devtools',
           onClick: () => {
             settings.toggle('isDev')
-          }
-        },
-        'Layout',
-        {
-          checked: layoutState.isReverse,
-          label: 'Reverse',
-          onClick: () => {
-            layoutStore.toggle('isReverse')
           }
         },
         'Misc',

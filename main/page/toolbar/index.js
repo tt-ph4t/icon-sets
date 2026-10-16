@@ -8,6 +8,7 @@ import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {pluralize} from '../../misc/pluralize'
 import Context from '../context'
+import Layout from '../layout'
 import AllIconQueries from './all-icon-queries'
 import Cuelume from './cuelume'
 import FailedQueries from './failed-queries'
@@ -58,6 +59,7 @@ export default component(({menu}) => (
       <Fps />
       <VscodeToolbarContainer>
         <Settings menu={castArray(menu)} />
+        <Layout.SidebarRightToggle />
         <Cuelume />
         <IconGrid.Search>
           <PrefetchIcons.Actions />

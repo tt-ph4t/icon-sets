@@ -5,6 +5,7 @@ import React from 'react'
 import {Resizable} from '../components/resizable'
 import {Slot} from '../components/slot'
 import {SplitLayout} from '../components/split-layout'
+import {ToolbarButton} from '../components/toolbar-button'
 import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
@@ -12,7 +13,7 @@ import {THEME} from '../misc/constants'
 import {withImmerAtom} from '../misc/with-immer-atom'
 
 const useStore = withImmerAtom({
-  isReverse: true,
+  sidebarRight: true,
   size: {
     height: 0,
     width: 0
@@ -58,23 +59,39 @@ export default {
       </Slot>
     )
   }),
+  SidebarRightToggle: component(props => {
+    const store = useStore()
+    const {sidebarRight} = store.useSelectValue('sidebarRight')
+
+    return (
+      <Slot
+        onClick={() => {
+          store.toggle('sidebarRight')
+        }}>
+        <ToolbarButton
+          icon={sidebarRight ? 'layout-sidebar-left' : 'layout-sidebar-right'}
+          {...props}
+        />
+      </Slot>
+    )
+  }),
   Split: component(({children, ...props}) => {
     const ref = useRef()
-    const {isReverse} = useStore().useSelectValue('isReverse')
+    const {sidebarRight} = useStore().useSelectValue('sidebarRight')
 
     useEffect.update(() => {
       ref.current.resetHandlePosition()
-    }, [isReverse])
+    }, [sidebarRight])
 
     return (
       <Slot ref={ref} style={style}>
         <SplitLayout
-          initialHandlePosition={isReverse ? '73%' : '27%'}
+          initialHandlePosition={sidebarRight ? '73%' : '27%'}
           sizeHint
           {...props}>
           {pipe(
             React.Children.toArray(children),
-            (isReverse ? reverse : take)(Infinity)
+            (sidebarRight ? reverse : take)(Infinity)
           )}
         </SplitLayout>
       </Slot>
