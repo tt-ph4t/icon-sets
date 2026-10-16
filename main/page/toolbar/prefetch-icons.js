@@ -48,16 +48,16 @@ const PrefetchIcons = component(({enabled}) => {
   useRafInterval(() => {
     const idleCallbackId = requestIdleCallback(() => {
       if (enabled) {
-        const queries = []
+        const queries = new Set()
 
-        while (queries.length < state.batchSize) {
+        while (queries.size < state.batchSize) {
           const iconSet = query.data[ref1.current]
 
           if (hasValues(iconSet)) {
             const icon = iconSet.icons[ref2.current]
 
             if (hasValues(icon)) {
-              queries.push(getQueryOptions.icon(iconSet.prefix, icon))
+              queries.add(getQueryOptions.icon(iconSet.prefix, icon))
 
               ref2.current++
             } else {

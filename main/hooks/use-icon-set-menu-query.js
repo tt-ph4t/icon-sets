@@ -14,16 +14,11 @@ export const useIconSetMenuQuery = (getItemProps = noop) =>
 
         for (const iconSet of Object.values(iconSets)) {
           const label = `${iconSet.name} (${iconSet.icons.length})`
-          const [key] = label.toUpperCase()
 
-          const item = {
+          map.getOrInsert(label.toUpperCase()[0], []).push({
             label,
             ...getItemProps(iconSet)
-          }
-
-          const group = map.get(key)
-
-          group ? group.push(item) : map.set(key, [item])
+          })
         }
 
         return pipe(
