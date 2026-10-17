@@ -7,7 +7,6 @@ import {Menu} from '../../components/menu'
 import {useTheme} from '../../components/theme'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
-import {useSettings} from '../../hooks/use-settings'
 import {open} from '../../misc'
 import {GITHUB_REPO} from '../../misc/constants'
 import {takumi} from '../../misc/takumi'
@@ -36,9 +35,6 @@ const useThemeMenu = () => {
 
 export default component(({menu, ...props}) => {
   const themeMenu = useThemeMenu()
-
-  const settings = useSettings()
-  const settingsState = settings.useSelectValue('isDev')
 
   const takumiStore = takumi.useStore()
   const takumiState = takumiStore.useValue()
@@ -92,13 +88,6 @@ export default component(({menu, ...props}) => {
               }
             }))
           ]
-        },
-        {
-          checked: settingsState.isDev,
-          label: 'Devtools',
-          onClick: () => {
-            settings.toggle('isDev')
-          }
         },
         'Misc',
         {

@@ -10,7 +10,6 @@ import {Menu} from '../../components/menu'
 import {Slot} from '../../components/slot'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
-import {useCallback} from '../../hooks/use-callback'
 import {useEffect} from '../../hooks/use-effect'
 import {numbers} from '../../misc'
 import {pluralize} from '../../misc/pluralize'
@@ -40,11 +39,9 @@ export default component(props => {
     setVolume(state.volume)
   }, [state.volume])
 
-  const toggleEnabled = useCallback(() => {
+  useHotkey(hotkey, () => {
     store.toggle('enabled')
   })
-
-  useHotkey(hotkey, toggleEnabled)
 
   return (
     <Menu
@@ -74,13 +71,6 @@ export default component(props => {
               })
           }
         },
-        {
-          checked: state.enabled,
-          description: Kbd.text(hotkey),
-          disabled: !state.volume,
-          label: 'Enabled',
-          onClick: toggleEnabled
-        },
         pluralize(soundNames, 'sound'),
         ...soundNames.map(sound => ({
           disabled: !state.enabled,
@@ -103,8 +93,9 @@ export default component(props => {
         checked={state.enabled}
         controlled
         icon={state.enabled ? 'unmute' : 'mute'}
-        {...props}
-      />
+        {...props}>
+        {Kbd.text(hotkey)}
+      </ToolbarButton>
     </Menu>
   )
 })

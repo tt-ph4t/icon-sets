@@ -3,11 +3,13 @@ import {VscodeToolbarContainer} from '@vscode-elements/react-elements'
 import {useNetwork} from 'ahooks'
 import {castArray} from 'es-toolkit/compat'
 
+import {Devtools} from '../../components/devtools'
 import {IconGrid} from '../../components/icon-grid'
+import {Slot} from '../../components/slot'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {pluralize} from '../../misc/pluralize'
-import Context from '../context'
+import PageContext from '../context'
 import Layout from '../layout'
 import AllIconQueries from './all-icon-queries'
 import Cuelume from './cuelume'
@@ -38,10 +40,14 @@ const FetchingQueries = component(props => {
   )
 })
 
-const Remount = component(() => {
-  const {remount} = Context.useSelectValue('remount')
+const PageRemount = component(props => {
+  const {remount} = PageContext.useSelectValue('remount')
 
-  return <ToolbarButton icon={remount.icon} onClick={remount} />
+  return (
+    <Slot onClick={remount}>
+      <ToolbarButton icon={remount.icon} {...props} />
+    </Slot>
+  )
 })
 
 export default component(({menu}) => (
@@ -60,12 +66,13 @@ export default component(({menu}) => (
       <VscodeToolbarContainer>
         <Settings menu={castArray(menu)} />
         <Layout.SidebarRightToggle />
+        <Devtools.Toggle />
         <Cuelume />
         <IconGrid.Search>
           <PrefetchIcons.Actions />
           <AllIconQueries />
         </IconGrid.Search>
-        <Remount />
+        <PageRemount />
       </VscodeToolbarContainer>
     </div>
     <Font.Sync />

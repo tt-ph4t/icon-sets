@@ -6,13 +6,13 @@ import {preconnect} from 'react-dom'
 import {createRoot} from 'react-dom/client'
 
 import {Boundary} from './components/boundary'
+import {Devtools} from './components/devtools'
 import {ProgressRing} from './components/progress-ring'
 import {component} from './hocs'
 import {DATABASE_URL} from './misc/constants'
 import './styles.css'
 
 const Page = React.lazy(() => import('./page'))
-const Devtools = React.lazy(() => import('./components/devtools'))
 
 const ScrollLock = component(() => {
   useScrollLock(document.body, true)
