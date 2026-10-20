@@ -24,10 +24,8 @@ export default component(
       <div
         ref={size.ref}
         style={{
-          '--size': 'inherit',
-
-          height: 'var(--size)',
-          width: 'var(--size)'
+          height: 'inherit',
+          width: 'inherit'
         }}>
         <VGrid
           cols={cols}
