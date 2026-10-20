@@ -9,6 +9,8 @@ import {ToolbarButton} from '../components/toolbar-button'
 import {component} from '../hocs'
 import {useEffect} from '../hooks/use-effect'
 import {useRef} from '../hooks/use-ref'
+import {useSize} from '../hooks/use-size'
+import {useUpdateEffect} from '../hooks/use-update-effect'
 import {THEME} from '../misc/constants'
 import {withImmerAtom} from '../misc/with-immer-atom'
 
@@ -28,7 +30,7 @@ const style = {
 export default {
   Resizable: component(props => {
     const store = useStore()
-    const maxConstraints = useRef.size()
+    const maxConstraints = useSize()
     const {size} = store.useSelectValue('size')
 
     useEffect(() => {
@@ -79,7 +81,7 @@ export default {
     const ref = useRef()
     const {sidebarRight} = useStore().useSelectValue('sidebarRight')
 
-    useEffect.update(() => {
+    useUpdateEffect(() => {
       ref.current.resetHandlePosition()
     }, [sidebarRight])
 

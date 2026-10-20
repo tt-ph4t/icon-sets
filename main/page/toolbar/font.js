@@ -4,6 +4,7 @@ import {mapValues} from 'es-toolkit'
 
 import {component} from '../../hocs'
 import {useEffect} from '../../hooks/use-effect'
+import {useOnceEffect} from '../../hooks/use-once-effect'
 import {hasValues} from '../../misc'
 import {EMPTY} from '../../misc/constants'
 import {withImmerAtom} from '../../misc/with-immer-atom'
@@ -64,7 +65,7 @@ export default {
       })
     })
 
-    useEffect.once(() => {
+    useOnceEffect(() => {
       updateCssVariables()
 
       if (!hasValues(state.default))
@@ -73,7 +74,7 @@ export default {
             document.documentElement.style.getPropertyValue(a)
           )
         })
-    })
+    }, EMPTY.ARRAY)
 
     useEffect(() => {
       document.documentElement.dataset.fontUpdatedAt = Date.now()

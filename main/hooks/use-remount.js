@@ -42,9 +42,9 @@ export const useRemount = Object.assign(
         return (
           <React.Fragment key={remount.state}>
             <Component
-              {...props}
               {...{
-                [key]: remount
+                [key]: remount,
+                ...props
               }}
             />
           </React.Fragment>

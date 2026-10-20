@@ -10,8 +10,9 @@ import {asyncNoop, delay, omit} from 'es-toolkit'
 import React from 'react'
 
 import {component} from '../hocs'
-import {useEffect} from '../hooks/use-effect'
+import {useAsyncEffect} from '../hooks/use-async-effect'
 import {useRef} from '../hooks/use-ref'
+import {useSize} from '../hooks/use-size'
 import {useState} from '../hooks/use-state'
 import {hasValues, isOdd, sizeLabel} from '../misc'
 import {buildContext} from '../misc/build-context'
@@ -35,7 +36,7 @@ const useIdleEffect = (fn = asyncNoop, {before = asyncNoop, deps, options}) => {
   const ref = useRef()
   const cleanupRef = useRef()
 
-  useEffect.async(async () => {
+  useAsyncEffect(async () => {
     cancelIdleCallback(ref.current)
 
     await Promise.try(before)
@@ -53,7 +54,7 @@ const useIdleEffect = (fn = asyncNoop, {before = asyncNoop, deps, options}) => {
 }
 
 const Item = component(({aaaaaaaaaaaaa = 0, children, sizeHint, ...props}) => {
-  const size = useRef.size()
+  const size = useSize()
   const [state, setState] = useState()
   const context = Context.useSelectValue('positionInPercentage', 'index')
   const isSlotEnd = isOdd(context.index)

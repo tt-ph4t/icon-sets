@@ -10,7 +10,7 @@ import {Menu} from '../../components/menu'
 import {Slot} from '../../components/slot'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
-import {useEffect} from '../../hooks/use-effect'
+import {useUpdateEffect} from '../../hooks/use-update-effect'
 import {numbers} from '../../misc'
 import {pluralize} from '../../misc/pluralize'
 import {withImmerAtom} from '../../misc/with-immer-atom'
@@ -31,11 +31,11 @@ export default component(props => {
   const state = store.useValue()
   const volumePercent = Math.round(state.volume * 100)
 
-  useEffect.update(() => {
+  useUpdateEffect(() => {
     setEnabled(state.enabled)
   }, [state.enabled])
 
-  useEffect.update(() => {
+  useUpdateEffect(() => {
     setVolume(state.volume)
   }, [state.volume])
 

@@ -5,7 +5,7 @@ import {sumBy} from 'es-toolkit'
 import {Kbd} from '../../components/kbd'
 import {useProgress} from '../../components/progress'
 import {component} from '../../hocs'
-import {useEffect} from '../../hooks/use-effect'
+import {useUpdateEffect} from '../../hooks/use-update-effect'
 import {hasValues} from '../../misc'
 
 const Sound = component(() => {
@@ -16,7 +16,7 @@ const Sound = component(() => {
     hotkeyRegistrationView => hotkeyRegistrationView.triggerCount
   )
 
-  useEffect.update(() => {
+  useUpdateEffect(() => {
     progress.with(() => {
       play('release')
     })

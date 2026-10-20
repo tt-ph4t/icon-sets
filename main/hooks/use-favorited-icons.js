@@ -5,13 +5,13 @@ import {castArray} from 'es-toolkit/compat'
 import {filterValidIconIds} from '../misc'
 import {EMPTY} from '../misc/constants'
 import {useCallback} from './use-callback'
-import {useState} from './use-state'
+import {useLocalStorage} from './use-local-storage'
 
 const defaultValue = EMPTY.ARRAY
 
 export const useFavoritedIcons = Object.assign(
   (key = 'useFavoritedIcons') => {
-    const [state, setState] = useState.localStorage(key, {
+    const [state, setState] = useLocalStorage(key, {
       defaultValue
     })
 

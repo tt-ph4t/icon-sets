@@ -5,7 +5,7 @@ import {asyncNoop} from 'es-toolkit'
 import {map, pipe} from 'es-toolkit/fp'
 
 import {component} from '../hocs'
-import {useEffect} from '../hooks/use-effect'
+import {useOnceEffect} from '../hooks/use-once-effect'
 import {useRef} from '../hooks/use-ref'
 import {EMPTY} from '../misc/constants'
 import {withImmerAtom} from '../misc/with-immer-atom'
@@ -39,7 +39,7 @@ export const VscodeDevToolbar = component(props => {
   const progress = useProgress()
   const theme = store.useSelectValue('ids')
 
-  useEffect.once(() => {
+  useOnceEffect(() => {
     if (isEqual(theme.ids, useStore.initial.ids)) {
       const selectorElement = ref.current.shadowRoot
         .querySelector('vscode-theme-selector')
@@ -69,7 +69,7 @@ export const VscodeDevToolbar = component(props => {
         }
       })
     }
-  })
+  }, EMPTY.ARRAY)
 
   useEventListener(
     changeEvent.type,

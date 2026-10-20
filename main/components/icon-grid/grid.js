@@ -2,7 +2,7 @@ import {noop} from 'es-toolkit'
 import {VGrid} from 'virtua'
 
 import {component} from '../../hocs'
-import {useRef} from '../../hooks/use-ref'
+import {useSize} from '../../hooks/use-size'
 import {Slot} from '../slot'
 
 export default component(
@@ -15,7 +15,7 @@ export default component(
     rows,
     ...props
   }) => {
-    const size = useRef.size()
+    const size = useSize()
 
     cols ??= Math.max(1, Math.floor(size.width / colWidth))
     rows ??= Math.ceil(count / cols)

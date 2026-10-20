@@ -1,11 +1,11 @@
-import {useHotkey, useHotkeys} from '@tanstack/react-hotkeys'
+import {useHotkeys} from '@tanstack/react-hotkeys'
 import {VscodeIcon, VscodeTextfield} from '@vscode-elements/react-elements'
 import React from 'react'
 
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
-import {useEffect} from '../../hooks/use-effect'
 import {useRef} from '../../hooks/use-ref'
+import {useUpdateEffect} from '../../hooks/use-update-effect'
 import {isWordChar} from '../../misc'
 import {EMPTY} from '../../misc/constants'
 import {Input} from '../input'
@@ -33,10 +33,6 @@ const Search = component(({children, ...props}) => {
     ref.current.focus()
   })
 
-  useHotkey('esc', () => {
-    ref.current.blur()
-  })
-
   useHotkeys(
     hotkeys.map(hotkey => ({
       callback: focusFn,
@@ -44,7 +40,7 @@ const Search = component(({children, ...props}) => {
     }))
   )
 
-  useEffect.update(() => {
+  useUpdateEffect(() => {
     ref.current = ref.current.renderRoot.querySelector('input')
   }, EMPTY.ARRAY)
 

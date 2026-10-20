@@ -7,7 +7,7 @@ import {asyncNoop, last} from 'es-toolkit'
 import {component} from '../../hocs'
 import {useCallback} from '../../hooks/use-callback'
 import {useCustomizedIcons} from '../../hooks/use-customized-icons'
-import {useState} from '../../hooks/use-state'
+import {usePrevious} from '../../hooks/use-previous'
 import {buildContext} from '../../misc/build-context'
 import {
   DEFAULT_ICON_CUSTOMISATIONS,
@@ -85,7 +85,7 @@ const Pickers = component(props => {
 
 const Previous = component(props => {
   const color = useColor()
-  const previousColor = useState.previous(color.current)
+  const previousColor = usePrevious(color.current)
 
   return (
     <Slot
