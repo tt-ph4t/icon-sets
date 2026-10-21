@@ -13,9 +13,7 @@ export const ICONIFY_API_URLS = deepFreeze([
   'https://api.unisvg.com'
 ])
 
-export const DATABASE_URL =
-  // https://raw.githubusercontent.com/${GITHUB_REPO}/refs/heads/data/data
-  `https://cdn.jsdelivr.net/gh/${GITHUB_REPO}@refs/heads/data/data`
+export const DATABASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/refs/heads/data/data`
 
 export const DELAY_MS = 150
 
