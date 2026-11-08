@@ -18,7 +18,7 @@ export const Input = component(
     const [state, setState] = useState(true)
     const ref = useRef()
 
-    useHotkey('esc', () => {
+    useHotkey('Escape', () => {
       ref.current.blur()
     })
 

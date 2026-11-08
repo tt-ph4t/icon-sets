@@ -44,7 +44,7 @@ export default withProviders(
   useRemount.with(
     withQueryBoundary(
       component(({[useRemount.key]: remount}) => {
-        useHotkey('f5', remount)
+        useHotkey('F5', remount)
 
         return (
           <Context remount={remount}>

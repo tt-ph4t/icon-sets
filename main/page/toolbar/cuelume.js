@@ -1,21 +1,16 @@
 import {isNumber, isSafeInteger} from '@sindresorhus/is'
 import {useHotkey} from '@tanstack/react-hotkeys'
-import {capitalCase} from 'change-case'
-import {play, setEnabled, setVolume, sounds} from 'cuelume'
+import {setEnabled, setVolume} from 'cuelume'
 import {find, map, pipe} from 'es-toolkit/fp'
-import {sort} from 'fast-sort'
 
 import {Kbd} from '../../components/kbd'
-import {Menu} from '../../components/menu'
 import {Slot} from '../../components/slot'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {useUpdateEffect} from '../../hooks/use-update-effect'
 import {numbers} from '../../misc'
-import {pluralize} from '../../misc/pluralize'
 import {withImmerAtom} from '../../misc/with-immer-atom'
 
-const soundNames = sort(sounds).asc()
 const hotkey = 'm'
 
 const useStore = withImmerAtom({
@@ -44,58 +39,35 @@ export default component(props => {
   })
 
   return (
-    <Menu
-      data={[
-        {
-          description: `${volumePercent}%`,
-          label: 'Set',
-          onClick: () => {
-            const volume =
-              Math.min(
-                100,
-                Math.abs(
-                  pipe(
-                    numbers(prompt(undefined, `${volumePercent}%`), {
-                      splitter: /[\s%]+/u
-                    }),
-                    map(Math.round),
-                    find(isSafeInteger)
-                  )
-                )
-              ) / 100
+    <Slot
+      onClick={() => {
+        const volume =
+          Math.min(
+            100,
+            Math.abs(
+              pipe(
+                numbers(prompt(undefined, `${volumePercent}%`), {
+                  splitter: /[\s%]+/u
+                }),
+                map(Math.round),
+                find(isSafeInteger)
+              )
+            )
+          ) / 100
 
-            if (isNumber(volume))
-              store.set(({draft}) => {
-                draft.volume = volume
-                draft.enabled = Boolean(volume)
-              })
-          }
-        },
-        pluralize(soundNames, 'sound'),
-        ...soundNames.map(sound => ({
-          disabled: !state.enabled,
-          label: capitalCase(sound),
-          onClick: () => {
-            play(sound)
-          }
-        }))
-      ]}
-      render={
-        <Slot
-          onChange={event => {
-            store.set(({draft}) => {
-              draft.enabled = event.target.checked
-            })
-          }}
-        />
-      }>
+        if (isNumber(volume))
+          store.set(({draft}) => {
+            draft.volume = volume
+            draft.enabled = Boolean(volume)
+          })
+      }}>
       <ToolbarButton
         checked={state.enabled}
         controlled
         icon={state.enabled ? 'unmute' : 'mute'}
         {...props}>
-        {Kbd.text(hotkey)}
+        {state.enabled ? `${volumePercent}%` : Kbd.text(hotkey)}
       </ToolbarButton>
-    </Menu>
+    </Slot>
   )
 })
