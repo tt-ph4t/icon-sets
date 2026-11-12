@@ -6,7 +6,6 @@ import {castArray} from 'es-toolkit/compat'
 import {DATABASE_URL} from './constants'
 import {fetch} from './fetch'
 import {getId} from './get-id'
-import {terminateWorker} from './terminate-worker'
 
 const structuralSharing = (a, b) => (isEqual(a, b) ? a : b)
 
@@ -45,24 +44,8 @@ export const getQueryOptions = Object.assign(
     icon: (iconSetPrefix, icon, options) =>
       getQueryOptions({
         queryKey: getId(iconSetPrefix, icon),
-        url: `${DATABASE_URL}/${iconSetPrefix}/${icon}.msgpack`,
+        url: `${DATABASE_URL}/data/${iconSetPrefix}/${icon}.msgpack`,
         ...options
-      }),
-    worker: (worker, options) => {
-      options = toMerged(
-        {
-          select: () => {
-            terminateWorker(worker)
-          }
-        },
-        options
-      )
-
-      return {
-        ...getQueryOptions(options),
-        queryFn: async () =>
-          await Promise.try(async () => await worker.queryFn(options.url))
-      }
-    }
+      })
   }
 )

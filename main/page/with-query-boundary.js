@@ -1,10 +1,9 @@
 import {useQuery} from '@tanstack/react-query'
 
-import {Boundary} from '../../components/boundary'
-import {ProgressRing} from '../../components/progress-ring'
-import {component} from '../../hocs'
-import {DATABASE_URL} from '../../misc/constants'
-import {getQueryOptions} from '../../misc/get-query-options'
+import {Boundary} from '../components/boundary'
+import {ProgressRing} from '../components/progress-ring'
+import {component} from '../hocs'
+import {DEFAULT_QUERY_OPTIONS} from '../misc/constants'
 
 const fallback = (
   <div
@@ -27,17 +26,9 @@ const fallback = (
 
 const renderError = Component => <Component progressBar={false} />
 
-const queryWorker = new ComlinkWorker(
-  new URL('./query.worker', import.meta.url)
-)
-
-const queryOptions = getQueryOptions.worker(queryWorker, {
-  url: `${DATABASE_URL}/index.msgpack`
-})
-
 export default Component =>
   component(props => {
-    const query = useQuery(queryOptions)
+    const query = useQuery(DEFAULT_QUERY_OPTIONS)
 
     return (
       <Boundary.Query

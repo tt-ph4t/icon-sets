@@ -8,7 +8,7 @@ import {useTheme} from '../../components/theme'
 import {ToolbarButton} from '../../components/toolbar-button'
 import {component} from '../../hocs'
 import {open} from '../../misc'
-import {GITHUB_REPO} from '../../misc/constants'
+import {GITHUB_URL} from '../../misc/constants'
 import {takumi} from '../../misc/takumi'
 import Font from './font'
 
@@ -93,7 +93,7 @@ export default component(({menu, ...props}) => {
         {
           label: 'GitHub',
           onClick: () => {
-            open(`https://github.com/${GITHUB_REPO}`)
+            open(GITHUB_URL)
           }
         },
         ...castArray(menu)

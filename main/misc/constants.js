@@ -5,7 +5,7 @@ import {LRUCache} from 'lru-cache'
 
 import {getQueryOptions} from './get-query-options'
 
-export const GITHUB_REPO = 'tt-ph4t/icon-sets'
+export const GITHUB_URL = new URL('https://github.com/tt-ph4t/icon-sets')
 
 export const ICONIFY_API_URLS = deepFreeze([
   'https://api.iconify.design',
@@ -13,7 +13,7 @@ export const ICONIFY_API_URLS = deepFreeze([
   'https://api.unisvg.com'
 ])
 
-export const DATABASE_URL = `https://cdn.jsdelivr.net/gh/${GITHUB_REPO}@refs/heads/data/data`
+export const DATABASE_URL = `https://cdn.jsdelivr.net/gh${GITHUB_URL.pathname}@refs/heads/data`
 
 export const DELAY_MS = 150
 
@@ -61,7 +61,7 @@ export const DEFAULT_ICON_CUSTOMISATIONS = deepFreeze({
 
 export const DEFAULT_QUERY_OPTIONS = deepFreeze(
   getQueryOptions({
-    url: `${DATABASE_URL}/index.msgpack`
+    url: `${DATABASE_URL}/data/index.msgpack`
   })
 )
 

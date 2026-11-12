@@ -6,7 +6,6 @@ import react from '@vitejs/plugin-react-swc'
 import has from 'has-values'
 import path from 'node:path'
 import {defineConfig, transformWithEsbuild} from 'vite'
-import {comlink} from 'vite-plugin-comlink'
 import {compression} from 'vite-plugin-compression2'
 import preload from 'vite-plugin-preload'
 import {VitePWA} from 'vite-plugin-pwa'
@@ -46,7 +45,6 @@ export default defineConfig({
     target: 'esnext'
   },
   plugins: [
-    comlink(),
     devtools({
       removeDevtoolsOnBuild: false
     }),
@@ -74,8 +72,5 @@ export default defineConfig({
         skipWaiting: true
       }
     })
-  ],
-  worker: {
-    plugins: () => [comlink()]
-  }
+  ]
 })
