@@ -42,9 +42,11 @@ fs.rmSync(dataDir, {
 
 fs.mkdirSync(dataDir);
 
-const collections = Object.fromEntries(
+const collections = await lookupCollections();
+
+const filteredCollections = Object.fromEntries(
   uniqWith(
-    Object.entries(await lookupCollections()),
+    Object.entries(collections),
     ([, a], [, b]) =>
       ["name", "total", "version", "author", "license"].every((key) =>
         isEqual(a[key], b[key]),
