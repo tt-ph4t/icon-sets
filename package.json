@@ -63,7 +63,7 @@
     "irregular-plurals": "4.2.0",
     "is-number": "7.0.0",
     "is-word-character": "2.0.1",
-    "jotai": "3.0.1",
+    "jotai": "3.0.2",
     "jotai-immer": "0.4.3",
     "jszip": "3.10.2",
     "lru-cache": "11.5.3",
@@ -84,6 +84,6 @@
     "vite-plugin-compression2": "2.5.4",
     "vite-plugin-preload": "0.7.0",
     "vite-plugin-pwa": "2.0.0",
-    "vite-plugin-webfont-dl": "3.13.1"
+    "vite-plugin-webfont-dl": "3.14.0"
   }
 }
