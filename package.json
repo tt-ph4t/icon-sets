@@ -72,6 +72,7 @@
     "ofetch": "1.5.1",
     "ohash": "2.0.12",
     "pluralize-esm": "9.0.5",
+    "pretty-num": "0.6.2",
     "radix-ui": "1.8.1",
     "react-error-boundary": "6.1.6",
     "react-resizable": "4.0.2",
